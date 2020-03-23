@@ -59,7 +59,12 @@ You should ask for access to this tools if you don't have it already:
 $ git clone git@github.com:ProyectoIntegrador2018/arquidiocesis-app.git
 ```
 
-2. Open a terminal and run:
+2. Install Expo CLI Tools
+```bash
+$ npm install -g expo-cli
+```
+
+3. Open a terminal and run:
 
 ```bash
 $ npm install
