@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Login, Parroquias, Admin, Acompanantes, Coordinadores, Grupos, Capacitacion } from './screens';
+import { Login, Parroquias, Admin, Acompanantes, Coordinadores, Grupos, Capacitacion, Dummy } from './screens';
 import { API } from './lib'
 
 var Tab = createBottomTabNavigator();
@@ -14,10 +14,13 @@ var Home = (props)=>{
 	useEffect(()=>{
 		API.getUser().then(setUser);
 	}, []);
+	var params = {
+		logout: props.route.params.logout
+	}
 
 	return (
-		<Tab.Navigator>
-			<Tab.Screen name="Parroquias" component={Parroquias} />
+		<Tab.Navigator initialRouteName='Parroquias'>
+			<Tab.Screen name="Parroquias" component={Parroquias} initialParams={params} />
 			<Tab.Screen name="Acompañantes" component={Acompanantes} />
 			<Tab.Screen name="Coordinadores" component={Coordinadores} />
 			<Tab.Screen name="Gpos HeMa" component={Grupos} />
@@ -29,10 +32,12 @@ var Home = (props)=>{
 
 var Stack = createStackNavigator();
 var App = (props)=>{
+	
 	return (
 		<NavigationContainer>
-			<Stack.Navigator user={props.user}>
-				<Stack.Screen name="Home" component={Home} />
+			<Stack.Navigator user={props.user} initialRouteName='Home'>
+				<Stack.Screen name="Home" component={Home} initialParams={{ logout: props.logout }}/>
+				<Stack.Screen name="Dummy" component={Dummy} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
@@ -60,13 +65,19 @@ export default (props)=>{
 		setLogin(user);
 	}
 
+	var logout = ()=>{
+		API.logout().then(done=>{
+			setLogin(null);
+		})
+	}
+
 	return (
 		<View style={StyleSheet.absoluteFillObject}>
 			<StatusBar barStyle={'dark-content'} />
 			{!login ? (
 				<Login user={login} onLogin={onLogin} />
 			) : ( 							// User is logged in
-				<App user={login} />
+				<App user={login} logout={logout} />
 			)}
 		</View>
 	)

@@ -66,9 +66,7 @@ async function login(email, password){
 		access: 3
 	}
 
-	AsyncStorage.setItem('login', JSON.stringify(user), (err)=>{
-		console.log(err)
-	});
+	await AsyncStorage.setItem('login', JSON.stringify(user));
 
 	return user;
 }

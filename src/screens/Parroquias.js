@@ -5,14 +5,23 @@ import { API } from '../lib';
 
 export default (props)=>{
 
+	var { navigation, route } = props;
+
+
 	var logout = ()=>{
-		API.logout()
+		route.params.logout();
+	}
+
+	var test = ()=>{
+		// Navegar dentro del stack.
+		navigation.navigate('Dummy');
 	}
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.testText}>Parroquias</Text>
 			<Button onPress={logout} text="Logout" />
+			<Button onPress={test} text="Test navigate" />
 		</View>
 	)
 }
