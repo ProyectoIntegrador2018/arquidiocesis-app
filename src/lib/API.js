@@ -3,12 +3,21 @@ import { AsyncStorage } from 'react-native';
 
 const ROOT_URL = 'http://localhost:8000/'
 
-function post(endpoint, data){
+async function post(endpoint, data){
+	var u = await getUser();
+	if(u){
+		data.token = u.token;
+	}
 	return axios.post(ROOT_URL+endpoint, data);
 }
 
-function get(endpoint, data){
-	return axios.get(ROOT_URL+endpoint, )
+async function get(endpoint, data){
+	var u = await getUser();
+	if(u){
+		data.token = u.token;
+	}
+
+	return axios.get(ROOT_URL+endpoint, data)
 }
 
 // Debug, delete later.
