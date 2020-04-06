@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage, StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Login, Dummy } from './screens';
+import { Login, Parroquias, Admin, Acompanantes, Coordinadores, Grupos, Capacitacion } from './screens';
+import { API } from './lib'
 
 var Tab = createBottomTabNavigator();
 var Home = (props)=>{
+	var [user, setUser] = useState(false);
+
+	useEffect(()=>{
+		API.getUser().then(setUser);
+	}, []);
+
 	return (
 		<Tab.Navigator>
-			<Tab.Screen name="Dummy" component={Dummy} />
+			<Tab.Screen name="Parroquias" component={Parroquias} />
+			<Tab.Screen name="Acompañantes" component={Acompanantes} />
+			<Tab.Screen name="Coordinadores" component={Coordinadores} />
+			<Tab.Screen name="Gpos HeMa" component={Grupos} />
+			<Tab.Screen name="Capacitacion" component={Capacitacion} />
 		</Tab.Navigator>
 	)
 }
@@ -20,7 +31,7 @@ var Stack = createStackNavigator();
 var App = (props)=>{
 	return (
 		<NavigationContainer>
-			<Stack.Navigator>
+			<Stack.Navigator user={props.user}>
 				<Stack.Screen name="Home" component={Home} />
 			</Stack.Navigator>
 		</NavigationContainer>
@@ -34,33 +45,28 @@ export default (props)=>{
 
 	// This function runs when the screen is shown.
 	useEffect(()=>{
-		// Check to see if the user is logged in.
-		AsyncStorage.getItem('login').then(login=>{
-			/* 
-				If user has never logged in, login === null
-				If user has done login return the user object
-					inside of storage.
-			*/
-			
-			// setLogin(login);
-
-			// Debug setting this to dummy use for now.			
-			setLogin({
-				access: 1
-			})
-		})
+		checkLogin()
 	}, [])
+	
+	// Check to see if the user is logged in.
+	var checkLogin = ()=>{
+		API.getLogin().then(user=>{
+			if(!user) return setLogin(null);
+			setLogin(user)
+		})
+	}
+
+	var onLogin = (user)=>{
+		setLogin(user);
+	}
 
 	return (
 		<View style={StyleSheet.absoluteFillObject}>
-			{login===false ? ( 			// Storage hasn't responded. Show splash still
-				<View>
-					<Text>LOADING</Text>					
-				</View>
-			) : login===null ? ( 		// User is not logged in.
-				<Login />
+			<StatusBar barStyle={'dark-content'} />
+			{!login ? (
+				<Login user={login} onLogin={onLogin} />
 			) : ( 							// User is logged in
-				<App />
+				<App user={login} />
 			)}
 		</View>
 	)
