@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-n
 import { Input, Button } from '../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API } from '../lib';
+import {Image} from 'react-native' ; 
 
 export default (props)=>{
 
@@ -34,8 +35,10 @@ export default (props)=>{
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={{ backgroundColor: 'red', height: '30%', width: '100%' }}>
-				{/* Imagen de logo */}
+			<View style={{ backgroundColor: 'white', height: '30%', width: '100%',paddingTop:20, paddingBottom:60  }}>
+				<View style={{alignItems:"center", justifyContent:"center"}}>
+				<Image source={require("../../assets/logo.jpeg")} />
+				</View>
 			</View>
 			{props.user===false ? (
 				<View style={[styles.loginContainer, { alignItems: 'center', justifyContent: 'center' }]}>

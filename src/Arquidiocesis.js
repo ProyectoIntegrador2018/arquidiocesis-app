@@ -20,10 +20,10 @@ var Home = (props)=>{
 
 	return (
 		<Tab.Navigator initialRouteName='Parroquias'>
-			<Tab.Screen name="Parroquias" component={Parroquias} initialParams={params} />
+			<Tab.Screen name="Pquias" component={Parroquias} initialParams={params} />
 			<Tab.Screen name="Acompañantes" component={Acompanantes} />
-			<Tab.Screen name="Coordinadores" component={Coordinadores} />
-			<Tab.Screen name="Gpos HeMa" component={Grupos} />
+			<Tab.Screen name="Coord" component={Coordinadores} />
+			<Tab.Screen name="HeMa" component={Grupos} />
 			<Tab.Screen name="Capacitacion" component={Capacitacion} />
 		</Tab.Navigator>
 	)
