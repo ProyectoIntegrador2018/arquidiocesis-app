@@ -9,6 +9,7 @@ import Parroquias from './Parroquias';
 import Login from './Login';
 import Registro from './Registro';
 import Asistencia from './Asistencia';
+import DetallePersona from './DetallePersona';
 
 export {
 	Login,
@@ -21,4 +22,5 @@ export {
 	Dummy,
 	Registro,
 	Asistencia,
+	DetallePersona,
 }
