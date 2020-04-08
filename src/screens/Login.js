@@ -46,11 +46,12 @@ export default (props)=>{
 				</View>
 			) : (
 				<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
-					<Text style={styles.header}>Iniciar Sesión</Text>
+					<Text style={styles.header}>Iniciar Sesión</Text> 
 					<Input name="Correo electrónico" value={email} onChangeText={setEmail} textContentType={'emailAddress'} />
 					<Input name="Contraseña" style={{ marginTop: 10 }} value={password} onChangeText={setPassword} textContentType={'password'} password />
 
 					<Button text="Iniciar Sesión" loading={loading} onPress={doLogin} />
+					
 				</KeyboardAwareScrollView>
 			)}
 		</SafeAreaView>

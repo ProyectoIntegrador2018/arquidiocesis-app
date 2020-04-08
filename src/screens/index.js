@@ -7,6 +7,8 @@ import Coordinadores from './Coordinadores';
 import Grupos from './Grupos';
 import Parroquias from './Parroquias';
 import Login from './Login';
+import Registro from './Registro';
+import Asistencia from './Asistencia';
 
 export {
 	Login,
@@ -16,5 +18,7 @@ export {
 	Capacitacion,
 	Coordinadores,
 	Grupos,
-	Dummy
+	Dummy,
+	Registro,
+	Asistencia,
 }

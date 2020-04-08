@@ -51,7 +51,7 @@ class App extends React.Component {
    
 	render() {
 	  return (
-		<View style={{ flex: 1 }}>
+		<View style={{ flex: 2 }}>
 		  <AlphabetSectionList
 			data={this.state.data}
 			renderItem={this.renderItem}
