@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Login, Parroquias, Admin, Acompanantes, Coordinadores, Grupos, Capacitacion, Dummy, Asistencia } from './screens';
+import { Login, Parroquias, Admin, Acompanantes, Coordinadores, Grupos, Capacitacion, Dummy, Asistencia, Registro } from './screens';
 import { API } from './lib'
 
 var Tab = createBottomTabNavigator();
@@ -39,6 +39,7 @@ var App = (props)=>{
 				<Stack.Screen name="Home" component={Home} initialParams={{ logout: props.logout }}/>
 				<Stack.Screen name="Dummy" component={Dummy} />
 				<Stack.Screen name="Asistencia" component={Asistencia}/>
+				<Stack.Screen name="Registro" component={Registro}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
