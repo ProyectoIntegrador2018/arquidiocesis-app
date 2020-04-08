@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { CheckBox } from 'react-native-elements'
-import AlphabetSectionList from 'react-native-alphabet-sectionlist';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Util } from '../lib'
 
-export default (props)=>{
+var Screen = (props)=>{
 
 	var [data, setData] = useState(false);
 
@@ -43,11 +43,7 @@ export default (props)=>{
 	}
 
 	// Ordenar datos
-	var orderedData = {}
-	for(var i of data.sort((a,b)=>a.name-b.name)){
-		if(!orderedData[i.name[0]]) orderedData[i.name[0]] = []
-		orderedData[i.name[0]].push(i);
-	}
+	var orderedData = Util.organizeListData(data, 'name');
 
 	var components = []
 	var headers = []
@@ -61,15 +57,25 @@ export default (props)=>{
 		components.push(...orderedData[i].map((a,ix)=><CheckboxItem {...a} onCheck={onCheck} key={'item'+i+'-'+ix} />))
 	}
 
-	return <ScrollView style={StyleSheet.absoluteFillObject} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers}>
-		{components}
-	</ScrollView>
+	return <View style={StyleSheet.absoluteFillObject}>
+		<ScrollView style={StyleSheet.absoluteFillObject} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers}>
+			{components}
+		</ScrollView>
+	</View>
 }
 
+Screen.navigationOptions = (props)=>({
+	title: "ASSI!!",
+	headerStyle: {
+		backgroundColor: 'red'
+	}
+})
+
+export default Screen;
+
+
 var CheckboxItem = (props)=>{
-
 	var [checked, setChecked] = useState(props.checked);
-
 	var onPress = ()=>{
 		setChecked(!checked)
 		props.onCheck(props.id, checked)
