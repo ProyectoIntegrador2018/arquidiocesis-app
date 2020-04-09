@@ -3,7 +3,10 @@ import { View, Text, StyleSheet, TextInput, ActivityIndicator, TouchableOpacity 
 
 export default (props)=>{
 	return (
-		<TouchableOpacity onPress={props.onPress}>
+		<TouchableOpacity onPress={()=>{
+			if(props.loading) return;
+			if(props.onPress) props.onPress();
+		}}>
 			<View style={[styles.container, props.style, { backgroundColor: (props.color || '#002E60') }]}>
 				{props.loading ? (
 					<ActivityIndicator size={'small'} color='white' />

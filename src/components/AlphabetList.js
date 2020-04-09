@@ -16,20 +16,32 @@ export default  (props)=>{
 			</View>
 		)
 		components.push(...organizedData[i].map((a,ix)=>props.renderItem ? (
-			<TouchableOpacity onPress={()=>props.onSelect(a)} key={'item'+i+'-'+ix}>
-				<View style={[styles.item]}>
-					{props.renderItem(a)}
-					<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
-				</View>
-			</TouchableOpacity>
+			<View style={{ backgroundColor: 'white' }}>
+				<TouchableOpacity onPress={()=>props.onSelect(a)} key={'item'+i+'-'+ix}>
+					<View style={[styles.item]}>
+						{props.renderItem(a)}
+						<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+					</View>
+				</TouchableOpacity>
+			</View>
 		) : <ListItem data={a} onPress={props.onSelect} key={'item'+i+'-'+ix} />))
 	}
 
-	return <ScrollView style={props.style} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers} refreshControl={
-		(typeof props.refreshing !== undefined) ? <RefreshControl refreshing={(props.refreshing || false)} onRefresh={props.onRefresh} /> : null
-	}>
-		{components}
-	</ScrollView>
+	if(props.scroll!==false){
+		return (
+			<ScrollView style={props.style} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers} refreshControl={
+				(props.refreshing !== undefined) ? <RefreshControl refreshing={(props.refreshing || false)} onRefresh={props.onRefresh} /> : null
+			}>
+				{components}
+			</ScrollView>
+		)
+	}else{
+		return (
+			<View>
+				{components}
+			</View>
+		)
+	}
 
 }
 
@@ -37,27 +49,31 @@ var ListItem = (props)=>{
 	return <TouchableOpacity onPress={()=>{
 		props.onPress(props.data)
 	}}>
-		<View style={styles.item}>
-			<Text>{props.data.name}</Text>
-			<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+		<View style={{ backgroundColor: 'white' }}>
+			<View style={styles.item}>
+				<Text>{props.data.name}</Text>
+				<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+			</View>
 		</View>
 	</TouchableOpacity>
 }
 
 const styles = StyleSheet.create({
 	header: {
-		backgroundColor: 'white',
+		backgroundColor: '#F7F7F7',
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: '#CCC',
 		width: '100%',
 		padding: 5,
-		paddingHorizontal: 15
+		paddingHorizontal: 15,
+		// borderTopWidth: StyleSheet.hairlineWidth,
+		// borderTopColor: '#CCC'
 	},
 	headerText: {
-		fontWeight: '600'
+		fontWeight: '600',
 	},
 	item: {
-		marginLeft: 15, 
+		paddingLeft: 15, 
 		paddingVertical: 15, 
 		width: '100%', 
 		borderBottomColor: '#CCC',

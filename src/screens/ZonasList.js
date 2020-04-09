@@ -1,16 +1,40 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { AlphabetList } from '../components';
+import { AlphabetList, ErrorView } from '../components';
 import { API } from '../lib';
 
 export default (props)=>{
 	var [data, setData] = useState(false);
+	var [refreshing, setRefreshing] = useState(false);
+	var [error, setError] = useState(false);
 
 	useEffect(()=>{
 		API.getZonas().then(zonas=>{
-			setData(zonas)
+			setData(zonas);
+			setRefreshing(false);
+			setError(false);
+		}).catch(err=>{
+			setRefreshing(false);
+			setError(true);
 		})
 	}, [])
+
+	var getZonas = ()=>{
+		setRefreshing(true);
+		console.log("REFRESHING")
+		API.getZonas(true).then(zonas=>{
+			setData(zonas);
+			setError(false);
+			setRefreshing(false);
+		}).catch(err=>{
+			setRefreshing(false);
+			setError(true);
+		})
+	}
+
+	if(error){
+		return <ErrorView refreshing={refreshing} retry={getZonas} scroll />
+	}
 	
 	if(data === false){
 		return <View style={{ marginTop: 50 }}>
@@ -24,7 +48,7 @@ export default (props)=>{
 	}
 
 	return <View style={{ flex: 1 }}>
-		<AlphabetList data={data} onSelect={onPress} />
+		<AlphabetList data={data} onSelect={onPress} refreshing={refreshing} onRefresh={getZonas} />
 	</View>
 
 }

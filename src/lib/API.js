@@ -99,9 +99,11 @@ async function logout(){
 
 /**
  * Get the list of zonas.
+ *	@param {Boolean} force Should skip cached data. 
  */
-async function getZonas(){
+async function getZonas(force=false){
 	// DUMMY DATA
+	await timeout(500);
 	var d = [
 		{ id: 1, name: 'Zona1' },
 		{ id: 2, name: 'Zona2' },
@@ -111,8 +113,14 @@ async function getZonas(){
 	return d;
 }
 
-async function getZona(id){
+/**
+ * Get the zone information.
+ * @param {Number} id The zone id
+ * @param {Boolean} force Should skip cached data
+ */
+async function getZona(id, force=false){
 	// DUMMY DATA
+	await timeout(500);
 	var d = {
 		id: id,
 		name: 'Zona Prueba',
@@ -124,14 +132,20 @@ async function getZona(id){
 	return d;
 }
 
-async function getDecanato(id){
+/**
+ * Get the decanato data. 
+ * @param {Number} id The decanato ID
+ * @param {Boolean} force Should skip cached data
+ */
+async function getDecanato(id, force=false){
 	// DUMMY DATA
+	await timeout(500);
 	var d = {
 		id: id,
 		name: 'Decanato Test',
 		acompanantes: [
-			{ name: 'Raul' },
-			{ name: 'Jose' }
+			{ id: 1, name: 'Raul' },
+			{ id: 2, name: 'Jose' }
 		]
 	}
 	return d;
