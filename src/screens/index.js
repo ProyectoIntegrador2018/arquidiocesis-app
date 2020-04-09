@@ -1,6 +1,6 @@
 import Dummy from './Dummy'
 
-import Acompanantes from './Acompanantes';
+import Decanato from './Decanato';
 import Admin from './Admin';
 import Capacitacion from './Capacitacion';
 import Coordinadores from './Coordinadores';
@@ -10,11 +10,13 @@ import Login from './Login';
 import Registro from './Registro';
 import Asistencia from './Asistencia';
 import DetallePersona from './DetallePersona';
+import ZonasList from './ZonasList';
+import Zona from './Zona'
 
 export {
 	Login,
 	Parroquias,
-	Acompanantes,
+	Decanato,
 	Admin,
 	Capacitacion,
 	Coordinadores,
@@ -23,4 +25,6 @@ export {
 	Registro,
 	Asistencia,
 	DetallePersona,
+	ZonasList,
+	Zona,
 }

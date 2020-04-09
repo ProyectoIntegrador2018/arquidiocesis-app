@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Util } from '../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
 
-export default (props)=>{
+export default  (props)=>{
 	var components = []
 	var headers = []
 	var organizedData = Util.organizeListData(props.data, (props.key || 'name'))
@@ -25,7 +25,9 @@ export default (props)=>{
 		) : <ListItem data={a} onPress={props.onSelect} key={'item'+i+'-'+ix} />))
 	}
 
-	return <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers}>
+	return <ScrollView style={props.style} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers} refreshControl={
+		(typeof props.refreshing !== undefined) ? <RefreshControl refreshing={(props.refreshing || false)} onRefresh={props.onRefresh} /> : null
+	}>
 		{components}
 	</ScrollView>
 

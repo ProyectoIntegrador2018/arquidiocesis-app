@@ -97,9 +97,52 @@ async function logout(){
 	return true;
 }
 
+/**
+ * Get the list of zonas.
+ */
+async function getZonas(){
+	// DUMMY DATA
+	var d = [
+		{ id: 1, name: 'Zona1' },
+		{ id: 2, name: 'Zona2' },
+		{ id: 3, name: 'Zona3' },
+		{ id: 4, name: 'Zona4' }
+	]
+	return d;
+}
+
+async function getZona(id){
+	// DUMMY DATA
+	var d = {
+		id: id,
+		name: 'Zona Prueba',
+		decanatos: [
+			{ id: 1, name: 'Decanato del Rosario' },
+			{ id: 2, name: 'Decanato de Fátima' }
+		]
+	}
+	return d;
+}
+
+async function getDecanato(id){
+	// DUMMY DATA
+	var d = {
+		id: id,
+		name: 'Decanato Test',
+		acompanantes: [
+			{ name: 'Raul' },
+			{ name: 'Jose' }
+		]
+	}
+	return d;
+}
+
 export default {
 	getLogin,
 	getUser,
 	login,
-	logout
+	logout,
+	getZona,
+	getZonas,
+	getDecanato
 }

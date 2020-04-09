@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome5 } from '@expo/vector-icons'
 
-import { Login, Parroquias, Admin, Acompanantes, Coordinadores, Grupos, Capacitacion, Dummy, Asistencia, Registro, DetallePersona } from './screens';
+import { Login, Parroquias, Decanato, Coordinadores, Grupos, Capacitacion, Dummy, Asistencia, ZonasList, Zona, Registro, DetallePersona } from './screens';
 import { API } from './lib'
 
 var Tab = createBottomTabNavigator();
@@ -38,7 +38,7 @@ var Home = (props)=>{
 	return (
 		<Tab.Navigator initialRouteName='Parroquias'>
 			<Tab.Screen name="Pquias" component={Parroquias} />
-			<Tab.Screen name="Acompañantes" component={Acompanantes} />
+			<Tab.Screen name="Acompañantes" component={ZonasList} />
 			<Tab.Screen name="Coord" component={Coordinadores} />
 			<Tab.Screen name="HeMa" component={Grupos} />
 			<Tab.Screen name="Capacitacion" component={Capacitacion} />
@@ -51,16 +51,16 @@ var App = (props)=>{
 	return (
 		<NavigationContainer>
 			<Stack.Navigator user={props.user} initialRouteName='Home' screenOptions={{
-				headerStyle: {
-					backgroundColor: '#002E60'
-				},
+				headerStyle: { backgroundColor: '#002E60' },
 				headerTintColor: 'white'
 			}}>
 				<Stack.Screen name="Home" component={Home} initialParams={{ logout: props.logout }} />
 				<Stack.Screen name="Dummy" component={Dummy} />
-				<Stack.Screen name="Asistencia" component={Asistencia}/>
 				<Stack.Screen name="Registro" component={Registro}/>
 				<Stack.Screen name="DetallePersona" component={DetallePersona}/>
+				<Stack.Screen name="Asistencia" component={Asistencia} />
+				<Stack.Screen name="Decanato" component={Decanato} />
+				<Stack.Screen name="Zona" component={Zona} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
