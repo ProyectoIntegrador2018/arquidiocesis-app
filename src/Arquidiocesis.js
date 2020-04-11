@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome5 } from '@expo/vector-icons'
 
-import { Login, Parroquias, Decanato, Coordinadores, Grupos, Capacitacion, Dummy, Asistencia, ZonasList, Zona, Registro, DetallePersona, RegistroCoordinador } from './screens';
+import { Login, Parroquias, Decanato, Coordinadores, Grupos, Capacitacion, Dummy, Asistencia, ZonasList, Zona, Registro, DetallePersona, RegistroCoordinador, AltaPquia } from './screens';
 import { API } from './lib'
 
 var Tab = createBottomTabNavigator();
@@ -61,6 +61,7 @@ var App = (props)=>{
 				<Stack.Screen name="Asistencia" component={Asistencia} />
 				<Stack.Screen name="Decanato" component={Decanato} />
 				<Stack.Screen name="Zona" component={Zona} />
+				<Stack.Screen name="AltaPquia" component={AltaPquia}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

@@ -13,6 +13,7 @@ import DetallePersona from './DetallePersona';
 import ZonasList from './ZonasList';
 import Zona from './Zona';
 import RegistroCoordinador from './RegistroCoordinador';
+import AltaPquia from './AltaPquia';
 
 export {
 	Login,
@@ -29,4 +30,5 @@ export {
 	ZonasList,
 	Zona,
 	RegistroCoordinador,
+	AltaPquia,
 }

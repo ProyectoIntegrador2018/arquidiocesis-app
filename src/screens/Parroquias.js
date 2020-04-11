@@ -9,7 +9,7 @@ export default (props)=>{
 
 	var test = ()=>{
 		// Navegar dentro del stack.
-		navigation.navigate('Dummy');
+		navigation.navigate('AltaPquia');
 	}
 	var test2 = ()=>{
 		// Navegar dentro del stack.
@@ -22,7 +22,7 @@ export default (props)=>{
 	return (
 		<View style={styles.container}>
 			<Text style={styles.testText}>Parroquias</Text>
-			<Button onPress={test} text="Test navigate" />
+			<Button onPress={test} text="Alta Parroquia" />
 			<Button onPress={test2} text="Test Asist"/>
 			<Button onPress={test3} text="Test RC"/>
 		</View>
