@@ -19,12 +19,17 @@ export default (props)=>{
 		// Navegar dentro del stack.
 		navigation.navigate('RegistroCoordinador');
 	}
+	var test4 = ()=>{
+		// Navegar dentro del stack.
+		navigation.navigate('RegistroMiembro');
+	}
 	return (
 		<View style={styles.container}>
 			<Text style={styles.testText}>Parroquias</Text>
 			<Button onPress={test} text="Alta Parroquia" />
 			<Button onPress={test2} text="Test Asist"/>
 			<Button onPress={test3} text="Test RC"/>
+			<Button onPress={test4} text="Test RM"/>
 		</View>
 	)
 }

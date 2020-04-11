@@ -14,6 +14,7 @@ import ZonasList from './ZonasList';
 import Zona from './Zona';
 import RegistroCoordinador from './RegistroCoordinador';
 import AltaPquia from './AltaPquia';
+import RegistroMiembro from './RegistroMiembro';
 
 export {
 	Login,
@@ -31,4 +32,5 @@ export {
 	Zona,
 	RegistroCoordinador,
 	AltaPquia,
+	RegistroMiembro,
 }

@@ -4,20 +4,25 @@ import { Input, Button } from '../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import { API } from '../lib';
-import {Image} from 'react-native' ; 
+
 
 export default (props)=>{
 
 	var [loading, setLoading] = useState(false);
     var [name, setName] = useState('pepe');
-    var [adress, setAddress]= useState('calle 1, col. tecnologico');
+    var [lastname, setLastname] = useState('perez');
+    var [age, setAge] = useState ('80');
+    
 
 	var doRegister = ()=>{
 		if(loading) return;
 		setLoading(true);
         if(name.length<1) return alert ('Por favor introduzca un nombre');
-        if(adress.length<1) return alert ('Por favor introduzca una direccion');
-        
+        if(lastname.length<1) return alert ('Por favor introduzca un apellido');
+        if(age<18) return alert ('Por favor introduzca una edad valida');
+        // if(parroquia.length<1) return alert('Por favor introduzca una Parroquia')
+		
+
         // FALTA HACER REGISTRO
 		
 	}
@@ -34,26 +39,29 @@ export default (props)=>{
 				</View>
 			) : (
 				<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
-					<Text style={styles.header}>Registrar Parroquia</Text> 
+					<Text style={styles.header}>Registrar Miembro</Text> 
 					<Input name="Nombre" value={name} onChangeText={setName} textContentType={'Nombre'} />
-                    <Input name="Dirección" value={adress} onChangeText={setAddress}  textContentType={'Direccion'} />
+                    <Input name="Apellidos" value={lastname} onChangeText={setLastname}  textContentType={'Apellidos'} />
+                    <Input name="Edad" value={age} onChangeText={setAge}  textContentType={'Edad'} />
                     {/* editar estilo */}
-                    <Text style={styles.testText}>Seleccionar Decanato</Text>
+                    <Text style={styles.testText}>Seleccionar parroquia</Text>
                     <RNPickerSelect
-                    placeholder={{
-                        label: 'Decanato',
-                        value: null,
-                    }}
+                        style={{fontSize:18, color: 'black', padding: 10,}}
+                        placeholder={{
+                            label: 'Parroquia',
+                            value: null,
+                        }}
+                        
+                        onValueChange={(value) => console.log(value) }
+                        items={[
+                                { label: 'Don Bosco', value: 'P1' },
+                                { label: 'La Salle', value: 'P2' },
+                                { label: 'Sagrado Corazon', value: 'P3' },
+                            ]}
+                    />
+                   
                     
-                    onValueChange={(value) => console.log(value) }
-                     items={[
-                            { label: 'Decanato 1', value: 'D1' },
-                            { label: 'Decanato 2', value: 'D2' },
-                            { label: 'Decanato 2', value: 'D3' },
-                        ]}
-        />
-                    
-					<Button text="Registrar" loading={loading} onPress={doRegister} />
+					<Button text="Registrar" loading={loading} onPress={doRegister}/>
 					
 				</KeyboardAwareScrollView>
 			)}
@@ -63,7 +71,7 @@ export default (props)=>{
 
 const styles = StyleSheet.create({
 	testText: {
-		fontSize: 20
+		fontSize: 18
 	},
 	container: {
 		flex: 1,

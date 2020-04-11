@@ -45,6 +45,7 @@ export default (props)=>{
                     <Input name="Apellidos" value={lastname} onChangeText={setLastname}  textContentType={'Apellidos'} />
                     <Input name="Edad" value={age} onChangeText={setAge}  textContentType={'Edad'} />
                     {/* editar estilo */}
+                    <Text style={styles.testText}>Seleccionar Grupo</Text>
                     <RNPickerSelect
                     placeholder={{
                         label: 'A cargo del grupo',
