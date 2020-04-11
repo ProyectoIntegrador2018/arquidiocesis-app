@@ -12,6 +12,7 @@ export default (props)=>{
     var [name, setName] = useState('pepe');
     var [lastname, setLastname] = useState('perez');
     var [age, setAge] = useState ('80');
+    var [parroquia,setParroquia] = useState(null);
     
 
 	var doRegister = ()=>{
@@ -20,6 +21,7 @@ export default (props)=>{
         if(name.length<1) return alert ('Por favor introduzca un nombre');
         if(lastname.length<1) return alert ('Por favor introduzca un apellido');
         if(age<18) return alert ('Por favor introduzca una edad valida');
+        // if(parroquia==null) return alert('seleccione una parroquia');
         // if(parroquia.length<1) return alert('Por favor introduzca una Parroquia')
 		
 

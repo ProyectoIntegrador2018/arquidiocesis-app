@@ -7,6 +7,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 import { Login, Parroquias, Decanato, Coordinadores, Grupos, Capacitacion, Dummy, Asistencia, ZonasList, Zona, Registro, DetallePersona, RegistroCoordinador, AltaPquia, RegistroMiembro } from './screens';
 import { API } from './lib'
+import AltaCapilla from './screens/AltaCapilla';
 
 var Tab = createBottomTabNavigator();
 var Home = (props)=>{
@@ -63,6 +64,7 @@ var App = (props)=>{
 				<Stack.Screen name="Zona" component={Zona} />
 				<Stack.Screen name="AltaPquia" component={AltaPquia}/>
 				<Stack.Screen name="RegistroMiembro" component={RegistroMiembro}/>
+				<Stack.Screen name="AltaCapilla" component={AltaCapilla}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

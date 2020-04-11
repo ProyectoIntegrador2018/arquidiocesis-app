@@ -9,14 +9,16 @@ import {Image} from 'react-native' ;
 export default (props)=>{
 
 	var [loading, setLoading] = useState(false);
-    var [name, setName] = useState('pepe');
+    var [name, setName] = useState('Don Bosco');
     var [adress, setAddress]= useState('calle 1, col. tecnologico');
+    
 
 	var doRegister = ()=>{
 		if(loading) return;
 		setLoading(true);
         if(name.length<1) return alert ('Por favor introduzca un nombre');
         if(adress.length<1) return alert ('Por favor introduzca una direccion');
+        
         
         // FALTA HACER REGISTRO
 		
