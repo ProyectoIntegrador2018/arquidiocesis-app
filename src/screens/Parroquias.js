@@ -17,14 +17,14 @@ export default (props)=>{
 	}
 	var test3 = ()=>{
 		// Navegar dentro del stack.
-		navigation.navigate('DetallePersona');
+		navigation.navigate('RegistroCoordinador');
 	}
 	return (
 		<View style={styles.container}>
 			<Text style={styles.testText}>Parroquias</Text>
 			<Button onPress={test} text="Test navigate" />
 			<Button onPress={test2} text="Test Asist"/>
-			{/* <Button onPress={test3} text="Test detalle"/> */}
+			<Button onPress={test3} text="Test RC"/>
 		</View>
 	)
 }

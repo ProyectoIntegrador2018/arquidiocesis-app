@@ -11,7 +11,8 @@ import Registro from './Registro';
 import Asistencia from './Asistencia';
 import DetallePersona from './DetallePersona';
 import ZonasList from './ZonasList';
-import Zona from './Zona'
+import Zona from './Zona';
+import RegistroCoordinador from './RegistroCoordinador';
 
 export {
 	Login,
@@ -27,4 +28,5 @@ export {
 	DetallePersona,
 	ZonasList,
 	Zona,
+	RegistroCoordinador,
 }
