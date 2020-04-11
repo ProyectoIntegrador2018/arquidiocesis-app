@@ -24,7 +24,7 @@ export default (props)=>{
 			<Text style={styles.testText}>Parroquias</Text>
 			<Button onPress={test} text="Test navigate" />
 			<Button onPress={test2} text="Test Asist"/>
-			<Button onPress={test3} text="Test Asist"/>
+			{/* <Button onPress={test3} text="Test detalle"/> */}
 		</View>
 	)
 }

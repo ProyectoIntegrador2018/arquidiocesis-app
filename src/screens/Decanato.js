@@ -42,7 +42,7 @@ export default (props)=>{
 	}
 
 	var onPress = (item)=>{
-		console.log(item);
+		props.navigation.navigate('DetallePersona', item);
 	}
 
 	return <View style={{ flex: 1 }}>
