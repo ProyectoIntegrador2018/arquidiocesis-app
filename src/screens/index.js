@@ -17,6 +17,7 @@ import AltaPquia from './AltaPquia';
 import RegistroMiembro from './RegistroMiembro';
 import AltaCapilla from './AltaCapilla';
 import RegistroGrupo from './RegistroGrupo';
+import Parroquia from './Parroquia'
 
 export {
 	Login,
@@ -37,4 +38,5 @@ export {
 	RegistroMiembro,
 	AltaCapilla,
 	RegistroGrupo,
+	Parroquia
 }

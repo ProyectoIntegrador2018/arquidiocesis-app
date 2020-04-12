@@ -1,36 +1,66 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Input, Button, Picker } from '../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import RNPickerSelect from 'react-native-picker-select';
 import { API } from '../lib';
-import {Image} from 'react-native' ; 
+import { FontAwesome5 } from '@expo/vector-icons'
 
 export default (props)=>{
-
 	var [loading, setLoading] = useState(false);
-    var [name, setName] = useState('Don Bosco');
-    var [adress, setAddress]= useState('calle 1, col. tecnologico');
-    
+	var [name, setName] = useState('Don Bosco');
+	var [address, setAddress]= useState('calle 1, col. tecnologico');
+	var [decanato, setDecanato] = useState(false);
+	var [listDecanatos, setListDecanatos] = useState(false);
+
+	var onAdd = props.route.params.onAdd;
 
 	var doRegister = ()=>{
 		if(loading) return;
+		if(name.length<1) return alert ('Por favor introduzca un nombre.');
+		if(address.length<1) return alert ('Por favor introduzca una direccion.');
+		if(!decanato) return alert('Favor de seleccionar un decanato.');
+
 		setLoading(true);
-		if(name.length<1) return alert ('Por favor introduzca un nombre');
-		if(adress.length<1) return alert ('Por favor introduzca una direccion');
-		// FALTA HACER REGISTRO
+		API.addParroquia(name, address, decanato.value).then(done=>{
+			setLoading(false);
+			if(onAdd) onAdd({ name });
+			props.navigation.goBack();
+		}).catch(err=>{
+			setLoading(true);
+			alert("Hubo un error agregando la parroquia.");
+		});
 	}
+
+	useEffect(()=>{
+		API.getDecanatos(false).then(decanatos=>{
+			var d = decanatos.map(a=>{
+				return { label: a.name, value: a.id }
+			})
+			setListDecanatos(d);
+		});
+	}, [])
+
+	props.navigation.setOptions({
+		headerRight: ()=>(
+			<TouchableOpacity onPress={()=>{}}>
+			  <View style={{ width: 50, height: 40, alignItems: 'center', justifyContent: 'center' }}>
+					<FontAwesome5 name="ellipsis-h" size={25} color={'white'} />
+			  </View>
+		  </TouchableOpacity>
+		),
+		headerTitle: 'Alta Parroquia'
+	});
 
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
 			<Text style={styles.header}>Registrar Parroquia</Text> 
 			<Input name="Nombre" value={name} onChangeText={setName} />
-			<Input name="Dirección" value={adress} onChangeText={setAddress} />
-			<Picker items={[
-				{ label: 'Decanato 1', value: 'D1' },
-				{ label: 'Decanato 2', value: 'D2' },
-				{ label: 'Decanato 2', value: 'D3' },
-			]} />
+			<Input name="Dirección" value={address} onChangeText={setAddress} />
+			{listDecanatos ? (
+				<Picker onValueChange={setDecanato} name="Seleccionar decanato" items={listDecanatos} />
+			) : (
+				<ActivityIndicator style={{ height: 80 }} />
+			)}
 					
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
 		</KeyboardAwareScrollView>

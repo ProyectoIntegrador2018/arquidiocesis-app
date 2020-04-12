@@ -1,47 +1,65 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button } from '../components';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { AlphabetList, ErrorView, Button } from '../components';
 import { API } from '../lib';
 
 export default (props)=>{
+	var [data, setData] = useState(false);
+	var [refreshing, setRefreshing] = useState(false);
+	var [error, setError] = useState(false);
 
-	var { navigation, route } = props;
+	useEffect(()=>{
+		API.getParroquias().then(zonas=>{
+			setData(zonas);
+			setRefreshing(false);
+			setError(false);
+		}).catch(err=>{
+			setRefreshing(false);
+			setError(true);
+		})
+	}, [])
 
-	var test = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('AltaPquia');
+	var getParroquias = ()=>{
+		setRefreshing(true);
+		API.getParroquias(true).then(d=>{
+			setData(d);
+			setError(false);
+			setRefreshing(false);
+		}).catch(err=>{
+			setRefreshing(false);
+			setError(true);
+		})
 	}
-	var test2 = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('Asistencia');
+
+	if(error){
+		return <ErrorView refreshing={refreshing} retry={getParroquias} scroll />
 	}
-	var test3 = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('RegistroCoordinador');
-	}
-	var test4 = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('RegistroMiembro');
-	}
-	var test5 = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('AltaCapilla');
-	}
-	var test6 = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('RegistroGrupo');
-	}
-	return (
-		<View style={styles.container}>
-			<Text style={styles.testText}>Parroquias</Text>
-			<Button onPress={test} text="Alta Parroquia" />
-			<Button onPress={test2} text="Test Asist"/>
-			<Button onPress={test3} text="Test RC"/>
-			<Button onPress={test4} text="Test RM"/>
-			<Button onPress={test5} text="Test Capilla"/>
-			<Button onPress={test6} text="Test RG"/>
+	
+	if(data === false){
+		return <View style={{ marginTop: 50 }}>
+			<ActivityIndicator size="large" />
+			<Text style={{ marginTop: 10, textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Cargando datos...</Text>
 		</View>
-	)
+	}
+
+	var onPress = (item)=>{
+		props.navigation.navigate('Parroquia', item);
+	}
+
+	var addParroquia = ()=>{
+		props.navigation.navigate('AltaPquia', {
+			onAdd: (p)=>{
+				if(!data) return;
+				setData([...data, p]);
+			}
+		});
+	}
+
+	return <View style={{ flex: 1 }}>
+		<Button text="Agregar parroquia" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
+		<AlphabetList data={data} onSelect={onPress} refreshing={refreshing} onRefresh={getParroquias} />
+	</View>
+
 }
 
 const styles = StyleSheet.create({
@@ -51,7 +69,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center',
-		width: '100%',
+		justifyContent: 'center'
 	}
 })

@@ -5,7 +5,24 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome5 } from '@expo/vector-icons'
 
-import { Login, Parroquias, Decanato, Coordinadores, Grupos, Capacitacion, Dummy, Asistencia, ZonasList, Zona, Registro, DetallePersona, RegistroCoordinador, AltaPquia, RegistroMiembro, RegistroGrupo } from './screens';
+import { 
+	Login, 
+	Parroquias, 
+	Parroquia,
+	Decanato, 
+	Coordinadores, 
+	Grupos, 
+	Capacitacion, 
+	Asistencia, 
+	ZonasList, 
+	Zona, 
+	Registro, 
+	DetallePersona, 
+	RegistroCoordinador, 
+	AltaPquia, 
+	RegistroMiembro, 
+	RegistroGrupo 
+} from './screens';
 import { API } from './lib'
 import AltaCapilla from './screens/AltaCapilla';
 
@@ -22,7 +39,7 @@ var Home = (props)=>{
 	}
 
 	navigation.setOptions({
-		headerRight: () => (
+		headerLeft: () => (
 		  <TouchableOpacity onPress={logout}>
 			  <View style={{ width: 50, height: 40, alignItems: 'center', justifyContent: 'center' }}>
 					<FontAwesome5 name="sign-out-alt" size={25} color={'white'} />
@@ -56,16 +73,17 @@ var App = (props)=>{
 				headerTintColor: 'white'
 			}}>
 				<Stack.Screen name="Home" component={Home} initialParams={{ logout: props.logout }} />
-				<Stack.Screen name="Dummy" component={Dummy} />
 				<Stack.Screen name="Registro" component={Registro}/>
 				<Stack.Screen name="RegistroCoordinador" component={RegistroCoordinador}/>
 				<Stack.Screen name="Asistencia" component={Asistencia} />
 				<Stack.Screen name="Decanato" component={Decanato} />
 				<Stack.Screen name="Zona" component={Zona} />
-				<Stack.Screen name="AltaPquia" component={AltaPquia}/>
+				<Stack.Screen name="AltaPquia" component={AltaPquia} />
 				<Stack.Screen name="RegistroMiembro" component={RegistroMiembro}/>
 				<Stack.Screen name="AltaCapilla" component={AltaCapilla}/>
 				<Stack.Screen name="RegistroGrupo" component={RegistroGrupo}/>
+				<Stack.Screen name="Parroquia" component={Parroquia}/>
+				<Stack.Screen name="DetallePersona" component={DetallePersona}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

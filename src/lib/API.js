@@ -151,12 +151,75 @@ async function getDecanato(id, force=false){
 	return d;
 }
 
+async function getParroquias(force=false){
+	// DUMMY DATA
+	await timeout(500);
+	var d = [
+		{ id: 1, name: 'Parroquia 1' },
+		{ id: 2, name: 'Parroquia 2' },
+		{ id: 3, name: 'Parroquia 3' },
+		{ id: 4, name: 'Parroquia 4' }
+	]
+	return d;
+}
+
+async function getParroquia(id, force=false){
+	// DUMMY DATA
+	await timeout(500);
+	var d = {
+		id: id,
+		name: 'Parroquia Test',
+		capillas: [
+			{ id: 1, name: 'Capilla 1' },
+			{ id: 2, name: 'Capilla 2' },
+			{ id: 3, name: 'Capilla 3' },
+			{ id: 4, name: 'Capilla 4' }
+		]
+	}
+	return d;
+}
+
+async function addParroquia(name, address, decanato_id){
+	await timeout(500);
+	var payload = {
+		name,
+		address,
+		decanato: decanato_id
+	};
+	return true;
+}
+
+async function addCapilla(name, address, parroquia_id){
+	await timeout(500);
+	var payload = {
+		name,
+		address,
+		parroquia: parroquia_id
+	};
+	return true;
+}
+
+async function getDecanatos(force=false){
+	var d = [
+		{ name: 'Decanato 1', id: 'D1' },
+		{ name: 'Decanato 2', id: 'D2' },
+		{ name: 'Decanato 2', id: 'D3' },
+	]
+	return d;
+}
+
 export default {
 	getLogin,
 	getUser,
 	login,
 	logout,
+	addCapilla,
 	getZona,
 	getZonas,
-	getDecanato
+	getDecanato,
+	getParroquias,
+	getParroquia,
+	addParroquia,
+	getDecanato,
+	getDecanatos
 }

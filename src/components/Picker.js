@@ -11,10 +11,9 @@ export default (props)=>{
 
 	var valueSelected = (val, index)=>{
 		if(index==0) return;
-		
 		setSelect(index);
-		if(props.onValueChanged){
-			props.onValueChange(val, index);
+		if(props.onValueChange){
+			props.onValueChange(items[index-1]);
 		}
 	}
 	
