@@ -24,7 +24,7 @@ export default (props)=>{
 				<Text style={styles.header}>Registrar Capilla</Text> 
 				<Input name="Nombre" value={name} onChangeText={setName} />
 				<Input name="Dirección" value={adress} onChangeText={setAddress} />
-				<Picker items={[
+				<Picker name="Seleccionar parroquia" items={[
 					{ label: 'Parroquia 1', value: 'P1' },
 					{ label: 'Parroquia 2', value: 'P2' },
 					{ label: 'Parroquia 3', value: 'P3' },

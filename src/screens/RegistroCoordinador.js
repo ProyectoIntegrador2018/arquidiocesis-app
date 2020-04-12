@@ -34,7 +34,7 @@ export default (props)=>{
 			<Input name="Nombre" value={name} onChangeText={setName}/>
 					<Input name="Apellidos" value={lastname} onChangeText={setLastname} />
 					<Input name="Edad" value={age} onChangeText={setAge}/>
-					<Picker items={[
+					<Picker name="Seleccionar grupo" items={[
 						{ label: 'Grupo 1', value: 'G1' },
 						{ label: 'Grupo 2', value: 'G2' },
 						{ label: 'Grupo 3', value: 'G3' },
