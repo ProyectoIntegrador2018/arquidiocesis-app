@@ -10,6 +10,7 @@ export default (props)=>{
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 
+
 	props.navigation.setOptions({
 		headerStyle: {
 			backgroundColor: '#002E60',
