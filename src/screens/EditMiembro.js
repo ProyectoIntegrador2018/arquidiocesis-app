@@ -33,16 +33,6 @@ export default (props) => {
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
 			<Text style={styles.header}>Editar Miembro</Text>
-			<Picker name="Seleccionar parroquia" items={[
-				{ label: 'Don Bosco', value: 'P1' },
-				{ label: 'La Salle', value: 'P2' },
-				{ label: 'Sagrado Corazon', value: 'P3' },
-			]} />
-			<Picker name="Seleccionar Miembro" items={[
-				{ label: 'Juan Alberto', value: 'P1' },
-				{ label: 'Jose Antonio', value: 'P2' },
-				{ label: 'Carlos Salazar', value: 'P3' },
-			]} />
 			<Input name="Nombre" value={name} onChangeText={setName} />
 			<Input name="Apellidos" value={lastname} onChangeText={setLastname} />
 			<Input name="Edad" value={age} onChangeText={setAge} />
