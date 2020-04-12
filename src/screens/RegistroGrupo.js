@@ -27,22 +27,22 @@ export default (props)=>{
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
 			<Text style={styles.header}>Registrar Grupo</Text> 
 			<Input name="Nombre" value={name} onChangeText={setName} textContentType={'Nombre'} />
-					<Input name="Acompañante" value={acompañante} onChangeText={setAcompañante} />
-					<Text style={styles.label}>Pertenece a Capilla?</Text>
-					<View style={styles.checkboxContainer}>
-						<Switch
-							trackColor={{ false: "#767577", true: "#32CD32" }}
-							thumbColor={isEnabled ? "#FFFFFF" : "#f4f3f4"}
-							ios_backgroundColor="#3e3e3e"
-							onValueChange={toggleSwitch}
-							value={isEnabled}
-						/>
-					</View>
-					<Picker name={'Seleccionar Parroquia/Capilla'} items={[
-						{ label: 'Parroquia 1', value: 'p1' },
-						{ label: 'Parroquia 2', value: 'p2' },
-						{ label: 'Parroquia 3', value: 'p3' },
-					]} />
+				<Input name="Acompañante" value={acompañante} onChangeText={setAcompañante} />
+				<Text style={styles.label}>Pertenece a Capilla?</Text>
+				<View style={styles.checkboxContainer}>
+					<Switch
+						trackColor={{ false: "#767577", true: "#32CD32" }}
+						thumbColor={isEnabled ? "#FFFFFF" : "#f4f3f4"}
+						ios_backgroundColor="#3e3e3e"
+						onValueChange={toggleSwitch}
+						value={isEnabled}
+					/>
+				</View>
+				<Picker name={'Seleccionar Parroquia/Capilla'} items={[
+					{ label: 'Parroquia 1', value: 'p1' },
+					{ label: 'Parroquia 2', value: 'p2' },
+					{ label: 'Parroquia 3', value: 'p3' },
+				]} />
 					
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
 		</KeyboardAwareScrollView>

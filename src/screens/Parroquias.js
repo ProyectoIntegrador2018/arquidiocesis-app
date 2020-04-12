@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { AlphabetList, ErrorView, Button } from '../components';
 import { API } from '../lib';
 
@@ -30,10 +30,6 @@ export default (props)=>{
 			setError(true);
 		})
 	}
-
-	if(error){
-		return <ErrorView refreshing={refreshing} retry={getParroquias} scroll />
-	}
 	
 	if(data === false){
 		return <View style={{ marginTop: 50 }}>
@@ -55,10 +51,18 @@ export default (props)=>{
 		});
 	}
 
-	return <View style={{ flex: 1 }}>
-		<Button text="Agregar parroquia" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
-		<AlphabetList data={data} onSelect={onPress} refreshing={refreshing} onRefresh={getParroquias} />
-	</View>
+	return <ScrollView style={{ flex: 1 }} refreshControl={
+		<RefreshControl refreshing={refreshing} onRefresh={getParroquias} />
+	}>
+		{error ? (
+			<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getZona} />
+		) : (
+			<View>
+				<Button text="Agregar parroquia" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
+				<AlphabetList data={data} onSelect={onPress} scroll />
+			</View>
+		)}
+	</ScrollView>
 
 }
 
