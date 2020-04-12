@@ -15,7 +15,8 @@ import Zona from './Zona';
 import RegistroCoordinador from './RegistroCoordinador';
 import AltaPquia from './AltaPquia';
 import RegistroMiembro from './RegistroMiembro';
-import AltaCapilla from './AltaCapilla'
+import AltaCapilla from './AltaCapilla';
+import RegistroGrupo from './RegistroGrupo';
 
 export {
 	Login,
@@ -35,4 +36,5 @@ export {
 	AltaPquia,
 	RegistroMiembro,
 	AltaCapilla,
+	RegistroGrupo,
 }

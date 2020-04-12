@@ -27,6 +27,10 @@ export default (props)=>{
 		// Navegar dentro del stack.
 		navigation.navigate('AltaCapilla');
 	}
+	var test6 = ()=>{
+		// Navegar dentro del stack.
+		navigation.navigate('RegistroGrupo');
+	}
 	return (
 		<View style={styles.container}>
 			<Text style={styles.testText}>Parroquias</Text>
@@ -35,6 +39,7 @@ export default (props)=>{
 			<Button onPress={test3} text="Test RC"/>
 			<Button onPress={test4} text="Test RM"/>
 			<Button onPress={test5} text="Test Capilla"/>
+			<Button onPress={test6} text="Test RG"/>
 		</View>
 	)
 }
