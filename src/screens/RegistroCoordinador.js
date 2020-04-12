@@ -13,8 +13,14 @@ export default (props)=>{
 	var [name, setName] = useState('pepe');
 	var [lastname, setLastname] = useState('perez');
 	var [age, setAge] = useState ('80');
-	//puede haber coordinadores sin grupo
 	var [grupo, setGrupo] = useState(null);
+	var [listGrupo, setListGrupo] = useState(false);
+
+	var onAdd = props.route.params.onAdd;
+
+	props.navigation.setOptions({
+		headerTitle: 'Registro Coordinador'
+	});
 
 	var doRegister = ()=>{
 		if(loading) return;
@@ -26,20 +32,47 @@ export default (props)=>{
 		if(password.length<3) return alert('Favor de ingresar una contraseña válida');
 
 		// FALTA HACER REGISTRO
+		API.registerCoordinador(name, lastname, age, email, password, grupo ? grupo.value : null).then(done=>{
+			if(onAdd) onAdd({
+				name,
+				lastname,
+				age, 
+				email,
+				grupo: (grupo ? grupo.label : null)
+			})
+			props.navigation.goBack();
+		}).catch(err=>{
+			console.log(err);
+			alert("Hubo un error registrando el coordinador");
+		})
 	}
 
+	useEffect(()=>{
+		API.getGrupos(false).then(g=>{
+			var d = g.map(a=>{
+				return { label: a.name, value: a.id }
+			})
+			setListGrupo([{ label: 'Sin grupo', value: null }, ...d]);
+		}).catch(err=>{
+			alert("Hubo un error consiguiendo los grupos activos...");
+			setListGrupo([{ label: 'Sin grupo', value: null }]);
+		})
+	}, []);
+
 	return (
-		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
+		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
 			<Text style={styles.header}>Registrar Coordinador</Text> 
 			<Input name="Nombre" value={name} onChangeText={setName}/>
-					<Input name="Apellidos" value={lastname} onChangeText={setLastname} />
-					<Input name="Edad" value={age} onChangeText={setAge}/>
-					<Picker name="Seleccionar grupo" items={[
-						{ label: 'Grupo 1', value: 'G1' },
-						{ label: 'Grupo 2', value: 'G2' },
-						{ label: 'Grupo 3', value: 'G3' },
-					]} />
-					<Input name="Correo electrónico" value={email} onChangeText={setEmail} textContentType={'emailAddress'} />
+			<Input name="Apellidos" value={lastname} onChangeText={setLastname} />
+			<Input name="Edad" value={age} onChangeText={setAge}/>
+			{listGrupo ? (
+				<Picker name="Seleccionar grupo" onValueChange={setGrupo} items={listGrupo} />
+			) : (
+				<ActivityIndicator style={{ height: 80 }} />
+			)}
+
+			<Text style={styles.subHeader}>Credenciales</Text> 
+			<Input name="Correo electrónico" value={email} onChangeText={setEmail} textContentType={'emailAddress'} />
 			<Input name="Contraseña" style={{ marginTop: 10 }} value={password} onChangeText={setPassword} textContentType={'password'} password />
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
 		</KeyboardAwareScrollView>
@@ -66,5 +99,13 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		marginBottom: 20,
 		marginTop: 20,
+	},
+	subHeader: {
+		fontSize: 20,
+		fontWeight: '600',
+		textAlign: 'center',
+		color: 'grey',
+		marginBottom: 20,
+		marginTop: 10,
 	}
 })

@@ -12,7 +12,7 @@ export default  (props)=>{
 		headers.push(components.length);
 		components.push(
 			<View key={'header-'+i} style={styles.header}>
-				<Text style={styles.headerText}>{i}</Text>
+				<Text style={styles.headerText}>{i.toUpperCase()}</Text>
 			</View>
 		)
 		components.push(...organizedData[i].map((a,ix)=>props.renderItem ? (

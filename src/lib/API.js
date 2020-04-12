@@ -208,6 +208,41 @@ async function getDecanatos(force=false){
 	return d;
 }
 
+async function getCoordinadores(force=false){
+	await timeout(500);
+	var d = [
+		{ name: 'A1', grupo: 'Grupo 1' }, { name: 'A2', grupo: 'Grupo 2' }, { name: 'A3', grupo: 'Grupo 2' },
+		{ name: 'B1', grupo: 'Grupo 1' }, { name: 'B2', grupo: 'Grupo 1' }, { name: 'B3', grupo: 'Grupo 1' },
+		{ name: 'Y1', grupo: 'Grupo 2' }, { name: 'Y2', grupo: 'Grupo 1' }
+	]
+
+	return d;
+}
+
+async function getGrupos(force=false){
+	await timeout(500);
+	var d = [
+		{ name: 'Grupo 1', id: 20130 },
+		{ name: 'Grupo 2', id: 120102 },
+		{ name: 'Grupo 3', id: 57291 },
+	]
+	return d;
+}
+
+async function registerCoordinador(name, lastname, age, email, password, grupo_id){
+	await timeout(500);
+	var payload = {
+		name,
+		lastname,
+		age,
+		email,
+		password,
+		grupo: grupo_id
+	}
+
+	return true;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -221,5 +256,8 @@ export default {
 	getParroquia,
 	addParroquia,
 	getDecanato,
-	getDecanatos
+	getDecanatos,
+	getCoordinadores,
+	getGrupos,
+	registerCoordinador
 }

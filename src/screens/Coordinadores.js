@@ -1,24 +1,36 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ListView, ActivityIndicator, ScrollView } from 'react-native';
-import { AlphabetList } from '../components';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { AlphabetList, Button } from '../components';
+import { API } from '../lib';
 
 export default (props)=>{
 	var [data, setData] = useState(false);
+	var [error, setError] = useState(false);
+	var [refreshing, setRefreshing] = useState(false);
 
 	useEffect(()=>{
-		var d = [
-			{ name: 'A1' }, { name: 'A2' }, { name: 'A3' },
-			{ name: 'B1' }, { name: 'B2' }, { name: 'B3' },
-			{ name: 'E1' }, { name: 'E2' }, { name: 'E3' }, { name: 'E4' },
-			{ name: 'F1' }, { name: 'F2' }, { name: 'F3' },
-			{ name: 'H1' }, { name: 'H2' }, { name: 'H3' }, { name: 'H5' },
-			{ name: 'J1' }, { name: 'J2' }, { name: 'J3' }, { name: 'J5' },
-			{ name: 'K1' }, { name: 'K2' }, { name: 'K3' }, { name: 'K5' },
-			{ name: 'N1' }, { name: 'N2' }, { name: 'N3' }, { name: 'N5' },
-			{ name: 'Y1' }, { name: 'Y2' }, { name: 'Y3' }, { name: 'Y5' }, { name: 'Y6' }
-		]
-		setData(d)
+		setRefreshing(true);
+		API.getCoordinadores(false).then(d=>{
+			setRefreshing(false);
+			setData(d);
+			setError(false);
+		}).catch(err=>{
+			setError(true);
+		})
 	}, [])
+
+	var getCoordinadores = ()=>{
+		setRefreshing(true);
+		setError(false);
+		API.getCoordinadores(false).then(d=>{
+			setRefreshing(false);
+			setData(d);
+			setError(false);
+		}).catch(err=>{
+			setRefreshing(false);
+			setError(true);
+		})
+	}
 	
 	if(data === false){
 		return <View style={{ marginTop: 50 }}>
@@ -33,14 +45,31 @@ export default (props)=>{
 
 	var renderItem = (data)=>{
 		return <View>
-			<Text>{data.name}</Text>
-			<Text>HELLO</Text>
+			<Text style={{ fontSize: 18 }} numberOfLines={1}>{data.name}</Text>
+			<Text style={{ color: 'gray', fontStyle: !data.grupo ? 'italic' : 'normal' }} numberOfLines={1}>{(data.grupo || 'Sin grupo')}</Text>
 		</View>
 	}
 
-	return <View style={{ flex: 1 }}>
-		<AlphabetList data={data} onSelect={onPress} renderItem={renderItem} />
-	</View>
+	var addCoordinador = ()=>{
+		props.navigation.navigate('RegistroCoordinador', {
+			onAdd: c=>{
+				setData([...data, c]);
+			}
+		})
+	}
+
+	return <ScrollView style={{ flex: 1 }} refreshControl={
+		<RefreshControl refreshing={refreshing} onRefresh={getCoordinadores} />
+	}>
+		{error ? (
+			<ErrorView message={'Hubo un error cargando los coordinadores...'} refreshing={refreshing} retry={getZona} />
+		) : (
+			<View>
+				<Button text="Registro coordinador" style={{ width: 250, alignSelf: 'center' }} onPress={addCoordinador} />
+				<AlphabetList data={data} onSelect={onPress} renderItem={renderItem} scroll />
+			</View>
+		)}
+	</ScrollView>
 
 }
 
