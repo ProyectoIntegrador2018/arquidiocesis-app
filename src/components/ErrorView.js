@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, ScrollView, RefreshControl } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'
 import Button from './Button';
-import {  } from 'react-native-gesture-handler';
 
 export default (props)=>{
 	if(props.scroll!==undefined){
