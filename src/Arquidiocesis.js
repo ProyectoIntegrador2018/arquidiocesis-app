@@ -56,10 +56,28 @@ var Home = (props)=>{
 	}, []);
 
 	return (
-		<Tab.Navigator initialRouteName='Parroquias'>
-			<Tab.Screen name="Pquias" component={Parroquias} />
-			<Tab.Screen name="Acompañantes" component={ZonasList} />
-			<Tab.Screen name="Coord" component={Coordinadores} />
+		<Tab.Navigator initialRouteName='Parroquias' screenOptions={({route})=>({
+			tabBarIcon: ({ focused, color, size }) => {
+				let iconName;
+				switch(route.name){
+					case 'Parroquias': iconName = 'church';
+					break;
+					case 'Zonas': iconName = 'globe-americas'
+					break;
+					case 'Coordina': iconName = 'user-circle'
+					break;
+					case 'HeMa': iconName = 'users'; 
+					break;
+					case 'Capacitacion': iconName = 'chalkboard-teacher';
+					break;
+					default: iconName = 'exclamation-circle'
+				}
+            return <FontAwesome5 name={iconName} size={size} color={color} style={{ paddingTop: 5 }} />;
+          },
+		})}>
+			<Tab.Screen name="Parroquias" component={Parroquias} />
+			<Tab.Screen name="Zonas" component={ZonasList} />
+			<Tab.Screen name="Coordina" component={Coordinadores} />
 			<Tab.Screen name="HeMa" component={Grupos} />
 			<Tab.Screen name="Capacitacion" component={Capacitacion} />
 		</Tab.Navigator>
