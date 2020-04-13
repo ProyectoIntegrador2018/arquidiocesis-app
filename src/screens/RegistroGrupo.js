@@ -1,49 +1,114 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, CheckBox, Switch} from 'react-native';
+import { View, Text, StyleSheet,  Switch, ActivityIndicator} from 'react-native';
 import { Input, Button, Picker } from '../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import RNPickerSelect from 'react-native-picker-select';
-
 import { API } from '../lib';
-import {Image} from 'react-native' ; 
 
 export default (props)=>{
 	var [loading, setLoading] = useState(false);
 	var [name, setName] = useState('Grupo 1');
-	var [acompañante, setAcompañante]= useState('Pepe Perez');
-	const [isSelected, setSelection] = useState(false);
-	const [isEnabled, setIsEnabled] = useState(false);
-	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+	var [coordinador, setCoordinador]= useState(false);
+	var [parroquia, setParroquia] = useState(false);
+	var [capilla, setCapilla] = useState(false);
+	var [isEnabled, setIsEnabled] = useState(false);
+	
+	var [coordinadorList, setCoordinadorList] = useState(false);
+	var [parroquiasList, setParroquiasList] = useState(false);
+	var [capillasList, setCapillasList] = useState(false);
+
+	useEffect(()=>{
+		API.getParroquias().then(d=>{
+			setParroquiasList(d);
+		});
+
+		API.getCoordinadores().then(c=>{
+			setCoordinadorList(c);
+		})
+	}, [])
 
 	var doRegister = ()=>{
 		if(loading) return;
 		setLoading(true);
-		if(name.length<1) return alert ('Por favor introduzca un nombre');
-		if(acompañante.length<1) return alert ('Por favor introduzca el nombre del acompañante');
+		if(name.length<1) return alert ('Por favor introduzca un nombre.');
+		if(coordinador.length<1) return alert ('Favor de seleccionar un coordinador.');
+		if(!parroquia) return alert("Favor de seleccionar una parroquia");
 		// FALTA HACER REGISTRO
+
+
 	}
 
+	var parroquiaSelected = (p, state=false)=>{
+		setParroquia(p);
+		setCapilla(null);
+		setCapillasList(false)
+		if(!isEnabled && !state) return;
+		API.getParroquia(p.value).then(c=>{
+			setCapillasList(c.capillas || []);
+		});
+	}
+
+	var toggleSwitch = () => {
+		var ps = isEnabled;
+		setIsEnabled(!ps);
+		if(!ps && parroquia){
+			parroquiaSelected(parroquia, !ps)
+		}
+	}
+
+	console.log(coordinador);
+
 	return (
-		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
+		<KeyboardAwareScrollView style={styles.container} bounces={false}>
 			<Text style={styles.header}>Registrar Grupo</Text> 
-			<Input name="Nombre" value={name} onChangeText={setName} textContentType={'Nombre'} />
-				<Input name="Acompañante" value={acompañante} onChangeText={setAcompañante} />
-				<Text style={styles.label}>Pertenece a Capilla?</Text>
-				<View style={styles.checkboxContainer}>
-					<Switch
-						trackColor={{ false: "#767577", true: "#32CD32" }}
-						thumbColor={isEnabled ? "#FFFFFF" : "#f4f3f4"}
-						ios_backgroundColor="#3e3e3e"
-						onValueChange={toggleSwitch}
-						value={isEnabled}
-					/>
+			<Input name="Nombre" value={name} onChangeText={setName} />
+			{/* <Input name="Coordinador" value={coordinador} onChangeText={setCoordinador} /> */}
+			{coordinadorList ? (
+				<Picker name={'Seleccionar coordinador'} items={coordinadorList.map(a=>({ label: a.nombre, value: a.id, ...a }))} onValueChange={setCoordinador} />
+			) : (
+				<ActivityIndicator style={{ height: 80 }} />
+			)}
+			{coordinador ? (
+				<View style={{ marginBottom: 10 }}>
+					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+						<Text style={{ marginRight: 5, fontSize: 16 }}>Nombre:</Text>
+						<Text style={{ fontSize: 16 }}>{coordinador.nombre}</Text>
+					</View>
+					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+						<Text style={{ marginRight: 5, fontSize: 16 }}>Correo:</Text>
+						<Text style={{ fontSize: 16 }}>{coordinador.email}</Text>
+					</View>
 				</View>
-				<Picker name={'Seleccionar Parroquia/Capilla'} items={[
-					{ label: 'Parroquia 1', value: 'p1' },
-					{ label: 'Parroquia 2', value: 'p2' },
-					{ label: 'Parroquia 3', value: 'p3' },
-				]} />
-					
+			) : null}
+			{parroquiasList ? (
+				<Picker name={'Seleccionar Parroquia'} items={parroquiasList.map(a=>({ label: a.nombre, value: a.id }))} onValueChange={parroquiaSelected} />
+			) : (
+				<ActivityIndicator style={{ height: 80 }} />
+			)}
+			{parroquia ? (
+				<View>
+					<Text style={styles.label}>¿Pertenece a Capilla?</Text>
+					<View style={styles.checkboxContainer}>
+						<Switch
+							trackColor={{ false: "#767577", true: "#32CD32" }}
+							thumbColor={isEnabled ? "#FFFFFF" : "#f4f3f4"}
+							ios_backgroundColor="#3e3e3e"
+							onValueChange={toggleSwitch}
+							value={isEnabled}
+						/>
+					</View>
+				</View>
+			) : null}
+			{isEnabled ? (
+				capillasList ? (
+					capillasList.length>0 ? (
+						<Picker name={'Seleccionar Capilla'} items={capillasList.map(a=>({ label: a.nombre, value: a.id }))} onValueChange={setCapilla} />
+					) : (
+						<Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 10, backgroundColor: 'white' }}>Esta parroquia no tiene capillas.</Text>
+					)
+				) : (
+					<ActivityIndicator style={{ height: 80 }} />
+				)
+			) : null}
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
 		</KeyboardAwareScrollView>
 	)
@@ -57,11 +122,6 @@ const styles = StyleSheet.create({
 		fontWeight: '500'
 	},
 	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	loginContainer: {
 		height: '70%', 
 		width: '100%', 
 		padding: 10

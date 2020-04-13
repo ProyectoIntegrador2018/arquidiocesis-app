@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
-import { AlphabetList, ErrorView } from '../components';
+import { AlphabetList, ErrorView, Button } from '../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { API } from '../lib';
 
 export default (props)=>{
-	var [parroquia, setParroquia] = useState(props.route.params);
-	var [capillas, setCapillas] = useState(false);
+	var [grupo, setGrupo] = useState(props.route.params);
+	var [miembros, setMiembros] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 
@@ -18,7 +18,7 @@ export default (props)=>{
 		},
 		headerTitle: '',
 		headerRight: ()=>(
-			<TouchableOpacity onPress={addParroquia}>
+			<TouchableOpacity onPress={addMiembro}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
 		)
@@ -26,11 +26,11 @@ export default (props)=>{
 
 	useEffect(()=>{
 		setError(false);
-		var id = parroquia.id;
-		API.getParroquia(id).then(d=>{
+		var id = grupo.id;
+		API.getGrupo(id).then(d=>{
 			d.id = id;
-			setParroquia(d);
-			setCapillas(d.capillas || [])
+			setGrupo(d);
+			setMiembros(d.miembros || [])
 			setError(false);
 		}).catch(err=>{
 			setRefreshing(false);
@@ -41,11 +41,11 @@ export default (props)=>{
 	var getParroquia = ()=>{
 		setRefreshing(true);
 		setError(false);
-		var id = parroquia.id;
-		API.getParroquia(parroquia.id, true).then(d=>{
+		var id = grupo.id;
+		API.getGrupo(grupo.id, true).then(d=>{
 			d.id = id;
-			setParroquia(d);
-			setCapillas(d.capillas || [])
+			setGrupo(d);
+			setMiembros(d.miembros || [])
 			setRefreshing(false);
 			setError(false);
 		}).catch(err=>{
@@ -54,38 +54,38 @@ export default (props)=>{
 		})
 	}
 
-	var addParroquia = ()=>{
-		props.navigation.navigate('AltaCapilla', {
-			parroquia,
-			onAdded: (capilla=>{
-				if(!capillas) return;
-				setCapillas([...capillas, capilla]);
-			})
-		});
+	var addMiembro = ()=>{
+
 	}
 	
 	var onPress = (item)=>{
-		
+
+	}
+
+	var assistance = ()=>{
+		props.navigation.navigate('Asistencia');
 	}
 
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
-			<Text style={styles.headerText} numberOfLines={1}>{parroquia.nombre}</Text>
+			<Text style={styles.headerText} numberOfLines={1}>{grupo.nombre}</Text>
 			<FontAwesome5 name="edit" style={styles.editIcon} />
 		</View>
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getParroquia} />
 		}>
 			{error ? (
-				<ErrorView message={'Hubo un error cargando la parroquia...'} refreshing={refreshing} retry={getParroquia} />
-			) : capillas!==false ? (
+				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getParroquia} />
+			) : miembros!==false ? (
 				<View>
-					<Text style={styles.sectionText}>CAPILLAS</Text>
-					{capillas.length>0 ? (
-						<AlphabetList data={capillas.map(a=>({ name: a.nombre, ...a }))} onSelect={onPress} scroll={false} sort={'nombre'} />
+					<Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center' }} onPress={assistance} />
+
+					<Text style={styles.sectionText}>MIEMBROS</Text>
+					{miembros.length>0 ? (
+						<AlphabetList data={miembros.map(a=>({ name: a.nombre, ...a }))} onSelect={onPress} scroll={false} sort={'nombre'} />
 					) : (
 						<View>
-							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Esta parroquia no tiene capillas agregadas.</Text>
+							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Este grupo no tiene miembros agregados.</Text>
 						</View>
 					)}
 				</View>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: 'gray',
 		marginVertical: 10,
-		marginTop: 30,
+		marginTop: 10,
 		paddingLeft: 15,
 	}
 })

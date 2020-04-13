@@ -47,29 +47,12 @@ export default (props)=>{
 		})
 	}
 
-	useEffect(()=>{
-		API.getGrupos(false).then(g=>{
-			var d = g.map(a=>{
-				return { label: a.name, value: a.id }
-			})
-			setListGrupo([{ label: 'Sin grupo', value: null }, ...d]);
-		}).catch(err=>{
-			alert("Hubo un error consiguiendo los grupos activos...");
-			setListGrupo([{ label: 'Sin grupo', value: null }]);
-		})
-	}, []);
-
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
 			<Text style={styles.header}>Registrar Coordinador</Text> 
 			<Input name="Nombre" value={name} onChangeText={setName}/>
 			<Input name="Apellidos" value={lastname} onChangeText={setLastname} />
 			<Input name="Edad" value={age} onChangeText={setAge}/>
-			{listGrupo ? (
-				<Picker name="Seleccionar grupo" onValueChange={setGrupo} items={listGrupo} />
-			) : (
-				<ActivityIndicator style={{ height: 80 }} />
-			)}
 
 			<Text style={styles.subHeader}>Credenciales</Text> 
 			<Input name="Correo electrónico" value={email} onChangeText={setEmail} textContentType={'emailAddress'} />

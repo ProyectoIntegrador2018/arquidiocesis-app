@@ -18,12 +18,9 @@ export default (props)=>{
 		if(name.length<1) return alert ('Por favor introduzca un nombre');
 		if(address.length<1) return alert ('Por favor introduzca una direccion');
 
-		API.addCapilla(name, address, parroquia.id).then(done=>{
+		API.addCapilla(name, address, parroquia.id).then(new_capilla=>{
 			if(!onAdded) return;
-			onAdded({
-				id: 129293,
-				name
-			})
+			onAdded(new_capilla);
 			props.navigation.goBack();
 		})
 	}

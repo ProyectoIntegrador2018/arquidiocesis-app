@@ -21,11 +21,12 @@ import {
 	RegistroCoordinador, 
 	AltaPquia, 
 	RegistroMiembro, 
-	RegistroGrupo 
+	RegistroGrupo,
+	Grupo,
+	AltaCapilla,
+	EditMiembro,
 } from './screens';
 import { API } from './lib'
-import AltaCapilla from './screens/AltaCapilla';
-import EditMiembro from './screens/EditMiembro';
 
 var Tab = createBottomTabNavigator();
 var Home = (props)=>{
@@ -86,6 +87,7 @@ var App = (props)=>{
 				<Stack.Screen name="Parroquia" component={Parroquia} />
 				<Stack.Screen name="EditMiembro" component={EditMiembro} />
 				<Stack.Screen name="DetallePersona" component={DetallePersona}/>
+				<Stack.Screen name="Grupo" component={Grupo}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

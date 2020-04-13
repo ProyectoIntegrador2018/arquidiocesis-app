@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, StatusBar } from 'react-native';
 import { Input, Button } from '../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API } from '../lib';
@@ -12,16 +12,13 @@ export default (props)=>{
 	var [password, setPassword] = useState('contrasnaprueba');
 
 	var doLogin = ()=>{
-		if(loading) return;
-		setLoading(true);
-
 		if(email.length<5) return alert('Favor de ingresar un correo electrónico válido.');
 		if(password.length<3) return alert('Favor de ingresar una contraseña válida');
 
 		setLoading(true);
 		API.login(email, password).then(user=>{
-			if(!user) return alert("Correo o contraseña invalida.")
 			setLoading(false);
+			if(!user) return alert("Correo o contraseña invalida.")
 			if(props.onLogin) props.onLogin(user);
 		}).catch(err=>{
 			setLoading(false);
@@ -35,6 +32,7 @@ export default (props)=>{
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<StatusBar barStyle={'dark-content'} />
 			<View style={{ backgroundColor: 'white', height: '30%', width: '100%',paddingTop:20, paddingBottom:60  }}>
 				<View style={{alignItems:"center", justifyContent:"center"}}>
 				<Image source={require("../../assets/logo.jpeg")} />

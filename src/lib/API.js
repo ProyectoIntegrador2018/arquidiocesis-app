@@ -1,23 +1,35 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 
-const ROOT_URL = 'http://localhost:8000/'
+const ROOT_URL = 'http://localhost:8000/api/'
 
 async function post(endpoint, data){
 	var u = await getUser();
 	if(u){
-		data.token = u.token;
+		if(!data) data = { token: u.token }
+		else data.token = u.token;
 	}
-	return axios.post(ROOT_URL+endpoint, data);
+	try{
+		var res = await axios.post(ROOT_URL+endpoint, data);
+		return res.data;
+	}catch(err){
+		return {
+			error: true,
+			message: 'No hubo conexión con el servidor.'
+		}
+	}
 }
 
 async function get(endpoint, data){
 	var u = await getUser();
 	if(u){
-		data.token = u.token;
+		if(!data) data = { token: u.token };
+		else data.token = u.token;
 	}
-
-	return axios.get(ROOT_URL+endpoint, data)
+	var res = await axios.get(ROOT_URL+endpoint, {
+		params: data
+	});
+	return res.data;
 }
 
 // Debug, delete later.
@@ -66,17 +78,16 @@ async function getLogin(){
  * @param {String} password The user's password
  */
 async function login(email, password){
-	await timeout(500);
+	try{
+		var u = await post('login', { email, password });
+		if(!u) return false;
+		if(u.error) return true;
 
-	var user = {
-		nombre: 'Prueba',
-		correo: email,
-		token: 'om12md1iomdiomo1i2mdo39581895n1591n359153n9135831n3',
-		access: 3
+		var user = u.data;
+		await AsyncStorage.setItem('login', JSON.stringify(user));
+	}catch(err){
+		throw err;
 	}
-
-	await AsyncStorage.setItem('login', JSON.stringify(user));
-
 	return user;
 }
 
@@ -105,10 +116,10 @@ async function getZonas(force=false){
 	// DUMMY DATA
 	await timeout(500);
 	var d = [
-		{ id: 1, name: 'Zona1' },
-		{ id: 2, name: 'Zona2' },
-		{ id: 3, name: 'Zona3' },
-		{ id: 4, name: 'Zona4' }
+		{ id: 1, nombre: 'Zona1' },
+		{ id: 2, nombre: 'Zona2' },
+		{ id: 3, nombre: 'Zona3' },
+		{ id: 4, nombre: 'Zona4' }
 	]
 	return d;
 }
@@ -123,10 +134,10 @@ async function getZona(id, force=false){
 	await timeout(500);
 	var d = {
 		id: id,
-		name: 'Zona Prueba',
+		nombre: 'Zona Prueba',
 		decanatos: [
-			{ id: 1, name: 'Decanato del Rosario' },
-			{ id: 2, name: 'Decanato de Fátima' }
+			{ id: 1, nombre: 'Decanato del Rosario' },
+			{ id: 2, nombre: 'Decanato de Fátima' }
 		]
 	}
 	return d;
@@ -142,51 +153,36 @@ async function getDecanato(id, force=false){
 	await timeout(500);
 	var d = {
 		id: id,
-		name: 'Decanato Test',
+		nombre: 'Decanato Test',
 		acompanantes: [
-			{ id: 1, name: 'Raul' },
-			{ id: 2, name: 'Jose' }
+			{ id: 1, nombre: 'Raul' },
+			{ id: 2, nombre: 'Jose' }
 		]
 	}
 	return d;
 }
 
 async function getParroquias(force=false){
-	// DUMMY DATA
-	await timeout(500);
-	var d = [
-		{ id: 1, name: 'Parroquia 1' },
-		{ id: 2, name: 'Parroquia 2' },
-		{ id: 3, name: 'Parroquia 3' },
-		{ id: 4, name: 'Parroquia 4' }
-	]
-	return d;
+	var p = await get('parroquias');
+	if(p.error) throw p;
+	else return p.data;
 }
 
 async function getParroquia(id, force=false){
-	// DUMMY DATA
-	await timeout(500);
-	var d = {
-		id: id,
-		name: 'Parroquia Test',
-		capillas: [
-			{ id: 1, name: 'Capilla 1' },
-			{ id: 2, name: 'Capilla 2' },
-			{ id: 3, name: 'Capilla 3' },
-			{ id: 4, name: 'Capilla 4' }
-		]
-	}
-	return d;
+	var p = await get('parroquias/'+id);
+	if(p.error) throw p;
+	else return p.data;
 }
 
 async function addParroquia(name, address, decanato_id){
-	await timeout(500);
 	var payload = {
 		name,
 		address,
 		decanato: decanato_id
 	};
-	return true;
+	var res = await post('parroquias', payload);
+	if(res.error) throw res;
+	else return res.data;
 }
 
 async function addCapilla(name, address, parroquia_id){
@@ -196,48 +192,53 @@ async function addCapilla(name, address, parroquia_id){
 		address,
 		parroquia: parroquia_id
 	};
-	return true;
+	var res = await post('capillas', payload);
+	if(res.error) throw res;
+	else return res.data;
 }
 
 async function getDecanatos(force=false){
-	var d = [
-		{ name: 'Decanato 1', id: 'D1' },
-		{ name: 'Decanato 2', id: 'D2' },
-		{ name: 'Decanato 2', id: 'D3' },
-	]
-	return d;
+	var p = await get('decanatos');
+	if(p.error) throw p;
+	else return p.data;
 }
 
 async function getCoordinadores(force=false){
 	await timeout(500);
 	var d = [
-		{ name: 'A1', grupo: 'Grupo 1' }, { name: 'A2', grupo: 'Grupo 2' }, { name: 'A3', grupo: 'Grupo 2' },
-		{ name: 'B1', grupo: 'Grupo 1' }, { name: 'B2', grupo: 'Grupo 1' }, { name: 'B3', grupo: 'Grupo 1' },
-		{ name: 'Y1', grupo: 'Grupo 2' }, { name: 'Y2', grupo: 'Grupo 1' }
+		{ nombre: 'Andres', email: 'a00819118@itesm.mx', id: 1 }, 
+		{ nombre: 'Carlos', email: 'A00000000@itesm.mx', id: 2 },
+		{ nombre: 'Rolando', email: 'A00000000@itesm.mx', id: 3 },
+		{ nombre: 'Gerardo', email: 'A00000000@itesm.mx', id: 4 }
 	]
 
 	return d;
 }
 
 async function getGrupos(force=false){
-	await timeout(500);
-	var d = [
-		{ name: 'Grupo 1', id: 20130 },
-		{ name: 'Grupo 2', id: 120102 },
-		{ name: 'Grupo 3', id: 57291 },
-	]
-	return d;
+	var res = await get('grupos');
+	if(res.error) throw res;
+	else return res.data;
 }
 
-async function registerCoordinador(name, lastname, age, email, password, grupo_id){
+async function getGrupo(id, force=false){
+	var res = await get('grupos/'+id);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function addGrupo(nombre, coordinador, parroquia, capilla){
+
+}
+
+async function registerCoordinador(name, lastname, age, email, password){
 	await timeout(500);
 	var payload = {
 		name,
 		lastname,
 		age,
 		email,
-		password,
-		grupo: grupo_id
+		password
 	}
 
 	return true;
@@ -259,5 +260,6 @@ export default {
 	getDecanatos,
 	getCoordinadores,
 	getGrupos,
+	getGrupo,
 	registerCoordinador
 }

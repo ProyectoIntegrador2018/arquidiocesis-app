@@ -21,9 +21,10 @@ export default (props)=>{
 		if(!decanato) return alert('Favor de seleccionar un decanato.');
 
 		setLoading(true);
-		API.addParroquia(name, address, decanato.value).then(done=>{
+		API.addParroquia(name, address, decanato.value).then(new_parroquia=>{
 			setLoading(false);
-			if(onAdd) onAdd({ name });
+			if(!new_parroquia) return alert("Hubo un error agregando la parroquia.");
+			if(onAdd) onAdd(new_parroquia);
 			props.navigation.goBack();
 		}).catch(err=>{
 			setLoading(true);
