@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
-import { AlphabetList, Button } from '../components';
+import { AlphabetList, Button, ErrorView } from '../components';
 import { API } from '../lib';
 
 export default (props)=>{
@@ -43,13 +43,6 @@ export default (props)=>{
 		console.log(item);
 	}
 
-	var renderItem = (data)=>{
-		return <View>
-			<Text style={{ fontSize: 18 }} numberOfLines={1}>{data.nombre}</Text>
-			<Text style={{ color: 'gray', fontStyle: !data.grupo ? 'italic' : 'normal' }} numberOfLines={1}>{(data.grupo || 'Sin grupo')}</Text>
-		</View>
-	}
-
 	var addCoordinador = ()=>{
 		props.navigation.navigate('RegistroCoordinador', {
 			onAdd: c=>{
@@ -66,7 +59,7 @@ export default (props)=>{
 		) : (
 			<View>
 				<Button text="Registro coordinador" style={{ width: 250, alignSelf: 'center' }} onPress={addCoordinador} />
-				<AlphabetList data={data} onSelect={onPress} renderItem={renderItem} scroll />
+				<AlphabetList data={data} onSelect={onPress} scroll />
 			</View>
 		)}
 	</ScrollView>

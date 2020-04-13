@@ -16,6 +16,8 @@ export default (props)=>{
 	var [parroquiasList, setParroquiasList] = useState(false);
 	var [capillasList, setCapillasList] = useState(false);
 
+	var onAdd = props.route.params.onAdd;
+
 	useEffect(()=>{
 		API.getParroquias().then(d=>{
 			setParroquiasList(d);
@@ -28,13 +30,23 @@ export default (props)=>{
 
 	var doRegister = ()=>{
 		if(loading) return;
-		setLoading(true);
 		if(name.length<1) return alert ('Por favor introduzca un nombre.');
-		if(coordinador.length<1) return alert ('Favor de seleccionar un coordinador.');
+		if(!coordinador) return alert ('Favor de seleccionar un coordinador.');
 		if(!parroquia) return alert("Favor de seleccionar una parroquia");
-		// FALTA HACER REGISTRO
 
-
+		setLoading(true);
+		API.addGrupo(name, coordinador.value, parroquia.value, (capilla ? capilla.value : null)).then(new_grupo=>{
+			setLoading(false);
+			if(!new_grupo) return alert("Hubo un error registrando el coordinador");
+			new_grupo.new = true;
+			if(onAdd) onAdd(new_grupo)
+			alert("Se ha agregado el grupo");
+			props.navigation.goBack();
+		}).catch(err=>{
+			console.log(err);
+			alert("Hubo un error registrando el grupo");
+			setLoading(false);
+		})
 	}
 
 	var parroquiaSelected = (p, state=false)=>{
@@ -54,8 +66,6 @@ export default (props)=>{
 			parroquiaSelected(parroquia, !ps)
 		}
 	}
-
-	console.log(coordinador);
 
 	return (
 		<KeyboardAwareScrollView style={styles.container} bounces={false}>

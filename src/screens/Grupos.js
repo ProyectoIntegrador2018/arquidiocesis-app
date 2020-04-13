@@ -54,7 +54,11 @@ export default (props)=>{
 	var renderItem = (data)=>{
 		return <View>
 			<Text style={{ fontSize: 18 }} numberOfLines={1}>{data.nombre}</Text>
-			<Text style={{ color: 'gray', fontStyle: !data.parroquia ? 'italic' : 'normal' }} numberOfLines={1}>{data.parroquia}</Text>
+			{data.new ? (
+				<Text style={{ color: 'green', fontStyle: 'italic' }} numberOfLines={1}>¡Nuevo!</Text>
+			) : (
+				<Text style={{ color: 'gray', fontStyle: !data.parroquia ? 'italic' : 'normal' }} numberOfLines={1}>{data.parroquia}</Text>
+			)}
 		</View>
 	}
 

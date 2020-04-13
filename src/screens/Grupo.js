@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
-import { AlphabetList, ErrorView, Button } from '../components';
+import { AlphabetList, ErrorView, Button, List } from '../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { API } from '../lib';
 
@@ -18,7 +18,7 @@ export default (props)=>{
 		},
 		headerTitle: '',
 		headerRight: ()=>(
-			<TouchableOpacity onPress={addMiembro}>
+			<TouchableOpacity onPress={addMember}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
 		)
@@ -53,10 +53,6 @@ export default (props)=>{
 			setError(true);
 		})
 	}
-
-	var addMiembro = ()=>{
-
-	}
 	
 	var onPress = (item)=>{
 
@@ -65,11 +61,31 @@ export default (props)=>{
 	var assistance = ()=>{
 		props.navigation.navigate('Asistencia');
 	}
+	
+	var showAsistencia = (a)=>{
+		console.log(a);
+	}
+
+	var addMember = ()=>{
+		props.navigation.navigate('RegistroMiembro', {
+			grupo,
+			onAdd: m=>{
+				if(!m) return;
+				setMiembros([...miembros, m])
+			}
+		});
+	}
+
+	var editGroup = ()=>{
+
+	}
 
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText} numberOfLines={1}>{grupo.nombre}</Text>
-			<FontAwesome5 name="edit" style={styles.editIcon} />
+			<TouchableOpacity onPress={editGroup}>
+				<FontAwesome5 name="edit" style={styles.editIcon} />
+			</TouchableOpacity>
 		</View>
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getParroquia} />
@@ -88,6 +104,9 @@ export default (props)=>{
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Este grupo no tiene miembros agregados.</Text>
 						</View>
 					)}
+
+					<Text style={[styles.sectionText, { marginTop: 30 }]}>ASISTENCIAS</Text>
+					<List data={[{ name: '10/04/20' }]} onSelect={showAsistencia} scroll={false} />
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>

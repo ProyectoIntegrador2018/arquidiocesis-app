@@ -6,7 +6,7 @@ export default (props)=>{
 	return (
 		<View style={[styles.container, props.style]}>
 			<Text style={styles.label}>{props.name || 'Input'}</Text>
-			<TextInput style={[styles.input]} placeholder={props.placeholder} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} secureTextEntry={typeof props.password !== 'undefined'} />
+			<TextInput style={[styles.input]} placeholder={props.placeholder} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} keyboardType={props.keyboard} secureTextEntry={typeof props.password !== 'undefined'} />
 		</View>
 	)
 }

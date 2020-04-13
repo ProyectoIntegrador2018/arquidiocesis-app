@@ -114,7 +114,6 @@ async function logout(){
  */
 async function getZonas(force=false){
 	// DUMMY DATA
-	await timeout(500);
 	var d = [
 		{ id: 1, nombre: 'Zona1' },
 		{ id: 2, nombre: 'Zona2' },
@@ -186,7 +185,6 @@ async function addParroquia(name, address, decanato_id){
 }
 
 async function addCapilla(name, address, parroquia_id){
-	await timeout(500);
 	var payload = {
 		name,
 		address,
@@ -204,15 +202,9 @@ async function getDecanatos(force=false){
 }
 
 async function getCoordinadores(force=false){
-	await timeout(500);
-	var d = [
-		{ nombre: 'Andres', email: 'a00819118@itesm.mx', id: 1 }, 
-		{ nombre: 'Carlos', email: 'A00000000@itesm.mx', id: 2 },
-		{ nombre: 'Rolando', email: 'A00000000@itesm.mx', id: 3 },
-		{ nombre: 'Gerardo', email: 'A00000000@itesm.mx', id: 4 }
-	]
-
-	return d;
+	var p = await get('coordinadores');
+	if(p.error) throw p;
+	else return p.data;
 }
 
 async function getGrupos(force=false){
@@ -227,21 +219,45 @@ async function getGrupo(id, force=false){
 	else return res.data;
 }
 
-async function addGrupo(nombre, coordinador, parroquia, capilla){
-
-}
-
-async function registerCoordinador(name, lastname, age, email, password){
-	await timeout(500);
+async function addGrupo(name, coordinador, parroquia, capilla){
 	var payload = {
 		name,
-		lastname,
+		coordinador,
+		parroquia,
+		capilla
+	}
+
+	var res = await post('grupos', payload);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function registerCoordinador(name, age, gender, email, password){
+	var payload = {
+		name,
 		age,
+		gender,
 		email,
 		password
 	}
 
-	return true;
+	var res = await post('coordinadores', payload);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function registerMember(grupo, name, age, gender, email){
+	var payload = {
+		name,
+		grupo,
+		age, 
+		gender,
+		email
+	}
+
+	var res = await post('grupos/register', payload);
+	if(res.error) throw res;
+	else return res.data;
 }
 
 export default {
@@ -250,6 +266,7 @@ export default {
 	login,
 	logout,
 	addCapilla,
+	addGrupo,
 	getZona,
 	getZonas,
 	getDecanato,
@@ -261,5 +278,6 @@ export default {
 	getCoordinadores,
 	getGrupos,
 	getGrupo,
-	registerCoordinador
+	registerCoordinador,
+	registerMember
 }
