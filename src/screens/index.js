@@ -18,6 +18,8 @@ import RegistroMiembro from './RegistroMiembro';
 import AltaCapilla from './AltaCapilla';
 import RegistroGrupo from './RegistroGrupo';
 import Parroquia from './Parroquia'
+import Grupo from './Grupo';
+import EditMiembro from './EditMiembro';
 
 export {
 	Login,
@@ -38,5 +40,7 @@ export {
 	RegistroMiembro,
 	AltaCapilla,
 	RegistroGrupo,
-	Parroquia
+	Parroquia,
+	Grupo,
+	EditMiembro
 }

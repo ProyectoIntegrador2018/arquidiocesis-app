@@ -46,7 +46,7 @@ export default (props)=>{
 
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
-			<Text style={styles.headerText}>{zona.name}</Text>
+			<Text style={styles.headerText}>{zona.nombre}</Text>
 		</View>
 
 			<ScrollView refreshControl={
@@ -57,7 +57,7 @@ export default (props)=>{
 				) : zona.decanatos ? (
 					<View>
 						<Text style={styles.sectionText}>DECANATOS</Text>
-						<AlphabetList data={[{ name: 'test' }]} onSelect={onPress} scroll={false} />
+						<AlphabetList data={[{ nombre: 'test' }]} onSelect={onPress} scroll={false} />
 					</View>
 				) : (
 					<View style={{ marginTop: 50 }}>

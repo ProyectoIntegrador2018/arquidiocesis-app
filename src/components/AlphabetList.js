@@ -6,7 +6,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 export default  (props)=>{
 	var components = []
 	var headers = []
-	var organizedData = Util.organizeListData(props.data, (props.key || 'name'))
+	var organizedData = Util.organizeListData(props.data, (props.sort || 'nombre'))
 
 	for(var i in organizedData){
 		headers.push(components.length);
@@ -51,7 +51,7 @@ var ListItem = (props)=>{
 	}}>
 		<View style={{ backgroundColor: 'white' }}>
 			<View style={styles.item}>
-				<Text>{props.data.name}</Text>
+				<Text>{(props.data.nombre || props.data.name)}</Text>
 				<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
 			</View>
 		</View>

@@ -55,11 +55,11 @@ export default (props)=>{
 		<RefreshControl refreshing={refreshing} onRefresh={getParroquias} />
 	}>
 		{error ? (
-			<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getZona} />
+			<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getParroquias} />
 		) : (
 			<View>
 				<Button text="Agregar parroquia" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
-				<AlphabetList data={data} onSelect={onPress} scroll />
+				<AlphabetList data={data.map(a=>({ name: a.nombre, ...a }))} onSelect={onPress} scroll />
 			</View>
 		)}
 	</ScrollView>

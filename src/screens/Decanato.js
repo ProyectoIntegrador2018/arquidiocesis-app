@@ -47,7 +47,7 @@ export default (props)=>{
 
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
-			<Text style={styles.headerText}>{decanato.name}</Text>
+			<Text style={styles.headerText}>{decanato.nombre}</Text>
 		</View>
 
 		<ScrollView refreshControl={
