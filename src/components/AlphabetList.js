@@ -6,7 +6,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 export default  (props)=>{
 	var components = []
 	var headers = []
-	var organizedData = Util.organizeListData(props.data, (props.sort || 'nombre'))
+	var organizedData = Util.organizeListData(props.data, (props.sort || 'name'))
 
 	for(var i in organizedData){
 		headers.push(components.length);

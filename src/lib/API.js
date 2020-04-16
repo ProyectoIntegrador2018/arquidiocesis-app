@@ -26,10 +26,17 @@ async function get(endpoint, data){
 		if(!data) data = { token: u.token };
 		else data.token = u.token;
 	}
-	var res = await axios.get(ROOT_URL+endpoint, {
-		params: data
-	});
-	return res.data;
+	try{
+		var res = await axios.get(ROOT_URL+endpoint, {
+			params: data
+		});
+		return res.data;
+	}catch(e){
+		return {
+			error: true,
+			message: 'No hubo conexión con el servidor.'
+		}
+	}
 }
 
 // Debug, delete later.
@@ -115,10 +122,10 @@ async function logout(){
 async function getZonas(force=false){
 	// DUMMY DATA
 	var d = [
-		{ id: 1, nombre: 'Zona1' },
-		{ id: 2, nombre: 'Zona2' },
-		{ id: 3, nombre: 'Zona3' },
-		{ id: 4, nombre: 'Zona4' }
+		{ id: 1, name: 'Zona1' },
+		{ id: 2, name: 'Zona2' },
+		{ id: 3, name: 'Zona3' },
+		{ id: 4, name: 'Zona4' }
 	]
 	return d;
 }
@@ -133,10 +140,10 @@ async function getZona(id, force=false){
 	await timeout(500);
 	var d = {
 		id: id,
-		nombre: 'Zona Prueba',
+		name: 'Zona Prueba',
 		decanatos: [
-			{ id: 1, nombre: 'Decanato del Rosario' },
-			{ id: 2, nombre: 'Decanato de Fátima' }
+			{ id: 1, name: 'Decanato del Rosario' },
+			{ id: 2, name: 'Decanato de Fátima' }
 		]
 	}
 	return d;
@@ -152,10 +159,10 @@ async function getDecanato(id, force=false){
 	await timeout(500);
 	var d = {
 		id: id,
-		nombre: 'Decanato Test',
+		name: 'Decanato Test',
 		acompanantes: [
-			{ id: 1, nombre: 'Raul' },
-			{ id: 2, nombre: 'Jose' }
+			{ id: 1, name: 'Raul' },
+			{ id: 2, name: 'Jose' }
 		]
 	}
 	return d;

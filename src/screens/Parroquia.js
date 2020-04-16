@@ -70,7 +70,7 @@ export default (props)=>{
 
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
-			<Text style={styles.headerText} numberOfLines={1}>{parroquia.nombre}</Text>
+			<Text style={styles.headerText} numberOfLines={1}>{parroquia.name}</Text>
 			<FontAwesome5 name="edit" style={styles.editIcon} />
 		</View>
 		<ScrollView refreshControl={
@@ -82,7 +82,7 @@ export default (props)=>{
 				<View>
 					<Text style={styles.sectionText}>CAPILLAS</Text>
 					{capillas.length>0 ? (
-						<AlphabetList data={capillas.map(a=>({ name: a.nombre, ...a }))} onSelect={onPress} scroll={false} sort={'nombre'} />
+						<AlphabetList data={capillas} onSelect={onPress} scroll={false} sort={'nombre'} />
 					) : (
 						<View>
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Esta parroquia no tiene capillas agregadas.</Text>

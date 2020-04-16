@@ -70,7 +70,7 @@ export default (props)=>{
 		) : (
 			<View>
 				<Button text="Agregar grupo" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
-				<AlphabetList data={data} onSelect={onPress} scroll renderItem={renderItem} />
+				<AlphabetList data={data} onSelect={onPress} scroll renderItem={renderItem} sort={'nombre'} />
 			</View>
 		)}
 	</ScrollView>

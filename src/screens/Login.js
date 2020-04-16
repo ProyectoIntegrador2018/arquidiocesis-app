@@ -8,13 +8,13 @@ import {Image} from 'react-native' ;
 export default (props)=>{
 
 	var [loading, setLoading] = useState(false);
-	var [email, setEmail] = useState('prueba@prubea.com');
-	var [password, setPassword] = useState('contrasnaprueba');
+	var [email, setEmail] = useState('carlosa_miranda@outlook.com');
+	var [password, setPassword] = useState('abcd1234');
 
 	var doLogin = ()=>{
 		if(email.length<5) return alert('Favor de ingresar un correo electrónico válido.');
 		if(password.length<3) return alert('Favor de ingresar una contraseña válida');
-
+		
 		setLoading(true);
 		API.login(email, password).then(user=>{
 			setLoading(false);
@@ -49,7 +49,6 @@ export default (props)=>{
 					<Input name="Contraseña" style={{ marginTop: 10 }} value={password} onChangeText={setPassword} textContentType={'password'} password />
 
 					<Button text="Iniciar Sesión" loading={loading} onPress={doLogin} />
-					
 				</KeyboardAwareScrollView>
 			)}
 		</SafeAreaView>

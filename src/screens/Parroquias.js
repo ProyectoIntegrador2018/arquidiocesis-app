@@ -30,13 +30,6 @@ export default (props)=>{
 			setError(true);
 		})
 	}
-	
-	if(data === false){
-		return <View style={{ marginTop: 50 }}>
-			<ActivityIndicator size="large" />
-			<Text style={{ marginTop: 10, textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Cargando datos...</Text>
-		</View>
-	}
 
 	var onPress = (item)=>{
 		props.navigation.navigate('Parroquia', item);
@@ -56,10 +49,15 @@ export default (props)=>{
 	}>
 		{error ? (
 			<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getParroquias} />
+		) : data===false ? (
+			<View style={{ marginTop: 50 }}>
+				<ActivityIndicator size="large" />
+				<Text style={{ marginTop: 10, textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Cargando datos...</Text>
+			</View>
 		) : (
 			<View>
 				<Button text="Agregar parroquia" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
-				<AlphabetList data={data.map(a=>({ name: a.nombre, ...a }))} onSelect={onPress} scroll />
+				<AlphabetList data={data} onSelect={onPress} scroll />
 			</View>
 		)}
 	</ScrollView>
