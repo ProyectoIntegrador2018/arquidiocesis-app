@@ -3,6 +3,9 @@ import { View, Text, StyleSheet,Button, TextInput, TextComponent } from 'react-n
 import { API } from '../lib';
 
 export default (props)=>{
+	var goDetalle = (item)=>{
+		props.navigation.navigate('DetallePersona');
+	}
 	return (
 		<View>
 		
@@ -26,7 +29,9 @@ export default (props)=>{
 			</View>
 
 			<View style={{flexDirection:'row', paddingTop:'75%', paddingLeft:'5%'}}>
-				<Button style={{paddingTop:'50%'}} title='Ficha Medica'></Button>
+				<Button style={{paddingTop:'50%'}} title='Ficha Medica' onPress={() => props.navigation.navigate('FichaMedica')}/>
+					
+				
 			</View>
 		</View>
 		// <Text style={styles.fields}>Nombre:</Text>

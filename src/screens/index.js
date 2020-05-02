@@ -20,6 +20,7 @@ import RegistroGrupo from './RegistroGrupo';
 import Parroquia from './Parroquia'
 import Grupo from './Grupo';
 import EditMiembro from './EditMiembro';
+import FichaMedica from './FichaMedica';
 
 export {
 	Login,
@@ -43,4 +44,5 @@ export {
 	Parroquia,
 	Grupo,
 	EditMiembro,
+	FichaMedica,
 }

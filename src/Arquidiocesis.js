@@ -25,6 +25,7 @@ import {
 	Grupo,
 	AltaCapilla,
 	EditMiembro,
+	FichaMedica,
 } from './screens';
 import { API } from './lib'
 
@@ -107,6 +108,7 @@ var App = (props)=>{
 				<Stack.Screen name="EditMiembro" component={EditMiembro} />
 				<Stack.Screen name="DetallePersona" component={DetallePersona}/>
 				<Stack.Screen name="Grupo" component={Grupo}/>
+				<Stack.Screen name="FichaMedica" component={FichaMedica}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
