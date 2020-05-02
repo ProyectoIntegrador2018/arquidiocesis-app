@@ -21,6 +21,7 @@ import Parroquia from './Parroquia'
 import Grupo from './Grupo';
 import EditMiembro from './EditMiembro';
 import FichaMedica from './FichaMedica';
+import EditarStatus from './EditarStatus';
 
 export {
 	Login,
@@ -45,4 +46,5 @@ export {
 	Grupo,
 	EditMiembro,
 	FichaMedica,
+	EditarStatus,
 }

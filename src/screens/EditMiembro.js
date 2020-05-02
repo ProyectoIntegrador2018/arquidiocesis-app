@@ -12,8 +12,8 @@ export default (props) => {
 	var [name, setName] = useState('pepe');
 	var [lastname, setLastname] = useState('perez');
 	var [age, setAge] = useState('80');
-	var [parroquia, setParroquia] = useState(null);
-
+	var [parroquia, setParroquia] = useState('Don Bosco');
+	var [grupo, setGrupo]= useState('Grupo 1');
 
 	var doCambios = () => {
 		if (loading) return;
@@ -21,10 +21,6 @@ export default (props) => {
 		if (name.length < 1) return alert('Por favor introduzca un nombre');
 		if (lastname.length < 1) return alert('Por favor introduzca un apellido');
 		if (age < 18) return alert('Por favor introduzca una edad valida');
-		// if(parroquia==null) return alert('seleccione una parroquia');
-		// if(parroquia.length<1) return alert('Por favor introduzca una Parroquia')
-		// if(parroquia==null) return alert('seleccione una parroquia');
-		// if(parroquia.length<1) return alert('Por favor introduzca una Parroquia')
 
 		// FALTA hacer de verdad el cambio
 	}
@@ -36,6 +32,8 @@ export default (props) => {
 			<Input name="Nombre" value={name} onChangeText={setName} />
 			<Input name="Apellidos" value={lastname} onChangeText={setLastname} />
 			<Input name="Edad" value={age} onChangeText={setAge} />
+			<Input name="Parroquia" value={parroquia} onChangeText={setParroquia} />
+			<Input name="Grupo" value={grupo} onChangeText={setGrupo}/>
 			<Button text="Guardar Cambios" loading={loading} onPress={doCambios} />
 		</KeyboardAwareScrollView>
 	)

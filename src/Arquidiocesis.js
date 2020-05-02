@@ -26,6 +26,7 @@ import {
 	AltaCapilla,
 	EditMiembro,
 	FichaMedica,
+	EditarStatus,
 } from './screens';
 import { API } from './lib'
 
@@ -109,6 +110,7 @@ var App = (props)=>{
 				<Stack.Screen name="DetallePersona" component={DetallePersona}/>
 				<Stack.Screen name="Grupo" component={Grupo}/>
 				<Stack.Screen name="FichaMedica" component={FichaMedica}/>
+				<Stack.Screen name="EditarStatus" component={EditarStatus}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
