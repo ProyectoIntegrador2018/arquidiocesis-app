@@ -128,16 +128,12 @@ async function getZonas(force=false){
 		return Cache.getZonas()
 	}
 
-	// DUMMY DATA
-	var d = [
-		{ id: 1, name: 'Zona1' },
-		{ id: 2, name: 'Zona2' },
-		{ id: 3, name: 'Zona3' },
-		{ id: 4, name: 'Zona4' }
-	]
-
-	Cache.setZonas(d);
-	return d;
+	var p = await get('zonas');
+	if(p.error) throw p;
+	else{
+		Cache.setZonas(p.data);
+		return p.data;
+	}
 }
 
 /**
@@ -154,18 +150,12 @@ async function getZona(id, force=false){
 		}
 	}
 
-	// DUMMY DATA 
-	await timeout(500);
-	var d = {
-		id: id,
-		name: 'Zona Prueba',
-		decanatos: [
-			{ id: 1, name: 'Decanato del Rosario' },
-			{ id: 2, name: 'Decanato de Fátima' }
-		]
+	var p = await get('zonas/'+id);
+	if(p.error) throw p;
+	else {
+		Cache.setZona(p.data);
+		return p.data;
 	}
-	Cache.setZona(d);
-	return d;
 }
 
 /**

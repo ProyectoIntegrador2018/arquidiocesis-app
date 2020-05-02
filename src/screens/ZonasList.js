@@ -21,7 +21,6 @@ export default (props)=>{
 
 	var getZonas = ()=>{
 		setRefreshing(true);
-		console.log("REFRESHING")
 		API.getZonas(true).then(zonas=>{
 			setData(zonas);
 			setError(false);
@@ -30,6 +29,10 @@ export default (props)=>{
 			setRefreshing(false);
 			setError(true);
 		})
+	}
+
+	var onPress = (item)=>{
+		props.navigation.navigate('Zona', item);
 	}
 
 	if(error){
@@ -43,12 +46,9 @@ export default (props)=>{
 		</View>
 	}
 
-	var onPress = (item)=>{
-		props.navigation.navigate('Zona', item);
-	}
 
 	return <View style={{ flex: 1 }}>
-		<AlphabetList data={data} onSelect={onPress} refreshing={refreshing} onRefresh={getZonas} />
+		<AlphabetList data={data} onSelect={onPress} refreshing={refreshing} onRefresh={getZonas} sort={'nombre'} />
 	</View>
 
 }

@@ -30,18 +30,6 @@ export default (props)=>{
 			setError(true);
 		})
 	}
-	/* var getZonas = ()=>{
-		setRefreshing(true);
-		console.log("REFRESHING")
-		API.getZonas(true).then(zonas=>{
-			setData(zonas);
-			setError(false);
-			setRefreshing(false);
-		}).catch(err=>{
-			setRefreshing(false);
-			setError(true);
-		})
-	} */
 
 	var onPress = (item)=>{
 		props.navigation.navigate('Parroquia', item);
@@ -54,16 +42,6 @@ export default (props)=>{
 				setData([...data, p]);
 			}
 		});
-	}
-	var renderItem = (data)=>{
-		return <View>
-			<Text style={{ fontSize: 18 }} numberOfLines={1}>{data.nombre}</Text>
-			{data.new ? (
-				<Text style={{ color: 'green', fontStyle: 'italic' }} numberOfLines={1}>¡Nuevo!</Text>
-			) : (
-				<Text style={{ color: 'gray', fontStyle: !data.parroquia ? 'italic' : 'normal' }} numberOfLines={1}>{data.parroquia}</Text>
-			)}
-		</View>
 	}
 
 	return <ScrollView style={{ flex: 1 }} refreshControl={
@@ -79,8 +57,7 @@ export default (props)=>{
 		) : (
 			<View>
 				<Button text="Agregar parroquia" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
-				{/* <AlphabetList data={data} onSelect={onPress} scroll /> */}
-				<AlphabetList data={data} onSelect={onPress} scroll renderItem={renderItem} sort={'nombre'} />
+				<AlphabetList data={data} onSelect={onPress} scroll sort={'nombre'} />
 			</View>
 		)}
 	</ScrollView>

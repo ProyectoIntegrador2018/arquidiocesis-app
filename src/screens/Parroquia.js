@@ -16,7 +16,7 @@ export default (props)=>{
 			backgroundColor: '#002E60',
 			shadowOpacity: 0
 		},
-		headerTitle: 'parroquia test',
+		headerTitle: '',
 		headerRight: ()=>(
 			<TouchableOpacity onPress={addParroquia}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
@@ -67,28 +67,17 @@ export default (props)=>{
 	var onPress = (item)=>{
 		props.navigation.navigate('DetalleCapilla')
 	}
-	/* var getZonas = ()=>{
-		setRefreshing(true);
-		console.log("REFRESHING")
-		API.getZonas(true).then(zonas=>{
-			setData(zonas);
-			setError(false);
-			setRefreshing(false);
-		}).catch(err=>{
-			setRefreshing(false);
-			setError(true);
-		})
-	} */
+
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
-			<Text style={styles.headerText}>{parroquia.name}</Text>
+			<Text style={styles.headerText}>{parroquia.nombre}</Text>
 			<FontAwesome5 name="edit" style={styles.editIcon} />
 		</View>
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getParroquia} />
 		}>
 			{error ? (
-				<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getParroquia} />
+				<ErrorView message={'Hubo un error cargando la parroquia...'} refreshing={refreshing} retry={getParroquia} />
 			) : capillas!==false ? (
 				<View>
 					<Text style={styles.sectionText}>CAPILLAS</Text>

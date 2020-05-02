@@ -43,10 +43,14 @@ export default (props)=>{
 	var onPress = (item)=>{
 		props.navigation.navigate('Decanato', item);
 	}
+	
+	var onPressParroquia = (item)=>{
+		props.navigation.navigate('Parroquia', item);
+	}
 
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
-			<Text style={styles.headerText}>{zona.name}</Text>
+			<Text style={styles.headerText}>{zona.nombre}</Text>
 		</View>
 
 			<ScrollView refreshControl={
@@ -57,7 +61,13 @@ export default (props)=>{
 				) : zona.decanatos ? (
 					<View>
 						<Text style={styles.sectionText}>DECANATOS</Text>
-						<AlphabetList data={[{ name: 'test' }]} onSelect={onPress} scroll={false} />
+						<AlphabetList data={zona.decanatos} onSelect={onPress} scroll={false} sort={'nombre'} />
+						{zona.parroquias && zona.parroquias.length>0 && (
+							<View>
+								<Text style={styles.sectionText}>PARROQUIAS</Text>
+								<AlphabetList data={zona.parroquias} onSelect={onPressParroquia} scroll={false} sort={'nombre'} />
+							</View>
+						)}
 					</View>
 				) : (
 					<View style={{ marginTop: 50 }}>
