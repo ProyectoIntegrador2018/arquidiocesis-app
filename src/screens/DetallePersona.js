@@ -8,7 +8,7 @@ export default (props)=>{
 	}
 	return (
 		<View>
-			<View style={{paddingLeft:'5%' ,paddingTop:'0%', flexDirection: 'row', flex: 1}}>
+			<View style={{paddingLeft:'5%' ,paddingTop:'10%', flexDirection: 'row', flex: 1}}>
 				<View>
 					<Text style={styles.fields}>Nombre: </Text>
 					<Text style={styles.fields}>Edad:</Text>
