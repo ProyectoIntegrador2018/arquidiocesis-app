@@ -22,6 +22,7 @@ import Grupo from './Grupo';
 import EditMiembro from './EditMiembro';
 import FichaMedica from './FichaMedica';
 import EditarStatus from './EditarStatus';
+import DetalleCapilla from './DetalleCapilla';
 
 export {
 	Login,
@@ -47,4 +48,5 @@ export {
 	EditMiembro,
 	FichaMedica,
 	EditarStatus,
+	DetalleCapilla,
 }

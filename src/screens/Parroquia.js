@@ -16,7 +16,7 @@ export default (props)=>{
 			backgroundColor: '#002E60',
 			shadowOpacity: 0
 		},
-		headerTitle: '',
+		headerTitle: 'Parroquia',
 		headerRight: ()=>(
 			<TouchableOpacity onPress={addParroquia}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
@@ -53,7 +53,7 @@ export default (props)=>{
 			setError(true);
 		})
 	}
-
+// esta funcion agrega capillas a la parroquia
 	var addParroquia = ()=>{
 		props.navigation.navigate('AltaCapilla', {
 			parroquia,
@@ -65,7 +65,7 @@ export default (props)=>{
 	}
 	
 	var onPress = (item)=>{
-		
+		props.navigation.navigate('DetalleCapilla')
 	}
 
 	return <View style={{ flex: 1 }}>
