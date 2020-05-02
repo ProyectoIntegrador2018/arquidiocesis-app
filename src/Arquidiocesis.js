@@ -80,6 +80,7 @@ var Home = (props)=>{
 			<Tab.Screen name="Coordina" component={Coordinadores} />
 			<Tab.Screen name="HeMa" component={Grupos} />
 			<Tab.Screen name="Capacitacion" component={Capacitacion} />
+
 		</Tab.Navigator>
 	)
 }

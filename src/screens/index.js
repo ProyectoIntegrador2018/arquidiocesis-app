@@ -42,5 +42,5 @@ export {
 	RegistroGrupo,
 	Parroquia,
 	Grupo,
-	EditMiembro
+	EditMiembro,
 }
