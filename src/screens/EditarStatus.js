@@ -9,7 +9,7 @@ export default (props)=>{
 	}
 	return (
 		<View>
-			<View style={{paddingLeft:'5%' ,paddingTop:'15%', paddingBottom:'30%', flexDirection: 'row', flex: 1}}>
+			<View style={{paddingLeft:'5%' ,paddingTop:'15%', paddingBottom:'40%', flexDirection: 'row', flex: 1}}>
 				<View>
 					<Text style={styles.fields}>Nombre: </Text>
 					<Text style={styles.fields}>Grupo:</Text>
@@ -24,7 +24,7 @@ export default (props)=>{
 				
 			</View>
 
-			<View style={{flexDirection:'row', paddingTop:'30%', paddingLeft:'5%',  justifyContent:'center'}}>
+			<View style={{flexDirection:'row', paddingTop:'10%', paddingLeft:'5%',  justifyContent:'center'}}>
 				<Button  buttonStyle={{backgroundColor: "red" }} title='Baja Total' onPress={() => props.navigation.navigate('FichaMedica')}/>	
 			</View>
 			<View style={{flexDirection:'row', paddingTop:'5%', paddingLeft:'5%', justifyContent:'center'}}>

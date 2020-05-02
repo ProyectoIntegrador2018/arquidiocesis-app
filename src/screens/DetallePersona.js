@@ -8,7 +8,7 @@ export default (props)=>{
 	}
 	return (
 		<View>
-			<View style={{paddingLeft:'5%' ,paddingTop:'10%', flexDirection: 'row', flex: 1}}>
+			<View style={{paddingLeft:'5%' ,paddingTop:'10%', paddingBottom:'60%',flexDirection: 'row', flex: 1}}>
 				<View>
 					<Text style={styles.fields}>Nombre: </Text>
 					<Text style={styles.fields}>Edad:</Text>
@@ -27,7 +27,7 @@ export default (props)=>{
 				
 			</View>
 
-			<View style={{flexDirection:'row', paddingTop:'75%', paddingLeft:'5%'}}>
+			<View style={{flexDirection:'row', paddingTop:'20%', paddingLeft:'5%'}}>
 				<Button style={{paddingTop:'0%'}} title='Ficha Medica' onPress={() => props.navigation.navigate('FichaMedica')}/>	
 			</View>
 			<View style={{flexDirection:'row', paddingTop:'5%', paddingLeft:'5%'}}>
