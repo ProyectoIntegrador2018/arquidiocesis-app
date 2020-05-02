@@ -67,7 +67,18 @@ export default (props)=>{
 	var onPress = (item)=>{
 		props.navigation.navigate('DetalleCapilla')
 	}
-
+	/* var getZonas = ()=>{
+		setRefreshing(true);
+		console.log("REFRESHING")
+		API.getZonas(true).then(zonas=>{
+			setData(zonas);
+			setError(false);
+			setRefreshing(false);
+		}).catch(err=>{
+			setRefreshing(false);
+			setError(true);
+		})
+	} */
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText} numberOfLines={1}>{parroquia.name}</Text>
@@ -77,7 +88,7 @@ export default (props)=>{
 			<RefreshControl refreshing={refreshing} onRefresh={getParroquia} />
 		}>
 			{error ? (
-				<ErrorView message={'Hubo un error cargando la parroquia...'} refreshing={refreshing} retry={getParroquia} />
+				<ErrorView message={'Hubo un error cargando los decanatos...'} refreshing={refreshing} retry={getParroquia} />
 			) : capillas!==false ? (
 				<View>
 					<Text style={styles.sectionText}>CAPILLAS</Text>

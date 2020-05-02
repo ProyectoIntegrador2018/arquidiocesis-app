@@ -30,6 +30,18 @@ export default (props)=>{
 			setError(true);
 		})
 	}
+	/* var getZonas = ()=>{
+		setRefreshing(true);
+		console.log("REFRESHING")
+		API.getZonas(true).then(zonas=>{
+			setData(zonas);
+			setError(false);
+			setRefreshing(false);
+		}).catch(err=>{
+			setRefreshing(false);
+			setError(true);
+		})
+	} */
 
 	var onPress = (item)=>{
 		props.navigation.navigate('Parroquia', item);
