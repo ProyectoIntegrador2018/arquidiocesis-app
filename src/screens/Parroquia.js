@@ -16,7 +16,7 @@ export default (props)=>{
 			backgroundColor: '#002E60',
 			shadowOpacity: 0
 		},
-		headerTitle: 'Parroquia',
+		headerTitle: 'parroquia test',
 		headerRight: ()=>(
 			<TouchableOpacity onPress={addParroquia}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
@@ -81,14 +81,14 @@ export default (props)=>{
 	} */
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
-			<Text style={styles.headerText} numberOfLines={1}>{parroquia.name}</Text>
+			<Text style={styles.headerText}>{parroquia.name}</Text>
 			<FontAwesome5 name="edit" style={styles.editIcon} />
 		</View>
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getParroquia} />
 		}>
 			{error ? (
-				<ErrorView message={'Hubo un error cargando los decanatos...'} refreshing={refreshing} retry={getParroquia} />
+				<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getParroquia} />
 			) : capillas!==false ? (
 				<View>
 					<Text style={styles.sectionText}>CAPILLAS</Text>

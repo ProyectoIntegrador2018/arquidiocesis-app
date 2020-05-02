@@ -182,7 +182,7 @@ async function getParroquia(id, force=false){
 
 async function addParroquia(name, address, decanato_id){
 	var payload = {
-		name,
+		name:
 		address,
 		decanato: decanato_id
 	};
