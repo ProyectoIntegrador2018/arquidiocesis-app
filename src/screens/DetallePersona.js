@@ -19,7 +19,7 @@ export default (props)=>{
 				</View>
 
 				<View>
-					<Text style={styles.fields}>Pepe</Text>
+					<Text style={styles.fields}>Gerardo</Text>
 					<Text style={styles.fields}>80</Text>
 					<Text style={styles.fields}>Masculino</Text>
 					<Text style={styles.fields}>Pepe@gmail.com</Text>
@@ -34,18 +34,6 @@ export default (props)=>{
 				
 			</View>
 		</View>
-		// <Text style={styles.fields}>Nombre:</Text>
-		// <Text style={styles.fields}>Sexo:</Text>
-		// <Text style={styles.fields}>Edad:</Text>
-		// <Text style={styles.fields}>email:</Text>
-		// <Text style={styles.fields}>grupo:</Text>
-		
-		// <Button style={styles.boton}
-        //   title='Ficha Medica'
-        // //   onPress={this.signUp}
-        // />
-		
-	//   </View>
 		
     )
   }
