@@ -1,11 +1,21 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet,Button, TextInput, TextComponent } from 'react-native';
+import { View, Text, StyleSheet,Button, TextInput, TextComponent, TouchableOpacity } from 'react-native';
 import { API } from '../lib';
+import { FontAwesome5 } from '@expo/vector-icons'
 
 export default (props)=>{
-	var goDetalle = (item)=>{
-		props.navigation.navigate('DetallePersona');
-	}
+	props.navigation.setOptions({
+		headerStyle: {
+			backgroundColor: '#002E60',
+			shadowOpacity: 0
+		},
+		headerTitle: 'Persona',
+		headerRight: ()=>(
+			<TouchableOpacity onPress={() => props.navigation.navigate('EditarStatus')}>
+				<FontAwesome5 name={'edit'} size={24} style={{ paddingRight: 15 }} color={'white'} />
+			</TouchableOpacity>
+		)
+	});
 	return (
 		<View>
 			<View style={{paddingLeft:'5%' ,paddingTop:'10%', paddingBottom:'60%',flexDirection: 'row', flex: 1}}>
@@ -30,9 +40,7 @@ export default (props)=>{
 			<View style={{flexDirection:'row', paddingTop:'20%', paddingLeft:'5%'}}>
 				<Button style={{paddingTop:'0%'}} title='Ficha Medica' onPress={() => props.navigation.navigate('FichaMedica')}/>	
 			</View>
-			<View style={{flexDirection:'row', paddingTop:'5%', paddingLeft:'5%'}}>
-				<Button style={{paddingTop:'0%'}} title='Editar Status' onPress={() => props.navigation.navigate('EditarStatus')}/>	
-			</View>
+			
 		</View>
 		
     )
