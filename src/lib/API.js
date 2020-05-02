@@ -172,17 +172,13 @@ async function getDecanato(id, force=false){
 		}
 	}
 
-	// DUMMY DATA
-	await timeout(500);
-	var d = {
-		id: id,
-		name: 'Decanato Test',
-		acompanantes: [
-			{ id: 1, name: 'Raul' },
-			{ id: 2, name: 'Jose' }
-		]
+	var p = await get('decanatos/'+id);
+	if(p.error) throw p;
+	else {
+		Cache.setDecanato(p.data);
+		return p.data;
 	}
-	Cache.setDecanato(d);
+
 	return d;
 }
 

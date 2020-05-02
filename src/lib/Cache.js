@@ -5,6 +5,7 @@ var getZona = id=>zonas.find(a=>a.id==id && a.cached);
 var isZonasDirty = ()=>zonas_dirty;
 var setZona = (i)=>{
 	i.cached = true;
+	if(!zonas) zonas = [];
 	var ix = zonas.findIndex(a=>a.id==i.id)
 	if(ix==-1) zonas.push(i);
 	else zonas[ix] = i;
@@ -28,6 +29,7 @@ var getDecanato = id=>decanatos.find(a=>a.id==id && a.cached);
 var isDecanatosDirty = ()=>decanatos_dirty;
 var setDecanato = (i)=>{
 	i.cached = true;
+	if(!decanatos) decanatos = [];
 	var ix = decanatos.findIndex(a=>a.id==i.id)
 	if(ix==-1) decanatos.push(i);
 	else decanatos[ix] = i;
@@ -54,6 +56,7 @@ var setParroquias = z=>{
 }
 var setParroquia = (i)=>{
 	i.cached = true;
+	if(!parroquias) parroquias = [];
 	var ix = parroquias.findIndex(a=>a.id==i.id)
 	if(ix==-1) parroquias.push(i);
 	else parroquias[ix] = i;
@@ -77,6 +80,7 @@ var setCapillas = z=>{
 }
 var setCapilla = (i)=>{
 	i.cached = true;
+	if(!capillas) capillas = [];
 	var ix = capillas.findIndex(a=>a.id==i.id)
 	if(ix==-1) capillas.push(i);
 	else capillas[ix] = i;
@@ -100,6 +104,7 @@ var setCoordinadores = z=>{
 }
 var setCoordinador = (i)=>{
 	i.cached = true;
+	if(!coordinadores) coordinadores = [];
 	var ix = coordinadores.findIndex(a=>a.id==i.id)
 	if(ix==-1) coordinadores.push(i);
 	else coordinadores[ix] = i;
@@ -123,6 +128,7 @@ var setGrupos = z=>{
 }
 var setGrupo = (i)=>{
 	i.cached = true;
+	if(!grupos) grupos = [];
 	var ix = grupos.findIndex(a=>a.id==i.id)
 	if(ix==-1) grupos.push(i);
 	else grupos[ix] = i;
