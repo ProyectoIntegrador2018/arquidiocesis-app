@@ -133,6 +133,12 @@ var setGrupo = (i)=>{
 	if(ix==-1) grupos.push(i);
 	else grupos[ix] = i;
 }
+var registerAsistencia = (id, date)=>{
+	var g = getGrupo(id);
+	if(!g.asistencias) g.asistencias = []
+	g.asistencias.push(date);
+	setGrupo(g);
+}
 var setGruposDirty = (d=true)=>{
 	grupos_dirty = d;
 }
@@ -190,5 +196,6 @@ export default {
 	setGruposDirty,
 	isGruposDirty,
 	setGrupo,
-	addGrupo
+	addGrupo,
+	registerAsistencia
 }

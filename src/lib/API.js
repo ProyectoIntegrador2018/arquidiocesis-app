@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import Cache from './Cache';
 
-const ROOT_URL = 'http://192.168.0.131:8000/api/'
+const ROOT_URL = 'http://localhost:8000/api/'
 
 async function post(endpoint, data){
 	var u = await getUser();
@@ -331,6 +331,22 @@ async function registerMember(grupo, name, age, gender, email){
 	else return res.data;
 }
 
+async function getAsistencia(grupo_id, fecha){
+
+}
+
+async function registerAsistencia(grupo_id, fecha, miembros, force=false){
+	var payload = {
+		fecha, miembros, force
+	}
+	var res = await post('grupos/'+grupo_id+'/asistencia', payload);
+	if(res.error) throw res;
+	else {
+		Cache.registerAsistencia(grupo_id, res.data);
+		return res.data
+	}
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -350,5 +366,6 @@ export default {
 	getGrupos,
 	getGrupo,
 	registerCoordinador,
-	registerMember
+	registerMember,
+	registerAsistencia
 }

@@ -3,10 +3,13 @@ import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, 
 import { AlphabetList, ErrorView, Button, List } from '../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { API } from '../lib';
+import moment from 'moment/min/moment-with-locales'
+moment.locale('es')
 
 export default (props)=>{
 	var [grupo, setGrupo] = useState(props.route.params);
 	var [miembros, setMiembros] = useState(false);
+	var [asistencias, setAsistencias] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 
@@ -30,7 +33,8 @@ export default (props)=>{
 		API.getGrupo(id).then(d=>{
 			d.id = id;
 			setGrupo(d);
-			setMiembros(d.miembros || [])
+			setMiembros(d.miembros || []);
+			setAsistencias(d.asistencias || []);
 			setError(false);
 		}).catch(err=>{
 			setRefreshing(false);
@@ -46,6 +50,7 @@ export default (props)=>{
 			d.id = id;
 			setGrupo(d);
 			setMiembros(d.miembros || [])
+			setAsistencias(d.asistencias || []);
 			setRefreshing(false);
 			setError(false);
 		}).catch(err=>{
@@ -59,7 +64,25 @@ export default (props)=>{
 	}
 
 	var assistance = ()=>{
-		props.navigation.navigate('Asistencia');
+		props.navigation.navigate('Asistencia', {
+			grupo,
+			onAssistance: date=>{
+				setAsistencias(a=>Array.from(new Set([...a, date])));
+			}
+		});
+	}
+
+	var formatDate = a=>{
+		var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
+		return f.charAt(0).toUpperCase() + f.substr(1);
+	}
+
+	var formatAsistencias = ()=>{
+		if(!asistencias) return []
+		return asistencias.sort((a,b)=>moment(b, 'YYYY-MM-DD').unix()-moment(a, 'YYYY-MM-DD').unix()).map(a=>({
+			name: formatDate(a),
+			id: a
+		}))
 	}
 	
 	var showAsistencia = (a)=>{
@@ -104,9 +127,14 @@ export default (props)=>{
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Este grupo no tiene miembros agregados.</Text>
 						</View>
 					)}
-
 					<Text style={[styles.sectionText, { marginTop: 30 }]}>ASISTENCIAS</Text>
-					<List data={[{ name: '10/04/20' }]} onSelect={showAsistencia} scroll={false} />
+					{asistencias && asistencias.length>0 ? (
+						<List data={formatAsistencias()} onSelect={showAsistencia} scroll={false} />
+					) : (
+						<View>
+							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No se han marcado asistencias.</Text>
+						</View>
+					)}
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>

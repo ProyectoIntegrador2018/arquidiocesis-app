@@ -16,13 +16,20 @@ export default  (props)=>{
 			</View>
 		)
 		components.push(...organizedData[i].map((a,ix)=>props.renderItem ? (
-			<View style={{ backgroundColor: 'white' }}>
-				<TouchableOpacity onPress={()=>props.onSelect(a)} key={'item'+i+'-'+ix}>
+			<View style={{ backgroundColor: 'white' }} key={'item'+i+'-'+ix}>
+				{props.onSelect ? (
+					<TouchableOpacity onPress={()=>props.onSelect(a)} >
+						<View style={[styles.item]}>
+							{props.renderItem(a, ix)}
+							<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+						</View>
+					</TouchableOpacity>
+				) : (
 					<View style={[styles.item]}>
-						{props.renderItem(a)}
+						{props.renderItem(a, ix)}
 						<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
 					</View>
-				</TouchableOpacity>
+				)}
 			</View>
 		) : <ListItem data={a} onPress={props.onSelect} key={'item'+i+'-'+ix} />))
 	}

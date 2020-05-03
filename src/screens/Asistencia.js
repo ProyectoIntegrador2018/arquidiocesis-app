@@ -1,28 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator,TouchableOpacity, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements'
-import { Util } from '../lib'
+import { Input } from '../components'
+import { Util, API } from '../lib'
+import DatePicker from 'react-native-datepicker';
+import moment from 'moment/min/moment-with-locales'
+moment.locale('es')
 
 var Screen = (props)=>{
-
 	var [data, setData] = useState(false);
+	var [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+	var [sending, setSending] = useState(false);
+	var [assistance, setAssistance] = useState([]);
+	var pickerRef = useRef(null)
 
 	// When the screen is shown get data for this group.
 	useEffect(()=>{
-		setTimeout(()=>{
-			// Dummy data
-			var d = [
-				{ id: 1, name: 'Savanah Navarro', checked: false }, { id: 2, name: 'Gage Mcguire', checked: false }, { id: 3, name: 'Giana Russell', checked: false }, { id: 4, name: 'Matthew Mcclure', checked: false },
-				{ id: 5, name: 'Gabriel Carr', checked: false }, { id: 6, name: 'Skyla Mclean', checked: false }, { id: 7, name: 'Gretchen Price', checked: false }, { id: 8, name: 'Aedan Reeves', checked: false },
-				{ id: 9, name: 'Paxton Campos', checked: false }, { id: 10, name: 'Milo Sandoval', checked: false }, { id: 11, name: 'Ella George', checked: false }, { id: 12, name: 'Waylon Anthony', checked: false },
-				{ id: 13, name: 'Marco Cantu', checked: false }, { id: 14, name: 'Madeline Mendez', checked: false }, { id: 15, name: 'Amaya Salinas', checked: false }, { id: 16, name: 'Moses Bray', checked: false },
-				{ id: 17, name: 'Kira Berry', checked: false }, { id: 18, name: 'Brynn Estrada', checked: false }, { id: 19, name: 'Maribel Burns', checked: false }, { id: 20, name: 'Bria Bradley', checked: false },
-				{ id: 21, name: 'Ana Mckee', checked: false }, { id: 22, name: 'Abigail Boyer', checked: false }, { id: 23, name: 'Nikhil Beard', checked: false }, { id: 24, name: 'Marcelo Hebert', checked: false },
-				{ id: 25, name: 'Amelie Gibbs', checked: false }, { id: 26, name: 'Uriah Powell', checked: false }, { id: 27, name: 'Kallie Proctor', checked: false }, { id: 28, name: 'Landon Wilkinson', checked: false },
-				{ id: 29, name: 'Colten Garcia', checked: false }, { id: 30, name: 'Clare Austin', checked: false }, { id: 31, name: 'Van Griffin', checked: false }, { id: 32, name: 'Edward Cannon', checked: false }
-			]
-			setData(d.sort((a,b)=>a.name>b.name));
-		}, 500)
+		API.getGrupo(props.route.params.grupo.id, true).then(g=>{
+			setData(g.miembros);
+		}).catch(err=>{
+			
+		})
 	}, [])
 
 	// Cargando datos
@@ -34,16 +32,11 @@ var Screen = (props)=>{
 	}
 
 	var onCheck = (id, checked) =>{
-		var new_data = data;
-		var dix = new_data.findIndex(a=>a.id==id);
-		if(dix==-1) return;
-		new_data[dix].checked = checked;
-		setData(new_data);
+		setAssistance(p=>checked ? Array.from(new Set([...p, id])) : p.filter(a=>a!=id));
 	}
 
 	// Ordenar datos
-	var orderedData = Util.organizeListData(data, 'name');
-
+	var orderedData = Util.organizeListData(data, 'nombre');
 	var components = []
 	var headers = []
 	for(var i in orderedData){
@@ -53,18 +46,79 @@ var Screen = (props)=>{
 				<Text style={styles.headerText}>{i}</Text>
 			</View>
 		)
-		components.push(...orderedData[i].map((a,ix)=><CheckboxItem {...a} onCheck={onCheck} key={'item'+i+'-'+ix} />))
+		components.push(...orderedData[i].map((a,ix)=><CheckboxItem {...a} onCheck={onCheck} key={'item'+i+'-'+ix} checked={false} />))
 	}
 
+	var formatDate = a=>{
+		var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
+		return f.charAt(0).toUpperCase() + f.substr(1);
+	}
+	
+	var showOverwrite = ()=>{
+		Alert.alert('Asistencia ya existe', 'Ya se ha tomado asistencia en esta fecha de este grupo, ¿Deseas reemplazarla por esta?', [
+			{ style: 'cancel', text: 'Cancelar' },
+			{ text: 'Reemplazar', onPress: ()=>{
+				saveAsistencia(true);
+			} }
+		])
+	}
+
+	var saveAsistencia = (force=false)=>{
+		setSending(true);
+		API.registerAsistencia(props.route.params.grupo.id, date, assistance, force).then(done=>{
+			setSending(false);
+			props.route.params.onAssistance(done);
+			alert("Se ha guardado la asistencia.");
+			props.navigation.goBack();
+		}).catch(err=>{
+			if(err.code==52 && !force){
+				showOverwrite();
+			}else{
+				setSending(false);
+				alert("Hubo un error marcando la asistencia.");
+			}
+		})
+	}
+
+
 	return <View style={StyleSheet.absoluteFillObject}>
-		<ScrollView style={StyleSheet.absoluteFillObject} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers}>
+		<View style={{ paddingHorizontal: 20, marginTop: 10 }}>
+			<Input value={formatDate(date)} name={'Fecha'} readonly onPress={()=>{
+				pickerRef.current.onPressDate()
+			}} />
+		</View>
+		<ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers}>
 			{components}
 		</ScrollView>
+		<View style={{ backgroundColor: '#012E60', position: 'absolute', bottom: 50, width: 200, borderRadius: 100, alignSelf: 'center' }}>
+			<TouchableOpacity onPress={()=>saveAsistencia(false)}>
+				{ sending ? (
+					<ActivityIndicator size={'small'} style={{ padding: 12 }} />
+				) : (
+					<Text style={{ color: 'white', fontSize: 20, textAlign: 'center', padding: 10 }}>Guardar</Text>
+				)}
+			</TouchableOpacity>
+		</View>
+		<DatePicker
+			ref={pickerRef}
+        	date={date}
+        	mode="date"
+        	format="YYYY-MM-DD"
+        	confirmBtnText="Confirmar"
+        	cancelBtnText="Cancelar"
+			customStyles={{
+				dateIcon: { display: 'none' },
+				dateInput: { display: 'none' }
+			}}
+			locale={'es'}
+			onDateChange={d=>{
+				setDate(d);
+		  	}}
+      />
 	</View>
 }
 
 Screen.navigationOptions = (props)=>({
-	title: "ASSI!!",
 	headerStyle: {
 		backgroundColor: 'red'
 	}
@@ -76,17 +130,17 @@ export default Screen;
 var CheckboxItem = (props)=>{
 	var [checked, setChecked] = useState(props.checked);
 	var onPress = ()=>{
+		props.onCheck(props.id, !checked)
 		setChecked(!checked)
-		props.onCheck(props.id, checked)
 	}
 
 	return <TouchableOpacity onPress={onPress}>
-		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+		<View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white' }}>
 			<CheckBox 
 				checked={checked}
 				onPress={onPress}
 				containerStyle={{ marginRight: 0 }} />
-			<Text style={{ fontSize: 16 }}>{props.name}</Text>
+			<Text style={{ fontSize: 16 }}>{props.nombre}</Text>
 		</View>
 	</TouchableOpacity>
 }
@@ -101,7 +155,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	header: {
-		backgroundColor: 'white',
+		backgroundColor: '#F7F7F7',
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: '#CCC',
 		width: '100%',
