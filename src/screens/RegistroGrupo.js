@@ -43,7 +43,6 @@ export default (props)=>{
 			alert("Se ha agregado el grupo");
 			props.navigation.goBack();
 		}).catch(err=>{
-			console.log(err);
 			alert("Hubo un error registrando el grupo");
 			setLoading(false);
 		})

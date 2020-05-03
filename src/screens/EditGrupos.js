@@ -21,7 +21,6 @@ export default (props)=>{
 
 	var getZonas = ()=>{
 		setRefreshing(true);
-		console.log("REFRESHING")
 		API.getZonas(true).then(zonas=>{
 			setData(zonas);
 			setError(false);

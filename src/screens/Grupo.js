@@ -66,6 +66,7 @@ export default (props)=>{
 	var assistance = ()=>{
 		props.navigation.navigate('Asistencia', {
 			grupo,
+			new: true,
 			onAssistance: date=>{
 				setAsistencias(a=>Array.from(new Set([...a, date])));
 			}
@@ -86,7 +87,14 @@ export default (props)=>{
 	}
 	
 	var showAsistencia = (a)=>{
-		console.log(a);
+		props.navigation.navigate('Asistencia', {
+			grupo,
+			date: a.id,
+			new: false,
+			onDelete: d=>{
+				setAsistencias(a=>a.filter(a=>a!=d));
+			}
+		})
 	}
 
 	var addMember = ()=>{

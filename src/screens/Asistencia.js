@@ -8,19 +8,44 @@ import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
 var Screen = (props)=>{
+	var isNew = props.route.params.new;
 	var [data, setData] = useState(false);
-	var [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+	var [date, setDate] = useState(isNew ? moment().format('YYYY-MM-DD') : props.route.params.date);
 	var [sending, setSending] = useState(false);
 	var [assistance, setAssistance] = useState([]);
 	var pickerRef = useRef(null)
 
+	props.navigation.setOptions({
+		headerTitle: 'Editar asistencia'
+	})
+
 	// When the screen is shown get data for this group.
 	useEffect(()=>{
-		API.getGrupo(props.route.params.grupo.id, true).then(g=>{
-			setData(g.miembros);
-		}).catch(err=>{
-			
-		})
+		if(isNew){
+			API.getGrupo(props.route.params.grupo.id, true).then(g=>{
+				setData(g.miembros);
+			}).catch(err=>{
+				Alert.alert('Error cargando asistencia', 'La asistencia solicitada no existe.', [
+					{ style: 'cancel', onPress: ()=>{
+						props.navigation.goBack();
+					} }
+				])
+			})
+		}else{
+			API.getAsistencia(props.route.params.grupo.id, props.route.params.date).then(d=>{
+				setData(d.miembros);
+				setAssistance(d.miembros.filter(a=>a.assist).map(a=>a.id));
+			}).catch(err=>{
+				if(err.code==34){
+					props.route.params.onDelete(date);
+				}
+				Alert.alert('Error cargando asistencia', 'La asistencia solicitada no existe.', [
+					{ style: 'cancel', onPress: ()=>{
+						props.navigation.goBack();
+					} }
+				])
+			})
+		}
 	}, [])
 
 	// Cargando datos
@@ -46,7 +71,7 @@ var Screen = (props)=>{
 				<Text style={styles.headerText}>{i}</Text>
 			</View>
 		)
-		components.push(...orderedData[i].map((a,ix)=><CheckboxItem {...a} onCheck={onCheck} key={'item'+i+'-'+ix} checked={false} />))
+		components.push(...orderedData[i].map((a,ix)=><CheckboxItem {...a} onCheck={onCheck} key={'item'+i+'-'+ix} checked={assistance.findIndex(b=>b==a.id)!=-1} />))
 	}
 
 	var formatDate = a=>{
@@ -65,19 +90,33 @@ var Screen = (props)=>{
 
 	var saveAsistencia = (force=false)=>{
 		setSending(true);
-		API.registerAsistencia(props.route.params.grupo.id, date, assistance, force).then(done=>{
-			setSending(false);
-			props.route.params.onAssistance(done);
-			alert("Se ha guardado la asistencia.");
-			props.navigation.goBack();
-		}).catch(err=>{
-			if(err.code==52 && !force){
-				showOverwrite();
-			}else{
+		if(isNew){
+			API.registerAsistencia(props.route.params.grupo.id, date, assistance, force).then(done=>{
+				setSending(false);
+				props.route.params.onAssistance(done);
+				alert("Se ha guardado la asistencia.");
+				props.navigation.goBack();
+			}).catch(err=>{
+				if(err.code==52 && !force){
+					showOverwrite();
+				}else{
+					setSending(false);
+					alert("Hubo un error marcando la asistencia.");
+				}
+			})
+		}else{
+			API.saveAsistencia(props.route.params.grupo.id, date, assistance).then(done=>{
+				if(done.deleted){
+					props.route.params.onDelete(done.date);
+				}
+				setSending(false);	
+				alert("Se ha guardado la asistencia.");
+				props.navigation.goBack();
+			}).catch(err=>{
 				setSending(false);
 				alert("Hubo un error marcando la asistencia.");
-			}
-		})
+			})
+		}
 	}
 
 
@@ -118,12 +157,6 @@ var Screen = (props)=>{
 	</View>
 }
 
-Screen.navigationOptions = (props)=>({
-	headerStyle: {
-		backgroundColor: 'red'
-	}
-})
-
 export default Screen;
 
 
@@ -133,6 +166,10 @@ var CheckboxItem = (props)=>{
 		props.onCheck(props.id, !checked)
 		setChecked(!checked)
 	}
+
+	useEffect(()=>{
+		setChecked(props.checked);
+	}, [props.checked])
 
 	return <TouchableOpacity onPress={onPress}>
 		<View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white' }}>

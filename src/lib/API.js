@@ -332,7 +332,9 @@ async function registerMember(grupo, name, age, gender, email){
 }
 
 async function getAsistencia(grupo_id, fecha){
-
+	var res = await get('grupos/'+grupo_id+'/asistencia/'+fecha);
+	if(res.error) throw res;
+	else return res.data;
 }
 
 async function registerAsistencia(grupo_id, fecha, miembros, force=false){
@@ -345,6 +347,12 @@ async function registerAsistencia(grupo_id, fecha, miembros, force=false){
 		Cache.registerAsistencia(grupo_id, res.data);
 		return res.data
 	}
+}
+
+async function saveAsistencia(grupo_id, fecha, miembros){
+	var res = await post('grupos/'+grupo_id+'/asistencia/'+fecha, { miembros });
+	if(res.error) throw res;
+	else return res.data
 }
 
 export default {
@@ -367,5 +375,7 @@ export default {
 	getGrupo,
 	registerCoordinador,
 	registerMember,
-	registerAsistencia
+	registerAsistencia,
+	getAsistencia,
+	saveAsistencia
 }
