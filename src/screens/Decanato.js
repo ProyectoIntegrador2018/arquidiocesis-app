@@ -21,6 +21,7 @@ export default (props)=>{
 		setError(false);
 		API.getDecanato(decanato.id).then(d=>{
 			setDecanato(d);
+			console.log(d);
 			setRefreshing(false);
 			setError(false);
 		}).catch(err=>{
@@ -42,12 +43,12 @@ export default (props)=>{
 	}
 
 	var onPress = (item)=>{
-		props.navigation.navigate('DetallePersona', item);
+		props.navigation.navigate('Parroquia', item);
 	}
 
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
-			<Text style={styles.headerText}>{decanato.name}</Text>
+			<Text style={styles.headerText}>{decanato.nombre}</Text>
 		</View>
 
 		<ScrollView refreshControl={
@@ -55,10 +56,16 @@ export default (props)=>{
 		}>
 			{error ? (
 				<ErrorView message={'Hubo un error cargando el decanato...'} refreshing={refreshing} retry={getDecanato} />
-			) : decanato.acompanantes ? (
+			) : decanato.parroquias ? (
 				<View>
-					<Text style={styles.sectionText}>ACOMPAÑANTES</Text>
-					<AlphabetList data={decanato.acompanantes} onSelect={onPress} />
+					<Text style={styles.sectionText}>PARROQUIAS</Text>
+					{decanato.parroquias && decanato.parroquias.length>0 ? (
+						<AlphabetList data={decanato.parroquias} onSelect={onPress} sort={'nombre'} />
+					) : (
+						<View>
+							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Este decanato no tiene parroquias agregadas.</Text>
+						</View>
+					)}
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>
