@@ -123,7 +123,7 @@ var Screen = (props)=>{
 	return <View style={StyleSheet.absoluteFillObject}>
 		<View style={{ paddingHorizontal: 20, marginTop: 10 }}>
 			<Input value={formatDate(date)} name={'Fecha'} readonly onPress={()=>{
-				pickerRef.current.onPressDate()
+				if(isNew) pickerRef.current.onPressDate()
 			}} />
 		</View>
 		<ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers}>

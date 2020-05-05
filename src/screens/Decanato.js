@@ -53,7 +53,7 @@ export default (props)=>{
 
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getDecanato} />
-		}>
+		}> 	
 			{error ? (
 				<ErrorView message={'Hubo un error cargando el decanato...'} refreshing={refreshing} retry={getDecanato} />
 			) : decanato.parroquias ? (

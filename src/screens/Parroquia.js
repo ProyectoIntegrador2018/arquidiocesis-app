@@ -30,7 +30,7 @@ export default (props)=>{
 		API.getParroquia(id).then(d=>{
 			d.id = id;
 			setParroquia(d);
-			setCapillas(d.capillas || [])
+			setCapillas(d.capillas.filter(a=>a.nombre) || [])
 			setError(false);
 		}).catch(err=>{
 			setRefreshing(false);
@@ -45,7 +45,7 @@ export default (props)=>{
 		API.getParroquia(parroquia.id, true).then(d=>{
 			d.id = id;
 			setParroquia(d);
-			setCapillas(d.capillas || [])
+			setCapillas(d.capillas.filter(a=>a.nombre) || [])
 			setRefreshing(false);
 			setError(false);
 		}).catch(err=>{
@@ -65,7 +65,11 @@ export default (props)=>{
 	}
 	
 	var onPress = (item)=>{
-		props.navigation.navigate('DetalleCapilla')
+		item.parroquia = parroquia;
+		item.onDelete = (id)=>{
+			setCapillas(a=>a.filter(a=>a.id!=id));
+		}
+		props.navigation.navigate('DetalleCapilla', item)
 	}
 
 	return <View style={{ flex: 1 }}>
@@ -101,9 +105,6 @@ export default (props)=>{
 }
 
 const styles = StyleSheet.create({
-	testText: {
-		fontSize: 20
-	},
 	container: {
 		flex: 1,
 		alignItems: 'center',

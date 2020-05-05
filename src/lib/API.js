@@ -42,8 +42,25 @@ async function get(endpoint, data){
 	}
 }
 
-// Debug, delete later.
-var timeout = (ms) => new Promise(r=>setTimeout(r, ms));
+async function sendDelete(endpoint, data){
+	var u = await getUser();
+	if(u){
+		if(!data) data = { token: u.token };
+		else data.token = u.token;
+	}
+	try{
+		console.log("DELETE /"+endpoint);
+		var res = await axios.delete(ROOT_URL+endpoint, {
+			params: data
+		});
+		return res.data;
+	}catch(e){
+		return {
+			error: true,
+			message: 'No hubo conexión con el servidor.'
+		}
+	}
+}
 
 /**
  * Get the user that is logged in.
@@ -355,6 +372,28 @@ async function saveAsistencia(grupo_id, fecha, miembros){
 	else return res.data
 }
 
+async function getCapilla(capilla_id){
+	var res = await get('capillas/'+capilla_id);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function editCapilla(capilla_id, data, parroquia_id){
+	var payload = {
+		...data,
+		parroquia_id
+	}
+}
+
+async function deleteCapilla(parroquia_id, capilla_id){
+	var res = await sendDelete('capillas/'+capilla_id);
+	if(res.error) throw res;
+	else{
+		Cache.deleteParroquiaCapilla(parroquia_id, capilla_id)
+		return res.data
+	}
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -377,5 +416,7 @@ export default {
 	registerMember,
 	registerAsistencia,
 	getAsistencia,
-	saveAsistencia
+	saveAsistencia,
+	getCapilla,
+	deleteCapilla
 }

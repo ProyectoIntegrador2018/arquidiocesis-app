@@ -21,7 +21,10 @@ export default (props)=>{
 		API.addCapilla(name, address, parroquia.id).then(new_capilla=>{
 			if(!onAdded) return;
 			onAdded(new_capilla);
+			alert('Se ha agregado la capilla')
 			props.navigation.goBack();
+		}).catch(err=>{
+			alert('Hubo un error agregando la capilla.')
 		})
 	}
 
