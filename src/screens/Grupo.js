@@ -60,7 +60,9 @@ export default (props)=>{
 	}
 	
 	var onPress = (item)=>{
-		props.navigation.navigate('DetallePersona');
+		props.navigation.navigate('DetallePersona', {
+			persona: item
+		});
 	}
 
 	var assistance = ()=>{

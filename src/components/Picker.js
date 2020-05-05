@@ -5,7 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 export default (props)=>{
 
-	var [select, setSelect] = useState(0);
+	var [select, setSelect] = useState(props.select+1 || 0);
 	var items = (props.items || [])
 	var placeholder = (props.placeholder || { label: 'Seleccionar valor...', value: null });
 	var pickerRef = useRef(null)
