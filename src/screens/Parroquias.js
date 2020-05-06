@@ -9,8 +9,8 @@ export default (props)=>{
 	var [error, setError] = useState(false);
 
 	useEffect(()=>{
-		API.getParroquias().then(zonas=>{
-			setData(zonas);
+		API.getParroquias().then(d=>{
+			setData(d);
 			setRefreshing(false);
 			setError(false);
 		}).catch(err=>{
@@ -32,7 +32,12 @@ export default (props)=>{
 	}
 
 	var onPress = (item)=>{
-		props.navigation.navigate('Parroquia', item);
+		props.navigation.navigate('Parroquia', {
+			...item,
+			onDelete: function(id){
+				setData(d=>d.filter(a=>a.id!=id));
+			}
+		});
 	}
 
 	var addParroquia = ()=>{

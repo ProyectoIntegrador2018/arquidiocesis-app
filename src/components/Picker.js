@@ -5,10 +5,13 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 export default (props)=>{
 
-	var [select, setSelect] = useState(props.select+1 || 0);
+	var [select, setSelect] = useState(0);
 	var items = (props.items || [])
 	var placeholder = (props.placeholder || { label: 'Seleccionar valor...', value: null });
-	var pickerRef = useRef(null)
+
+	useEffect(()=>{
+		valueSelected(props.select+1)
+	}, [props.select])
 
 	var valueSelected = (val, index)=>{
 		if(index==0) return;
@@ -23,15 +26,12 @@ export default (props)=>{
 			<Text style={styles.label}>{props.name || 'Input'}</Text>
 			<View style={styles.input}>
 				<RNPickerSelect
-					ref={pickerRef}
 					placeholder={props.placeholder}
 					onValueChange={valueSelected}
 					items={items}
 					textInputProps={{
 						style: styles.pickerStyle,
 					}}
-
-					disabled={props.disabled===true}
 				>
 					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
 						<Text style={{ fontSize: 18, width: '100%', color: !items[select-1] ? 'gray' : 'black' }}>{(items[select-1] || placeholder).label}</Text>

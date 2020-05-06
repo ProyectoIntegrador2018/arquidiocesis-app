@@ -26,8 +26,10 @@ export default (props)=>{
 			if(!new_parroquia) return alert("Hubo un error agregando la parroquia.");
 			if(onAdd) onAdd(new_parroquia);
 			props.navigation.goBack();
+			alert("Se ha agregado la parroquia.")
 		}).catch(err=>{
-			setLoading(true);
+			console.log(err);
+			setLoading(false);
 			alert("Hubo un error agregando la parroquia.");
 		});
 	}
@@ -35,7 +37,7 @@ export default (props)=>{
 	useEffect(()=>{
 		API.getDecanatos(false).then(decanatos=>{
 			var d = decanatos.map(a=>{
-				return { label: a.name, value: a.id }
+				return { label: a.nombre, value: a.id }
 			})
 			setListDecanatos(d);
 		});

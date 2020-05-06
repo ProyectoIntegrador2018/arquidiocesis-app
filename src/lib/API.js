@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import Cache from './Cache';
 
-const ROOT_URL = 'http://localhost:8000/api/'
+const ROOT_URL = 'http://192.168.0.111:8000/api/'
 
 async function post(endpoint, data){
 	var u = await getUser();
@@ -232,10 +232,10 @@ async function getParroquia(id, force=false){
 
 async function addParroquia(name, address, decanato_id){
 	var payload = {
-		name:
+		name,
 		address,
 		decanato: decanato_id
-	};
+	}
 	var res = await post('parroquias', payload);
 	if(res.error) throw res;
 	else return res.data;
@@ -387,6 +387,7 @@ async function editCapilla(capilla_id, data, parroquia_id){
 		...data,
 		parroquia_id
 	}
+	// Edit cache
 }
 
 async function deleteCapilla(parroquia_id, capilla_id){
@@ -394,6 +395,15 @@ async function deleteCapilla(parroquia_id, capilla_id){
 	if(res.error) throw res;
 	else{
 		Cache.deleteParroquiaCapilla(parroquia_id, capilla_id)
+		return res.data
+	}
+}
+
+async function deleteParroquia(parroquia_id){
+	var res = await sendDelete('parroquias/'+parroquia_id);
+	if(res.error) throw res;
+	else{
+		Cache.deleteParroquia(parroquia_id);
 		return res.data
 	}
 }
@@ -422,5 +432,6 @@ export default {
 	getAsistencia,
 	saveAsistencia,
 	getCapilla,
-	deleteCapilla
+	deleteCapilla,
+	deleteParroquia
 }

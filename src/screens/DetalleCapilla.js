@@ -71,7 +71,7 @@ export default (props)=>{
 			{ text: 'Cancelar', style: 'cancel' },
 			{ text: 'Eliminar', style: 'destructive', onPress: ()=>{
 				API.deleteCapilla(capilla.parroquia.id, capilla.id).then(done=>{
-					alert('Capilla eliminada.');
+					alert('Se ha eliminado la capilla.');
 					props.navigation.goBack();
 					if(onDelete) onDelete(capilla.id);
 				}).catch(err=>{
