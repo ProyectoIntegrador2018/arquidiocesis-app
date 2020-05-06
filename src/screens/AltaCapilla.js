@@ -22,8 +22,11 @@ export default (props)=>{
 			if(!onAdded) return;
 			onAdded(new_capilla);
 			alert('Se ha agregado la capilla')
+			setLoading(false);
 			props.navigation.goBack();
 		}).catch(err=>{
+			console.error(err);
+			setLoading(false);
 			alert('Hubo un error agregando la capilla.')
 		})
 	}

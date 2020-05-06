@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
-import { AlphabetList, ErrorView, Button, List } from '../components';
+import { AlphabetList, ErrorView, Button, List, Input } from '../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { API } from '../lib';
 import moment from 'moment/min/moment-with-locales'
+import Cache from '../lib/Cache';
 moment.locale('es')
 
 export default (props)=>{
@@ -12,6 +13,7 @@ export default (props)=>{
 	var [asistencias, setAsistencias] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
+	var [capilla, setCapilla] = useState(false);
 
 
 	props.navigation.setOptions({
@@ -42,7 +44,7 @@ export default (props)=>{
 		})
 	}, [])
 
-	var getParroquia = ()=>{
+	var getGrupo = ()=>{
 		setRefreshing(true);
 		setError(false);
 		var id = grupo.id;
@@ -63,6 +65,18 @@ export default (props)=>{
 		props.navigation.navigate('DetallePersona', {
 			persona: item
 		});
+	}
+
+	var goParroquia = ()=>{
+		var p = grupo.parroquia;
+		p.readonly = true;
+		props.navigation.navigate('Parroquia', p)
+	}
+
+	var goCapilla = ()=>{
+		var p = grupo.capilla;
+		p.readonly = true;
+		props.navigation.navigate('DetalleCapilla', p)
 	}
 
 	var assistance = ()=>{
@@ -121,13 +135,43 @@ export default (props)=>{
 			</TouchableOpacity>
 		</View>
 		<ScrollView refreshControl={
-			<RefreshControl refreshing={refreshing} onRefresh={getParroquia} />
+			<RefreshControl refreshing={refreshing} onRefresh={getGrupo} />
 		}>
 			{error ? (
-				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getParroquia} />
+				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getGrupo} />
 			) : miembros!==false ? (
 				<View>
-					<Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center' }} onPress={assistance} />
+					{miembros.length>0 && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={assistance} />}
+					{ grupo.parroquia ? (
+						<View>
+							<Text style={styles.sectionText}>VER PARROQUIA</Text>
+							<TouchableOpacity onPress={goParroquia}>
+								<View style={{ backgroundColor: 'white' }}>
+									<View style={styles.item}>
+										<Text style={{ fontSize: 16 }}>{grupo.parroquia.nombre}</Text>
+										<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+									</View>
+								</View>
+							</TouchableOpacity>
+						</View>
+					) : grupo.capilla ? (
+						<View>
+							<Text style={styles.sectionText}>VER CAPILLA</Text>
+							<TouchableOpacity onPress={goCapilla}>
+								<View style={{ backgroundColor: 'white' }}>
+									<View style={styles.item}>
+										<Text style={{ fontSize: 16 }}>{grupo.capilla.nombre}</Text>
+										<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+									</View>
+								</View>
+							</TouchableOpacity>
+						</View>
+					) : (
+						<View>
+							<Text style={styles.sectionText}>VER PARROQUIA</Text>
+							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Este grupo no tiene parroquia.</Text>
+						</View>
+					)}
 
 					<Text style={styles.sectionText}>MIEMBROS</Text>
 					{miembros.length>0 ? (
@@ -186,8 +230,24 @@ const styles = StyleSheet.create({
 	sectionText: {
 		fontSize: 14,
 		color: 'gray',
+		marginBottom: 10,
+		paddingLeft: 15,
+	},
+	item: {
+		paddingLeft: 15, 
+		paddingVertical: 15, 
+		width: '100%', 
+		borderBottomColor: '#CCC',
+		borderBottomWidth: StyleSheet.hairlineWidth, 
+		flexDirection: 'row', 
+		alignItems: 'center', 
+		justifyContent: 'space-between' 
+	},
+	sectionText: {
+		fontSize: 14,
+		color: 'gray',
 		marginVertical: 10,
-		marginTop: 10,
+		marginTop: 30,
 		paddingLeft: 15,
 	}
 })

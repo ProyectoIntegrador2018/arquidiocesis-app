@@ -56,8 +56,18 @@ export default (props)=>{
 			<Text style={{ fontSize: 18 }} numberOfLines={1}>{data.nombre}</Text>
 			{data.new ? (
 				<Text style={{ color: 'green', fontStyle: 'italic' }} numberOfLines={1}>¡Nuevo!</Text>
+			) : (data.parroquia || data.capilla) ? (
+				<Text style={{ color: 'gray', fontStyle: (!data.parroquia && !data.capilla) ? 'italic' : 'normal' }} numberOfLines={1}>
+					{data.parroquia ? (
+						('Parroquia: '+data.parroquia.nombre)
+					) : (
+						('Capilla: '+data.capilla.nombre)
+					)}
+				</Text>
 			) : (
-				<Text style={{ color: 'gray', fontStyle: !data.parroquia ? 'italic' : 'normal' }} numberOfLines={1}>{data.parroquia}</Text>
+				<Text style={{ color: 'gray', fontStyle: 'italic' }} numberOfLines={1}>
+					Sin parroquia
+				</Text>
 			)}
 		</View>
 	}

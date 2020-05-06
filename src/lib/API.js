@@ -249,7 +249,11 @@ async function addCapilla(name, address, parroquia_id){
 	};
 	var res = await post('capillas', payload);
 	if(res.error) throw res;
-	else return res.data;
+	else {
+		Cache.parroquiaAddCapilla(parroquia_id, res.data);
+		Cache.addCapilla(res.data);
+		return res.data;
+	}
 }
 
 async function getDecanatos(force=false){

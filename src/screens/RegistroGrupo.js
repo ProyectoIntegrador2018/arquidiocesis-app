@@ -35,7 +35,7 @@ export default (props)=>{
 		if(!parroquia) return alert("Favor de seleccionar una parroquia");
 
 		setLoading(true);
-		API.addGrupo(name, coordinador.value, parroquia.value, (capilla ? capilla.value : null)).then(new_grupo=>{
+		API.addGrupo(name, coordinador.value, (capilla && isEnabled ? null : parroquia.value), (capilla ? capilla.value : null)).then(new_grupo=>{
 			setLoading(false);
 			if(!new_grupo) return alert("Hubo un error registrando el coordinador");
 			new_grupo.new = true;
@@ -43,6 +43,7 @@ export default (props)=>{
 			alert("Se ha agregado el grupo");
 			props.navigation.goBack();
 		}).catch(err=>{
+			console.error(err);
 			alert("Hubo un error registrando el grupo");
 			setLoading(false);
 		})

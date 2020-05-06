@@ -10,6 +10,7 @@ export default (props)=>{
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 
+	var readonly = props.route.params.readonly;
 
 	props.navigation.setOptions({
 		headerStyle: {
@@ -75,7 +76,9 @@ export default (props)=>{
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{parroquia.nombre}</Text>
-			<FontAwesome5 name="edit" style={styles.editIcon} />
+			{readonly ? null : (
+				<FontAwesome5 name="edit" style={styles.editIcon} />
+			)}
 		</View>
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getParroquia} />

@@ -68,6 +68,14 @@ var deleteParroquiaCapilla = (parroquia_id, capilla_id) =>{
 	setParroquia(p);
 	return true;
 }
+var parroquiaAddCapilla = (parroquia_id, capilla)=>{
+	var p = getParroquia(parroquia_id);
+	if(!p) return false;
+	if(!p.capillas) p.capillas = []
+	p.capillas.push(capilla);
+	setParroquia(p);
+	return true;
+}
 var setParroquiasDirty = (d=true)=>{
 	parroquias_dirty = d;
 }
@@ -96,6 +104,7 @@ var setCapillasDirty = (d=true)=>{
 	capillas_dirty = d;
 }
 var addCapilla = i=>{
+	if(!capillas) capillas = []
 	capillas.push(i);
 }
 
@@ -181,6 +190,7 @@ export default {
 	setParroquia,
 	addParroquia,
 	deleteParroquiaCapilla,
+	parroquiaAddCapilla,
 
 	getCapillas,
 	getCapilla,
