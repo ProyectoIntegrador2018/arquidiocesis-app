@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity, Alert } from 'react-native';
-import { AlphabetList, ErrorView, Input, Button } from '../components';
+import { AlphabetList, ErrorView, Input, Button, Picker } from '../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { API } from '../lib';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -11,6 +11,8 @@ export default (props)=>{
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 	var [edit, setEdit] = useState(false);
+	var [listDecanatos, setListDecanatos] = useState(false);
+	var [decanato, setDecanato] = useState(false);
 
 	var readonly = props.route.params.readonly;
 	var onDelete = props.route.params.onDelete;
@@ -40,6 +42,12 @@ export default (props)=>{
 			setRefreshing(false);
 			setError(true);
 		})
+		API.getDecanatos(false).then(decanatos=>{
+			var d = decanatos.map(a=>{
+				return { label: a.nombre, value: a.id }
+			})
+			setListDecanatos(d);
+		});
 	}, [])
 
 	var getParroquia = ()=>{
@@ -124,10 +132,15 @@ export default (props)=>{
 							)}
 						</View>
 					)}
-
+					{/* editar parroquia */}
 					<KeyboardAwareScrollView style={{ padding: 10, marginTop: 10 }}>
 						<Input name="Nombre" value={parroquia.nombre} readonly={!edit} />
 						<Input name="Dirección" value={parroquia.direccion} readonly={!edit} />
+						{listDecanatos ? (
+							<Picker onValueChange={setDecanato} name="Seleccionar decanato" items={listDecanatos} />
+							) : (
+							<ActivityIndicator style={{ height: 80 }} />
+						)}
 						{edit && <Button text={'Guardar'} onPress={saveParroquia} />}
 						{edit && <Button text={'Eliminar'} color={'#FF2233'} onPress={deleteParroquia} />}
 					</KeyboardAwareScrollView>
