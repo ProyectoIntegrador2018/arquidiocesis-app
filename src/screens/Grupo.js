@@ -62,7 +62,7 @@ export default (props)=>{
 	}
 	
 	var onPress = (item)=>{
-		props.navigation.navigate('DetallePersona', {
+		props.navigation.navigate('DetalleMiembro', {
 			persona: item
 		});
 	}

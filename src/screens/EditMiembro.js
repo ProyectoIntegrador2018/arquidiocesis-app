@@ -25,7 +25,6 @@ export default (props) => {
 		// FALTA hacer de verdad el cambio
 	}
 
-	// aun debe buscar nombres de verdad
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
 			<Text style={styles.header}>Editar Miembro</Text>

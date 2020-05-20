@@ -10,12 +10,12 @@ export default (props)=>{
 	var placeholder = (props.placeholder || { label: 'Seleccionar valor...', value: null });
 
 	useEffect(()=>{
-		valueSelected(props.select+1)
+		valueSelected(null, props.select+1)
 	}, [props.select])
 
 	var valueSelected = (val, index)=>{
-		if(index==0) return;
 		setSelect(index);
+		if(index==0) return;
 		if(props.onValueChange){
 			props.onValueChange(items[index-1]);
 		}

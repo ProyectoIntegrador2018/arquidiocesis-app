@@ -75,12 +75,12 @@ export default (props)=>{
 						{ label: 'Masculino', value: 'Masculino' },
 						{ label: 'Femenino', value: 'Femenino' },
 						{ label: 'Sin especificar', value: 'Sin especificar' }
-					]} onValueChange={v=>editField('sexo')(v.value)} select={getGender()} disabled={!edit} />
+					]} onValueChange={v=>v ? editField('sexo')(v.value) : null} select={getGender()} disabled={!edit} />
 					{ persona.estatus=='Baja Definitiva' ? null : (
 						<Picker name="Estatus" items={[
 							{ label: 'Activo', value: 'Activo' },
 							{ label: 'Baja Parcial', value: 'Baja Parcial' }
-						]} onValueChange={v=>editField('estatus')(v.value)} select={getStatus()} disabled={!edit} />
+						]} onValueChange={v=>v ? editField('estatus')(v.value) : null} select={getStatus()} disabled={!edit} />
 					) }
 					{edit && <Button text={'Guardar'} onPress={savePersona} loading={sending} />}
 					{edit && <Button text={'Baja definitiva'} color={'#FF2233'} onPress={deletePersona} loading={sending} />}

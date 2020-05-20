@@ -16,7 +16,7 @@ var Screen = (props)=>{
 	var pickerRef = useRef(null)
 
 	props.navigation.setOptions({
-		headerTitle: 'Editar asistencia'
+		headerTitle: isNew ? 'Tomar asistencia' : 'Editar asistencia'
 	})
 
 	// When the screen is shown get data for this group.

@@ -23,6 +23,7 @@ import EditMiembro from './EditMiembro';
 import FichaMedica from './FichaMedica';
 import EditarStatus from './EditarStatus';
 import DetalleCapilla from './DetalleCapilla';
+import DetalleMiembro from './DetalleMiembro';
 
 export {
 	Login,
@@ -49,4 +50,5 @@ export {
 	FichaMedica,
 	EditarStatus,
 	DetalleCapilla,
+	DetalleMiembro,
 }

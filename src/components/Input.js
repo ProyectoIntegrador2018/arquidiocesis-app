@@ -7,11 +7,11 @@ export default (props)=>{
 		<View style={[styles.container, props.style]}>
 			<Text style={styles.label}>{props.name || 'Input'}</Text>
 			{ typeof props.readonly === 'undefined' || props.readonly===false ? (
-				<TextInput style={[styles.input]} placeholder={props.placeholder} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} keyboardType={props.keyboard} secureTextEntry={typeof props.password !== 'undefined'}/>
+				<TextInput style={[styles.input]} placeholder={(props.placeholder || props.name)} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} keyboardType={props.keyboard} secureTextEntry={typeof props.password !== 'undefined'}/>
 			) : (
 				<TouchableWithoutFeedback onPress={props.onPress}>
 					<View style={[styles.input, { justifyContent: 'center' }]}>
-						<Text style={{ fontSize: 20, color: !props.value || props.value.length==0 ? 'gray' : 'black' }}>{!props.value || props.value.length==0 ? props.placeholder : props.value}</Text>
+						<Text style={{ fontSize: 20, color: !props.value || props.value.length==0 ? 'gray' : 'black' }}>{(!props.value || props.value.length==0) ? (props.placeholder.length>0 ? props.placeholder : props.name) : props.value}</Text>
 					</View>
 				</TouchableWithoutFeedback>
 			)}

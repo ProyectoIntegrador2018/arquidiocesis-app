@@ -58,6 +58,7 @@ export default (props)=>{
 	}
 
 	var selectedParroquia = (v)=>{
+		if(!v) return
 		if(v.id==parroquia) setParroquia(false);
 		else setParroquia(v.id);
 	}
@@ -97,7 +98,7 @@ export default (props)=>{
 					{edit && <Text style={{ textAlign: 'center', fontSize: 20 }}>Editando capilla</Text>}
 					<Input name={'Nombre'} value={nombre} placeholder={'Nombre'} readonly={!edit} />
 					<Input name={'Dirección'} value={direccion} placeholder={'Dirección'} readonly={!edit} />
-					<Picker name={'Parroquia'} items={parroquias ? parroquias.map(a=>({ label: a.nombre, value: a.id, ...a })) : []} onValueChange={selectedParroquia} disabled={!edit} placeholder={{ label: capilla.parroquia.nombre }} />
+					<Picker name={'Parroquia'} items={parroquias ? parroquias.map(a=>({ label: a.nombre, value: a.id, ...a })) : [{ label: capilla.parroquia.nombre }]} onValueChange={selectedParroquia} disabled={!edit} select={edit ? -1 : 0} />
 					{edit && <Button text={'Guardar'} onPress={saveCapilla} />}
 					{edit && <Button text={'Eliminar'} color={'#FF2233'} onPress={deleteCapilla} />}
 				</View>
