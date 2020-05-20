@@ -9,7 +9,7 @@ export default (props)=>{
 
 	var [loading, setLoading] = useState(false);
 	var [email, setEmail] = useState('carlosa_miranda@outlook.com');
-	var [password, setPassword] = useState('abcd1234');
+	var [password, setPassword] = useState('hello');
 
 	var doLogin = ()=>{
 		if(email.length<5) return alert('Favor de ingresar un correo electrónico válido.');
@@ -25,10 +25,6 @@ export default (props)=>{
 			alert("Hubo un error realizando el login.")
 		})
 	}
-
-	useEffect(()=>{
-		
-	}, [props.user])
 
 	return (
 		<SafeAreaView style={styles.container}>

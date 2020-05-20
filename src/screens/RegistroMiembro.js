@@ -130,8 +130,6 @@ export default (props)=>{
 			<Input name="Teléfono Casa" value={phoneHome} onChangeText={setPhoneHome} />
 			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} />
 
-
-
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
 
 			<DatePicker

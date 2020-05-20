@@ -28,7 +28,9 @@ import {
 	FichaMedica,
 	EditarStatus,
 	DetalleCapilla,
-	DetalleMiembro
+	DetalleMiembro,
+	User,
+	ChangePassword,
 } from './screens';
 import { API } from './lib'
 
@@ -37,18 +39,17 @@ var Home = (props)=>{
 	var [user, setUser] = useState(false);
 	var { navigation } = props;
 
-	var logout = ()=>{
-		Alert.alert('Cerrar sesión', '¿Deseas cerrar sesión?', [
-			{ text: 'Cerrar sesión', onPress: props.route.params.logout },
-			{ text: 'Cancelar', style: 'cancel' }
-		])
+	var gotoUser = ()=>{
+		props.navigation.navigate('User', {
+			logout: props.route.params.logout
+		})
 	}
 
 	navigation.setOptions({
 		headerLeft: () => (
-		  <TouchableOpacity onPress={logout}>
+		  <TouchableOpacity onPress={gotoUser}>
 			  <View style={{ width: 50, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-					<FontAwesome5 name="sign-out-alt" size={25} color={'white'} />
+					<FontAwesome5 name="user-circle" solid size={25} color={'white'} />
 			  </View>
 		  </TouchableOpacity>
 		),
@@ -115,6 +116,8 @@ var App = (props)=>{
 				<Stack.Screen name="EditarStatus" component={EditarStatus}/>
 				<Stack.Screen name="DetalleCapilla" component={DetalleCapilla}/>
 				<Stack.Screen name="DetalleMiembro" component={DetalleMiembro}/>
+				<Stack.Screen name="User" component={User}/>
+				<Stack.Screen name="ChangePassword" component={ChangePassword}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

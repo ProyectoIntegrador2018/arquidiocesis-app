@@ -1,7 +1,7 @@
 import Dummy from './Dummy'
 
 import Decanato from './Decanato';
-import Admin from './Admin';
+import User from './User';
 import Capacitacion from './Capacitacion';
 import Coordinadores from './Coordinadores';
 import Grupos from './Grupos';
@@ -24,18 +24,20 @@ import FichaMedica from './FichaMedica';
 import EditarStatus from './EditarStatus';
 import DetalleCapilla from './DetalleCapilla';
 import DetalleMiembro from './DetalleMiembro';
+import ChangePassword from './ChangePassword';
 
 export {
 	Login,
 	Parroquias,
 	Decanato,
-	Admin,
+	User,
 	Capacitacion,
 	Coordinadores,
 	Grupos,
 	Dummy,
 	Registro,
 	Asistencia,
+	ChangePassword,
 	DetallePersona,
 	ZonasList,
 	Zona,

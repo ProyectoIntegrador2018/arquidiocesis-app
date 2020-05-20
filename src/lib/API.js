@@ -108,7 +108,7 @@ async function login(email, password){
 	try{
 		var u = await post('login', { email, password });
 		if(!u) return false;
-		if(u.error) return true;
+		if(u.error) return false;
 
 		var user = u.data;
 		await AsyncStorage.setItem('login', JSON.stringify(user));
@@ -116,6 +116,13 @@ async function login(email, password){
 		throw err;
 	}
 	return user;
+}
+
+async function changePassword(old_password, new_password){
+	var u = await post('password/change', { old_password, new_password });
+	if(!u) return false;
+	if(!u.error) await AsyncStorage.removeItem('login')
+	return u;
 }
 
 /**
@@ -343,7 +350,6 @@ async function registerMember(grupo, data){
 		grupo,
 		...data,
 	}
-	throw new Error('HELOO')
 
 	var res = await post('grupos/register', payload);
 	if(res.error) throw res;
@@ -438,5 +444,6 @@ export default {
 	getCapilla,
 	deleteCapilla,
 	deleteParroquia,
-	getMiembro
+	getMiembro,
+	changePassword
 }
