@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import Cache from './Cache';
 
-const ROOT_URL = 'http://172.20.10.3:8000/api/'
+const ROOT_URL = 'http://192.168.0.131:8000/api/'
 
 async function post(endpoint, data){
 	var u = await getUser();
@@ -437,7 +437,22 @@ async function registerAdmin(data){
 }
 
 async function changeAdminPassword(email, password){
-	var res = await post('admin/users/add', { email, password });
+	var res = await post('admin/users/password', { email, password });
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function deleteAdmin(email){
+	var res = await post('admin/users/delete', { email });
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function editAdmin(old_email, data){
+	var res = await post('admin/users/edit', {
+		id: old_email,
+		...data
+	});
 	if(res.error) throw res;
 	else return res.data;
 }
@@ -473,5 +488,7 @@ export default {
 	adminGetUsers,
 	registerAdmin,
 	getAdmin,
-	changeAdminPassword
+	deleteAdmin,
+	changeAdminPassword,
+	editAdmin
 }

@@ -7,7 +7,7 @@ import Coordinadores from './Coordinadores';
 import Grupos from './Grupos';
 import Parroquias from './Parroquias';
 import Login from './Login';
-import RegistroAdmin from './RegistroAdmin';
+import RegistroAdmin from './admin/RegistroAdmin';
 import Asistencia from './Asistencia';
 import DetallePersona from './DetallePersona';
 import ZonasList from './ZonasList';
@@ -21,12 +21,12 @@ import Parroquia from './Parroquia'
 import Grupo from './Grupo';
 import EditMiembro from './EditMiembro';
 import FichaMedica from './FichaMedica';
-import EditarStatus from './EditarStatus';
 import DetalleCapilla from './DetalleCapilla';
 import DetalleMiembro from './DetalleMiembro';
 import ChangePassword from './ChangePassword';
-import AdminUsers from './AdminUsers';
-import DetalleAdmin from './DetalleAdmin';
+import AdminUsers from './admin/AdminUsers';
+import DetalleAdmin from './admin/DetalleAdmin';
+import EditAdmin from './admin/EditAdmin';
 
 export {
 	Login,
@@ -53,8 +53,8 @@ export {
 	Grupo,
 	EditMiembro,
 	FichaMedica,
-	EditarStatus,
 	DetalleCapilla,
 	DetalleMiembro,
-	AdminUsers
+	AdminUsers,
+	EditAdmin
 }

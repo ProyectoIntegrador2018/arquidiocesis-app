@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { API, Util } from '../lib';
-import { Input, LoadingView, Button, Picker } from '../components';
+import { API, Util } from '../../lib';
+import { Input, Button, Picker } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props)=>{

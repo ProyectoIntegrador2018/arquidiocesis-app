@@ -11,6 +11,10 @@ export default (props)=>{
 	var [email, setEmail] = useState('');
 	var [password, setPassword] = useState('');
 
+	useEffect(()=>{
+		setLoading(false);
+	}, []);
+
 	var doLogin = ()=>{
 		var { valid, prompt } = Util.validateForm({ email, password }, {
 			email: { type: 'email', prompt: 'Favor de introducir un correo electrónico válido.' },
@@ -26,7 +30,7 @@ export default (props)=>{
 		}).catch(err=>{
 			setLoading(false);
 			alert("Hubo un error realizando el login.")
-		})
+		});
 	}
 
 	return (

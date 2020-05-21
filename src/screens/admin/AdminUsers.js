@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
-import { API } from '../lib';
-import { AlphabetList } from '../components';
+import { API } from '../../lib';
+import { AlphabetList } from '../../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 
 export default (props)=>{
@@ -63,7 +63,18 @@ export default (props)=>{
 	var formatList = a=>a.map(a=>({ email: a.email, id: a.member_id }));
 
 	var showUser = v=>{
-		props.navigation.navigate('DetalleAdmin', v);
+		props.navigation.navigate('DetalleAdmin', {
+			...v,
+			onEdit: (email, tipo)=>{
+				var u = [...users];
+				var ix = u.findIndex(a=>a.email==email);
+				u[ix].tipo = tipo;
+				setUsers(u);
+			},
+			onDelete: email=>{
+				setUsers(users.filter(a=>a.email!=email));
+			}
+		});
 	}
 
 	return (

@@ -23,6 +23,7 @@ export default (props)=>{
 
 	var changePassword = ()=>{
 		props.navigation.navigate('ChangePassword', {
+			admin_email: false,
 			logout: props.route.params.logout
 		});
 	}

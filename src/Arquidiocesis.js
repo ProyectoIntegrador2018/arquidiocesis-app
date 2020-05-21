@@ -26,13 +26,13 @@ import {
 	AltaCapilla,
 	EditMiembro,
 	FichaMedica,
-	EditarStatus,
 	DetalleCapilla,
 	DetalleMiembro,
 	User,
 	ChangePassword,
 	AdminUsers,
-	DetalleAdmin
+	DetalleAdmin,
+	EditAdmin
 } from './screens';
 import { API } from './lib'
 
@@ -115,13 +115,13 @@ var App = (props)=>{
 				<Stack.Screen name="DetallePersona" component={DetallePersona}/>
 				<Stack.Screen name="Grupo" component={Grupo}/>
 				<Stack.Screen name="FichaMedica" component={FichaMedica}/>
-				<Stack.Screen name="EditarStatus" component={EditarStatus}/>
 				<Stack.Screen name="DetalleCapilla" component={DetalleCapilla}/>
 				<Stack.Screen name="DetalleMiembro" component={DetalleMiembro}/>
 				<Stack.Screen name="User" component={User}/>
 				<Stack.Screen name="ChangePassword" component={ChangePassword}/>
 				<Stack.Screen name="AdminUsers" component={AdminUsers}/>
 				<Stack.Screen name="DetalleAdmin" component={DetalleAdmin}/>
+				<Stack.Screen name="EditAdmin" component={EditAdmin}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

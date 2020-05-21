@@ -10,12 +10,14 @@ export default (props)=>{
 	var [newPassword2, setNewPassword2] = useState('');
 	var [loading, setLoading] = useState(false);
 
+	var admin_email = props.route.params.admin_email
+
 	props.navigation.setOptions({
 		headerTitle: 'Cambiar contraseña'
 	});
 
 	var changePassword = ()=>{
-		if(oldPassword.length==0){
+		if(oldPassword.length==0 && !admin_email){
 			return alert('Favor de introducir la contraseña actual.');
 		}
 		if(newPassword.length<5){
@@ -26,25 +28,38 @@ export default (props)=>{
 		}
 		setLoading(true);
 
-		API.changePassword(oldPassword, newPassword).then(done=>{
-			setLoading(false);
-			if(!done) return alert('Hubo un error cambiando la contraseña.');
-			if(done.error){
-				if(done.code==923) return alert('La contraseña actual no es correcta.')
-				else return alert('Hubo un error cambiando la contraseña.');
-			}
-			alert('Se ha cambiado la contraseña.');
-			if(props.route.params.logout) props.route.params.logout()
-		}).catch(err=>{
-			setLoading(false);
-			console.log(err);
-			return alert('Hubo un error cambiando la contraseña.');
-		})
+		if(admin_email){
+			API.changeAdminPassword(admin_email, newPassword).then(done=>{
+				setLoading(false);
+				if(!done) return alert('Hubo un error cambiando la contraseña.');
+				alert('Se ha cambiado la contraseña.');
+				return props.navigation.goBack();
+			}).catch(err=>{
+				setLoading(false);
+			})
+		}else{
+			API.changePassword(oldPassword, newPassword).then(done=>{
+				setLoading(false);
+				if(!done) return alert('Hubo un error cambiando la contraseña.');
+				if(done.error){
+					if(done.code==923) return alert('La contraseña actual no es correcta.')
+					else return alert('Hubo un error cambiando la contraseña.');
+				}
+				alert('Se ha cambiado la contraseña.');
+				if(props.route.params.logout) props.route.params.logout()
+			}).catch(err=>{
+				setLoading(false);
+				console.log(err);
+				return alert('Hubo un error cambiando la contraseña.');
+			});
+		}
 	}
-
+	
 	return (
 		<KeyboardAwareScrollView style={styles.container}>
-			<Input name="Contraseña actual" value={oldPassword} onChangeText={setOldPassword} style={{ marginBottom: 30 }} password />
+			{!admin_email ? (
+				<Input name="Contraseña actual" value={oldPassword} onChangeText={setOldPassword} style={{ marginBottom: 30 }} password />
+			) : null}
 			<Input name="Nueva contraseña" value={newPassword} onChangeText={setNewPassword} password />
 			<Input name="Repetir nueva contraseña" value={newPassword2} onChangeText={setNewPassword2} password />
 			<Button text="Cambiar contraseña" onPress={changePassword} loading={loading} />
