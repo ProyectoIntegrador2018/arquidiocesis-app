@@ -64,7 +64,7 @@ export default (props)=>{
 	return <View style={{ flex: 1 }}>
 		<KeyboardAwareScrollView>
 			{error ? (
-				<ErrorView message={'Hubo un error cargando la parroquia...'} refreshing={refreshing} retry={getPersona} />
+				<ErrorView message={'Hubo un error cargando la persona...'} refreshing={refreshing} retry={getPersona} />
 			) : persona ? (
 				<View style={{ padding: 10 }}>
 					{edit && <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: '500' }}>Editando persona</Text>}
@@ -94,36 +94,6 @@ export default (props)=>{
 		</KeyboardAwareScrollView>
 	</View>
 
-
-
-	// return (
-	// 	<View>
-	// 		<View style={{paddingLeft:'5%' ,paddingTop:'10%', paddingBottom:'60%',flexDirection: 'row', flex: 1}}>
-	// 			<View>
-	// 				<Text style={styles.fields}>Nombre: </Text>
-	// 				<Text style={styles.fields}>Edad:</Text>
-	// 				<Text style={styles.fields}>Sexo:</Text>
-	// 				<Text style={styles.fields}>email:</Text>
-	// 				<Text style={styles.fields}>grupo:</Text>
-	// 			</View>
-
-	// 			<View>
-	// 				<Text style={styles.fields}>Gerardo</Text>
-	// 				<Text style={styles.fields}>80</Text>
-	// 				<Text style={styles.fields}>Masculino</Text>
-	// 				<Text style={styles.fields}>Pepe@gmail.com</Text>
-	// 				<Text style={styles.fields}>Grupo 1</Text>
-	// 			</View>
-				
-	// 		</View>
-
-	// 		<View style={{flexDirection:'row', paddingTop:'20%', paddingLeft:'5%'}}>
-	// 			<Button style={{paddingTop:'0%'}} title='Ficha Medica' onPress={() => props.navigation.navigate('FichaMedica')}/>	
-	// 		</View>
-			
-	// 	</View>
-		
-   //  )
   }
 
 
