@@ -7,7 +7,7 @@ import Coordinadores from './Coordinadores';
 import Grupos from './Grupos';
 import Parroquias from './Parroquias';
 import Login from './Login';
-import Registro from './Registro';
+import RegistroAdmin from './RegistroAdmin';
 import Asistencia from './Asistencia';
 import DetallePersona from './DetallePersona';
 import ZonasList from './ZonasList';
@@ -25,6 +25,8 @@ import EditarStatus from './EditarStatus';
 import DetalleCapilla from './DetalleCapilla';
 import DetalleMiembro from './DetalleMiembro';
 import ChangePassword from './ChangePassword';
+import AdminUsers from './AdminUsers';
+import DetalleAdmin from './DetalleAdmin';
 
 export {
 	Login,
@@ -35,8 +37,9 @@ export {
 	Coordinadores,
 	Grupos,
 	Dummy,
-	Registro,
+	RegistroAdmin,
 	Asistencia,
+	DetalleAdmin,
 	ChangePassword,
 	DetallePersona,
 	ZonasList,
@@ -53,4 +56,5 @@ export {
 	EditarStatus,
 	DetalleCapilla,
 	DetalleMiembro,
+	AdminUsers
 }

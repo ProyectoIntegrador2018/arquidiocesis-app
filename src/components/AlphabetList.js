@@ -9,12 +9,14 @@ export default  (props)=>{
 	var organizedData = Util.organizeListData(props.data, (props.sort || 'name'))
 
 	for(var i in organizedData){
-		headers.push(components.length);
-		components.push(
-			<View key={'header-'+i} style={styles.header}>
-				<Text style={styles.headerText}>{i.toUpperCase()}</Text>
-			</View>
-		)
+		if(props.headers!==false){
+			headers.push(components.length);
+			components.push(
+				<View key={'header-'+i} style={styles.header}>
+					<Text style={styles.headerText}>{i.toUpperCase()}</Text>
+				</View>
+			)
+		}
 		components.push(...organizedData[i].map((a,ix)=>props.renderItem ? (
 			<View style={{ backgroundColor: 'white' }} key={'item'+i+'-'+ix}>
 				{props.onSelect ? (
@@ -31,7 +33,7 @@ export default  (props)=>{
 					</View>
 				)}
 			</View>
-		) : <ListItem data={a} onPress={props.onSelect} key={'item'+i+'-'+ix} />))
+		) : <ListItem data={a} onPress={props.onSelect} key={'item'+i+'-'+ix} sort={props.sort} />))
 	}
 
 	if(props.scroll!==false){
@@ -58,7 +60,7 @@ var ListItem = (props)=>{
 	}}>
 		<View style={{ backgroundColor: 'white' }}>
 			<View style={styles.item}>
-				<Text>{(props.data.nombre || props.data.name)}</Text>
+				<Text>{(props.sort ? props.data[props.sort] : props.data.nombre || props.data.name)}</Text>
 				<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
 			</View>
 		</View>

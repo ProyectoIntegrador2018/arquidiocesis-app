@@ -2,19 +2,22 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, StatusBar } from 'react-native';
 import { Input, Button } from '../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { API } from '../lib';
+import { API, Util } from '../lib';
 import {Image} from 'react-native' ; 
 
 export default (props)=>{
 
 	var [loading, setLoading] = useState(false);
-	var [email, setEmail] = useState('carlosa_miranda@outlook.com');
-	var [password, setPassword] = useState('hello');
+	var [email, setEmail] = useState('');
+	var [password, setPassword] = useState('');
 
 	var doLogin = ()=>{
-		if(email.length<5) return alert('Favor de ingresar un correo electrónico válido.');
-		if(password.length<3) return alert('Favor de ingresar una contraseña válida');
-		
+		var { valid, prompt } = Util.validateForm({ email, password }, {
+			email: { type: 'email', prompt: 'Favor de introducir un correo electrónico válido.' },
+			password: { type: 'empty', prompt: 'Favor de introducir la contraseña.' }
+		})
+		if(!valid) return alert(prompt);
+
 		setLoading(true);
 		API.login(email, password).then(user=>{
 			setLoading(false);

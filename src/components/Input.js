@@ -11,7 +11,7 @@ export default (props)=>{
 			) : (
 				<TouchableWithoutFeedback onPress={props.onPress}>
 					<View style={[styles.input, { justifyContent: 'center' }]}>
-						<Text style={{ fontSize: 20, color: !props.value || props.value.length==0 ? 'gray' : 'black' }}>{(!props.value || props.value.length==0) ? (props.placeholder.length>0 ? props.placeholder : props.name) : props.value}</Text>
+						<Text style={{ fontSize: 20, color: !props.value || props.value.length==0 ? 'gray' : 'black' }}>{(!props.value || props.value.length==0) ? ((props.placeholder && props.placeholder.length>0) ? props.placeholder : props.name) : props.value}</Text>
 					</View>
 				</TouchableWithoutFeedback>
 			)}

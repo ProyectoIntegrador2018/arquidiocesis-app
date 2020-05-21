@@ -13,10 +13,18 @@ export default (props)=>{
 		valueSelected(null, props.select+1)
 	}, [props.select])
 
+	var orderItems = (items)=>{
+		return items.map(a=>{
+			if(typeof a === 'string'){
+				return { label: a, value: a }
+			}else return a;
+		})
+	}
+
 	var valueSelected = (val, index)=>{
 		setSelect(index);
-		if(index==0) return;
 		if(props.onValueChange){
+			if(index==0) props.onValueChange(null);
 			props.onValueChange(items[index-1]);
 		}
 	}
@@ -28,13 +36,13 @@ export default (props)=>{
 				<RNPickerSelect
 					placeholder={props.placeholder}
 					onValueChange={valueSelected}
-					items={items}
+					items={orderItems(items)}
 					textInputProps={{
 						style: styles.pickerStyle,
 					}}
 				>
 					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
-						<Text style={{ fontSize: 18, width: '100%', color: !items[select-1] ? 'gray' : 'black' }}>{(items[select-1] || placeholder).label}</Text>
+						<Text style={{ fontSize: 18, width: '100%', color: !orderItems(items)[select-1] ? 'gray' : 'black' }}>{(orderItems(items)[select-1] || placeholder).label}</Text>
 						<FontAwesome5 name={'caret-down'} size={20} style={{ marginLeft: -15 }} />
 					</View>
 				</RNPickerSelect>

@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'rea
 import { Input, Button, Picker } from '../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API } from '../lib';
-import { FontAwesome5 } from '@expo/vector-icons'
 
 export default (props)=>{
 	var [loading, setLoading] = useState(false);
@@ -44,13 +43,6 @@ export default (props)=>{
 	}, [])
 
 	props.navigation.setOptions({
-		headerRight: ()=>(
-			<TouchableOpacity onPress={()=>{}}>
-			  <View style={{ width: 50, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-					<FontAwesome5 name="ellipsis-h" size={25} color={'white'} />
-			  </View>
-		  </TouchableOpacity>
-		),
 		headerTitle: 'Alta Parroquia'
 	});
 

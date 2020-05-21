@@ -16,7 +16,7 @@ import {
 	Asistencia, 
 	ZonasList, 
 	Zona, 
-	Registro, 
+	RegistroAdmin, 
 	DetallePersona, 
 	RegistroCoordinador, 
 	AltaPquia, 
@@ -31,6 +31,8 @@ import {
 	DetalleMiembro,
 	User,
 	ChangePassword,
+	AdminUsers,
+	DetalleAdmin
 } from './screens';
 import { API } from './lib'
 
@@ -99,7 +101,7 @@ var App = (props)=>{
 				headerTintColor: 'white'
 			}}>
 				<Stack.Screen name="Home" component={Home} initialParams={{ logout: props.logout }} />
-				<Stack.Screen name="Registro" component={Registro}/>
+				<Stack.Screen name="RegistroAdmin" component={RegistroAdmin}/>
 				<Stack.Screen name="RegistroCoordinador" component={RegistroCoordinador}/>
 				<Stack.Screen name="Asistencia" component={Asistencia} />
 				<Stack.Screen name="Decanato" component={Decanato} />
@@ -118,6 +120,8 @@ var App = (props)=>{
 				<Stack.Screen name="DetalleMiembro" component={DetalleMiembro}/>
 				<Stack.Screen name="User" component={User}/>
 				<Stack.Screen name="ChangePassword" component={ChangePassword}/>
+				<Stack.Screen name="AdminUsers" component={AdminUsers}/>
+				<Stack.Screen name="DetalleAdmin" component={DetalleAdmin}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

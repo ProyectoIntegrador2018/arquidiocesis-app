@@ -418,6 +418,30 @@ async function getMiembro(miembro_id){
 	else return res.data;
 }
 
+async function adminGetUsers(){
+	var res = await get('admin/users');
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function getAdmin(email){
+	var res = await post('admin/users/get', { email });
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function registerAdmin(data){
+	var res = await post('admin/users/add', data);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function changeAdminPassword(email, password){
+	var res = await post('admin/users/add', { email, password });
+	if(res.error) throw res;
+	else return res.data;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -445,5 +469,9 @@ export default {
 	deleteCapilla,
 	deleteParroquia,
 	getMiembro,
-	changePassword
+	changePassword,
+	adminGetUsers,
+	registerAdmin,
+	getAdmin,
+	changeAdminPassword
 }
