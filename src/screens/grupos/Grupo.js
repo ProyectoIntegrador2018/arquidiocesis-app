@@ -12,6 +12,7 @@ export default (props)=>{
 	var [asistencias, setAsistencias] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
+	var [sending, setSending] = useState(false);
 
 	var onDelete = props.route.params.onDelete;
 	var onEdit = props.route.params.onEdit;
@@ -133,16 +134,32 @@ export default (props)=>{
 		})
 	}
 
+	var changeCoordinador = ()=>{
+		props.navigation.navigate('ChangeCoordinador', {
+			grupo,
+			onEdit: (new_coordinador)=>{
+				setGrupo(g=>{
+					g.coordinador = new_coordinador;
+					return g;
+				})
+			}
+		})
+	}
+
 	var deleteGroup = ()=>{
+		if(sending) return false;
 		Alert.alert('¿Eliminar grupo?', 'Esto eliminará todos las asistencias, miembros y datos del grupo.', [
 			{ text: 'Cancelar', style: 'cancel' },
 			{ text: 'Eliminar', style: 'destructive', onPress: ()=>{
+				setSending(true);
 				API.deleteGrupo(grupo.id).then(done=>{
+					setSending(false);
 					if(!done) return alert('Hubo un error eliminando el grupo.')
 					alert('Se ha eliminado el grupo.');
 					if(onDelete) onDelete(grupo.id);
 					props.navigation.goBack();
 				}).catch(err=>{
+					setSending(false);
 					console.log(err);
 					alert('Hubo un error eliminando el grupo.')
 				})
@@ -212,7 +229,8 @@ export default (props)=>{
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No se han marcado asistencias.</Text>
 						</View>
 					)}
-					<Item text="Eliminar grupo" style={{ marginTop: 40 }} onPress={deleteGroup} />
+					<Item text="Cambiar coordinador" style={{ marginTop: 40 }} onPress={changeCoordinador} />
+					<Item text="Eliminar grupo" onPress={deleteGroup}  loading={sending}/>
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>

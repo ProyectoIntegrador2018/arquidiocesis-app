@@ -33,6 +33,7 @@ import {
 	AdminUsers,
 	DetalleAdmin,
 	EditAdmin,
+	ChangeCoordinador,
 	EditGrupo
 } from './screens';
 import { API } from './lib'
@@ -128,6 +129,7 @@ var App = (props)=>{
 				<Stack.Screen name="DetalleAdmin" component={DetalleAdmin}/>
 				<Stack.Screen name="EditAdmin" component={EditAdmin}/>
 				<Stack.Screen name="EditGrupo" component={EditGrupo}/>
+				<Stack.Screen name="ChangeCoordinador" component={ChangeCoordinador}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

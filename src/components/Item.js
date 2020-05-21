@@ -1,12 +1,16 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'
 
 export default (props)=>{
 	return <TouchableOpacity onPress={props.onPress}>
 		<View style={[styles.item, props.style]}>
 			<Text style={styles.itemText}>{props.text}</Text>
-			<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+			{ props.loading ? (
+				<ActivityIndicator  size="small" style={{ marginRight: 30 }} />
+			) : (
+				<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+			)}
 		</View>
 	</TouchableOpacity>
 }

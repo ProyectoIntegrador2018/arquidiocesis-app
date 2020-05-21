@@ -475,6 +475,14 @@ async function deleteGrupo(id){
 	else return res.data;
 }
 
+async function changeCoordinador(grupo_id, coordinador_id){
+	var res = await post('grupos/'+grupo_id+'/coordinador', {
+		coordinador: coordinador_id
+	});
+	if(res.error) throw res;
+	else return res.data;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -510,5 +518,6 @@ export default {
 	changeAdminPassword,
 	editAdmin,
 	editGrupo,
-	deleteGrupo
+	deleteGrupo,
+	changeCoordinador
 }
