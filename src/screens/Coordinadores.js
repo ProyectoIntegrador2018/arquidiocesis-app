@@ -39,8 +39,10 @@ export default (props)=>{
 		</View>
 	}
 
-	var onPress = (item)=>{
-		console.log(item);
+	var detalleCoord = (item)=>{
+		props.navigation.navigate('DetalleCoordinador', {
+			persona: item
+		});
 	}
 
 	var addCoordinador = ()=>{
@@ -59,7 +61,7 @@ export default (props)=>{
 		) : (
 			<View>
 				<Button text="Registro coordinador" style={{ width: 250, alignSelf: 'center' }} onPress={addCoordinador} />
-				<AlphabetList data={data} onSelect={onPress} scroll sort={'nombre'} />
+				<AlphabetList data={data} onSelect={detalleCoord} scroll sort={'nombre'} />
 			</View>
 		)}
 	</ScrollView>

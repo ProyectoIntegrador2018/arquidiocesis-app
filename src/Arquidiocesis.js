@@ -37,6 +37,7 @@ import {
 	EditGrupo
 } from './screens';
 import { API } from './lib'
+import DetalleCoordinador from './screens/DetalleCoordinador';
 
 var Tab = createBottomTabNavigator();
 var Home = (props)=>{
@@ -130,6 +131,7 @@ var App = (props)=>{
 				<Stack.Screen name="EditAdmin" component={EditAdmin}/>
 				<Stack.Screen name="EditGrupo" component={EditGrupo}/>
 				<Stack.Screen name="ChangeCoordinador" component={ChangeCoordinador}/>
+				<Stack.Screen name="DetalleCoordinador" component={DetalleCoordinador}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
