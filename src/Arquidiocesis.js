@@ -83,9 +83,13 @@ var Home = (props)=>{
             return <FontAwesome5 name={iconName} size={size} color={color} style={{ paddingTop: 5 }} />;
           },
 		})}>
-			<Tab.Screen name="Parroquias" component={Parroquias} />
-			<Tab.Screen name="Zonas" component={ZonasList} />
-			<Tab.Screen name="Coordina" component={Coordinadores} />
+			{user.type!='coordinador' ? (
+				<>
+					<Tab.Screen name="Parroquias" component={Parroquias} />
+					<Tab.Screen name="Zonas" component={ZonasList} />
+					<Tab.Screen name="Coordina" component={Coordinadores} />
+				</>
+			) : null}
 			<Tab.Screen name="HeMa" component={Grupos} />
 			<Tab.Screen name="Capacitacion" component={Capacitacion} />
 

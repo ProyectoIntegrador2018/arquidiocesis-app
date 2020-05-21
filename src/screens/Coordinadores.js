@@ -22,7 +22,7 @@ export default (props)=>{
 	var getCoordinadores = ()=>{
 		setRefreshing(true);
 		setError(false);
-		API.getCoordinadores(false).then(d=>{
+		API.getCoordinadores(true).then(d=>{
 			setRefreshing(false);
 			setData(d);
 			setError(false);

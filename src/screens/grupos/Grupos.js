@@ -4,11 +4,13 @@ import { AlphabetList, ErrorView, Button } from '../../components';
 import { API } from '../../lib';
 
 export default (props)=>{
+	var [user, setUser] = useState(null)
 	var [data, setData] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 
 	useEffect(()=>{
+		API.getUser().then(setUser);
 		API.getGrupos().then(grupos=>{
 			setData(grupos);
 			setRefreshing(false);
@@ -19,7 +21,7 @@ export default (props)=>{
 		})
 	}, [])
 
-	var getParroquias = ()=>{
+	var getGrupos = ()=>{
 		setRefreshing(true);
 		API.getGrupos(true).then(d=>{
 			setData(d);
@@ -50,7 +52,7 @@ export default (props)=>{
 		});
 	}
 
-	var addParroquia = ()=>{
+	var addGrupo = ()=>{
 		props.navigation.navigate('RegistroGrupo', {
 			onAdd: (p)=>{
 				if(!data) return;
@@ -81,14 +83,20 @@ export default (props)=>{
 	}
 
 	return <ScrollView style={{ flex: 1 }} refreshControl={
-		<RefreshControl refreshing={refreshing} onRefresh={getParroquias} />
+		<RefreshControl refreshing={refreshing} onRefresh={getGrupos} />
 	}>
 		{error ? (
-			<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getParroquias} />
+			<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getGrupos} />
 		) : (
 			<View>
-				<Button text="Agregar grupo" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
-				<AlphabetList data={data} onSelect={onPress} scroll renderItem={renderItem} sort={'nombre'} />
+				{user && (user.type=='admin' || user.type=='superadmin') ? <Button text="Agregar grupo" style={{ width: 250, alignSelf: 'center' }} onPress={addGrupo} /> : null}
+				{data.length>0 ? (
+					<AlphabetList data={data} onSelect={onPress} scroll renderItem={renderItem} sort={'nombre'} />
+				) : (
+					<View>
+						<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No perteneces a un grupo.</Text>
+					</View>
+				)}
 			</View>
 		)}
 	</ScrollView>

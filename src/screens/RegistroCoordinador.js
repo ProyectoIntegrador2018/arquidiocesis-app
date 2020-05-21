@@ -21,6 +21,26 @@ export default (props)=>{
 	});
 
 	var doRegister = ()=>{
+
+	// 	var payload = {
+	// 		nombre,
+	// 		apellido_paterno,
+	// 		apellido_materno,
+	// 		fecha_nacimiento, // YYYY-MM-DD, convertir a Date
+	// 		estado_civil,
+	// 		sexo,
+	// 		domicilio,
+	// 		colonia,
+	// 		municipio,
+	// 		telefono_casa,
+	// 		telefono_movil,
+	// 		email,
+	// 		escolaridad,
+	// 		oficio,
+	// 		ocupacion
+	//   }
+ 
+
 		if(loading) return;
 		if(name.length<1) return alert ('Por favor introduzca un nombre.');
 		if(age<2) return alert ('Por favor introduzca una edad valida');
