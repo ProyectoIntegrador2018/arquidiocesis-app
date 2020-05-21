@@ -237,11 +237,14 @@ async function getParroquia(id, force=false){
 	}
 }
 
-async function addParroquia(name, address, decanato_id){
+async function addParroquia(data){
 	var payload = {
-		name,
-		address,
-		decanato: decanato_id
+		nombre: data.nombre,
+		direccion: data.direccion,
+		colonia: data.colonia,
+		municipio: data.municipio,
+		telefono1: data.telefono1,
+		telefono2: data.telefono2,
 	}
 	var res = await post('parroquias', payload);
 	if(res.error) throw res;
@@ -457,6 +460,21 @@ async function editAdmin(old_email, data){
 	else return res.data;
 }
 
+async function editGrupo(id, data){
+	var res = await post('grupos/edit', {
+		id,
+		...data
+	});
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function deleteGrupo(id){
+	var res = await sendDelete('grupos/'+id);
+	if(res.error) throw res;
+	else return res.data;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -490,5 +508,7 @@ export default {
 	getAdmin,
 	deleteAdmin,
 	changeAdminPassword,
-	editAdmin
+	editAdmin,
+	editGrupo,
+	deleteGrupo
 }

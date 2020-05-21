@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet,  Switch, ActivityIndicator} from 'react-native';
-import { Input, Button, Picker } from '../components'
+import { Input, Button, Picker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { API } from '../lib';
+import { API } from '../../lib';
 
 export default (props)=>{
 	var [loading, setLoading] = useState(false);
@@ -71,7 +71,6 @@ export default (props)=>{
 		<KeyboardAwareScrollView style={styles.container} bounces={false}>
 			<Text style={styles.header}>Registrar Grupo</Text> 
 			<Input name="Nombre" value={name} onChangeText={setName} />
-			{/* <Input name="Coordinador" value={coordinador} onChangeText={setCoordinador} /> */}
 			{coordinadorList ? (
 				<Picker name={'Seleccionar coordinador'} items={coordinadorList.map(a=>({ label: a.nombre, value: a.id, ...a }))} onValueChange={setCoordinador} />
 			) : (

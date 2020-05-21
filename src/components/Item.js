@@ -4,7 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 export default (props)=>{
 	return <TouchableOpacity onPress={props.onPress}>
-		<View style={styles.item}>
+		<View style={[styles.item, props.style]}>
 			<Text style={styles.itemText}>{props.text}</Text>
 			<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
 		</View>

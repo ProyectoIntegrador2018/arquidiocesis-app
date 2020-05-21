@@ -22,13 +22,12 @@ function validateEmail(email) {
 
 function validateField(rule, val){
 	if(rule.type=='empty'){
-		if(typeof val === 'undefined' || val.length==0) return false;
+		if(typeof val === 'undefined' || val===null || val.length==0) return false;
 	}else if(rule.type=='minLength'){
-		if(typeof val === 'undefined' || val.length<(rule.value || 1)) return false;
+		if(typeof val === 'undefined' || val===null || val.length<(rule.value || 1)) return false;
 	}else if(rule.type=='maxLength'){
 		if(rule.value && val && val.length>rule.value) return false;
 	}else if(rule.type=='email'){
-		console.log(val);
 		if(typeof val === 'undefined' || !validateEmail(val)) return false;
 	}
 	return true;

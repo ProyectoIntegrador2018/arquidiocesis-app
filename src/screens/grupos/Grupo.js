@@ -1,20 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
-import { AlphabetList, ErrorView, Button, List, Input } from '../components';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity, Alert } from 'react-native';
+import { AlphabetList, ErrorView, Button, List, Item } from '../../components';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { API } from '../lib';
+import { API } from '../../lib';
 import moment from 'moment/min/moment-with-locales'
-import Cache from '../lib/Cache';
 moment.locale('es')
 
 export default (props)=>{
-	var [grupo, setGrupo] = useState(props.route.params);
+	var [grupo, setGrupo] = useState(props.route.params.grupo);
 	var [miembros, setMiembros] = useState(false);
 	var [asistencias, setAsistencias] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
-	var [capilla, setCapilla] = useState(false);
 
+	var onDelete = props.route.params.onDelete;
+	var onEdit = props.route.params.onEdit;
 
 	props.navigation.setOptions({
 		headerStyle: {
@@ -22,11 +22,11 @@ export default (props)=>{
 			shadowOpacity: 0
 		},
 		headerTitle: '',
-		headerRight: ()=>(
+		headerRight: ()=> miembros!==false ? (
 			<TouchableOpacity onPress={addMember}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
-		)
+		) : null
 	});
 
 	useEffect(()=>{
@@ -124,7 +124,30 @@ export default (props)=>{
 	}
 
 	var editGroup = ()=>{
+		props.navigation.navigate('EditGrupo', {
+			grupo,
+			onEdit: (new_grupo)=>{
+				setGrupo(new_grupo);
+				onEdit(new_grupo.id, new_grupo);
+			}
+		})
+	}
 
+	var deleteGroup = ()=>{
+		Alert.alert('¿Eliminar grupo?', 'Esto eliminará todos las asistencias, miembros y datos del grupo.', [
+			{ text: 'Cancelar', style: 'cancel' },
+			{ text: 'Eliminar', style: 'destructive', onPress: ()=>{
+				API.deleteGrupo(grupo.id).then(done=>{
+					if(!done) return alert('Hubo un error eliminando el grupo.')
+					alert('Se ha eliminado el grupo.');
+					if(onDelete) onDelete(grupo.id);
+					props.navigation.goBack();
+				}).catch(err=>{
+					console.log(err);
+					alert('Hubo un error eliminando el grupo.')
+				})
+			} }
+		]);
 	}
 
 	return <View style={{ flex: 1 }}>
@@ -189,6 +212,7 @@ export default (props)=>{
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No se han marcado asistencias.</Text>
 						</View>
 					)}
+					<Item text="Eliminar grupo" style={{ marginTop: 40 }} onPress={deleteGroup} />
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>
