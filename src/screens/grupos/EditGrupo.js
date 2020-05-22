@@ -134,23 +134,6 @@ export default (props)=>{
 
 	return <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
 		<Input name="Nombre" value={nombre} onChangeText={setNombre} />
-			{/* {coordinadorList ? (
-				<Picker name={'Seleccionar coordinador'} items={coordinadorList.map(a=>({ label: a.nombre, value: a.id, ...a }))} onValueChange={setCoordinador} select={getCoordinadorIndex()} />
-			) : (
-				<ActivityIndicator style={{ height: 80 }} />
-			)}
-			{coordinador ? (
-				<View style={{ marginBottom: 10 }}>
-					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-						<Text style={{ marginRight: 5, fontSize: 16 }}>Nombre:</Text>
-						<Text style={{ fontSize: 16 }}>{coordinador.nombre}</Text>
-					</View>
-					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-						<Text style={{ marginRight: 5, fontSize: 16 }}>Correo:</Text>
-						<Text style={{ fontSize: 16 }}>{coordinador.email}</Text>
-					</View>
-				</View>
-			) : null} */}
 			{parroquiasList ? (
 				<Picker 
 					name={'Seleccionar Parroquia'} 

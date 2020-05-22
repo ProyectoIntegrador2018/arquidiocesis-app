@@ -48,8 +48,14 @@ export default (props)=>{
 
 	}, []);
 	
-	var getPersona = ()=>{
-
+	var addMedical = ()=>{
+		props.navigation.navigate('FichaMedica', {
+			persona,
+			onEdit: (new_persona)=>{
+				setPersona(new_persona);
+				onEdit(new_persona, new_persona);
+			}
+		})
 	}
 
 	var savePersona = ()=>{
@@ -87,6 +93,12 @@ export default (props)=>{
 	}
 
 	return <View style={{ flex: 1 }}>
+		{<View style={styles.headerContainer}>
+			<Text style={styles.headerText} numberOfLines={1}>{persona.nombre}</Text>
+			<TouchableOpacity onPress={addMedical}>
+				<FontAwesome5 name="notes-medical" style={styles.editIcon} />
+			</TouchableOpacity>
+		</View>}
 		{persona===false ? (
 			<View style={{ marginTop: 50 }}>
 				<ActivityIndicator size="large" />
@@ -141,5 +153,22 @@ const styles = StyleSheet.create({
 		paddingTop:'50%',
 		backgroundColor: '#42A5F5',
 		color:'black',
+	},
+	headerContainer: {
+		backgroundColor: '#002E60',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between'
+	},
+	editIcon: {
+		paddingRight: 15,
+		color: 'white',
+		fontSize: 35
+	},	
+	headerText: {
+		fontSize: 20,
+		fontWeight: '700',
+		color: 'white',
+		padding: 15
 	}
 })
