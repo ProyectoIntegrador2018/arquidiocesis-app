@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import Cache from './Cache';
 
-const ROOT_URL = 'http://192.168.1.79:8000/api/'
+const ROOT_URL = 'http://192.168.0.131:8000/api/'
 
 async function post(endpoint, data){
 	var u = await getUser();
@@ -137,6 +137,9 @@ async function logout(){
 	// If user is not logged in, return true.
 	if(!user) return true;
 
+	// Clear cache
+	Cache.clearCache();
+
 	// Delete user info from storage.
 	await AsyncStorage.removeItem('login')
 	return true;
@@ -148,7 +151,6 @@ async function logout(){
  */
 async function getZonas(force=false){
 	if(!force && Cache.getZonas()){
-		console.log("RETURNED ZONAS CACHE");
 		return Cache.getZonas()
 	}
 
@@ -169,7 +171,6 @@ async function getZona(id, force=false){
 	if(!force){
 		var zonaCache = Cache.getZona(id);
 		if(zonaCache) {
-			console.log("RETURNED ZONA (1) CACHE");
 			return zonaCache;
 		}
 	}
@@ -191,7 +192,6 @@ async function getDecanato(id, force=false){
 	if(!force){
 		var decanatoCache = Cache.getDecanato(id);
 		if(decanatoCache){
-			console.log("RETURNED DECANATO (1) CACHE");
 			return decanatoCache;
 		}
 	}
@@ -202,13 +202,10 @@ async function getDecanato(id, force=false){
 		Cache.setDecanato(p.data);
 		return p.data;
 	}
-
-	return d;
 }
 
 async function getParroquias(force=false){
 	if(!force && Cache.getParroquias()){
-		console.log("RETURNED PARROQUIAS CACHE");
 		return Cache.getParroquias();
 	}
 
@@ -224,7 +221,6 @@ async function getParroquia(id, force=false){
 	if(!force){
 		var parroquiaCache = Cache.getParroquia(id);
 		if(parroquiaCache){
-			console.log("RETURNED PARROQUIA (1) CACHE");
 			return parroquiaCache;
 		}
 	}
@@ -268,7 +264,6 @@ async function addCapilla(name, address, parroquia_id){
 
 async function getDecanatos(force=false){
 	if(!force && Cache.getDecanatos()){
-		console.log("RETURNED DECANATOS CACHE");
 		return Cache.getDecanatos();
 	}
 	var p = await get('decanatos');
@@ -281,7 +276,6 @@ async function getDecanatos(force=false){
 
 async function getCoordinadores(force=false){
 	if(!force && Cache.getCoordinadores()){
-		console.log("RETURNED COORDINADORES CACHE");
 		return Cache.getCoordinadores();
 	}
 	var p = await get('coordinadores');
@@ -294,7 +288,6 @@ async function getCoordinadores(force=false){
 
 async function getGrupos(force=false){
 	if(!force && Cache.getGrupos()){
-		console.log("RETURNED GRUPOS CACHE");
 		return Cache.getGrupos();
 	}
 	var res = await get('grupos');
@@ -309,7 +302,6 @@ async function getGrupo(id, force=false){
 	if(!force){
 		var cacheGrupo = Cache.getGrupo(id);
 		if(cacheGrupo){
-			console.log("RETURNED GRUPO (1) CACHE");
 			return cacheGrupo;
 		}
 	}
@@ -415,10 +407,24 @@ async function deleteParroquia(parroquia_id){
 	}
 }
 
-async function getMiembro(miembro_id){
+async function getMiembro(miembro_id, force=false){
+	if(!force){
+		var m = Cache.getMiembro(miembro_id);
+		if(m){
+			return m;
+		}
+	}
+
+	
 	var res = await get('grupos/miembro/'+miembro_id);
 	if(res.error) throw res;
-	else return res.data;
+	else{
+		if(res.data){
+			res.data.id = miembro_id;
+			Cache.addMiembro(res.data);
+		}
+		return res.data;
+	}
 }
 
 async function adminGetUsers(){
@@ -467,6 +473,16 @@ async function editGrupo(id, data){
 	});
 	if(res.error) throw res;
 	else return res.data;
+}
+
+async function editMiembro(id, data){
+	var res = await post('grupos/miembro/'+id+'/edit', data);
+	
+	if(res.error) throw res;
+	else{
+		Cache.setMiembroDirty(id);
+		return res.data;
+	}
 }
 
 async function deleteGrupo(id){
@@ -519,5 +535,6 @@ export default {
 	editAdmin,
 	editGrupo,
 	deleteGrupo,
+	editMiembro,
 	changeCoordinador
 }

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
-import { Input, Button, Picker } from '../components'
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import { Input, Button, Picker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { API } from '../lib';
+import { API, Util } from '../../lib';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
@@ -24,29 +24,19 @@ export default (props)=>{
 	var [phoneMobile, setPhoneMobile] = useState('');
 	var [escolaridad, setEscolaridad] = useState(false);
 	var [oficio, setOficio] = useState(false);
-	var [ocupacion, setOcupacion] = useState('');
 	var pickerRef = useRef(null);
 
 	var onAdd = props.route.params.onAdd;
 	var group = props.route.params.grupo;
 
 	props.navigation.setOptions({
-		headerTitle: 'Registro Coordinador'
+		headerTitle: 'Registro Miembro'
 	});
 
 	var doRegister = ()=>{
 		if(loading) return;
-		if(name.length<1) return alert ('Por favor introduzca un nombre.');
-		if(birthday.length<1) return alert ('Por favor introduzca una edad valida');
-		if(!gender) return alert('Favor de seleccionar el sexo.');
-		if(apPaterno.length<3) return alert('Favor de introducir el apellido paterno.');
-		if(apMaterno.length<3) return alert('Favor de introducir el apellido materno.');
-		if(!estadoCivil) return alert('Favor de seleccionar el estado civil.');
-		if(!escolaridad) return alert('Favor de seleccionar el grado de escolaridad.');
-		if(!oficio) return alert('Favor de seleccionar el oficio.');
 
-		setLoading(true);
-		API.registerMember(group.id, {
+		var data = {
 			nombre: name,
 			apellido_paterno: apPaterno,
 			apellido_materno: apMaterno,
@@ -63,14 +53,35 @@ export default (props)=>{
 				telefono_casa: phoneHome,
 				telefono_movil: phoneMobile,
 			}
-		}).then(new_member=>{
+		}
+
+		var { valid, prompt } = Util.validateForm(data, {
+			nombre: { type: 'minLength', value: 3, prompt: 'Favor de introducir el nombre.' },
+			apellido_paterno: { type: 'empty', prompt: 'Favor de introducir el apelldio paterno.' },
+			fecha_nacimiento: { type: 'empty', prompt: 'Favor de introducir la fecha de nacimiento.' },
+			sexo: { type: 'empty', prompt: 'Favor de introducir el sexo.' },
+			estado_civil: { type: 'empty', prompt: 'Favor de introducir el estado civil.' },
+			escolaridad: { type: 'empty', prompt: 'Favor de introducir la escolaridad.' },
+			oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
+		});
+
+		if(!valid){
+			return Alert.alert('Error', prompt);
+		}
+
+		setLoading(true);
+		API.registerMember(group.id, data).then(new_member=>{
 			setLoading(false);
-			if(!new_member) return alert("Hubo un error registrando el miembro");
+			if(!new_member) return Alert.alert('Error', "Hubo un error registrando el miembro");
 			if(onAdd) onAdd(new_member)
-			alert("Se ha agregado el miembro al grupo.");
+			Alert.alert('Exito', "Se ha agregado el miembro al grupo.");
 			props.navigation.goBack();
 		}).catch(err=>{
-			alert("Hubo un error registrando el miembro");
+			if(err.code && err.code==999){
+				Alert.alert('Error', "No tienes acceso a este grupo.");
+			}else{
+				Alert.alert('Error', "Hubo un error registrando el miembro");
+			}
 			setLoading(false);
 		})
 	}
@@ -91,10 +102,10 @@ export default (props)=>{
 				pickerRef.current.onPressDate()
 			}} />
 			<Picker name="Estado Civil" items={[
+				{ label: 'Soltero', value: 'Soltero' },
 				{ label: 'Casado', value: 'Casado' },
 				{ label: 'Viudo', value: 'Viudo' },
 				{ label: 'Unión Libre', value: 'Unión Libre' },
-				{ label: 'Soltero', value: 'Soltero' },
 				{ label: 'Divorciado', value: 'Divorciado' },
 			]} onValueChange={setEstadoCivil} />
 			<Picker name="Sexo" items={[

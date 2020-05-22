@@ -166,9 +166,46 @@ var addGrupo = i=>{
 }
 
 
+let miembros = [];
+var getMiembro = id=>miembros.find(a=>a.id==id && a.cached);
+var addMiembro = m=>{
+	var ix = miembros.findIndex(a=>a.id==m.id);
+	m.cached = true;
+	if(ix!=-1){
+		miembros[ix] = m;
+	}else{
+		miembros.push(m);
+	}
+}
+var clearMiembros = ()=>{
+	miembros = [];
+}
+var setMiembroDirty = id=>{
+	var ix = miembros.findIndex(a=>a.id==id);
+	if(ix!=-1){
+		miembros[ix].cached = false;
+	}
+}
+
+
+
+
+var clearCache = ()=>{
+	miembros = [];
+	grupos = [];
+	coordinadores = [];
+	capillas = [];
+	parroquias = [];
+	decanatos = [];
+	zonas = [];
+}
+
+
 
 
 export default {
+	clearCache,
+
 	getZonas,
 	getZona,
 	setZonas,
@@ -219,5 +256,10 @@ export default {
 	isGruposDirty,
 	setGrupo,
 	addGrupo,
-	registerAsistencia
+	registerAsistencia,
+
+	getMiembro,
+	addMiembro,
+	clearMiembros,
+	setMiembroDirty
 }

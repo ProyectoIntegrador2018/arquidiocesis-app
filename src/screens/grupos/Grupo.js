@@ -64,7 +64,10 @@ export default (props)=>{
 	
 	var onPress = (item)=>{
 		props.navigation.navigate('DetalleMiembro', {
-			persona: item
+			persona: item,
+			onEdit: (id, miembro)=>{
+				setMiembros([...miembros.filter(a=>a.id!=id), miembro])
+			}
 		});
 	}
 
