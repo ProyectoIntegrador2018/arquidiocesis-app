@@ -29,6 +29,7 @@ import DetalleAdmin from './admin/DetalleAdmin';
 import EditAdmin from './admin/EditAdmin';
 import EditGrupo from './grupos/EditGrupo';
 import ChangeCoordinador from './grupos/ChangeCoordinador';
+import AltaCapacitacion from './AltaCapacitacion';
 
 export {
 	Login,
@@ -60,5 +61,6 @@ export {
 	DetalleMiembro,
 	AdminUsers,
 	EditAdmin,
-	ChangeCoordinador
+	ChangeCoordinador, 
+	AltaCapacitacion
 }

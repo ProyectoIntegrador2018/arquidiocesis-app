@@ -1,32 +1,59 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button } from '../components';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { AlphabetList, ErrorView, Button } from '../components';
 import { API } from '../lib';
 
 export default (props)=>{
+	var [data, setData] = useState(false);
+	var [refreshing, setRefreshing] = useState(false);
+	var [error, setError] = useState(false);
 
-	var { navigation, route } = props;
+	useEffect(()=>{
+		API.getParroquias().then(d=>{
+			setData(d);
+			setRefreshing(false);
+			setError(false);
+		}).catch(err=>{
+			setRefreshing(false);
+			setError(true);
+		})
+	}, [])
 
-	var test2 = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('Asistencia');
+	var getCapacitacion = ()=>{
+		
 	}
-	var test4 = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('RegistroMiembro');
+
+	var onPress = (item)=>{
+		
 	}
-	var test6 = ()=>{
-		// Navegar dentro del stack.
-		navigation.navigate('RegistroGrupo');
+
+	var addCapacitacion = ()=>{
+		props.navigation.navigate('AltaCapacitacion', {
+			onAdd: (p)=>{
+				if(!data) return;
+				setData([...data, p]);
+			}
+		});
 	}
-	return (
-		<View style={styles.container}>
-			<Text style={styles.testText}>Parroquias</Text>
-			<Button onPress={test2} text="Test Asist"/>
-			<Button onPress={test4} text="Test RM"/>
-			<Button onPress={test6} text="Test RG"/>
-		</View>
-	)
+	
+	return <ScrollView style={{ flex: 1 }} refreshControl={
+		<RefreshControl refreshing={refreshing} onRefresh={getCapacitacion} />
+	}>
+		{error ? (
+			<ErrorView message={'Hubo un error cargando las capacitaciones...'} refreshing={refreshing} retry={getCapacitacion} />
+		) : data===false ? (
+			<View style={{ marginTop: 50 }}>
+				<ActivityIndicator size="large" />
+				<Text style={{ marginTop: 10, textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Cargando datos...</Text>
+			</View>
+		) : (
+			<View>
+				<Button text="Agregar Capacitacion" style={{ width: 250, alignSelf: 'center' }} onPress={addCapacitacion} />
+				<AlphabetList data={['a','b', 'c']} onSelect={onPress} scroll sort={'nombre'} />
+			</View>
+		)}
+	</ScrollView>
+
 }
 
 const styles = StyleSheet.create({
@@ -36,7 +63,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center',
-		width: '100%',
+		justifyContent: 'center'
 	}
 })
