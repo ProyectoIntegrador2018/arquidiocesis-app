@@ -10,9 +10,8 @@ moment.locale('es')
 export default (props)=>{
 	var [persona, setPersona] = useState(false)
 	var [refreshing, setRefreshing] = useState(false);
-	var [error, setError] = useState(false);
 
-	var { onEdit, onDelete } = props.route.params;
+	var { onEdit, onStatusChange } = props.route.params;
 
 	props.navigation.setOptions({
 		headerTitle: 'Detalle Miembro',
@@ -26,25 +25,30 @@ export default (props)=>{
 	
 	useEffect(()=>{
 		API.getMiembro(props.route.params.persona.id).then(miembro=>{
+			setRefreshing(false);
 			if(!miembro){
 				alert("Hubo un error cargando al miembro...");
 				props.navigation.goBack();
 			}
 			setPersona(miembro);
 		}).catch(err=>{
+			setRefreshing(false);
 			alert("Hubo un error cargando al miembro...");
 			props.navigation.goBack();
 		})
 	}, []);
 
 	var getPersona = ()=>{
+		setRefreshing(true);
 		API.getMiembro(persona.id, true).then(miembro=>{
+			setRefreshing(false);
 			if(!miembro){
 				alert("Hubo un error cargando al miembro...");
 				props.navigation.goBack();
 			}
 			setPersona(miembro);
 		}).catch(err=>{
+			setRefreshing(false);
 			alert("Hubo un error cargando al miembro...");
 			props.navigation.goBack();
 		})
@@ -62,9 +66,7 @@ export default (props)=>{
 				var p = {...persona};
 				p.estatus = status;
 				setPersona(p);
-				if(status==2){
-					onDelete(persona.id);
-				}
+				onStatusChange(persona.id, status, p);
 			}
 		});
 	}

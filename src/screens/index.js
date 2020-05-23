@@ -22,6 +22,7 @@ import RegistroGrupo from './grupos/RegistroGrupo';
 import Grupo from './grupos/Grupo';
 import EditGrupo from './grupos/EditGrupo';
 import ChangeCoordinador from './grupos/ChangeCoordinador';
+import GrupoBajasTemporales from './grupos/GrupoBajasTemporales';
 
 import RegistroAdmin from './admin/RegistroAdmin';
 import AdminUsers from './admin/AdminUsers';
@@ -44,6 +45,7 @@ export {
 	Grupos,
 	Dummy,
 	RegistroAdmin,
+	GrupoBajasTemporales,
 	Asistencia,
 	DetalleAdmin,
 	ChangePassword,

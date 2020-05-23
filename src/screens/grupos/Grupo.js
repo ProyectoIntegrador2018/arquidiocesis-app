@@ -67,18 +67,6 @@ export default (props)=>{
 			setError(true);
 		})
 	}
-	
-	var onPress = (item)=>{
-		props.navigation.navigate('DetalleMiembro', {
-			persona: item,
-			onEdit: (id, miembro)=>{
-				setMiembros([...miembros.filter(a=>a.id!=id), miembro])
-			},
-			onDelete: (id)=>{
-				setMiembros(miembros.filter(a=>a.id!=id));
-			}
-		});
-	}
 
 	var goParroquia = ()=>{
 		var p = grupo.parroquia;
@@ -134,6 +122,21 @@ export default (props)=>{
 				setMiembros([...miembros, m])
 			}
 		});
+	}	
+	
+	var viewMember = (item)=>{
+		props.navigation.navigate('DetalleMiembro', {
+			persona: item,
+			onEdit: (id, miembro)=>{
+				setMiembros([...miembros.filter(a=>a.id!=id), miembro])
+			},
+			onStatusChange: (id, status, miembro)=>{
+				if(status>0)setMiembros(miembros.filter(a=>a.id!=id));
+				else {
+					setMiembros([...miembros.filter(a=>a.id!=id), miembro])
+				}
+			}
+		});
 	}
 
 	var editGroup = ()=>{
@@ -154,6 +157,21 @@ export default (props)=>{
 					g.coordinador = new_coordinador;
 					return g;
 				})
+			}
+		})
+	}
+
+	var bajasTemporales = ()=>{
+		props.navigation.navigate('GrupoBajasTemporales', {
+			id: grupo.id,
+			onEdit: (id, miembro)=>{
+				setMiembros([...miembros.filter(a=>a.id!=id), miembro])
+			},
+			onStatusChange: (id, status, miembro)=>{
+				if(status>0)setMiembros(miembros.filter(a=>a.id!=id));
+				else {
+					setMiembros([...miembros.filter(a=>a.id!=id), miembro])
+				}
 			}
 		})
 	}
@@ -227,7 +245,7 @@ export default (props)=>{
 
 					<Text style={styles.sectionText}>MIEMBROS</Text>
 					{miembros.length>0 ? (
-						<AlphabetList data={miembros.map(a=>({ name: a.nombre, ...a }))} onSelect={onPress} scroll={false} sort={'nombre'} />
+						<AlphabetList data={miembros.map(a=>({ name: a.nombre, ...a }))} onSelect={viewMember} scroll={false} sort={'nombre'} />
 					) : (
 						<View>
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Este grupo no tiene miembros agregados.</Text>
@@ -242,6 +260,7 @@ export default (props)=>{
 						</View>
 					)}
 					<Item text="Cambiar coordinador" style={{ marginTop: 40 }} onPress={changeCoordinador} />
+					<Item text="Ver bajas temporales" onPress={bajasTemporales} />
 					<Item text="Eliminar grupo" onPress={deleteGroup}  loading={sending}/>
 				</View>
 			) : (

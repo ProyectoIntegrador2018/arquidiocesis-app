@@ -5,21 +5,26 @@ import { API, Util } from '../../lib';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props)=>{
+	var { grupo, onEdit, persona } = props.route.params;
+
 	var [loading, setLoading] = useState(false);
 	var [status, setStatus] = useState(false);
-
-	var { grupo, onEdit, persona } = props.route.params;
+	var [oldStatus, setOldStatus] = useState(persona.estatus)
 
 	props.navigation.setOptions({
 		headerTitle: 'Cambiar estatus',
 	});
 
 	var actuallySave = ()=>{
+		if(oldStatus==status.value){
+			return Alert.alert('Exito', 'Se ha editado el estatus del miembro.');
+		}
 		setLoading(true);
 		API.editMiembroStatus(persona.id, status.value).then(done=>{
 			setLoading(false);
 			if(!done) return Alert.alert('Error', 'Hubo un error editando el estatus del miembro.');
 			onEdit(status.value);
+			setOldStatus(status.value)
 			return Alert.alert('Exito', 'Se ha editado el estatus del miembro.');
 		}).catch(err=>{
 			setLoading(false);

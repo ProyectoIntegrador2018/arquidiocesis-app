@@ -502,6 +502,15 @@ async function changeCoordinador(grupo_id, coordinador_id){
 async function editMiembroStatus(id, status){
 	var res = await post('grupos/miembro/'+id+'/edit/status', { status });
 	if(res.error) throw res;
+	else{
+		Cache.setMiembroStatus(id, status);
+		return res.data
+	}
+}
+
+async function getGrupoBajasTemporales(id){
+	var res = await get('grupos/'+id+'/bajas');
+	if(res.error) throw res;
 	else return res.data;
 }
 
@@ -543,5 +552,6 @@ export default {
 	deleteGrupo,
 	editMiembro,
 	editMiembroStatus,
-	changeCoordinador
+	changeCoordinador,
+	getGrupoBajasTemporales
 }

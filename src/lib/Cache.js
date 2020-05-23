@@ -186,6 +186,12 @@ var setMiembroDirty = id=>{
 		miembros[ix].cached = false;
 	}
 }
+var setMiembroStatus = (id, status)=>{
+	var ix = miembros.findIndex(a=>a.id==id);
+	if(ix!=-1){
+		miembros[ix].estatus = status;
+	}
+}
 
 
 
@@ -261,5 +267,6 @@ export default {
 	getMiembro,
 	addMiembro,
 	clearMiembros,
-	setMiembroDirty
+	setMiembroDirty,
+	setMiembroStatus
 }
