@@ -40,6 +40,9 @@ export default (props)=>{
 			setAsistencias(d.asistencias || []);
 			setError(false);
 		}).catch(err=>{
+			if(err.code==999){
+				Alert.alert('Error', 'No tienes acceso a este grupo');
+			}
 			setRefreshing(false);
 			setError(true);
 		})
@@ -57,6 +60,9 @@ export default (props)=>{
 			setRefreshing(false);
 			setError(false);
 		}).catch(err=>{
+			if(err.code==999){
+				Alert.alert('Error', 'No tienes acceso a este grupo');
+			}
 			setRefreshing(false);
 			setError(true);
 		})
@@ -67,6 +73,9 @@ export default (props)=>{
 			persona: item,
 			onEdit: (id, miembro)=>{
 				setMiembros([...miembros.filter(a=>a.id!=id), miembro])
+			},
+			onDelete: (id)=>{
+				setMiembros(miembros.filter(a=>a.id!=id));
 			}
 		});
 	}

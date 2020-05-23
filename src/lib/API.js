@@ -499,6 +499,12 @@ async function changeCoordinador(grupo_id, coordinador_id){
 	else return res.data;
 }
 
+async function editMiembroStatus(id, status){
+	var res = await post('grupos/miembro/'+id+'/edit/status', { status });
+	if(res.error) throw res;
+	else return res.data;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -536,5 +542,6 @@ export default {
 	editGrupo,
 	deleteGrupo,
 	editMiembro,
+	editMiembroStatus,
 	changeCoordinador
 }

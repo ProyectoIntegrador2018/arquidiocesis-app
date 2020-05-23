@@ -5,19 +5,21 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { API, Util } from '../../lib';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
-;
+moment.locale('es');
 
 
 export default (props) => {
 	var { persona } = props.route.params;
+
+	var bd = moment.unix(persona.fecha_nacimiento._seconds)
+	if(!bd.isValid()) bd = moment();
 
 	var [loading, setLoading] = useState(false);
 	var [name, setName] = useState(persona.nombre);
 	var [apPaterno, setApPaterno] = useState(persona.apellido_paterno);
 	var [apMaterno, setApMaterno] = useState(persona.apellido_materno);
 	var [email, setEmail] = useState(persona.email);
-	var [birthday, setBirthday] = useState(moment.unix(persona.fecha_nacimiento._seconds).format('YYYY-MM-DD'));
+	var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'));
 	var [gender, setGender] = useState(false);
 	var [estadoCivil, setEstadoCivil] = useState(false);
 	var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio);
@@ -75,6 +77,9 @@ export default (props) => {
 		API.editMiembro(persona.id, data).then(done=>{
 			setLoading(false)
 			if(!done) return Alert.alert('Error', "Hubo un error editando el miembro.");
+			data.fecha_nacimiento = {
+				_seconds: moment(birthday, 'YYYY-MM-DD').unix()
+			}
 			onEdit(data);
 			Alert.alert('Exito', "Se ha editado el miembro.");
 		}).catch(err=>{
@@ -143,7 +148,7 @@ export default (props) => {
 
 			<DatePicker
 				ref={pickerRef}
-				date={birthday}
+				date={birthday || moment().format('YYYY-MM-DD')}
 				mode="date"
 				format="YYYY-MM-DD"
 				confirmBtnText="Confirmar"

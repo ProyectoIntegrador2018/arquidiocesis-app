@@ -57,7 +57,7 @@ export default (props)=>{
 
 	var editStatus = ()=>{
 		props.navigation.navigate('EstatusMiembro', {
-			estatus: persona.estatus,
+			persona,
 			onEdit: status=>{
 				var p = {...persona};
 				p.estatus = status;
@@ -94,8 +94,8 @@ export default (props)=>{
 	}
 
 	var getFechaNacimiento = ()=>{
-		if(!persona) return '';
-		return moment.unix(persona.fecha_nacimiento._seconds).format('DD MMMM, YYYY')
+		var f = moment.unix(persona.fecha_nacimiento._seconds).format('MMMM DD, YYYY')
+		return f.charAt(0).toUpperCase() + f.substr(1);
 	}
 
 	return <View style={{ flex: 1 }}>
