@@ -35,6 +35,7 @@ import RegistroMiembro from './miembros/RegistroMiembro';
 import EditMiembro from './miembros/EditMiembro';
 import DetalleMiembro from './miembros/DetalleMiembro';
 import EstatusMiembro from './miembros/EstatusMiembro';
+import AltaMiembroCap  from './AltaMiembroCap';
 
 export {
 	Login,
@@ -69,5 +70,6 @@ export {
 	EditAdmin,
 	ChangeCoordinador, 
 	AltaCapacitacion,
-	EstatusMiembro
+	EstatusMiembro,
+	AltaMiembroCap
 }

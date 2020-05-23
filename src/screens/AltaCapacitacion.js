@@ -12,7 +12,14 @@ export default (props)=>{
 	var onAdd = props.route.params.onAdd;
 
 	
-    var onPress =  ()=>{}
+    var onPress =  ()=>{
+        props.navigation.navigate('AltaMiembroCap', {
+			onAdd: (p)=>{
+				if(!data) return;
+				setData([...data, p]);
+			}
+		});
+    }
     var doRegister  = ()=>{}
 	props.navigation.setOptions({
 		headerTitle: 'Alta Capacitacion'
