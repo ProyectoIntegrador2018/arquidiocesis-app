@@ -20,6 +20,9 @@ export default (props)=>{
 			}
 		});
     }
+    var goDetalle =  ()=>{
+        props.navigation.navigate('DetalleCap');
+    }
     var doRegister  = ()=>{}
 	props.navigation.setOptions({
 		headerTitle: 'Alta Capacitacion'
@@ -50,12 +53,13 @@ export default (props)=>{
                 dateInput: {
                     marginLeft: 36
                 }
-                // ... You can check the source to find the other keys.
+                
                 }}
                 // onDateChange={(date) => {this.setState({date: date})}}
             />		
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
             <Button text="test agregar miembros" loading={loading} onPress={onPress} />
+            <Button text="test detalle capacitacion" loading={loading} onPress={goDetalle} />
 		</KeyboardAwareScrollView>
 	)
 }

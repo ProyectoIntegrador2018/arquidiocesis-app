@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import Cache from './Cache';
 
-const ROOT_URL = 'http://192.168.1.87:8000/api/'
+const ROOT_URL = 'http://192.168.1.79:8000/api/'
 
 async function post(endpoint, data){
 	var u = await getUser();
