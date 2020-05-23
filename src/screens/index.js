@@ -4,32 +4,37 @@ import Decanato from './Decanato';
 import User from './User';
 import Capacitacion from './Capacitacion';
 import Coordinadores from './Coordinadores';
-import Grupos from './grupos/Grupos';
 import Parroquias from './Parroquias';
 import Login from './Login';
-import RegistroAdmin from './admin/RegistroAdmin';
 import Asistencia from './Asistencia';
 import DetallePersona from './DetallePersona';
 import ZonasList from './ZonasList';
 import Zona from './Zona';
 import RegistroCoordinador from './RegistroCoordinador';
 import AltaPquia from './AltaPquia';
-import RegistroMiembro from './RegistroMiembro';
 import AltaCapilla from './AltaCapilla';
-import RegistroGrupo from './grupos/RegistroGrupo';
 import Parroquia from './Parroquia'
-import Grupo from './grupos/Grupo';
-import EditMiembro from './EditMiembro';
-import FichaMedica from './FichaMedica';
 import DetalleCapilla from './DetalleCapilla';
-import DetalleMiembro from './DetalleMiembro';
 import ChangePassword from './ChangePassword';
+
+import Grupos from './grupos/Grupos';
+import RegistroGrupo from './grupos/RegistroGrupo';
+import Grupo from './grupos/Grupo';
+import EditGrupo from './grupos/EditGrupo';
+import ChangeCoordinador from './grupos/ChangeCoordinador';
+import GrupoBajasTemporales from './grupos/GrupoBajasTemporales';
+
+import RegistroAdmin from './admin/RegistroAdmin';
 import AdminUsers from './admin/AdminUsers';
 import DetalleAdmin from './admin/DetalleAdmin';
 import EditAdmin from './admin/EditAdmin';
-import EditGrupo from './grupos/EditGrupo';
-import ChangeCoordinador from './grupos/ChangeCoordinador';
 import AltaCapacitacion from './AltaCapacitacion';
+
+import FichaMedica from './miembros/FichaMedica';
+import RegistroMiembro from './miembros/RegistroMiembro';
+import EditMiembro from './miembros/EditMiembro';
+import DetalleMiembro from './miembros/DetalleMiembro';
+import EstatusMiembro from './miembros/EstatusMiembro';
 
 export {
 	Login,
@@ -41,6 +46,7 @@ export {
 	Grupos,
 	Dummy,
 	RegistroAdmin,
+	GrupoBajasTemporales,
 	Asistencia,
 	DetalleAdmin,
 	ChangePassword,
@@ -62,5 +68,6 @@ export {
 	AdminUsers,
 	EditAdmin,
 	ChangeCoordinador, 
-	AltaCapacitacion
+	AltaCapacitacion,
+	EstatusMiembro
 }

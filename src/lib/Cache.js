@@ -166,9 +166,62 @@ var addGrupo = i=>{
 }
 
 
+let miembros = [];
+var getMiembro = id=>miembros.find(a=>a.id==id && a.cached);
+var addMiembro = m=>{
+	var ix = miembros.findIndex(a=>a.id==m.id);
+	m.cached = true;
+	if(ix!=-1){
+		miembros[ix] = m;
+	}else{
+		miembros.push(m);
+	}
+}
+var clearMiembros = ()=>{
+	miembros = [];
+}
+var setMiembroDirty = id=>{
+	var ix = miembros.findIndex(a=>a.id==id);
+	if(ix!=-1){
+		miembros[ix].cached = false;
+	}
+}
+var setMiembroStatus = (id, status)=>{
+	var ix = miembros.findIndex(a=>a.id==id);
+	if(ix!=-1){
+		miembros[ix].estatus = status;
+	}
+}
+var getMiembroFicha = id=>{
+	var m = getMiembro(id);
+	if(m.ficha_medica) return m.ficha_medica;
+	else return false;
+}
+var setMiembroFicha = (id, ficha)=>{
+	var ix = miembros.findIndex(a=>a.id==id);
+	if(ix==-1) return;
+	miembros[ix].ficha_medica = ficha;
+}
+
+
+
+
+var clearCache = ()=>{
+	miembros = [];
+	grupos = [];
+	coordinadores = [];
+	capillas = [];
+	parroquias = [];
+	decanatos = [];
+	zonas = [];
+}
+
+
 
 
 export default {
+	clearCache,
+
 	getZonas,
 	getZona,
 	setZonas,
@@ -219,5 +272,13 @@ export default {
 	isGruposDirty,
 	setGrupo,
 	addGrupo,
-	registerAsistencia
+	registerAsistencia,
+
+	getMiembro,
+	addMiembro,
+	clearMiembros,
+	setMiembroDirty,
+	setMiembroStatus,
+	getMiembroFicha,
+	setMiembroFicha
 }

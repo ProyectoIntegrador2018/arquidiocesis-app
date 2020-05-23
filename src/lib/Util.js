@@ -5,12 +5,13 @@
  */
 function organizeListData(data, key){
 	if(!key) key = 'name';
-	data = data.sort((a,b)=>a[key]>b[key]);
+	data = data.sort((a,b)=>(a[key] ? a[key].toUpperCase() : null)>(b[key] ? b[key].toUpperCase() : null));
 	var orderedData = {}
 	for(var i of data.sort((a,b)=>a[key]-b[key])){
 		if(!i[key])continue;
-		if(!orderedData[i[key][0]]) orderedData[i[key][0]] = []
-		orderedData[i[key][0]].push(i);
+		var c = (i[key][0]).toUpperCase();
+		if(!orderedData[c]) orderedData[c] = []
+		orderedData[c].push(i);
 	}
 	return orderedData;
 }
