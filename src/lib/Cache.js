@@ -192,6 +192,16 @@ var setMiembroStatus = (id, status)=>{
 		miembros[ix].estatus = status;
 	}
 }
+var getMiembroFicha = id=>{
+	var m = getMiembro(id);
+	if(m.ficha_medica) return m.ficha_medica;
+	else return false;
+}
+var setMiembroFicha = (id, ficha)=>{
+	var ix = miembros.findIndex(a=>a.id==id);
+	if(ix==-1) return;
+	miembros[ix].ficha_medica = ficha;
+}
 
 
 
@@ -268,5 +278,7 @@ export default {
 	addMiembro,
 	clearMiembros,
 	setMiembroDirty,
-	setMiembroStatus
+	setMiembroStatus,
+	getMiembroFicha,
+	setMiembroFicha
 }

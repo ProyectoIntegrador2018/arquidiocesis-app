@@ -206,7 +206,7 @@ export default (props)=>{
 		</View>
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getGrupo} />
-		}>
+		} contentContainerStyle={{ paddingBottom: 50 }}>
 			{error ? (
 				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getGrupo} />
 			) : miembros!==false ? (

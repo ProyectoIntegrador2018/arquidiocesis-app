@@ -514,6 +514,32 @@ async function getGrupoBajasTemporales(id){
 	else return res.data;
 }
 
+async function getFichaMedica(id, force=false){
+	if(!force){
+		var f = Cache.getMiembroFicha(id);
+		if(f!==false) return f;
+	}
+
+	var res = await get('grupos/miembro/'+id+'/ficha');
+	if(res.error) throw res;
+	else{
+		Cache.setMiembroFicha(id, res.data);
+		return res.data;
+	}
+}
+
+async function setFichaMedica(id, data){
+	var res = await post('grupos/miembro/'+id+'/ficha', {
+		id,
+		...data
+	});
+	if(res.error) throw res;
+	else{
+		Cache.setMiembroFicha(id, data);
+		return res.data;
+	}
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -553,5 +579,7 @@ export default {
 	editMiembro,
 	editMiembroStatus,
 	changeCoordinador,
-	getGrupoBajasTemporales
+	getGrupoBajasTemporales,
+	getFichaMedica,
+	setFichaMedica
 }

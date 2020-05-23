@@ -1,134 +1,141 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Alert, Switch, ScrollView, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Alert, Switch } from 'react-native';
 import { API } from '../../lib';
-import { FontAwesome5 } from '@expo/vector-icons'
-import { Input, Button, Picker, ErrorView } from '../../components';
+import { Input, Button, Picker, LoadingView } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 export default (props)=>{
-  var [persona, setPersona] = useState(false)
-  var [edit, setEdit] = useState(false);
-  var [isEnabled, setIsEnabled] = useState(false);
-  var [isEnabledAm, setIsEnabledAm] = useState(false);
 
- 
-  var editField = (key)=>{
-		return (val)=>{
-			setPersona(a=>{
-				a[key] = val;
-				return a;
-			})
-		}
-  }
-  var toggleSwitch = () => {
-		var alergia = isEnabled;
-		setIsEnabled(!alergia);
-  }
-  var toggleSwitchAmbulancia = () => {
-		var ambulancia = isEnabledAm;
-		setIsEnabledAm(!ambulancia);
-	}
-  props.navigation.setOptions({
-		headerStyle: {
-			backgroundColor: '#002E60',
-			shadowOpacity: 0
-		},
+	var { persona } = props.route.params;
+
+	var [bloodType, setBloodType] = useState('');
+	var [alergic, setAlergic] = useState(false);
+	var [medicalSerivce, setMedicalService] = useState(false);
+	var [ambulance, setAmbulance] = useState(false);
+	var [padecimientos, setPadecimientos] = useState('');
+	var [loading, setLoading] = useState(false);
+	var [getting, setGetting] = useState(true);
+
+	useState(()=>{
+		setGetting(true);
+		API.getFichaMedica(persona.id).then(ficha=>{
+			setGetting(false);
+			if(!ficha) return;
+			setBloodType(ficha.tipo_sangre);
+			setAlergic(ficha.alergico);
+			setMedicalService(ficha.servicio_medico);
+			setAmbulance(ficha.ambulancia);
+			setPadecimientos(ficha.padecimientos);
+		}).catch(err=>{
+			setGetting(false);
+			Alert.alert('Error', 'Hubo un error consiguiendo la ficha medica')
+		});
+	}, [])
+
+	props.navigation.setOptions({
 		headerTitle: 'Ficha Medica',
-		headerRight: ()=>(
-			<TouchableOpacity onPress={() => setEdit(e=>!e)}>
-				<FontAwesome5 name={'edit'} size={24} style={{ paddingRight: 15 }} color={'white'} />
-			</TouchableOpacity>
-		)
-  });
-  
- var saveFicha=()=>{}
+	});
+	
+	var saveFicha=()=>{
+		var data = {
+			tipo_sangre: bloodType,
+			alergico: alergic,
+			servicio_medico: medicalSerivce,
+			ambulancia: ambulance,
+			padecimientos
+		}
+		setLoading(true);
+		API.setFichaMedica(persona.id, data).then(done=>{
+			setLoading(false);
+			Alert.alert('Exito', 'Se ha guardado la ficha medica.')
+		}).catch(err=>{
+			setLoading(false);
+			Alert.alert('Error', 'Hubo un error guardando la ficha medica')
+		})
+	}
+
+	if(getting){
+		return <LoadingView />
+	}
+
 	return (
-
-    <KeyboardAwareScrollView contentContainerStyle={{ padding: 20 }}>
-      {edit && <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: '500' }}>Editando persona</Text>}
-
-        <Input name={'Parroquia'} value={'Don Bosco'} onChangeText={editField('parroquia')} placeholder={'Parroquia'} readonly={!edit} />
-        <Input name={'Capilla'}value={'capilla 1'} onChangeText={editField('capilla')} placeholder={'Capilla'} readonly={!edit} />
-        <Input name={'Grupo'}value={'grupo 1'} onChangeText={editField('grupo')} placeholder={'Grupo'} readonly={!edit} />
-				<Input name={'Integrante'}value={'pepe'} onChangeText={editField('nombre')} placeholder={'Nombre'} readonly={!edit} />
-        <Picker 
-							name={'Tipo de Sangre'} 
-							style={{ marginTop: 15 }}
-							items={[
-                { label: 'O+', value: 'O+' },
-                { label: 'O-', value: 'O-' },
-                { label: 'A', value: 'A' },
-                { label: 'AB', value: 'AB' }
-              ]}
+		<KeyboardAwareScrollView contentContainerStyle={{ padding: 15, marginTop: 10 }}>
+			<Picker 
+				name={'Tipo de Sangre'} 
+				items={[
+					'O-', 	'O+',
+					'A-', 	'A+',
+					'B-', 	'B+',
+					'AB-', 	'AB+',
+				]}
+			/>
+			{/* switch alergia */}
+			<Text style={styles.label}>¿Alergico a Medicamentos?</Text>
+			<View style={styles.checkboxContainer}>
+				<Switch
+					trackColor={{ false: "#767577", true: "#32CD32" }}
+					thumbColor={alergic ? "#FFFFFF" : "#f4f3f4"}
+					onValueChange={setAlergic}
+					value={alergic}
 				/>
-        {/* switch alergia */}
-        <Text style={{ textAlign: 'left', fontSize: 18, fontWeight: '400' }}>¿Alergico a Medicamentos?</Text>
-					<View style={styles.checkboxContainer}>
-						<Switch
-							trackColor={{ false: "#767577", true: "#32CD32" }}
-							thumbColor={isEnabled ? "#FFFFFF" : "#f4f3f4"}
-							ios_backgroundColor="#3e3e3e"
-							onValueChange={toggleSwitch}
-							value={isEnabled}
-						/>
-					</View>
-        {/* fin switch alergia */}
-        <Picker 
-							name={'Servicio Medico'} 
-							style={{ marginTop: 15 }}
-							items={[
-                { label: 'IMSS', value: 'IMSS' },
-                { label: 'ISSTE', value: 'ISSTE' },
-                { label: 'SSA', value: 'SSA' },
-                { label: 'NOVA', value: 'NOVA' }
-              ]}
+			</View>
+			{/* fin switch alergia */}
+			<Picker 
+				name={'Servicio Medico'} 
+				items={[ 'Ninguno', 'IMSS', 'ISSTE', 'SSA', 'NOVA', 'Otro' ]}
+			/>
+			{/* switch ambulancia */}
+			<Text style={styles.label}>Servicio de Ambulancia</Text>
+			<View style={styles.checkboxContainer}>
+				<Switch
+					trackColor={{ false: "#767577", true: "#32CD32" }}
+					thumbColor={ambulance ? "#FFFFFF" : "#f4f3f4"}
+					onValueChange={setAmbulance}
+					value={ambulance}
 				/>
-        {/* switch ambulancia */}
-        <Text style={{ textAlign: 'left', fontSize: 18, fontWeight: '400' }}>Servicio de Ambulancia</Text>
-					<View style={styles.checkboxContainer}>
-						<Switch
-							trackColor={{ false: "#767577", true: "#32CD32" }}
-							thumbColor={isEnabled ? "#FFFFFF" : "#f4f3f4"}
-							ios_backgroundColor="#3e3e3e"
-							onValueChange={toggleSwitchAmbulancia}
-							value={isEnabledAm}
-						/>
-					</View>
-        {/* fin switch ambulancia */}
-        <View style={styles.container}>  
-        <Input multiline={true} name={'Padecimientos'}value={'Asma'} onChangeText={editField('Padecimientos')} placeholder={'Padecimientos'} readonly={!edit} />
-        {edit && <Button text={'Guardar'} onPress={saveFicha} />}
-        
-      </View> 
+			</View>
+			{/* fin switch ambulancia */}
+			<Input multiline={true} name={'Padecimientos'} value={padecimientos} height={200} onChangeText={setPadecimientos} placeholder={'Padecimientos'} />
+			<Button text={'Guardar'} onPress={saveFicha} loading={loading} />
 		</KeyboardAwareScrollView>		
-   )
+	)
 }
-
-
+		
+		
 const styles = StyleSheet.create({
-    container: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start' // if you want to fill rows left to right
-  },
-  item: {
-    width: '10%' // is 50% of container width
-  },
-  fields:{
-	width: '100%',
-    height: 55,
-    margin: 0,
-    padding: 8,
-    color: 'black',
-    borderRadius: 14,
-    fontSize: 18,
-    fontWeight: '500',
-  },
-  boton:{
-	paddingTop:'50%',
-	backgroundColor: '#42A5F5',
-	color:'black',
-  }
+	container: {
+		flex: 1,
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		alignItems: 'flex-start' // if you want to fill rows left to right
+	},
+	item: {
+		width: '10%' // is 50% of container width
+	},
+	fields:{
+		width: '100%',
+		height: 55,
+		margin: 0,
+		padding: 8,
+		color: 'black',
+		borderRadius: 14,
+		fontSize: 18,
+		fontWeight: '500',
+	},
+	boton:{
+		paddingTop:'50%',
+		backgroundColor: '#42A5F5',
+		color:'black',
+	},
+	label: {
+		fontSize: 16,
+		marginBottom: 5,
+		color: 'grey',
+		fontWeight: '500'
+	},
+	checkboxContainer: {
+		alignItems: 'flex-start',
+		marginBottom: 10
+	}
 })

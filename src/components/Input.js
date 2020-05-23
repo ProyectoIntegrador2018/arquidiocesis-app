@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from 'rea
 
 export default (props)=>{
 
+	var multiline = typeof props.multiline!=='undefined';
+
 	return (
 		<View style={[styles.container, props.style]}>
 			<Text style={styles.label}>{props.name || 'Input'}</Text>
 			{ typeof props.readonly === 'undefined' || props.readonly===false ? (
-				<TextInput style={[styles.input]} placeholder={(props.placeholder || props.name)} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} keyboardType={props.keyboard} secureTextEntry={typeof props.password !== 'undefined'}/>
+				<TextInput multiline={multiline} style={[styles.input, { height: (props.height || 45) }]} placeholder={(props.placeholder || props.name)} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} keyboardType={props.keyboard} secureTextEntry={typeof props.password !== 'undefined'}/>
 			) : (
 				<TouchableWithoutFeedback onPress={props.onPress}>
 					<View style={[styles.input, { justifyContent: 'center' }]}>
