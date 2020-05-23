@@ -3,12 +3,17 @@ import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from 'rea
 
 export default (props)=>{
 
-	var multiline = typeof props.multiline!=='undefined';
+	var multiline = typeof props.multiline!=='undefined' && props.multiline!==false;
+	var readonly = !(typeof props.readonly === 'undefined' || props.readonly===false);
+	var required = typeof props.required!=='undefined' && props.required!==false
 
 	return (
 		<View style={[styles.container, props.style]}>
-			<Text style={styles.label}>{props.name || 'Input'}</Text>
-			{ typeof props.readonly === 'undefined' || props.readonly===false ? (
+			<Text style={styles.label}>
+				{props.name || 'Input'}
+				{required && <Text style={styles.required}> *</Text>}
+			</Text>
+			{ !readonly ? (
 				<TextInput multiline={multiline} style={[styles.input, { height: (props.height || 45) }]} placeholder={(props.placeholder || props.name)} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} keyboardType={props.keyboard} secureTextEntry={typeof props.password !== 'undefined'}/>
 			) : (
 				<TouchableWithoutFeedback onPress={props.onPress}>
@@ -40,5 +45,9 @@ const styles = StyleSheet.create({
 		marginBottom: 5,
 		color: 'grey',
 		fontWeight: '500'
+	},
+	required: {
+		color: '#c42727',
+		fontWeight: 'bold'
 	}
 })

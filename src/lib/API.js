@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import Cache from './Cache';
 
-const ROOT_URL = 'http://192.168.1.79:8000/api/'
+const ROOT_URL = 'http://192.168.0.131:8000/api/'
 
 async function post(endpoint, data){
 	var u = await getUser();
@@ -241,8 +241,26 @@ async function addParroquia(data){
 		municipio: data.municipio,
 		telefono1: data.telefono1,
 		telefono2: data.telefono2,
+		decanato: data.decanato
 	}
 	var res = await post('parroquias', payload);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function editParroquia(id, data){
+	var payload = {
+		nombre: data.nombre,
+		direccion: data.direccion,
+		colonia: data.colonia,
+		municipio: data.municipio,
+		telefono1: data.telefono1,
+		telefono2: data.telefono2,
+		decanato: data.decanato,
+		parroquia: id
+	}
+	
+	var res = await post('parroquias/edit', payload);
 	if(res.error) throw res;
 	else return res.data;
 }
@@ -581,5 +599,6 @@ export default {
 	changeCoordinador,
 	getGrupoBajasTemporales,
 	getFichaMedica,
-	setFichaMedica
+	setFichaMedica,
+	editParroquia
 }

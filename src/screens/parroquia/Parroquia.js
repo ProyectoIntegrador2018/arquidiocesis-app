@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity, Alert } from 'react-native';
-import { AlphabetList, ErrorView, Input, Button, Picker } from '../components';
+import { AlphabetList, ErrorView, Input, Button, Picker, Item } from '../../components';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { API } from '../lib';
+import { API } from '../../lib';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props)=>{
@@ -10,12 +10,11 @@ export default (props)=>{
 	var [capillas, setCapillas] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
-	var [edit, setEdit] = useState(false);
-	var [listDecanatos, setListDecanatos] = useState(false);
-	var [decanato, setDecanato] = useState(false);
+	var [deleting, setDeleting] = useState(false);
 
 	var readonly = props.route.params.readonly;
 	var onDelete = props.route.params.onDelete;
+	var onEdit = props.route.params.onEdit;
 
 	props.navigation.setOptions({
 		headerStyle: {
@@ -24,7 +23,7 @@ export default (props)=>{
 		},
 		headerTitle: '',
 		headerRight: ()=>(
-			<TouchableOpacity onPress={addParroquia}>
+			<TouchableOpacity onPress={addCapilla}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
 		)
@@ -65,8 +64,9 @@ export default (props)=>{
 			setError(true);
 		})
 	}
-// esta funcion agrega capillas a la parroquia
-	var addParroquia = ()=>{
+
+	// esta funcion agrega capillas a la parroquia
+	var addCapilla = ()=>{
 		props.navigation.navigate('AltaCapilla', {
 			parroquia,
 			onAdded: (capilla=>{
@@ -84,19 +84,18 @@ export default (props)=>{
 		props.navigation.navigate('DetalleCapilla', item)
 	}
 
-	var saveParroquia = ()=>{
-
-	}
-
 	var deleteParroquia = ()=>{
 		Alert.alert('¿Eliminar parroquia?', 'Esto eliminará las capillas y los grupos que se tengan de ella.', [
 			{ text: 'Cancelar', style: 'cancel' },
 			{ text: 'Eliminar', style: 'destructive', onPress: ()=>{
+				setDeleting(true);
 				API.deleteParroquia(parroquia.id).then(done=>{
+					setDeleting(false);
 					alert('Se ha eliminado la parroquia.');
 					props.navigation.goBack();
 					if(onDelete) onDelete(parroquia.id);
 				}).catch(err=>{
+					setDeleting(false);
 					console.error(err);
 					alert('Hubo un error eliminando la parroquia.')
 				})
@@ -104,46 +103,57 @@ export default (props)=>{
 		]);
 	}
 
+	var editParroquia = ()=>{
+		props.navigation.navigate('EditParroquia', {
+			parroquia,
+			onEdit: new_parroquia=>{
+				var p = {...parroquia};
+				for(var i in new_parroquia){
+					p[i] = new_parroquia[i];
+				}
+				setParroquia(p);
+				onEdit(p);
+			}
+		})
+	}
+
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{parroquia.nombre}</Text>
 			{readonly ? null : (
-				<TouchableOpacity onPress={()=>setEdit(e=>!e)}>
+				<TouchableOpacity onPress={editParroquia}>
 					<FontAwesome5 name="edit" style={styles.editIcon} />
 				</TouchableOpacity>
 			)}
 		</View>
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getParroquia} />
-		}>
+		} contentContainerStyle={{ paddingBottom: 50 }}>
 			{error ? (
 				<ErrorView message={'Hubo un error cargando la parroquia...'} refreshing={refreshing} retry={getParroquia} />
 			) : capillas!==false ? (
 				<View>
-					{!edit && (
-						<View>
-							<Text style={styles.sectionText}>CAPILLAS</Text>
-							{capillas.length>0 ? (
-								<AlphabetList data={capillas} onSelect={onPress} scroll={false} sort={'nombre'} />
-							) : (
-								<View>
-									<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Esta parroquia no tiene capillas agregadas.</Text>
-								</View>
-							)}
-						</View>
-					)}
-					{/* editar parroquia */}
-					<KeyboardAwareScrollView style={{ padding: 10, marginTop: 10 }}>
-						<Input name="Nombre" value={parroquia.nombre} readonly={!edit} />
-						<Input name="Dirección" value={parroquia.direccion} readonly={!edit} />
-						{listDecanatos ? (
-							<Picker onValueChange={setDecanato} name="Seleccionar decanato" items={listDecanatos} />
-							) : (
-							<ActivityIndicator style={{ height: 80 }} />
+					<View>
+						<Text style={styles.sectionText}>CAPILLAS</Text>
+						{capillas.length>0 ? (
+							<AlphabetList data={capillas} onSelect={onPress} scroll={false} sort={'nombre'} />
+						) : (
+							<View>
+								<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Esta parroquia no tiene capillas agregadas.</Text>
+							</View>
 						)}
-						{edit && <Button text={'Guardar'} onPress={saveParroquia} />}
-						{edit && <Button text={'Eliminar'} color={'#FF2233'} onPress={deleteParroquia} />}
-					</KeyboardAwareScrollView>
+					</View>
+					{/* editar parroquia */}
+					<View style={{ padding: 15, marginTop: 10 }}>
+						<Input name="Nombre" value={parroquia.nombre} readonly />
+						<Input name="Decanato" value={parroquia.decanato ? parroquia.decanato.nombre : null} readonly />
+						<Input name="Dirección" value={parroquia.direccion} readonly />
+						<Input name="Colonia" value={parroquia.colonia} readonly />
+						<Input name="Municipio" value={parroquia.municipio} readonly />
+						<Input name="Telefono 1" value={parroquia.telefono1} readonly />
+						<Input name="Telefono 2" value={parroquia.telefono2} readonly />
+					</View>
+					<Item text="Eliminar parroquia" onPress={deleteParroquia} loading={deleting} />
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>

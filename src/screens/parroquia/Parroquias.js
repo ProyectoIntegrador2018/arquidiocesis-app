@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
-import { AlphabetList, ErrorView, Button } from '../components';
-import { API } from '../lib';
+import { AlphabetList, ErrorView, Button } from '../../components';
+import { API } from '../../lib';
 
 export default (props)=>{
 	var [data, setData] = useState(false);
@@ -36,6 +36,9 @@ export default (props)=>{
 			...item,
 			onDelete: function(id){
 				setData(d=>d.filter(a=>a.id!=id));
+			},
+			onEdit: function(p){
+				setData([...data.filter(a=>a.id!=p.id), p]);
 			}
 		});
 	}

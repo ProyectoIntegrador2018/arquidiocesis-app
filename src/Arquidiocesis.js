@@ -40,6 +40,7 @@ import {
 	GrupoBajasTemporales,
 	AltaMiembroCap,
 	DetalleCap,
+	EditParroquia,
 } from './screens';
 import { API } from './lib'
 import DetalleCoordinador from './screens/DetalleCoordinador';
@@ -142,6 +143,7 @@ var App = (props)=>{
 				<Stack.Screen name="GrupoBajasTemporales" component={GrupoBajasTemporales}/>
 				<Stack.Screen name="AltaMiembroCap" component={AltaMiembroCap}/>
 				<Stack.Screen name="DetalleCap" component={DetalleCap}/>
+				<Stack.Screen name="EditParroquia" component={EditParroquia}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

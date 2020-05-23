@@ -4,18 +4,20 @@ import Decanato from './Decanato';
 import User from './User';
 import Capacitacion from './Capacitacion';
 import Coordinadores from './Coordinadores';
-import Parroquias from './Parroquias';
 import Login from './Login';
 import Asistencia from './Asistencia';
 import DetallePersona from './DetallePersona';
 import ZonasList from './ZonasList';
 import Zona from './Zona';
 import RegistroCoordinador from './RegistroCoordinador';
-import AltaPquia from './AltaPquia';
-import AltaCapilla from './AltaCapilla';
-import Parroquia from './Parroquia'
-import DetalleCapilla from './DetalleCapilla';
 import ChangePassword from './ChangePassword';
+import AltaCapilla from './AltaCapilla';
+import DetalleCapilla from './DetalleCapilla';
+
+import Parroquias from './parroquia/Parroquias';
+import Parroquia from './parroquia/Parroquia'
+import AltaPquia from './parroquia/AltaPquia';
+import EditParroquia from './parroquia/EditParroquia';
 
 import Grupos from './grupos/Grupos';
 import RegistroGrupo from './grupos/RegistroGrupo';
@@ -74,4 +76,5 @@ export {
 	EstatusMiembro,
 	AltaMiembroCap,
 	DetalleCap,
+	EditParroquia,
 }

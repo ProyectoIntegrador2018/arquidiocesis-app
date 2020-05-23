@@ -29,9 +29,14 @@ export default (props)=>{
 		}
 	}
 	
+	var required = typeof props.required!=='undefined' && props.required!==false
+	
 	return (
 		<View style={[styles.container, props.style]}>
-			<Text style={styles.label}>{props.name || 'Input'}</Text>
+			<Text style={styles.label}>
+				{props.name || 'Input'}
+				{required && <Text style={styles.required}> *</Text>}
+			</Text>
 			<View style={styles.input}>
 				<RNPickerSelect
 					placeholder={props.placeholder}
@@ -77,5 +82,9 @@ const styles = StyleSheet.create({
 		marginBottom: 5,
 		color: 'grey',
 		fontWeight: '500'
+	},
+	required: {
+		color: '#c42727',
+		fontWeight: 'bold'
 	}
 })
