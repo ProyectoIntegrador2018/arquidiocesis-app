@@ -8,6 +8,9 @@ export default (props)=>{
 	var [select, setSelect] = useState(0);
 	var items = (props.items || [])
 	var placeholder = (props.placeholder || { label: 'Seleccionar valor...', value: null });
+	if(typeof placeholder === 'string'){
+		placeholder = { label: placeholder, id: null }
+	}
 
 	useEffect(()=>{
 		valueSelected(null, props.select+1)

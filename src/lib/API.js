@@ -535,7 +535,7 @@ async function getFichaMedica(id, force=false){
 }
 
 async function setFichaMedica(id, data){
-	var res = await post('grupos/miembro/'+id+'/ficha', {
+	var res = await post('grupos/miembro/'+id+'/edit/ficha', {
 		id,
 		...data
 	});

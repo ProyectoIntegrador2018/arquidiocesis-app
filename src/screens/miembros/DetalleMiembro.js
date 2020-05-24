@@ -10,12 +10,15 @@ moment.locale('es')
 export default (props)=>{
 	var [persona, setPersona] = useState(false)
 	var [refreshing, setRefreshing] = useState(false);
+	var [user, setUser] = useState(false);
 
-	var { onEdit, onStatusChange } = props.route.params;
+	
+	var { onEdit, onStatusChange, grupo } = props.route.params;
+	var canEdit = user && (user.type=='admin' || user.type=='superadmin' || user.id==grupo.cooordinador)
 
 	props.navigation.setOptions({
 		headerTitle: 'Detalle Miembro',
-		headerRight: ()=>(
+		headerRight: ()=> canEdit && (
 			<TouchableOpacity onPress={editPersona}>
 				<FontAwesome5 name={'edit'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
@@ -24,6 +27,7 @@ export default (props)=>{
 
 	
 	useEffect(()=>{
+		API.getUser().then(setUser);
 		API.getMiembro(props.route.params.persona.id).then(miembro=>{
 			setRefreshing(false);
 			if(!miembro){
@@ -56,7 +60,7 @@ export default (props)=>{
 
 	
 	var editMedical = ()=>{
-		props.navigation.navigate('FichaMedica', { persona });
+		props.navigation.navigate('FichaMedica', { persona, canEdit });
 	}
 
 	var editStatus = ()=>{
@@ -109,7 +113,7 @@ export default (props)=>{
 			}>
 				<Text style={[styles.section, { marginTop: 10 }]}>Opciones</Text>
 				<Item text="Ficha medica" onPress={editMedical} />
-				<Item text="Cambiar estatus" onPress={editStatus} />
+				{ canEdit && <Item text="Cambiar estatus" onPress={editStatus} />}
 				<View style={{ padding: 15 }}>
 					<Input name="Nombre" value={persona.nombre} readonly />
 					<Input name="Apellido Paterno" value={persona.apellido_paterno} readonly />

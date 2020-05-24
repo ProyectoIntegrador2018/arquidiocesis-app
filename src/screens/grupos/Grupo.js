@@ -24,7 +24,7 @@ export default (props)=>{
 			shadowOpacity: 0
 		},
 		headerTitle: '',
-		headerRight: ()=> miembros!==false ? (
+		headerRight: ()=> (miembros!==false && (user && (user.type == 'admin' || user.type == 'superadmin' || user.id==grupo.coordinador))) ? (
 			<TouchableOpacity onPress={addMember}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
@@ -129,6 +129,7 @@ export default (props)=>{
 	
 	var viewMember = (item)=>{
 		props.navigation.navigate('DetalleMiembro', {
+			grupo,
 			persona: item,
 			onEdit: (id, miembro)=>{
 				setMiembros([...miembros.filter(a=>a.id!=id), miembro])
@@ -216,7 +217,7 @@ export default (props)=>{
 				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getGrupo} />
 			) : miembros!==false ? (
 				<View>
-					{miembros.length>0 && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={assistance} />}
+					{miembros.length>0 && (user && (user.type == 'admin' || user.type == 'superadmin' || user.id==grupo.coordinador)) && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={assistance} />}
 					{ grupo.parroquia ? (
 						<View>
 							<Text style={styles.sectionText}>VER PARROQUIA</Text>
