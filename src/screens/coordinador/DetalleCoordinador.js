@@ -22,7 +22,7 @@ export default (props)=>{
 			shadowOpacity: 0
 		},
 		headerTitle: 'Coordinador',
-		headerRight: ()=>(
+		headerRight: ()=> user && (user.type=='admin' || user.type=='superadmin') && (
 			<TouchableOpacity onPress={editCoordinador}>
 				<FontAwesome5 name={'edit'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>

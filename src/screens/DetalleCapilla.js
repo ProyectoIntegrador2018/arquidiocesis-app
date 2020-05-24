@@ -11,6 +11,7 @@ export default (props)=>{
 	var [error, setError] = useState(false);
 	var [edit, setEdit] = useState(false);
 	var [parroquias, setParroquias] = useState(false);
+	var [user, setUser] = useState(false);
 
 	var [nombre, setNombre] = useState('');
 	var [direccion, setDireccion] = useState('');
@@ -28,6 +29,7 @@ export default (props)=>{
 	});
 
 	useEffect(()=>{
+		API.getUser().then(setUser);
 		getCapilla()
 	}, [])
 
@@ -86,9 +88,11 @@ export default (props)=>{
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{props.route.params.nombre || capilla.nombre}</Text>
-			<TouchableOpacity onPress={setEditing}>
-				<FontAwesome5 name="edit" style={styles.editIcon} />
-			</TouchableOpacity>
+			{user && (user.type=='admin' || user.type=='superadmin') ? (
+				<TouchableOpacity onPress={setEditing}>
+					<FontAwesome5 name="edit" style={styles.editIcon} />
+				</TouchableOpacity>
+			) : null}
 		</View>
 		<KeyboardAwareScrollView>
 			{error ? (

@@ -7,8 +7,10 @@ export default (props)=>{
 	var [data, setData] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
+	var [user, setUser] = useState(false);
 
 	useEffect(()=>{
+		API.getUser().then(setUser);
 		API.getParroquias().then(d=>{
 			setData(d);
 			setRefreshing(false);
@@ -64,7 +66,7 @@ export default (props)=>{
 			</View>
 		) : (
 			<View>
-				<Button text="Agregar parroquia" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />
+				{user && (user.type=='admin' || user.type=='superadmin') && <Button text="Agregar parroquia" style={{ width: 250, alignSelf: 'center' }} onPress={addParroquia} />}
 				<AlphabetList data={data} onSelect={onPress} scroll sort={'nombre'} />
 			</View>
 		)}

@@ -18,7 +18,7 @@ export default (props)=>{
 
 	props.navigation.setOptions({
 		headerTitle: 'Detalle Acompañante',
-		headerRight: ()=>(
+		headerRight: ()=> user && (user.type=='admin' || user.type=='superadmin') && (
 			<TouchableOpacity onPress={editPersona}>
 				<FontAwesome5 name={'edit'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
@@ -98,9 +98,13 @@ export default (props)=>{
 			<LoadingView />
 		) : (
 			<ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
-				<Text style={[styles.section, { marginTop: 10 }]}>Opciones</Text>
-				{ user && (user.type=='admin' || user.type=='superadmin') && <Item text="Cambiar contraseña" onPress={changePassword} /> }
-				{ user && (user.type=='admin' || user.type=='superadmin') && <Item text="Eliminar acompañante" onPress={deleteAcompanante} loading={deleting} /> }
+				{ user && (user.type=='admin' || user.type=='superadmin') ? (
+					<View>
+						<Text style={[styles.section, { marginTop: 10 }]}>Opciones</Text>
+						<Item text="Cambiar contraseña" onPress={changePassword} />
+						<Item text="Eliminar acompañante" onPress={deleteAcompanante} loading={deleting} />
+					</View>
+				) : null}
 				<View style={{ padding: 15 }}>
 					<Input name='Correo Electrónico' value={persona.email} readonly />
 					<Input name="Nombre" value={persona.nombre} readonly />
