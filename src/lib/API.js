@@ -344,16 +344,8 @@ async function addGrupo(name, coordinador, parroquia, capilla){
 	else return res.data;
 }
 
-async function registerCoordinador(name, age, gender, email, password){
-	var payload = {
-		name,
-		age,
-		gender,
-		email,
-		password
-	}
-
-	var res = await post('coordinadores', payload);
+async function registerCoordinador(data){
+	var res = await post('coordinadores', data);
 	if(res.error) throw res;
 	else return res.data;
 }
@@ -558,6 +550,69 @@ async function setFichaMedica(id, data){
 	}
 }
 
+async function registerAcompananteZona(zona, data){
+	var res = await post('acompanante/zona', {
+		zona,
+		...data
+	});
+	if(res.error) throw res;
+	else{
+		if(res.data){
+			Cache.setZonaAcompanante(zona, res.data);
+		}
+		return res.data;
+	}
+}
+
+async function registerAcompananteDecanato(decanato, data){
+	var res = await post('acompanante/decanato', {
+		decanato,
+		...data
+	});
+	if(res.error) throw res;
+	else{
+		if(res.data){
+			Cache.setDecanatoAcompanante(decanato, res.data);
+		}
+		return res.data;
+	}
+}
+
+
+
+async function getAcompanante(id){
+	var res = await get('acompanante/'+id);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function deleteAcompananteZona(zona){
+	var res = await sendDelete('zonas/'+zona+'/acompanante');
+	if(res.error) throw res;
+	else{
+		Cache.setZonaAcompanante(zona, null);
+		return res.data;
+	}
+}
+
+async function deleteAcompananteDecanato(decanato){
+	var res = await sendDelete('decanatos/'+decanato+'/acompanante');
+	if(res.error) throw res;
+	else{
+		Cache.setDecanatoAcompanante(decanato, null);
+		return res.data;
+	}
+}
+
+async function editAcompanante(id, data){
+	var res = await post('acompanante/edit', {
+		id,
+		...data
+	});
+	if(res.error) throw res;
+	else return res.data;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -600,5 +655,11 @@ export default {
 	getGrupoBajasTemporales,
 	getFichaMedica,
 	setFichaMedica,
-	editParroquia
+	editParroquia,
+	getAcompanante,
+	registerAcompananteZona,
+	registerAcompananteDecanato,
+	deleteAcompananteZona,
+	deleteAcompananteDecanato,
+	editAcompanante
 }

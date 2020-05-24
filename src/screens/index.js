@@ -37,8 +37,13 @@ import RegistroMiembro from './miembros/RegistroMiembro';
 import EditMiembro from './miembros/EditMiembro';
 import DetalleMiembro from './miembros/DetalleMiembro';
 import EstatusMiembro from './miembros/EstatusMiembro';
+
 import AltaMiembroCap  from './AltaMiembroCap';
 import DetalleCap from './DetalleCap';
+
+import RegistroAcompanante from './acompanante/RegistroAcompanante';
+import EditAcompanante from './acompanante/EditAcompanante';
+import DetalleAcompanante from './acompanante/DetalleAcompanante';
 
 export {
 	Login,
@@ -77,4 +82,7 @@ export {
 	AltaMiembroCap,
 	DetalleCap,
 	EditParroquia,
+	RegistroAcompanante,
+	EditAcompanante,
+	DetalleAcompanante
 }

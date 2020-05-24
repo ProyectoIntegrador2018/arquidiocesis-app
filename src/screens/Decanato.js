@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
-import { AlphabetList, ErrorView } from '../components';
+import { AlphabetList, ErrorView, Item } from '../components';
 import { API } from '../lib';
 
 export default (props)=>{
 	var [decanato, setDecanato] = useState(props.route.params);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
+	var [user, setUser] = useState(false);
 
 	props.navigation.setOptions({
 		headerStyle: {
@@ -17,11 +18,12 @@ export default (props)=>{
 	});
 
 	useEffect(()=>{
+		API.getUser().then(setUser);
 		setRefreshing(true);
 		setError(false);
 		API.getDecanato(decanato.id).then(d=>{
+			d.id = decanato.id;
 			setDecanato(d);
-			console.log(d);
 			setRefreshing(false);
 			setError(false);
 		}).catch(err=>{
@@ -33,6 +35,7 @@ export default (props)=>{
 	var getDecanato = ()=>{
 		setRefreshing(true);
 		API.getDecanato(decanato.id, true).then(d=>{
+			d.id = decanato.id;
 			setDecanato(d);
 			setRefreshing(false);
 			setError(false);
@@ -41,6 +44,29 @@ export default (props)=>{
 			setRefreshing(false);
 		})
 	}
+
+	var addAcompanante = ()=>{
+		props.navigation.navigate('RegistroAcompanante', {
+			decanato,
+			onAdd: id=>{
+				var z = {...decanato};
+				z.acompanante = id;
+				setDecanato(z);
+			}
+		})
+	}
+
+	var viewAcompanante = ()=>{
+		props.navigation.navigate('DetalleAcompanante', {
+			decanato,
+			onDelete: function(){
+				var z = {...decanato};
+				z.acompanante = null;
+				setDecanato(z);
+			}
+		});
+	}
+
 
 	var onPress = (item)=>{
 		props.navigation.navigate('Parroquia', item);
@@ -58,6 +84,14 @@ export default (props)=>{
 				<ErrorView message={'Hubo un error cargando el decanato...'} refreshing={refreshing} retry={getDecanato} />
 			) : decanato.parroquias ? (
 				<View>
+					
+					{decanato.acompanante ? (
+						<Item text="Ver acompañante" onPress={viewAcompanante} />
+					) : (user && user.type=='admin' || user.type=='superadmin') ? (
+						<Item text="Agregar acompañante" onPress={addAcompanante} />
+					) : (
+						null
+					)}
 					<Text style={styles.sectionText}>PARROQUIAS</Text>
 					{decanato.parroquias && decanato.parroquias.length>0 ? (
 						<AlphabetList data={decanato.parroquias} onSelect={onPress} sort={'nombre'} />

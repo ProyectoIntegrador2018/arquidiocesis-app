@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { Input, Button } from '../components'
 import { API } from '../lib';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -18,39 +18,39 @@ export default (props)=>{
 
 	var changePassword = ()=>{
 		if(oldPassword.length==0 && !admin_email){
-			return alert('Favor de introducir la contraseña actual.');
+			return Alert.alert('Error', 'Favor de introducir la contraseña actual.');
 		}
 		if(newPassword.length<5){
-			return alert('La contraseña debe de ser de minimo 5 caracteres.');
+			return Alert.alert('Error', 'La contraseña debe de ser de minimo 5 caracteres.');
 		}
 		if(newPassword2!=newPassword){
-			return alert('Las nuevas contraseñas no concuerdan.');
+			return Alert.alert('Error', 'Las nuevas contraseñas no concuerdan.');
 		}
 		setLoading(true);
 
 		if(admin_email){
 			API.changeAdminPassword(admin_email, newPassword).then(done=>{
 				setLoading(false);
-				if(!done) return alert('Hubo un error cambiando la contraseña.');
-				alert('Se ha cambiado la contraseña.');
+				if(!done) return Alert.alert('Error', 'Hubo un error cambiando la contraseña.');
+				Alert.alert('Exito', 'Se ha cambiando la contraseña.');
 				return props.navigation.goBack();
 			}).catch(err=>{
 				setLoading(false);
+				Alert.alert('Error', 'Hubo un error cambiando la contraseña.');
 			})
 		}else{
 			API.changePassword(oldPassword, newPassword).then(done=>{
 				setLoading(false);
-				if(!done) return alert('Hubo un error cambiando la contraseña.');
+				if(!done) return Alert.alert('Error', 'Hubo un error cambiando la contraseña.');
 				if(done.error){
-					if(done.code==923) return alert('La contraseña actual no es correcta.')
-					else return alert('Hubo un error cambiando la contraseña.');
+					if(done.code==923) return Alert.alert('Error', 'La contraseña actual no es correcta.')
+					else return Alert.alert('Error', 'Hubo un error cambiando la contraseña.');
 				}
-				alert('Se ha cambiado la contraseña.');
+				Alert.alert('Error', 'Se ha cambiado la contraseña.');
 				if(props.route.params.logout) props.route.params.logout()
 			}).catch(err=>{
 				setLoading(false);
-				console.log(err);
-				return alert('Hubo un error cambiando la contraseña.');
+				return Alert.alert('Error', 'Hubo un error cambiando la contraseña.');
 			});
 		}
 	}

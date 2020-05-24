@@ -30,6 +30,9 @@ function validateField(rule, val){
 		if(rule.value && val && val.length>rule.value) return false;
 	}else if(rule.type=='email'){
 		if(typeof val === 'undefined' || !validateEmail(val)) return false;
+	}else if(rule.type=='equals'){
+		console.log(val, rule.value);
+		if(val!=rule.value) return false;
 	}
 	return true;
 }

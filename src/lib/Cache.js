@@ -19,6 +19,11 @@ var setZonasDirty = (d=true)=>{
 var addZona = i=>{
 	zonas.push(i);
 }
+var setZonaAcompanante = (id, acompanante)=>{
+	var ix = zonas.findIndex(a=>a.id==id);
+	if(ix==-1) return;
+	zonas[ix].acompanante = acompanante;
+}
 
 
 
@@ -42,6 +47,11 @@ var setDecanatosDirty = (d=true)=>{
 }
 var addDecanato = i=>{
 	decanatos.push(i);
+}
+var setDecanatoAcompanante = (id, acompanante)=>{
+	var ix = decanatos.findIndex(a=>a.id==id);
+	if(ix==-1) return;
+	decanatos[ix].acompanante = acompanante;
 }
 
 
@@ -229,6 +239,7 @@ export default {
 	isZonasDirty,
 	setZona,
 	addZona,
+	setZonaAcompanante,
 
 	getDecanatos,
 	getDecanato,
@@ -237,6 +248,7 @@ export default {
 	isDecanatosDirty,
 	setDecanato,
 	addDecanato,
+	setDecanatoAcompanante,
 
 	getParroquias,
 	getParroquia,

@@ -41,6 +41,9 @@ import {
 	AltaMiembroCap,
 	DetalleCap,
 	EditParroquia,
+	RegistroAcompanante,
+	DetalleAcompanante,
+	EditAcompanante
 } from './screens';
 import { API } from './lib'
 import DetalleCoordinador from './screens/DetalleCoordinador';
@@ -144,6 +147,9 @@ var App = (props)=>{
 				<Stack.Screen name="AltaMiembroCap" component={AltaMiembroCap}/>
 				<Stack.Screen name="DetalleCap" component={DetalleCap}/>
 				<Stack.Screen name="EditParroquia" component={EditParroquia}/>
+				<Stack.Screen name="RegistroAcompanante" component={RegistroAcompanante}/>
+				<Stack.Screen name="DetalleAcompanante" component={DetalleAcompanante}/>
+				<Stack.Screen name="EditAcompanante" component={EditAcompanante}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

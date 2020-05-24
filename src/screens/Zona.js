@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
-import { AlphabetList, ErrorView } from '../components';
+import { AlphabetList, ErrorView, Item } from '../components';
 import { API } from '../lib';
 
 export default (props)=>{
 	var [zona, setZona] = useState(props.route.params);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
+	var [user, setUser] = useState(false);
 
 	props.navigation.setOptions({
 		headerStyle: {
@@ -17,6 +18,7 @@ export default (props)=>{
 	});
 
 	useEffect(()=>{
+		API.getUser().then(setUser);
 		setError(false);
 		API.getZona(zona.id).then(d=>{
 			setZona(d);
@@ -48,6 +50,28 @@ export default (props)=>{
 		props.navigation.navigate('Parroquia', item);
 	}
 
+	var addAcompanante = ()=>{
+		props.navigation.navigate('RegistroAcompanante', {
+			zona,
+			onAdd: id=>{
+				var z = {...zona};
+				z.acompanante = id;
+				setZona(z);
+			}
+		})
+	}
+
+	var viewAcompanante = ()=>{
+		props.navigation.navigate('DetalleAcompanante', {
+			zona,
+			onDelete: function(){
+				var z = {...zona};
+				z.acompanante = null;
+				setZona(z);
+			}
+		});
+	}
+
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{zona.nombre}</Text>
@@ -60,6 +84,14 @@ export default (props)=>{
 					<ErrorView message={'Hubo un error cargando la zona...'} refreshing={refreshing} retry={getZona} />
 				) : zona.decanatos ? (
 					<View>
+						{zona.acompanante ? (
+							<Item text="Ver acompañante" onPress={viewAcompanante} />
+						) : (user && user.type=='admin' || user.type=='superadmin') ? (
+							<Item text="Agregar acompañante" onPress={addAcompanante} />
+						) : (
+							null
+						)}
+
 						<Text style={styles.sectionText}>DECANATOS</Text>
 						<AlphabetList data={zona.decanatos} onSelect={onPress} scroll={false} sort={'nombre'} />
 						{zona.parroquias && zona.parroquias.length>0 && (
