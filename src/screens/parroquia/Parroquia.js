@@ -11,6 +11,7 @@ export default (props)=>{
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 	var [deleting, setDeleting] = useState(false);
+	var [user, setUser] = useState(false);
 
 	var readonly = props.route.params.readonly;
 	var onDelete = props.route.params.onDelete;
@@ -22,14 +23,16 @@ export default (props)=>{
 			shadowOpacity: 0
 		},
 		headerTitle: '',
-		headerRight: ()=>(
-			<TouchableOpacity onPress={addCapilla}>
+		headerRight: ()=>{
+			if(readonly || !(user && (user.type=='admin' || user.type=='superadmin'))) return null;
+			else return <TouchableOpacity onPress={addCapilla}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
-		)
+		}
 	});
 
 	useEffect(()=>{
+		API.getUser().then(setUser);
 		setError(false);
 		var id = parroquia.id;
 		API.getParroquia(id).then(d=>{
@@ -120,7 +123,7 @@ export default (props)=>{
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{parroquia.nombre}</Text>
-			{readonly ? null : (
+			{readonly || !(user && (user.type=='admin' || user.type=='superadmin')) ? null : (
 				<TouchableOpacity onPress={editParroquia}>
 					<FontAwesome5 name="edit" style={styles.editIcon} />
 				</TouchableOpacity>
@@ -143,7 +146,6 @@ export default (props)=>{
 							</View>
 						)}
 					</View>
-					{/* editar parroquia */}
 					<View style={{ padding: 15, marginTop: 10 }}>
 						<Input name="Nombre" value={parroquia.nombre} readonly />
 						<Input name="Decanato" value={parroquia.decanato ? parroquia.decanato.nombre : null} readonly />
@@ -153,7 +155,7 @@ export default (props)=>{
 						<Input name="Telefono 1" value={parroquia.telefono1} readonly />
 						<Input name="Telefono 2" value={parroquia.telefono2} readonly />
 					</View>
-					<Item text="Eliminar parroquia" onPress={deleteParroquia} loading={deleting} />
+					{!readonly && (user && (user.type=='admin' || user.type=='superadmin')) && <Item text="Eliminar parroquia" onPress={deleteParroquia} loading={deleting} />}
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>

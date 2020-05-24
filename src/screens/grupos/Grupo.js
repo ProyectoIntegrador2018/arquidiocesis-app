@@ -13,6 +13,7 @@ export default (props)=>{
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 	var [sending, setSending] = useState(false);
+	var [user, setUser] = useState(false);
 
 	var onDelete = props.route.params.onDelete;
 	var onEdit = props.route.params.onEdit;
@@ -31,6 +32,8 @@ export default (props)=>{
 	});
 
 	useEffect(()=>{
+		API.getUser().then(setUser);
+
 		setError(false);
 		var id = grupo.id;
 		API.getGrupo(id).then(d=>{
@@ -200,9 +203,11 @@ export default (props)=>{
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText} numberOfLines={1}>{grupo.nombre}</Text>
-			<TouchableOpacity onPress={editGroup}>
-				<FontAwesome5 name="edit" style={styles.editIcon} />
-			</TouchableOpacity>
+			{ user && (user.type=='admin' || user.type=='superadmin') ? (
+				<TouchableOpacity onPress={editGroup}>
+					<FontAwesome5 name="edit" style={styles.editIcon} />
+				</TouchableOpacity>
+			) : null}
 		</View>
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getGrupo} />
@@ -259,9 +264,10 @@ export default (props)=>{
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No se han marcado asistencias.</Text>
 						</View>
 					)}
-					<Item text="Cambiar coordinador" style={{ marginTop: 40 }} onPress={changeCoordinador} />
+					<View style={{ marginTop: 40 }} />
+					{ user && (user.type=='admin' || user.type=='superadmin') && <Item text="Cambiar coordinador" onPress={changeCoordinador} /> }
 					<Item text="Ver bajas temporales" onPress={bajasTemporales} />
-					<Item text="Eliminar grupo" onPress={deleteGroup}  loading={sending}/>
+					{ user && (user.type=='admin' || user.type=='superadmin') && <Item text="Eliminar grupo" onPress={deleteGroup}  loading={sending}/> }
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>

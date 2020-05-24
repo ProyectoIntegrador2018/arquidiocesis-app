@@ -47,6 +47,7 @@ export default (props)=>{
 	}
 	
 	var onPressParroquia = (item)=>{
+		item.readonly = true;
 		props.navigation.navigate('Parroquia', item);
 	}
 
