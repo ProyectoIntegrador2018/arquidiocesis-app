@@ -248,19 +248,15 @@ async function addParroquia(data){
 	else return res.data;
 }
 
-async function editParroquia(id, data){
-	var payload = {
-		nombre: data.nombre,
-		direccion: data.direccion,
-		colonia: data.colonia,
-		municipio: data.municipio,
-		telefono1: data.telefono1,
-		telefono2: data.telefono2,
-		decanato: data.decanato,
-		parroquia: id
-	}
-	
-	var res = await post('parroquias/edit', payload);
+async function editParroquia(id, data){	
+	console.log({
+		parroquia: id,
+		...data
+	})
+	var res = await post('parroquias/edit', {
+		parroquia: id,
+		...data
+	});
 	if(res.error) throw res;
 	else return res.data;
 }

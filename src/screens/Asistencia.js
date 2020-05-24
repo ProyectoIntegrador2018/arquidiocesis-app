@@ -177,7 +177,7 @@ var CheckboxItem = (props)=>{
 				checked={checked}
 				onPress={onPress}
 				containerStyle={{ marginRight: 0 }} />
-			<Text style={{ fontSize: 16 }}>{props.nombre}</Text>
+			<Text style={{ fontSize: 16 }} numberOfLines={1}>{props.nombre} {props.apellido_paterno} {props.apellido_materno}</Text>
 		</View>
 	</TouchableOpacity>
 }

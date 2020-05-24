@@ -10,6 +10,7 @@ export default (props)=>{
 	var [coordinadorList, setCoordinadorList] = useState(false);
 
 	var { grupo, onEdit } = props.route.params;
+	var coordinador_id = (grupo.coordinador ? grupo.coordinador.id : null);
 
 	props.navigation.setOptions({
 		headerTitle: 'Cambiar coordinador',
@@ -23,12 +24,12 @@ export default (props)=>{
 
 	var getCoordinadorIndex = ()=>{
 		if(!coordinadorList) return;
-		return coordinadorList.findIndex(a=>a.id==grupo.coordinador.id);
+		return coordinadorList.findIndex(a=>a.id==coordinador_id);
 	}
 
 	var save = ()=>{
 		if(!coordinador) return alert("Favor de seleccionar un coordinador");
-		if(coordinador.id==grupo.coordinador.id){
+		if(coordinador.id==coordinador_id){
 			// Fake change.
 			alert("Se ha cambiado el coordinador.");
 			props.navigation.goBack();
@@ -57,7 +58,7 @@ export default (props)=>{
 			<View style={{ marginBottom: 10 }}>
 				<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 					<Text style={{ marginRight: 5, fontSize: 16 }}>Nombre:</Text>
-					<Text style={{ fontSize: 16 }}>{coordinador.nombre}</Text>
+					<Text style={{ fontSize: 16 }}>{coordinador.nombre} {coordinador.apellido_paterno} {coordinador.apellido_materno}</Text>
 				</View>
 				<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 					<Text style={{ marginRight: 5, fontSize: 16 }}>Correo:</Text>

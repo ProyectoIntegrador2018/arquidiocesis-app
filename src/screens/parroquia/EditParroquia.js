@@ -9,13 +9,13 @@ export default (props)=>{
 	var [loading, setLoading] = useState(false);
 	var [listDecanatos, setListDecanatos] = useState(false);
 	
-	var [name, setName] = useState(parroquia.nombre);
-	var [address, setAddress]= useState(parroquia.direccion);
+	var [name, setName] = useState((parroquia.nombre || ''));
+	var [address, setAddress]= useState((parroquia.direccion || ''));
 	var [decanato, setDecanato] = useState(false);
-	var [colonia, setColonia] = useState(parroquia.colonia);
-	var [municipio, setMunicipio] = useState(parroquia.municipio);
-	var [telefono1, setTelefono1] = useState(parroquia.telefono1);
-	var [telefono2, setTelefono2] = useState(parroquia.telefono2);
+	var [colonia, setColonia] = useState((parroquia.colonia || ''));
+	var [municipio, setMunicipio] = useState((parroquia.municipio || ''));
+	var [telefono1, setTelefono1] = useState((parroquia.telefono1 || ''));
+	var [telefono2, setTelefono2] = useState((parroquia.telefono2 || ''));
 	
 
 	var doRegister = ()=>{
@@ -43,9 +43,13 @@ export default (props)=>{
 		API.editParroquia(parroquia.id, data).then(done=>{
 			setLoading(false);
 			if(!done) return Alert.alert('Error', 'Hubo un error editando la parroquia.');
-			onEdit(done)
+			done.decanato = {
+				id: decanato.id,
+				nombre: decanato.label
+			}
 			return Alert.alert('Exito', 'Se ha editando la parroquia.');
 		}).catch(err=>{
+			console.log(err);
 			setLoading(false);
 			return Alert.alert('Error', 'Hubo un error editando la parroquia.');
 		})

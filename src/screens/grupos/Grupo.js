@@ -250,7 +250,7 @@ export default (props)=>{
 
 					<Text style={styles.sectionText}>MIEMBROS</Text>
 					{miembros.length>0 ? (
-						<AlphabetList data={miembros.map(a=>({ name: a.nombre, ...a }))} onSelect={viewMember} scroll={false} sort={'nombre'} />
+						<AlphabetList data={miembros.map(a=>({ ...a, nombre_completo: `${a.nombre} ${a.apellido_paterno}` }))} onSelect={viewMember} scroll={false} sort={'nombre_completo'} />
 					) : (
 						<View>
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Este grupo no tiene miembros agregados.</Text>
