@@ -613,6 +613,18 @@ async function editAcompanante(id, data){
 	else return res.data;
 }
 
+async function deleteCoordinador(id){
+	var res = await sendDelete('coordinadores/'+id);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function editCoordinador(id, data){
+	var res = await post('coordinadores/'+id+'/edit', data);
+	if(res.error) throw res;
+	else return res.data;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -661,5 +673,7 @@ export default {
 	registerAcompananteDecanato,
 	deleteAcompananteZona,
 	deleteAcompananteDecanato,
-	editAcompanante
+	editAcompanante,
+	editCoordinador,
+	deleteCoordinador
 }

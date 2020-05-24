@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Picker } from '../components'
+import { Input, Button, Picker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { API, Util } from '../lib';
+import { API, Util } from '../../lib';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
@@ -30,7 +30,7 @@ export default (props)=>{
 	var onAdd = props.route.params.onAdd;
 
 	props.navigation.setOptions({
-		headerTitle: 'Registro Miembro'
+		headerTitle: 'Registro Coordinador'
 	});
 
 	var doRegister = ()=>{

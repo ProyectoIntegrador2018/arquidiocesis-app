@@ -1,18 +1,19 @@
-import Dummy from './Dummy'
-
 import Decanato from './Decanato';
 import User from './User';
 import Capacitacion from './Capacitacion';
-import Coordinadores from './Coordinadores';
 import Login from './Login';
 import Asistencia from './Asistencia';
 import DetallePersona from './DetallePersona';
 import ZonasList from './ZonasList';
 import Zona from './Zona';
-import RegistroCoordinador from './RegistroCoordinador';
 import ChangePassword from './ChangePassword';
 import AltaCapilla from './AltaCapilla';
 import DetalleCapilla from './DetalleCapilla';
+
+import DetalleCoordinador from './coordinador/DetalleCoordinador';
+import RegistroCoordinador from './coordinador/RegistroCoordinador';
+import Coordinadores from './coordinador/Coordinadores';
+import EditCoordinador from './coordinador/EditCoordinador';
 
 import Parroquias from './parroquia/Parroquias';
 import Parroquia from './parroquia/Parroquia'
@@ -53,7 +54,6 @@ export {
 	Capacitacion,
 	Coordinadores,
 	Grupos,
-	Dummy,
 	RegistroAdmin,
 	GrupoBajasTemporales,
 	Asistencia,
@@ -84,5 +84,7 @@ export {
 	EditParroquia,
 	RegistroAcompanante,
 	EditAcompanante,
-	DetalleAcompanante
+	DetalleCoordinador,
+	DetalleAcompanante,
+	EditCoordinador
 }

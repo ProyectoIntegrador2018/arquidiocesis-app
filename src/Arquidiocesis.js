@@ -43,10 +43,11 @@ import {
 	EditParroquia,
 	RegistroAcompanante,
 	DetalleAcompanante,
-	EditAcompanante
+	EditAcompanante,
+	DetalleCoordinador,
+	EditCoordinador
 } from './screens';
 import { API } from './lib'
-import DetalleCoordinador from './screens/DetalleCoordinador';
 
 var Tab = createBottomTabNavigator();
 var Home = (props)=>{
@@ -150,6 +151,7 @@ var App = (props)=>{
 				<Stack.Screen name="RegistroAcompanante" component={RegistroAcompanante}/>
 				<Stack.Screen name="DetalleAcompanante" component={DetalleAcompanante}/>
 				<Stack.Screen name="EditAcompanante" component={EditAcompanante}/>
+				<Stack.Screen name="EditCoordinador" component={EditCoordinador}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
