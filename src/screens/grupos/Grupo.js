@@ -23,7 +23,7 @@ export default (props)=>{
 			backgroundColor: '#002E60',
 			shadowOpacity: 0
 		},
-		headerTitle: '',
+		headerTitle: 'Grupo',
 		headerRight: ()=> (miembros!==false && (user && (user.type == 'admin' || user.type == 'superadmin' || user.id==grupo.coordinador))) ? (
 			<TouchableOpacity onPress={addMember}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />

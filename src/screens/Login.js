@@ -36,24 +36,26 @@ export default (props)=>{
 	return (
 		<SafeAreaView style={styles.container}>
 			<StatusBar barStyle={'dark-content'} />
-			<View style={{ backgroundColor: 'white', height: '30%', width: '100%',paddingTop:20, paddingBottom:60  }}>
-				<View style={{alignItems:"center", justifyContent:"center"}}>
-				<Image source={require("../../assets/logo.jpeg")} />
+			<KeyboardAwareScrollView>
+				<View style={{ backgroundColor: 'white', height: '30%', width: '100%',paddingTop:20, paddingBottom:60  }}>
+					<View style={{alignItems:"center", justifyContent:"center"}}>
+					<Image source={require("../../assets/logo.jpeg")} />
+					</View>
 				</View>
-			</View>
-			{props.user===false ? (
-				<View style={[styles.loginContainer, { alignItems: 'center', justifyContent: 'center' }]}>
-					<ActivityIndicator size='large' color='black' />
-				</View>
-			) : (
-				<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
-					<Text style={styles.header}>Iniciar Sesión</Text> 
-					<Input name="Correo electrónico" value={email} onChangeText={setEmail} textContentType={'emailAddress'} />
-					<Input name="Contraseña" style={{ marginTop: 10 }} value={password} onChangeText={setPassword} textContentType={'password'} password />
+				{props.user===false ? (
+					<View style={[styles.loginContainer, { alignItems: 'center', justifyContent: 'center' }]}>
+						<ActivityIndicator size='large' color='black' />
+					</View>
+				) : (
+					<View style={styles.loginContainer} bounces={false}>
+						<Text style={styles.header}>Iniciar Sesión</Text> 
+						<Input name="Correo electrónico" value={email} onChangeText={setEmail} keyboardType={'email-address'}  />
+						<Input name="Contraseña" style={{ marginTop: 10 }} value={password} onChangeText={setPassword} textContentType={'password'} password />
 
-					<Button text="Iniciar Sesión" loading={loading} onPress={doLogin} />
-				</KeyboardAwareScrollView>
-			)}
+						<Button text="Iniciar Sesión" loading={loading} onPress={doLogin} />
+					</View>
+				)}
+			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	)
 }
@@ -63,12 +65,10 @@ const styles = StyleSheet.create({
 		fontSize: 20
 	},
 	container: {
+		width: '100%',
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
 	},
 	loginContainer: {
-		height: '70%', 
 		width: '100%', 
 		padding: 10
 	},
