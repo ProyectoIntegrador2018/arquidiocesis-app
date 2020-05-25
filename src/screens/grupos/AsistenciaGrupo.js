@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator,TouchableOpacity, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements'
-import { Input } from '../components'
-import { Util, API } from '../lib'
+import { Input } from '../../components'
+import { Util, API } from '../../lib'
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')

@@ -84,7 +84,7 @@ export default (props)=>{
 	}
 
 	var assistance = ()=>{
-		props.navigation.navigate('Asistencia', {
+		props.navigation.navigate('AsistenciaGrupo', {
 			grupo,
 			new: true,
 			onAssistance: date=>{

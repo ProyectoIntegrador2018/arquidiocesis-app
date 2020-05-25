@@ -1,7 +1,6 @@
 import Decanato from './Decanato';
 import User from './User';
 import Login from './Login';
-import Asistencia from './Asistencia';
 import ZonasList from './ZonasList';
 import Zona from './Zona';
 import ChangePassword from './ChangePassword';
@@ -24,6 +23,7 @@ import Grupo from './grupos/Grupo';
 import EditGrupo from './grupos/EditGrupo';
 import ChangeCoordinador from './grupos/ChangeCoordinador';
 import GrupoBajasTemporales from './grupos/GrupoBajasTemporales';
+import AsistenciaGrupo from './grupos/AsistenciaGrupo';
 
 import RegistroAdmin from './admin/RegistroAdmin';
 import AdminUsers from './admin/AdminUsers';
@@ -58,7 +58,7 @@ export {
 	Grupos,
 	RegistroAdmin,
 	GrupoBajasTemporales,
-	Asistencia,
+	AsistenciaGrupo,
 	DetalleAdmin,
 	ChangePassword,
 	ZonasList,

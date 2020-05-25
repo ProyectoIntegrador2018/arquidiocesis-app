@@ -13,7 +13,7 @@ import {
 	Coordinadores, 
 	Grupos, 
 	Capacitaciones, 
-	Asistencia, 
+	AsistenciaGrupo, 
 	ZonasList, 
 	Zona, 
 	RegistroAdmin, 
@@ -122,7 +122,7 @@ var App = (props)=>{
 				<Stack.Screen name="Home" component={Home} initialParams={{ logout: props.logout }} />
 				<Stack.Screen name="RegistroAdmin" component={RegistroAdmin}/>
 				<Stack.Screen name="RegistroCoordinador" component={RegistroCoordinador}/>
-				<Stack.Screen name="Asistencia" component={Asistencia} />
+				<Stack.Screen name="AsistenciaGrupo" component={AsistenciaGrupo} />
 				<Stack.Screen name="Decanato" component={Decanato} />
 				<Stack.Screen name="Zona" component={Zona} />
 				<Stack.Screen name="AltaPquia" component={AltaPquia} />
