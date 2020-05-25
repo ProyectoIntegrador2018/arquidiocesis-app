@@ -250,10 +250,6 @@ async function addParroquia(data){
 }
 
 async function editParroquia(id, data){	
-	console.log({
-		parroquia: id,
-		...data
-	})
 	var res = await post('parroquias/edit', {
 		parroquia: id,
 		...data
@@ -670,7 +666,6 @@ async function editCapacitacion(id, data){
 			_seconds: moment(data.fin, 'YYYY-MM-DD').unix()
 		}
 		Cache.editCapacitacion({ id, ...data });
-		console.log(Cache.getCapacitacion(id));
 		return res.data;
 	}
 }
@@ -700,12 +695,35 @@ async function getCapacitacionAsistencia(id, fecha){
 
 }
 
-async function addCapacitacionParticipante(capacitacion, data){
+async function getParticipante(id){
+	var res = await get('participante/'+id);
+	if(res.error) throw res;
+	else return res.data;
+}
 
+async function addCapacitacionParticipante(capacitacion, data){
+	var res = await post('participante', {
+		capacitacion,
+		...data
+	});
+
+	if(res.error) throw res;
+	else{
+		data.fecha_nacimiento = {
+			_seconds: moment(data.fecha_nacimiento, 'YYYY-MM-DD').unix()
+		}
+		Cache.addParticipante(capacitacion, data);
+		return res.data;
+	}
 }
 
 async function removeCapacitacionParticipante(capacitacion, id){
-
+	var res = await sendDelete('participante/'+id);
+	if(res.error) throw res;
+	else {
+		Cache.removeParticipante(capacitacion, id)
+		return res.data;
+	}
 }
 
 
@@ -770,5 +788,6 @@ export default {
 	saveCapacitacionAsistencia,
 	getCapacitacionAsistencia,
 	addCapacitacionParticipante,
-	removeCapacitacionParticipante
+	removeCapacitacionParticipante,
+	getParticipante
 }

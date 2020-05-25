@@ -2,7 +2,6 @@ import Decanato from './Decanato';
 import User from './User';
 import Login from './Login';
 import Asistencia from './Asistencia';
-import DetallePersona from './DetallePersona';
 import ZonasList from './ZonasList';
 import Zona from './Zona';
 import ChangePassword from './ChangePassword';
@@ -42,6 +41,7 @@ import DetalleCapacitacion from './capacitacion/DetalleCapacitacion';
 import Capacitaciones from './capacitacion/Capacitaciones';
 import RegistroCapacitacion from './capacitacion/RegistroCapacitacion';
 import EditarCapacitacion from './capacitacion/EditarCapacitacion';
+import DetalleParticipante from './capacitacion/DetalleParticipante';
 
 import RegistroAcompanante from './acompanante/RegistroAcompanante';
 import EditAcompanante from './acompanante/EditAcompanante';
@@ -59,7 +59,6 @@ export {
 	Asistencia,
 	DetalleAdmin,
 	ChangePassword,
-	DetallePersona,
 	ZonasList,
 	Zona,
 	RegistroCoordinador,
@@ -88,5 +87,6 @@ export {
 	DetalleCapacitacion,
 	Capacitaciones,
 	RegistroCapacitacion,
-	EditarCapacitacion
+	EditarCapacitacion,
+	DetalleParticipante
 }

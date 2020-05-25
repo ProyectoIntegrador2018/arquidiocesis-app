@@ -1,45 +1,142 @@
-import React, { useState, useEffect, Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, StyleSheet, Alert } from 'react-native';
 import { Input, Button, Picker, AlphabetList } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { API } from '../../lib';
-
-
+import { API, Util } from '../../lib';
+import DatePicker from 'react-native-datepicker';
+import moment from 'moment/min/moment-with-locales'
+moment.locale('es');
 
 export default (props)=>{
-	var [loading, setLoading] = useState(false);
-	var [name, setName] = useState('Don Bosco');
-	var [address, setAddress]= useState('calle 1, col. tecnologico');
-	var [decanato, setDecanato] = useState(false);
-	var [listDecanatos, setListDecanatos] = useState(false);
+	var { capacitacion, onAdd } = props.route.params;
 
-	var onAdd = props.route.params.onAdd;
+	var [loading, setLoading] = useState(false);
+	var [name, setName] = useState('');
+	var [shortName, setShortName] = useState('');
+	var [apPaterno, setApPaterno] = useState('');
+	var [apMaterno, setApMaterno] = useState('');
+	var [email, setEmail] = useState('');
+	var [birthday, setBirthday] = useState (moment().format('YYYY-MM-DD'));
+	var [gender, setGender] = useState(false);
+	var [estadoCivil, setEstadoCivil] = useState(false);
+	var [domicilio, setDomicilio] = useState('');
+	var [colonia, setColonia] = useState('');
+	var [municipio, setMunicipio] = useState('');
+	var [phoneHome, setPhoneHome] = useState('');
+	var [phoneMobile, setPhoneMobile] = useState('');
+	var [phoneMobile, setPhoneMobile] = useState('');
+	var [escolaridad, setEscolaridad] = useState(false);
+	var [oficio, setOficio] = useState(false);
+	var pickerRef = useRef(null);
 
 	var doRegister = ()=>{
-		
-	}
-    var onPress = ()=>{
-		
-	}
-	/* useEffect(()=>{
-		API.getDecanatos(false).then(decanatos=>{
-			var d = decanatos.map(a=>{
-				return { label: a.nombre, value: a.id }
-			})
-			setListDecanatos(d);
+		var data =  {
+			nombre: name,
+			apellido_paterno: apPaterno,
+			apellido_materno: apMaterno,
+			nombre_corto: shortName,
+			fecha_nacimiento: birthday,
+			estado_civil: estadoCivil,
+			sexo: gender,
+			email: email,
+			escolaridad: escolaridad,
+			oficio: oficio,
+			domicilio: {
+				domicilio: domicilio,
+				colonia: colonia,
+				municipio: municipio,
+				telefono_casa: phoneHome,
+				telefono_movil: phoneMobile,
+			}
+		}
+
+		var { valid, prompt } = Util.validateForm(data, {
+			nombre: { type: 'minLength', value: 3, prompt: 'Favor de introducir el nombre.' },
+			apellido_paterno: { type: 'empty', prompt: 'Favor de introducir el apelldio paterno.' },
+			fecha_nacimiento: { type: 'empty', prompt: 'Favor de introducir la fecha de nacimiento.' },
+			sexo: { type: 'empty', prompt: 'Favor de introducir el sexo.' },
+			estado_civil: { type: 'empty', prompt: 'Favor de introducir el estado civil.' },
+			escolaridad: { type: 'empty', prompt: 'Favor de introducir la escolaridad.' },
+			oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
 		});
-	}, []) */
+
+		if(!valid){
+			return Alert.alert('Error', prompt);
+		}
+		
+		setLoading(true);
+		API.addCapacitacionParticipante(capacitacion.id, data).then(done=>{
+			setLoading(false);
+			if(!done) return Alert.alert('Error', 'Hubo un error agregando el participante a la capacitación.');
+			Alert.alert('Exito', 'Se ha agregando el participante a la capacitación.');
+			data.id = done;
+			onAdd(data);
+			props.navigation.goBack();
+		}).catch(err=>{
+			setLoading(false);
+			console.log(err);
+			Alert.alert('Error', 'Hubo un error agregando el participante a la capacitación.');
+		})
+	}
 
 	props.navigation.setOptions({
-		headerTitle: 'Agregar Miembros'
+		headerTitle: 'Agregar Participante'
 	});
 
+	var formatDate = a=>{
+		var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
+		return f.charAt(0).toUpperCase() + f.substr(1);
+	}
+
 	return (
-		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
-			<Text style={styles.header}>Seleccione Miembros</Text> 
-			<AlphabetList data={['a','b','c']}scroll sort={'nombre'}/>
-					
+		<KeyboardAwareScrollView style={styles.container}>
+			<Input name="Nombre" value={name} onChangeText={setName} required/>
+			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} required/>
+			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno}/>
+			<Input name="Nombre Corto" value={shortName} onChangeText={setShortName}/>
+			<Picker name="Sexo" items={['Masculino', 'Femenino', 'Sin especificar']} onValueChange={setGender} required />
+			<Input value={formatDate(birthday)} required name={'Fecha de nacimiento'} readonly onPress={()=>{
+				pickerRef.current.onPressDate()
+			}} />
+			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'}/>
+			<Picker name="Estado Civil" items={['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado']} onValueChange={setEstadoCivil} required />
+			<Picker name="Grado escolaridad" items={[
+				'Ninguno', 'Primaria',
+				'Secundaria', 'Técnica carrera', 
+				'Maestría', 'Doctorado'
+			]} onValueChange={setEscolaridad} required />
+			<Picker name="Oficio" items={[
+				'Ninguno', 'Plomero', 
+				'Electricista', 'Carpintero', 
+				'Albañil', 'Pintor', 'Mecánico', 
+				'Músico', 'Chofer'
+			]} onValueChange={setOficio} required />
+
+			<Text style={styles.section}>Domicilio</Text> 
+			<Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
+			<Input name="Colonia" value={colonia} onChangeText={setColonia} />
+			<Input name="Municipio" value={municipio} onChangeText={setMunicipio} />
+			<Input name="Teléfono Casa" value={phoneHome} onChangeText={setPhoneHome} />
+			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} />
+
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
+
+			<DatePicker
+				ref={pickerRef}
+				date={birthday || moment().format('YYYY-MM-DD')}
+				mode="date"
+				format="YYYY-MM-DD"
+				confirmBtnText="Confirmar"
+				cancelBtnText="Cancelar"
+				customStyles={{
+					dateIcon: { display: 'none' },
+					dateInput: { display: 'none' }
+				}}
+				locale={'es'}
+				onDateChange={d=>{
+					setBirthday(d);
+				}}
+			/>
 		</KeyboardAwareScrollView>
 	)
 }
@@ -48,24 +145,15 @@ export default (props)=>{
 
 
 const styles = StyleSheet.create({
-	testText: {
-		fontSize: 20
-	},
 	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
+		padding: 15
 	},
-	loginContainer: {
-		height: '70%', 
-		width: '100%', 
-		padding: 10
-	},
-	header: {
-		fontSize: 24,
+	section: {
+		fontSize: 20,
 		fontWeight: '600',
 		textAlign: 'center',
-		marginBottom: 20,
+		color: 'grey',
+		marginBottom: 10,
 		marginTop: 20,
 	}
 })

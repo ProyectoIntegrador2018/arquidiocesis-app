@@ -17,7 +17,6 @@ import {
 	ZonasList, 
 	Zona, 
 	RegistroAdmin, 
-	DetallePersona, 
 	RegistroCoordinador, 
 	AltaPquia, 
 	RegistroMiembro, 
@@ -46,7 +45,8 @@ import {
 	EditAcompanante,
 	DetalleCoordinador,
 	EditCoordinador,
-	EditarCapacitacion
+	EditarCapacitacion,
+	DetalleParticipante
 } from './screens';
 import { API } from './lib'
 
@@ -129,7 +129,6 @@ var App = (props)=>{
 				<Stack.Screen name="RegistroGrupo" component={RegistroGrupo}/>
 				<Stack.Screen name="Parroquia" component={Parroquia} />
 				<Stack.Screen name="EditMiembro" component={EditMiembro} />
-				<Stack.Screen name="DetallePersona" component={DetallePersona}/>
 				<Stack.Screen name="Grupo" component={Grupo}/>
 				<Stack.Screen name="FichaMedica" component={FichaMedica}/>
 				<Stack.Screen name="DetalleCapilla" component={DetalleCapilla}/>
@@ -153,6 +152,7 @@ var App = (props)=>{
 				<Stack.Screen name="EditAcompanante" component={EditAcompanante}/>
 				<Stack.Screen name="EditCoordinador" component={EditCoordinador}/>
 				<Stack.Screen name="EditarCapacitacion" component={EditarCapacitacion}/>
+				<Stack.Screen name="DetalleParticipante" component={DetalleParticipante}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

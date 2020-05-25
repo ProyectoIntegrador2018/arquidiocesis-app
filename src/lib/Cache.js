@@ -259,6 +259,23 @@ var editCapacitacion = (cap)=>{
 	}
 	capacitaciones[ix] = p;
 }
+var addParticipante = (capacitacion, miembro)=>{
+	if(!capacitaciones) return;
+	var ix = capacitaciones.findIndex(a=>a.id==capacitacion);
+	if(ix==-1) return;
+	if(!capacitaciones[ix].participantes){
+		capacitaciones[ix].participantes = [miembro]
+	}else{
+		capacitaciones[ix].participantes.push(miembro);
+	}
+}
+var removeParticipante = (cap, id)=>{
+	if(!capacitaciones) return;
+	var ix = capacitaciones.findIndex(a=>a.id==cap);
+	if(ix==-1) return;
+	if(!capacitaciones[ix].participantes) return;
+	capacitaciones[ix].participantes = capacitaciones[ix].participantes.filter(a=>a.id!=id);
+}
 
 
 
@@ -351,5 +368,7 @@ export default {
 	registerCapacitacionAsistencia,
 	addCapacitacion,
 	removeCapacitacion,
-	editCapacitacion
+	editCapacitacion,
+	addParticipante,
+	removeParticipante
 }

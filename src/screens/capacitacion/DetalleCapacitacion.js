@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, RefreshControl } from 'react-native';
 import { API } from '../../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Item, AlphabetList, Button, List, Input, LoadingView } from '../../components';
+import { Item, AlphabetList, Button, List, Input, LoadingView, ErrorView } from '../../components';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
@@ -101,15 +101,29 @@ export default (props)=>{
 	}
 
 	var addParticipante = ()=>{
-
+		props.navigation.navigate('RegistroParticipante', {
+			capacitacion,
+			onAdd: part=>{
+				setParticipantes([...participantes, part]);
+			}
+		})
 	}
 
 	var tomarAsistencia = ()=>{
 
 	}
 	
-	var viewParticipante = ()=>{
-
+	var viewParticipante = p=>{
+		props.navigation.navigate('DetalleParticipante', {
+			id: p.id,
+			capacitacion_id: capacitacion.id,
+			onDelete: id=>{
+				setParticipantes(participantes.filter(a=>a.id!=id));
+			},
+			onEdit: data=>{
+				setParticipantes([...participantes.filter(a=>a.id!=data.id), data]);
+			}
+		})
 	}
 
 	var changeEncargado = ()=>{
@@ -141,7 +155,7 @@ export default (props)=>{
 			<RefreshControl refreshing={refreshing} onRefresh={getCapacitacion} />
 		} contentContainerStyle={{ paddingBottom: 50 }}>
 			{error ? (
-				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getGrupo} />
+				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getCapacitacion} />
 			) : participantes!==false ? (
 				<>
 					{ participantes.length>0 && canEdit && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={tomarAsistencia} /> }
