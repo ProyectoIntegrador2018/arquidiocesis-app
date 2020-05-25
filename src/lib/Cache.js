@@ -174,6 +174,13 @@ var setGruposDirty = (d=true)=>{
 var addGrupo = i=>{
 	grupos.push(i);
 }
+var setGrupoDirty = id=>{
+	var ix = grupos.findIndex(a=>a.id==id);
+	if(ix==-1) return;
+	grupos[ix].cached = false;
+}
+
+
 
 
 let miembros = [];
@@ -212,6 +219,48 @@ var setMiembroFicha = (id, ficha)=>{
 	if(ix==-1) return;
 	miembros[ix].ficha_medica = ficha;
 }
+
+
+
+
+
+let capacitaciones = false;
+var getCapacitaciones = ()=>capacitaciones;
+var getCapacitacion = id=>capacitaciones.find(a=>a.id==id && a.cached);
+var setCapacitaciones = z=>{
+	capacitaciones = z;
+}
+var removeCapacitacion = (id)=>{
+	capacitaciones = capacitaciones.filter(a=>a.id!=id);
+}
+var setCapacitacion = (i)=>{
+	i.cached = true;
+	if(!capacitaciones) capacitaciones = [];
+	var ix = capacitaciones.findIndex(a=>a.id==i.id)
+	if(ix==-1) capacitaciones.push(i);
+	else capacitaciones[ix] = i;
+}
+var registerCapacitacionAsistencia = (id, date)=>{
+	var g = getCapacitacion(id);
+	if(!g.asistencias) g.asistencias = []
+	g.asistencias.push(date);
+	setCapacitacion(g);
+}
+var addCapacitacion = i=>{
+	grupos.push(i);
+}
+var editCapacitacion = (cap)=>{
+	var ix = capacitaciones.findIndex(a=>a.id==cap.id);
+	if(ix==-1) return;
+	var old = capacitaciones[ix]; 
+	var p = {...old}
+	for(var i in cap){
+		p[i] = cap[i];
+	}
+	capacitaciones[ix] = p;
+}
+
+
 
 
 
@@ -283,6 +332,7 @@ export default {
 	setGruposDirty,
 	isGruposDirty,
 	setGrupo,
+	setGrupoDirty,
 	addGrupo,
 	registerAsistencia,
 
@@ -292,5 +342,14 @@ export default {
 	setMiembroDirty,
 	setMiembroStatus,
 	getMiembroFicha,
-	setMiembroFicha
+	setMiembroFicha,
+
+	getCapacitaciones,
+	getCapacitacion,
+	setCapacitaciones,
+	setCapacitacion,
+	registerCapacitacionAsistencia,
+	addCapacitacion,
+	removeCapacitacion,
+	editCapacitacion
 }

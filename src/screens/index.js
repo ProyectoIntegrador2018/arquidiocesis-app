@@ -1,6 +1,5 @@
 import Decanato from './Decanato';
 import User from './User';
-import Capacitacion from './Capacitacion';
 import Login from './Login';
 import Asistencia from './Asistencia';
 import DetallePersona from './DetallePersona';
@@ -31,7 +30,6 @@ import RegistroAdmin from './admin/RegistroAdmin';
 import AdminUsers from './admin/AdminUsers';
 import DetalleAdmin from './admin/DetalleAdmin';
 import EditAdmin from './admin/EditAdmin';
-import AltaCapacitacion from './AltaCapacitacion';
 
 import FichaMedica from './miembros/FichaMedica';
 import RegistroMiembro from './miembros/RegistroMiembro';
@@ -39,8 +37,11 @@ import EditMiembro from './miembros/EditMiembro';
 import DetalleMiembro from './miembros/DetalleMiembro';
 import EstatusMiembro from './miembros/EstatusMiembro';
 
-import AltaMiembroCap  from './AltaMiembroCap';
-import DetalleCap from './DetalleCap';
+import RegistroParticipante  from './capacitacion/RegistroParticipante';
+import DetalleCapacitacion from './capacitacion/DetalleCapacitacion';
+import Capacitaciones from './capacitacion/Capacitaciones';
+import RegistroCapacitacion from './capacitacion/RegistroCapacitacion';
+import EditarCapacitacion from './capacitacion/EditarCapacitacion';
 
 import RegistroAcompanante from './acompanante/RegistroAcompanante';
 import EditAcompanante from './acompanante/EditAcompanante';
@@ -51,7 +52,6 @@ export {
 	Parroquias,
 	Decanato,
 	User,
-	Capacitacion,
 	Coordinadores,
 	Grupos,
 	RegistroAdmin,
@@ -77,14 +77,16 @@ export {
 	AdminUsers,
 	EditAdmin,
 	ChangeCoordinador, 
-	AltaCapacitacion,
 	EstatusMiembro,
-	AltaMiembroCap,
-	DetalleCap,
 	EditParroquia,
 	RegistroAcompanante,
 	EditAcompanante,
 	DetalleCoordinador,
 	DetalleAcompanante,
-	EditCoordinador
+	EditCoordinador,
+	RegistroParticipante,
+	DetalleCapacitacion,
+	Capacitaciones,
+	RegistroCapacitacion,
+	EditarCapacitacion
 }

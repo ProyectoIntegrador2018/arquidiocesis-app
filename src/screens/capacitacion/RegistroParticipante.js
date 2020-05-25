@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Input, Button, Picker, AlphabetList } from '../components'
+import { Input, Button, Picker, AlphabetList } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { API } from '../lib';
+import { API } from '../../lib';
 
 
 

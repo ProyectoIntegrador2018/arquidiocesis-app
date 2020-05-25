@@ -12,7 +12,7 @@ import {
 	Decanato, 
 	Coordinadores, 
 	Grupos, 
-	Capacitacion, 
+	Capacitaciones, 
 	Asistencia, 
 	ZonasList, 
 	Zona, 
@@ -35,17 +35,18 @@ import {
 	EditAdmin,
 	ChangeCoordinador,
 	EditGrupo,
-	AltaCapacitacion,
+	RegistroCapacitacion,
 	EstatusMiembro,
 	GrupoBajasTemporales,
-	AltaMiembroCap,
-	DetalleCap,
+	RegistroParticipante,
+	DetalleCapacitacion,
 	EditParroquia,
 	RegistroAcompanante,
 	DetalleAcompanante,
 	EditAcompanante,
 	DetalleCoordinador,
-	EditCoordinador
+	EditCoordinador,
+	EditarCapacitacion
 } from './screens';
 import { API } from './lib'
 
@@ -88,7 +89,7 @@ var Home = (props)=>{
 					break;
 					case 'HeMa': iconName = 'users'; 
 					break;
-					case 'Capacitacion': iconName = 'chalkboard-teacher';
+					case 'Capacitación': iconName = 'chalkboard-teacher';
 					break;
 					default: iconName = 'exclamation-circle'
 				}
@@ -103,8 +104,7 @@ var Home = (props)=>{
 				</>
 			) : null}
 			<Tab.Screen name="HeMa" component={Grupos} />
-			<Tab.Screen name="Capacitacion" component={Capacitacion} />
-
+			<Tab.Screen name="Capacitación" component={Capacitaciones} />
 		</Tab.Navigator>
 	)
 }
@@ -142,16 +142,17 @@ var App = (props)=>{
 				<Stack.Screen name="EditGrupo" component={EditGrupo}/>
 				<Stack.Screen name="ChangeCoordinador" component={ChangeCoordinador}/>
 				<Stack.Screen name="DetalleCoordinador" component={DetalleCoordinador}/>
-				<Stack.Screen name="AltaCapacitacion"  component={AltaCapacitacion}/>
+				<Stack.Screen name="RegistroCapacitacion"  component={RegistroCapacitacion}/>
 				<Stack.Screen name="EstatusMiembro" component={EstatusMiembro}/>
 				<Stack.Screen name="GrupoBajasTemporales" component={GrupoBajasTemporales}/>
-				<Stack.Screen name="AltaMiembroCap" component={AltaMiembroCap}/>
-				<Stack.Screen name="DetalleCap" component={DetalleCap}/>
+				<Stack.Screen name="RegistroParticipante" component={RegistroParticipante}/>
+				<Stack.Screen name="DetalleCapacitacion" component={DetalleCapacitacion}/>
 				<Stack.Screen name="EditParroquia" component={EditParroquia}/>
 				<Stack.Screen name="RegistroAcompanante" component={RegistroAcompanante}/>
 				<Stack.Screen name="DetalleAcompanante" component={DetalleAcompanante}/>
 				<Stack.Screen name="EditAcompanante" component={EditAcompanante}/>
 				<Stack.Screen name="EditCoordinador" component={EditCoordinador}/>
+				<Stack.Screen name="EditarCapacitacion" component={EditarCapacitacion}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

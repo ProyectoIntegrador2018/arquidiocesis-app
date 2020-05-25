@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import Cache from './Cache';
+import moment from 'moment';
 
 const ROOT_URL = 'http://192.168.0.131:8000/api/'
 
@@ -478,7 +479,10 @@ async function editGrupo(id, data){
 		...data
 	});
 	if(res.error) throw res;
-	else return res.data;
+	else{
+		Cache.setGrupoDirty(id);
+		return res.data;
+	};
 }
 
 async function editMiembro(id, data){
@@ -621,6 +625,90 @@ async function editCoordinador(id, data){
 	else return res.data;
 }
 
+async function addCapacitacion(data){
+	var res = await post('capacitacion', data);
+	if(res.error) throw res;
+	else return res.data;
+}
+
+async function getCapacitaciones(force=false){
+	if(!force && Cache.getCapacitaciones()){
+		return Cache.getCapacitaciones();
+	}
+	var res = await get('capacitacion');
+	if(res.error) throw res;
+	else {
+		Cache.setCapacitaciones(res.data);
+		return res.data;
+	}
+}
+
+async function getCapacitacion(id, force=false){
+	if(!force){
+		var cacheCap = Cache.getCapacitacion(id);
+		if(cacheCap) return cacheCap;
+	}
+	var res = await get('capacitacion/'+id);
+	if(res.error) throw res;
+	else {
+		Cache.setCapacitacion(res.data);
+		return res.data;
+	}
+}
+
+async function editCapacitacion(id, data){
+	var res = await post('capacitacion/edit', {
+		id,
+		...data
+	});
+	if(res.error) throw res;
+	else{
+		data.inicio = {
+			_seconds: moment(data.inicio, 'YYYY-MM-DD').unix()
+		}
+		data.fin = {
+			_seconds: moment(data.fin, 'YYYY-MM-DD').unix()
+		}
+		Cache.editCapacitacion({ id, ...data });
+		console.log(Cache.getCapacitacion(id));
+		return res.data;
+	}
+}
+
+async function removeCapacitacion(id){
+	var res = await sendDelete('capacitacion/'+id);
+	if(res.error) throw res;
+	else{
+		Cache.removeCapacitacion(id);
+		return res.data;
+	}
+}
+
+async function changeCoordinadorCapacitacion(id, coordinador){
+
+}
+
+async function registerCapacitacionAsistencia(grupo_id, fecha, miembros, force=false){
+
+}
+
+async function saveCapacitacionAsistencia(id, fecha, miembros){
+
+}
+
+async function getCapacitacionAsistencia(id, fecha){
+
+}
+
+async function addCapacitacionParticipante(capacitacion, data){
+
+}
+
+async function removeCapacitacionParticipante(capacitacion, id){
+
+}
+
+
 export default {
 	getLogin,
 	getUser,
@@ -671,5 +759,16 @@ export default {
 	deleteAcompananteDecanato,
 	editAcompanante,
 	editCoordinador,
-	deleteCoordinador
+	deleteCoordinador,
+	addCapacitacion,
+	getCapacitaciones,
+	getCapacitacion,
+	editCapacitacion,
+	removeCapacitacion,
+	changeCoordinadorCapacitacion,
+	registerCapacitacionAsistencia,
+	saveCapacitacionAsistencia,
+	getCapacitacionAsistencia,
+	addCapacitacionParticipante,
+	removeCapacitacionParticipante
 }

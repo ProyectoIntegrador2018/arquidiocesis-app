@@ -4,18 +4,30 @@ import { Util } from '../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
 
 export default  (props)=>{
+	var renderChild = ()=>{
+		return props.data.map((a, ix)=><View key={'item-'+ix}>
+			{props.renderItem ? (
+				<TouchableOpacity onPress={()=>{
+					if(props.onSelect) props.onSelect(a);
+				}}>
+					<View style={[styles.item, { backgroundColor: 'white' }]}>{props.renderItem(a)}</View>
+				</TouchableOpacity>
+			) : <ListItem data={a} onPress={props.onSelect} />}
+		</View>)
+	}
+
 	if(props.scroll!==false){
 		return (
 			<ScrollView style={props.style} contentContainerStyle={{ paddingBottom: 50 }} refreshControl={
 				(props.refreshing !== undefined) ? <RefreshControl refreshing={(props.refreshing || false)} onRefresh={props.onRefresh} /> : null
 			}>
-				{props.data.map((a, ix)=><ListItem data={a} onPress={props.onSelect} key={'item-'+ix} />)}
+				{renderChild()}
 			</ScrollView>
 		)
 	}else{
 		return (
 			<View>
-				{props.data.map((a, ix)=><ListItem data={a} onPress={props.onSelect} key={'item-'+ix} />)}
+				{renderChild()}
 			</View>
 		)
 	}
