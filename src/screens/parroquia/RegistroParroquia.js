@@ -64,7 +64,7 @@ export default (props)=>{
 	}, [])
 
 	props.navigation.setOptions({
-		headerTitle: 'Alta Parroquia'
+		headerTitle: 'Registrar Parroquia'
 	});
 
 	return (
@@ -105,6 +105,5 @@ const styles = StyleSheet.create({
 		fontWeight: '600',
 		textAlign: 'center',
 		marginBottom: 20,
-		marginTop: 20,
 	}
 })

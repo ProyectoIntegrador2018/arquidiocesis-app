@@ -46,7 +46,7 @@ export default (props)=>{
 	}
 
 	var addParroquia = ()=>{
-		props.navigation.navigate('AltaPquia', {
+		props.navigation.navigate('RegistroParroquia', {
 			onAdd: (p)=>{
 				if(!data) return;
 				setData([...data, p]);

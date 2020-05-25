@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
-import { API } from '../lib';
+import { API } from '../../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Input, Button, Picker, ErrorView } from '../components';
+import { Input, Button, Picker, ErrorView, Item } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props)=>{
 	var [capilla, setCapilla] = useState(false);
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
-	var [edit, setEdit] = useState(false);
-	var [parroquias, setParroquias] = useState(false);
+	var [deleting, setDeleting] = useState(false);
 	var [user, setUser] = useState(false);
-
-	var [nombre, setNombre] = useState('');
-	var [direccion, setDireccion] = useState('');
-	var [parroquia, setParroquia] = useState('');
 
 	var onDelete = props.route.params.onDelete;
 	var onEdit = props.route.params.onEdit;
@@ -27,7 +22,6 @@ export default (props)=>{
 			shadowOpacity: 0
 		},
 	});
-
 	useEffect(()=>{
 		API.getUser().then(setUser);
 		getCapilla()
@@ -40,11 +34,6 @@ export default (props)=>{
 			d.parroquia = (capilla.parroquia || props.route.params.parroquia);
 			d.id = id;
 			setCapilla(d);
-			
-			setNombre(d.nombre);
-			setDireccion(d.direccion);
-			setParroquia(d.parroquia.id);
-
 			setError(false);
 		}).catch(err=>{
 			setRefreshing(false);
@@ -52,44 +41,33 @@ export default (props)=>{
 		})
 	}
 
-	var setEditing = ()=>{
-		setEdit(e=>!e);
-		API.getParroquias(false).then(parroquias=>{
-			setParroquias(parroquias);
-		})
-	}
-
-	var selectedParroquia = (v)=>{
-		if(!v) return
-		if(v.id==parroquia) setParroquia(false);
-		else setParroquia(v.id);
-	}
-
-	var saveCapilla = ()=>{
-		
-	}
-
 	var deleteCapilla = ()=>{
 		Alert.alert('¿Eliminar capilla?', 'Esto eliminará los grupos de la capilla y todos los datos de la capilla.', [
 			{ text: 'Cancelar', style: 'cancel' },
 			{ text: 'Eliminar', style: 'destructive', onPress: ()=>{
+				setDeleting(true);
 				API.deleteCapilla(capilla.parroquia.id, capilla.id).then(done=>{
-					alert('Se ha eliminado la capilla.');
+					setDeleting(false);
+					Alert.alert('Exito', 'Se ha eliminado la capilla.');
 					props.navigation.goBack();
 					if(onDelete) onDelete(capilla.id);
 				}).catch(err=>{
-					console.error(err);
-					alert('Hubo un error eliminando la capilla.')
+					setDeleting(false);
+					Alert.alert('Exito', 'Hubo un error eliminando la capilla.')
 				})
 			} }
 		])
+	}
+
+	var editCapilla = ()=>{
+		
 	}
 
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{props.route.params.nombre || capilla.nombre}</Text>
 			{user && (user.type=='admin' || user.type=='superadmin') ? (
-				<TouchableOpacity onPress={setEditing}>
+				<TouchableOpacity onPress={editCapilla}>
 					<FontAwesome5 name="edit" style={styles.editIcon} />
 				</TouchableOpacity>
 			) : null}
@@ -98,13 +76,16 @@ export default (props)=>{
 			{error ? (
 				<ErrorView message={'Hubo un error cargando la parroquia...'} refreshing={refreshing} retry={getCapilla} />
 			) : capilla ? (
-				<View style={{ padding: 10 }}>
-					{edit && <Text style={{ textAlign: 'center', fontSize: 20 }}>Editando capilla</Text>}
-					<Input name={'Nombre'} value={nombre} placeholder={'Nombre'} readonly={!edit} />
-					<Input name={'Dirección'} value={direccion} placeholder={'Dirección'} readonly={!edit} />
-					<Picker name={'Parroquia'} items={parroquias ? parroquias.map(a=>({ label: a.nombre, value: a.id, ...a })) : [{ label: capilla.parroquia.nombre }]} onValueChange={selectedParroquia} disabled={!edit} select={edit ? -1 : 0} />
-					{edit && <Button text={'Guardar'} onPress={saveCapilla} />}
-					{edit && <Button text={'Eliminar'} color={'#FF2233'} onPress={deleteCapilla} />}
+				<View>
+					<View style={{ padding: 15 }}>
+						<Input name={'Nombre'} value={capilla.nombre} readonly />
+						<Input name={'Dirección'} value={capilla.direccion} readonly />
+						<Input name={'Colonia'} value={capilla.colonia} readonly />
+						<Input name={'Municipio'} value={capilla.municipio} readonly />
+						<Input name={'Telefono 1'} value={capilla.telefono1} readonly />
+						<Input name={'Telefono 2'} value={capilla.telefono2} readonly />
+					</View>
+					{user && (user.type=='admin' || user.type=='superadmin') && <Item text="Eliminar capilla" onPress={deleteCapilla} loading={deleting} />}
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>

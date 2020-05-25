@@ -18,11 +18,11 @@ import {
 	Zona, 
 	RegistroAdmin, 
 	RegistroCoordinador, 
-	AltaPquia, 
+	RegistroParroquia, 
 	RegistroMiembro, 
 	RegistroGrupo,
 	Grupo,
-	AltaCapilla,
+	RegistroCapilla,
 	EditMiembro,
 	FichaMedica,
 	DetalleCapilla,
@@ -126,9 +126,9 @@ var App = (props)=>{
 				<Stack.Screen name="AsistenciaGrupo" component={AsistenciaGrupo} />
 				<Stack.Screen name="Decanato" component={Decanato} />
 				<Stack.Screen name="Zona" component={Zona} />
-				<Stack.Screen name="AltaPquia" component={AltaPquia} />
+				<Stack.Screen name="RegistroParroquia" component={RegistroParroquia} />
 				<Stack.Screen name="RegistroMiembro" component={RegistroMiembro}/>
-				<Stack.Screen name="AltaCapilla" component={AltaCapilla}/>
+				<Stack.Screen name="RegistroCapilla" component={RegistroCapilla}/>
 				<Stack.Screen name="RegistroGrupo" component={RegistroGrupo}/>
 				<Stack.Screen name="Parroquia" component={Parroquia} />
 				<Stack.Screen name="EditMiembro" component={EditMiembro} />

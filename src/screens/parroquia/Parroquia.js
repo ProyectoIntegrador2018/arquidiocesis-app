@@ -70,7 +70,7 @@ export default (props)=>{
 
 	// esta funcion agrega capillas a la parroquia
 	var addCapilla = ()=>{
-		props.navigation.navigate('AltaCapilla', {
+		props.navigation.navigate('RegistroCapilla', {
 			parroquia,
 			onAdded: (capilla=>{
 				if(!capillas) return;

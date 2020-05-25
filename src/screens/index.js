@@ -4,8 +4,9 @@ import Login from './Login';
 import ZonasList from './ZonasList';
 import Zona from './Zona';
 import ChangePassword from './ChangePassword';
-import AltaCapilla from './AltaCapilla';
-import DetalleCapilla from './DetalleCapilla';
+
+import RegistroCapilla from './capilla/RegistroCapilla';
+import DetalleCapilla from './capilla/DetalleCapilla';
 
 import DetalleCoordinador from './coordinador/DetalleCoordinador';
 import RegistroCoordinador from './coordinador/RegistroCoordinador';
@@ -14,7 +15,7 @@ import EditCoordinador from './coordinador/EditCoordinador';
 
 import Parroquias from './parroquia/Parroquias';
 import Parroquia from './parroquia/Parroquia'
-import AltaPquia from './parroquia/AltaPquia';
+import RegistroParroquia from './parroquia/RegistroParroquia';
 import EditParroquia from './parroquia/EditParroquia';
 
 import Grupos from './grupos/Grupos';
@@ -65,9 +66,9 @@ export {
 	ZonasList,
 	Zona,
 	RegistroCoordinador,
-	AltaPquia,
+	RegistroParroquia,
 	RegistroMiembro,
-	AltaCapilla,
+	RegistroCapilla,
 	RegistroGrupo,
 	Parroquia,
 	Grupo,
