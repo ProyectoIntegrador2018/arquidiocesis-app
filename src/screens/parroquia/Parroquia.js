@@ -44,12 +44,6 @@ export default (props)=>{
 			setRefreshing(false);
 			setError(true);
 		})
-		API.getDecanatos(false).then(decanatos=>{
-			var d = decanatos.map(a=>{
-				return { label: a.nombre, value: a.id }
-			})
-			setListDecanatos(d);
-		});
 	}, [])
 
 	var getParroquia = ()=>{
@@ -83,6 +77,9 @@ export default (props)=>{
 		item.parroquia = parroquia;
 		item.onDelete = (id)=>{
 			setCapillas(a=>a.filter(a=>a.id!=id));
+		}
+		item.onEdit = data=>{
+			setCapillas([...capillas.filter(a=>a.id!=data.id), data]);
 		}
 		props.navigation.navigate('DetalleCapilla', item)
 	}

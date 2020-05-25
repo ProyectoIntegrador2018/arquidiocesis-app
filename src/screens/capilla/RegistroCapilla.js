@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import { Input, Button } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { API } from '../../lib';
+import { API, Util } from '../../lib';
 
 export default (props)=>{
 
@@ -16,21 +16,37 @@ export default (props)=>{
 	var { parroquia, onAdded } = props.route.params;
 
 	var doRegister = ()=>{
-		if(loading) return;
-		setLoading(true);
-		if(name.length<1) return alert ('Por favor introduzca un nombre');
-		if(address.length<1) return alert ('Por favor introduzca una direccion');
+		var data = {
+			nombre,
+			direccion,
+			colonia,
+			municipio,
+			telefono1,
+			telefono2
+		};
 
-		API.addCapilla(name, address, parroquia.id).then(new_capilla=>{
-			if(!onAdded) return;
-			onAdded(new_capilla);
-			alert('Se ha agregado la capilla')
+		var { valid, prompt } = Util.validateForm(data, {
+			nombre: { type: 'empty', prompt: 'Favor de introducir el nombre de la capilla.' },
+			direccion: { type: 'empty', prompt: 'Favor de introducir la dirección de la capilla.' },
+			colonia: { type: 'empty', prompt: 'Favor de introducir la colonia la capilla.' },
+			municipio: { type: 'empty', prompt: 'Favor de introducir el municipio de la capilla.' },
+		})
+		if(!valid){
+			Alert.alert('Error', prompt);
+			return;
+		}
+
+		setLoading(true);
+		API.addCapilla(parroquia.id, data).then(done=>{
 			setLoading(false);
+			Alert.alert('Exito', 'Se ha agregado la capilla')
+			data.id = done;
+			if(onAdded) onAdded(data);
 			props.navigation.goBack();
 		}).catch(err=>{
-			console.error(err);
 			setLoading(false);
-			alert('Hubo un error agregando la capilla.')
+			console.error(err);
+			Alert.alert('Error', 'Hubo un error agregando la capilla.')
 		})
 	}
 
@@ -43,13 +59,13 @@ export default (props)=>{
 			<Text style={styles.header}>Registrar Capilla</Text> 
 			<Text style={styles.subHeader}>{parroquia.nombre}</Text> 
 			<View style={{ padding: 15 }}>
-				<Input name={'Nombre'} value={nombre} onChangeText={setNombre} />
-				<Input name={'Dirección'} value={direccion} onChangeText={setDireccion} />
-				<Input name={'Colonia'} value={colonia} onChangeText={setColonia} />
-				<Input name={'Municipio'} value={municipio} onChangeText={setMunicipio} />
+				<Input name={'Nombre'} value={nombre} onChangeText={setNombre} required />
+				<Input name={'Dirección'} value={direccion} onChangeText={setDireccion} required />
+				<Input name={'Colonia'} value={colonia} onChangeText={setColonia} required />
+				<Input name={'Municipio'} value={municipio} onChangeText={setMunicipio} required />
 				<Input name={'Telefono 1'} value={telefono1} onChangeText={setTelefono1} />
 				<Input name={'Telefono 2'} value={telefono2} onChangeText={setTelefono2} />
-				<Button text="Registrar" onPress={doRegister} />
+				<Button text="Registrar" onPress={doRegister} loading={loading} />
 			</View>
 		</KeyboardAwareScrollView>
 	)

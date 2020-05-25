@@ -258,10 +258,9 @@ async function editParroquia(id, data){
 	else return res.data;
 }
 
-async function addCapilla(name, address, parroquia_id){
+async function addCapilla(parroquia_id, data){
 	var payload = {
-		name,
-		address,
+		...data,
 		parroquia: parroquia_id
 	};
 	var res = await post('capillas', payload);
@@ -386,10 +385,19 @@ async function getCapilla(capilla_id){
 
 async function editCapilla(capilla_id, data, parroquia_id){
 	var payload = {
-		...data,
-		parroquia_id
+		id: capilla_id,
+		...data
 	}
-	// Edit cache
+
+	var res = await post('capillas/edit', payload);
+	if(res.error) throw res;
+	else {
+		Cache.parroquiaEditCapilla(parroquia_id, {
+			id: capilla_id,
+			...data
+		});
+		return res.data;
+	}
 }
 
 async function deleteCapilla(parroquia_id, capilla_id){
@@ -835,5 +843,6 @@ export default {
 	getParticipante,
 	editParticipante,
 	getParticipantes,
-	changeCapacitacionEncargado
+	changeCapacitacionEncargado,
+	editCapilla
 }

@@ -7,6 +7,7 @@ import ChangePassword from './ChangePassword';
 
 import RegistroCapilla from './capilla/RegistroCapilla';
 import DetalleCapilla from './capilla/DetalleCapilla';
+import EditarCapilla from './capilla/EditarCapilla';
 
 import DetalleCoordinador from './coordinador/DetalleCoordinador';
 import RegistroCoordinador from './coordinador/RegistroCoordinador';
@@ -95,5 +96,6 @@ export {
 	DetalleParticipante,
 	EditarParticipante,
 	ChangeEncargado,
+	EditarCapilla,
 	AsistenciaCapacitacion
 }

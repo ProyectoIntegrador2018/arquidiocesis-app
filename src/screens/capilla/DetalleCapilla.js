@@ -31,7 +31,7 @@ export default (props)=>{
 		setRefreshing(true)
 		var id = capilla ? capilla.id : props.route.params.id;
 		API.getCapilla(id).then(d=>{
-			d.parroquia = (capilla.parroquia || props.route.params.parroquia);
+			// d.parroquia = (capilla.parroquia || props.route.params.parroquia);
 			d.id = id;
 			setCapilla(d);
 			setError(false);
@@ -60,7 +60,17 @@ export default (props)=>{
 	}
 
 	var editCapilla = ()=>{
-		
+		props.navigation.navigate('EditarCapilla', {
+			capilla,
+			onEdit: data=>{
+				var c = {...capilla};
+				for(var i in data){
+					c[i] = data[i];
+				}
+				setCapilla(c);
+				onEdit(c);
+			}
+		})
 	}
 
 	return <View style={{ flex: 1 }}>
