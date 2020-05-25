@@ -107,7 +107,7 @@ export default (props)=>{
 	}
 	
 	var showAsistencia = (a)=>{
-		props.navigation.navigate('Asistencia', {
+		props.navigation.navigate('AsistenciaGrupo', {
 			grupo,
 			date: a.id,
 			new: false,

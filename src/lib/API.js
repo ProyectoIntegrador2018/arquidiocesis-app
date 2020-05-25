@@ -679,20 +679,28 @@ async function removeCapacitacion(id){
 	}
 }
 
-async function changeCoordinadorCapacitacion(id, coordinador){
-
-}
-
-async function registerCapacitacionAsistencia(grupo_id, fecha, miembros, force=false){
-
+async function registerCapacitacionAsistencia(id, fecha, miembros, force=false){
+	var payload = {
+		fecha, miembros, force
+	}
+	var res = await post('capacitacion/'+id+'/asistencia', payload);
+	if(res.error) throw res;
+	else {
+		Cache.registerCapacitacionAsistencia(id, res.data);
+		return res.data
+	}
 }
 
 async function saveCapacitacionAsistencia(id, fecha, miembros){
-
+	var res = await post('capacitacion/'+id+'/asistencia/'+fecha, { miembros });
+	if(res.error) throw res;
+	else return res.data
 }
 
 async function getCapacitacionAsistencia(id, fecha){
-
+	var res = await get('capacitacion/'+id+'/asistencia/'+fecha);
+	if(res.error) throw res;
+	else return res.data;
 }
 
 async function editParticipante(capacitacion, id, data){
@@ -757,6 +765,12 @@ async function changeCapacitacionEncargado(capacitacion, encargado){
 	}
 }
 
+async function getParticipantes(capacitacion){
+	var res = await get('capacitacion/'+capacitacion+'/participantes');
+	if(res.error) throw err;
+	else return res.data;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -813,7 +827,6 @@ export default {
 	getCapacitacion,
 	editCapacitacion,
 	removeCapacitacion,
-	changeCoordinadorCapacitacion,
 	registerCapacitacionAsistencia,
 	saveCapacitacionAsistencia,
 	getCapacitacionAsistencia,
@@ -821,5 +834,6 @@ export default {
 	removeCapacitacionParticipante,
 	getParticipante,
 	editParticipante,
+	getParticipantes,
 	changeCapacitacionEncargado
 }

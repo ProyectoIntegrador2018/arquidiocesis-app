@@ -44,6 +44,7 @@ import EditarCapacitacion from './capacitacion/EditarCapacitacion';
 import DetalleParticipante from './capacitacion/DetalleParticipante';
 import EditarParticipante from './capacitacion/EditarParticipante';
 import ChangeEncargado from './capacitacion/ChangeEncargado';
+import AsistenciaCapacitacion from './capacitacion/AsistenciaCapacitacion';
 
 import RegistroAcompanante from './acompanante/RegistroAcompanante';
 import EditAcompanante from './acompanante/EditAcompanante';
@@ -92,5 +93,6 @@ export {
 	EditarCapacitacion,
 	DetalleParticipante,
 	EditarParticipante,
-	ChangeEncargado
+	ChangeEncargado,
+	AsistenciaCapacitacion
 }

@@ -110,7 +110,24 @@ export default (props)=>{
 	}
 
 	var tomarAsistencia = ()=>{
+		props.navigation.navigate('AsistenciaCapacitacion', {
+			capacitacion: capacitacion.id,
+			isNew: true,
+			onAssistance: date=>{
+				setAsistencias(a=>Array.from(new Set([...a, date])));
+			}
+		});
+	}
 
+	var showAsistencia = a=>{
+		props.navigation.navigate('AsistenciaCapacitacion', {
+			capacitacion: capacitacion.id,
+			date: a.id,
+			new: false,
+			onDelete: d=>{
+				setAsistencias(a=>a.filter(a=>a!=d));
+			}
+		})
 	}
 	
 	var viewParticipante = p=>{
@@ -137,10 +154,6 @@ export default (props)=>{
 				setCapacitacion(c);
 			}
 		});
-	}
-
-	var showAsistencia = ()=>{
-
 	}
 
 	var formatAsistencias = ()=>{
