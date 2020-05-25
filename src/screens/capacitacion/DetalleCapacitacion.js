@@ -117,6 +117,7 @@ export default (props)=>{
 		props.navigation.navigate('DetalleParticipante', {
 			id: p.id,
 			capacitacion_id: capacitacion.id,
+			canEdit,
 			onDelete: id=>{
 				setParticipantes(participantes.filter(a=>a.id!=id));
 			},

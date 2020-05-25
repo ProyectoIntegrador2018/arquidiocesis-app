@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Item, LoadingView, ErrorView } from '../../components'
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { Input, Item, LoadingView, ErrorView } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { API, Util } from '../../lib';
-import DatePicker from 'react-native-datepicker';
+import { API } from '../../lib';
+import { FontAwesome5 } from '@expo/vector-icons'
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es');
 
 export default (props)=>{
-	var { onEdit, onDelete, id, capacitacion_id } = props.route.params;
+	var { onEdit, onDelete, id, capacitacion_id, canEdit } = props.route.params;
 
 	var [loading, setLoading] = useState(false);
 	var [error, setError] = useState(false);
@@ -17,7 +17,12 @@ export default (props)=>{
 	var pickerRef = useRef(null);
 
 	props.navigation.setOptions({
-		headerTitle: 'Participante'
+		headerTitle: 'Participante',
+		headerRight: ()=> canEdit && (
+			<TouchableOpacity onPress={editParticipante}>
+				<FontAwesome5 name={'edit'} size={24} style={{ paddingRight: 15 }} color={'white'} />
+			</TouchableOpacity>
+		)
 	});
 
 	useEffect(()=>{
@@ -52,14 +57,12 @@ export default (props)=>{
 			{ text: 'Eliminar', style: 'destructive', onPress: ()=>{
 				setDeleting(true);
 				API.removeCapacitacionParticipante(capacitacion_id, id).then(done=>{
-					console.log(done);
 					setDeleting(false);
 					if(!done) return Alert.alert('Error', 'Hubo un error eliminando el participante.');
 					Alert.alert('Exito', 'Se ha eliminado el participante.');
 					onDelete(id);
 					props.navigation.goBack();
 				}).catch(err=>{
-					console.log(done);
 					setDeleting(false);
 					Alert.alert('Error', 'Hubo un error eliminado el participante.');
 				})
@@ -68,7 +71,18 @@ export default (props)=>{
 	}
 
 	var editParticipante = ()=>{
-		
+		props.navigation.navigate('EditarParticipante', {
+			persona: participante,
+			capacitacion_id,
+			onEdit: data=>{
+				var p = {...participante}
+				for(var i in data){
+					p[i] = data[i];
+				}
+				setParticipante(p);
+				onEdit(p);
+			}
+		})
 	}
 
 	return (

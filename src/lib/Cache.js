@@ -276,6 +276,17 @@ var removeParticipante = (cap, id)=>{
 	if(!capacitaciones[ix].participantes) return;
 	capacitaciones[ix].participantes = capacitaciones[ix].participantes.filter(a=>a.id!=id);
 }
+var editParticipante = (cap, data)=>{
+	if(!capacitaciones) return;
+	var ix = capacitaciones.findIndex(a=>a.id==cap);
+	if(ix==-1) return;
+	if(!capacitaciones[ix].participantes) return;
+	var px = capacitaciones[ix].participantes.findIndex(a=>a.id==data.id);
+	if(px==-1) return;
+	for(var i in data){
+		capacitaciones[ix].participantes[px][i] = data[i];
+	}
+}
 
 
 
@@ -370,5 +381,6 @@ export default {
 	removeCapacitacion,
 	editCapacitacion,
 	addParticipante,
-	removeParticipante
+	removeParticipante,
+	editParticipante
 }

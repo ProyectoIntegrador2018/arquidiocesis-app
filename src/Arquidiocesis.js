@@ -46,7 +46,8 @@ import {
 	DetalleCoordinador,
 	EditCoordinador,
 	EditarCapacitacion,
-	DetalleParticipante
+	DetalleParticipante,
+	EditarParticipante
 } from './screens';
 import { API } from './lib'
 
@@ -153,6 +154,7 @@ var App = (props)=>{
 				<Stack.Screen name="EditCoordinador" component={EditCoordinador}/>
 				<Stack.Screen name="EditarCapacitacion" component={EditarCapacitacion}/>
 				<Stack.Screen name="DetalleParticipante" component={DetalleParticipante}/>
+				<Stack.Screen name="EditarParticipante" component={EditarParticipante}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

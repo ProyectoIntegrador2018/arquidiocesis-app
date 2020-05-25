@@ -695,6 +695,24 @@ async function getCapacitacionAsistencia(id, fecha){
 
 }
 
+async function editParticipante(capacitacion, id, data){
+	var res = await post('participante/edit', {
+		id, 
+		...data
+	});
+	if(res.error) throw res;
+	else{
+		data.fecha_nacimiento = {
+			_seconds: moment(data.fecha_nacimiento, 'YYYY-MM-DD').unix()
+		}
+		Cache.editParticipante(capacitacion, {
+			id,
+			...data
+		});
+		return res.data;
+	}
+}
+
 async function getParticipante(id){
 	var res = await get('participante/'+id);
 	if(res.error) throw res;
@@ -789,5 +807,6 @@ export default {
 	getCapacitacionAsistencia,
 	addCapacitacionParticipante,
 	removeCapacitacionParticipante,
-	getParticipante
+	getParticipante,
+	editParticipante
 }
