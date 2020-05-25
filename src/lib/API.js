@@ -745,6 +745,18 @@ async function removeCapacitacionParticipante(capacitacion, id){
 }
 
 
+async function changeCapacitacionEncargado(capacitacion, encargado){
+	var res = await post('capacitacion/edit/encargado', {
+		id: capacitacion,
+		coordinador: encargado
+	});
+	if(res.error) throw res;
+	else{
+		Cache.changeCapacitacionEncargado(capacitacion, encargado);
+		return res.data;
+	}
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -808,5 +820,6 @@ export default {
 	addCapacitacionParticipante,
 	removeCapacitacionParticipante,
 	getParticipante,
-	editParticipante
+	editParticipante,
+	changeCapacitacionEncargado
 }

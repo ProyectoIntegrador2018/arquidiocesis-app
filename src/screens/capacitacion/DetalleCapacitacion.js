@@ -128,7 +128,15 @@ export default (props)=>{
 	}
 
 	var changeEncargado = ()=>{
-
+		props.navigation.navigate('ChangeEncargado', {
+			id: capacitacion.id,
+			encargado: capacitacion.encargado,
+			onEdit: encargado=>{
+				var c = {...capacitacion};
+				c.encargado = encargado;
+				setCapacitacion(c);
+			}
+		});
 	}
 
 	var showAsistencia = ()=>{

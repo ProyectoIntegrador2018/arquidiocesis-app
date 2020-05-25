@@ -287,6 +287,12 @@ var editParticipante = (cap, data)=>{
 		capacitaciones[ix].participantes[px][i] = data[i];
 	}
 }
+var changeCapacitacionEncargado = (cap, encargado)=>{
+	if(!capacitaciones) return;
+	var ix = capacitaciones.findIndex(a=>a.id==cap);
+	if(ix==-1) return;
+	capacitaciones[ix].encargado = encargado;
+}
 
 
 
@@ -382,5 +388,6 @@ export default {
 	editCapacitacion,
 	addParticipante,
 	removeParticipante,
-	editParticipante
+	editParticipante,
+	changeCapacitacionEncargado,
 }
