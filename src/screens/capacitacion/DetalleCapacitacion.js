@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, RefreshControl } from 'react-native';
 import { API } from '../../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Item, AlphabetList, Button, List, Input } from '../../components';
+import { Item, AlphabetList, Button, List, Input, LoadingView } from '../../components';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
@@ -62,10 +62,15 @@ export default (props)=>{
 		Alert.alert('¿Eliminar capacitación?', 'Esto eliminará los registros de esta capacitación', [
 			{ text: 'Cancelar', style: 'cancel' },
 			{ text: 'Eliminar', style: 'destructive', onPress: ()=>{
-				API.deleteCoordinador(capacitacion.id).then(done=>{
-
+				setDeleting(true);
+				API.removeCapacitacion(capacitacion.id).then(done=>{
+					setDeleting(false);
+					Alert.alert('Exito', 'Se ha eliminado la capacitación.')
+					props.navigation.goBack();
+					onDelete(capacitacion.id);
 				}).catch(err=>{
-
+					setDeleting(false);
+					Alert.alert('Error', 'Hubo un error eliminando la capacitación.');
 				})
 			} }
 		])
@@ -135,40 +140,46 @@ export default (props)=>{
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getCapacitacion} />
 		} contentContainerStyle={{ paddingBottom: 50 }}>
+			{error ? (
+				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getGrupo} />
+			) : participantes!==false ? (
+				<>
+					{ participantes.length>0 && canEdit && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={tomarAsistencia} /> }
+					<Text style={styles.sectionText}>PARTICIPANTES</Text>
+					{participantes.length>0 ? (
+						<AlphabetList data={participantes.map(a=>({ ...a, nombre_completo: `${a.nombre} ${a.apellido_paterno}` }))} onSelect={viewParticipante} scroll={false} sort={'nombre_completo'} />
+					) : (
+						<View>
+							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Esta capacitación no tiene participantes.</Text>
+						</View>
+					)}
 
-			{ participantes.length>0 && canEdit && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={tomarAsistencia} /> }
 
-			<Text style={styles.sectionText}>PARTICIPANTES</Text>
-			{participantes.length>0 ? (
-				<AlphabetList data={participantes.map(a=>({ ...a, nombre_completo: `${a.nombre} ${a.apellido_paterno}` }))} onSelect={viewParticipante} scroll={false} sort={'nombre_completo'} />
+					<Text style={[styles.sectionText, { marginTop: 30 }]}>ASISTENCIAS</Text>
+					{asistencias && asistencias.length>0 ? (
+						<List data={formatAsistencias()} onSelect={showAsistencia} scroll={false} />
+					) : (
+						<View>
+							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No se han marcado asistencias.</Text>
+						</View>
+					)}
+
+					<View style={{ padding: 15, paddingBottom: 0 }}>
+						<Input name="Nombre" value={capacitacion.nombre} readonly />
+						<Input name="Fecha inicio" value={formatUnix(capacitacion.inicio._seconds)} readonly />
+						<Input name="Fecha fin" value={formatUnix(capacitacion.fin._seconds)} readonly />
+					</View>
+
+					{ user && (user.type=='admin' || user.type=='superadmin') ? (
+						<View style={{ marginTop: 20 }}>
+							<Item text="Cambiar encargado" onPress={changeEncargado} />
+							<Item text="Eliminar capacitación" onPress={deleteCapacitacion}  loading={deleting}/>
+						</View>
+					) : null}
+				</>
 			) : (
-				<View>
-					<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Esta capacitación no tiene participantes.</Text>
-				</View>
+				<LoadingView />
 			)}
-
-
-			<Text style={[styles.sectionText, { marginTop: 30 }]}>ASISTENCIAS</Text>
-			{asistencias && asistencias.length>0 ? (
-				<List data={formatAsistencias()} onSelect={showAsistencia} scroll={false} />
-			) : (
-				<View>
-					<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No se han marcado asistencias.</Text>
-				</View>
-			)}
-
-			<View style={{ padding: 15, paddingBottom: 0 }}>
-				<Input name="Nombre" value={capacitacion.nombre} readonly />
-				<Input name="Fecha inicio" value={formatUnix(capacitacion.inicio._seconds)} readonly />
-				<Input name="Fecha fin" value={formatUnix(capacitacion.fin._seconds)} readonly />
-			</View>
-
-			{ user && (user.type=='admin' || user.type=='superadmin') ? (
-				<View style={{ marginTop: 20 }}>
-					<Item text="Cambiar encargado" onPress={changeEncargado} />
-					<Item text="Eliminar capacitación" onPress={deleteCapacitacion}  loading={deleting}/>
-				</View>
-			) : null}
 		</ScrollView>
 	</View>
 }

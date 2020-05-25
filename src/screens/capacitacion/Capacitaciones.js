@@ -47,6 +47,9 @@ export default (props)=>{
 			capacitacion: item,
 			onEdit: (cap)=>{
 				setData([...data.filter(a=>a.id!=cap.id), cap]);
+			},
+			onDelete: id=>{
+				setData(data.filter(a=>a.id!=id));
 			}
 		})
 	}
