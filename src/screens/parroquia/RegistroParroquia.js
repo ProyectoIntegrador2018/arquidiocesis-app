@@ -55,7 +55,7 @@ export default (props)=>{
 	}
 
 	useEffect(()=>{
-		API.getDecanatos(false).then(decanatos=>{
+		API.getDecanatos(true).then(decanatos=>{
 			var d = decanatos.map(a=>{
 				return { label: a.nombre, value: a.id }
 			})
@@ -74,8 +74,8 @@ export default (props)=>{
 			<Input name="Dirección" value={address} onChangeText={setAddress} required />
 			<Input name="Colonia" value={colonia} onChangeText={setColonia} required />
 			<Input name="Municipio" value={municipio} onChangeText={setMunicipio} required />
-			<Input name="Telefono 1" value={telefono1} onChangeText={setTelefono1} />
-			<Input name="Telefono 2" value={telefono2} onChangeText={setTelefono2} />
+			<Input name="Telefono 1" value={telefono1} onChangeText={setTelefono1} keyboard={'phone-pad'} />
+			<Input name="Telefono 2" value={telefono2} onChangeText={setTelefono2} keyboard={'phone-pad'} />
 			{listDecanatos ? (
 				<Picker onValueChange={setDecanato} name="Seleccionar decanato" items={listDecanatos} required />
 			) : (

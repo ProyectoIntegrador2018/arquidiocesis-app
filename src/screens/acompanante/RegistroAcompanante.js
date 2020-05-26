@@ -152,8 +152,8 @@ export default (props)=>{
 			<Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
 			<Input name="Colonia" value={colonia} onChangeText={setColonia} />
 			<Input name="Municipio" value={municipio} onChangeText={setMunicipio} />
-			<Input name="Teléfono Casa" value={phoneHome} onChangeText={setPhoneHome} />
-			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} />
+			<Input name="Teléfono Casa" value={phoneHome} onChangeText={setPhoneHome} keyboard={'phone-pad'} />
+			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} keyboard={'phone-pad'} />
 
 			
 			<Text style={styles.section}>Credenciales</Text> 

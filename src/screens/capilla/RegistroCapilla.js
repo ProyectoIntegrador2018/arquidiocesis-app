@@ -63,8 +63,8 @@ export default (props)=>{
 				<Input name={'Dirección'} value={direccion} onChangeText={setDireccion} required />
 				<Input name={'Colonia'} value={colonia} onChangeText={setColonia} required />
 				<Input name={'Municipio'} value={municipio} onChangeText={setMunicipio} required />
-				<Input name={'Telefono 1'} value={telefono1} onChangeText={setTelefono1} />
-				<Input name={'Telefono 2'} value={telefono2} onChangeText={setTelefono2} />
+				<Input name={'Telefono 1'} value={telefono1} onChangeText={setTelefono1} keyboard={'phone-pad'} />
+				<Input name={'Telefono 2'} value={telefono2} onChangeText={setTelefono2} keyboard={'phone-pad'} />
 				<Button text="Registrar" onPress={doRegister} loading={loading} />
 			</View>
 		</KeyboardAwareScrollView>

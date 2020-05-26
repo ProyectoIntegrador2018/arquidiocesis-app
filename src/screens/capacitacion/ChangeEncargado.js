@@ -49,7 +49,7 @@ export default (props)=>{
 
 	return <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
 		{coordinadorList ? (
-			<Picker name={'Seleccionar coordinador'} items={coordinadorList.map(a=>({ label: a.nombre, value: a.id, ...a }))} onValueChange={setCoordinador} select={getCoordinadorIndex()} />
+			<Picker name={'Seleccionar encargado'} items={coordinadorList.map(a=>({ label: `${a.nombre} ${a.apellido_paterno} ${a.apellido_materno}`.trim(), value: a.id, ...a }))} onValueChange={setCoordinador} select={getCoordinadorIndex()} />
 		) : (
 			<ActivityIndicator style={{ height: 80 }} />
 		)}

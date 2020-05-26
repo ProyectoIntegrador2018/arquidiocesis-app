@@ -6,8 +6,8 @@ import { API } from '../../lib';
 
 export default (props)=>{
 	var [loading, setLoading] = useState(false);
-	var [name, setName] = useState('Grupo 1');
-	var [coordinador, setCoordinador]= useState(false);
+	var [name, setName] = useState('');
+	var [coordinador, setCoordinador] = useState(false);
 	var [parroquia, setParroquia] = useState(false);
 	var [capilla, setCapilla] = useState(false);
 	var [isEnabled, setIsEnabled] = useState(false);
@@ -15,6 +15,14 @@ export default (props)=>{
 	var [coordinadorList, setCoordinadorList] = useState(false);
 	var [parroquiasList, setParroquiasList] = useState(false);
 	var [capillasList, setCapillasList] = useState(false);
+
+	props.navigation.setOptions({
+		headerStyle: {
+			backgroundColor: '#002E60',
+			shadowOpacity: 0
+		},
+		headerTitle: 'Registro Grupo'
+	});
 
 	var onAdd = props.route.params.onAdd;
 

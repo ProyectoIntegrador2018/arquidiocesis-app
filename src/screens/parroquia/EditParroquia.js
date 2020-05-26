@@ -47,6 +47,7 @@ export default (props)=>{
 				id: decanato.id,
 				nombre: decanato.label
 			}
+			onEdit(done);
 			return Alert.alert('Exito', 'Se ha editando la parroquia.');
 		}).catch(err=>{
 			console.log(err);
@@ -55,9 +56,8 @@ export default (props)=>{
 		})
 
 	}
-
 	useEffect(()=>{
-		API.getDecanatos(false).then(decanatos=>{
+		API.getDecanatos(true).then(decanatos=>{
 			var d = decanatos.map(a=>{
 				return { label: a.nombre, value: a.id }
 			})
@@ -75,40 +75,31 @@ export default (props)=>{
 	});
 
 	return (
-		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false} contentContainerStyle={{ paddingBottom: 50 }}>
+		<KeyboardAwareScrollView bounces={false} contentContainerStyle={{ paddingBottom: 50 }}>
 			<Text style={styles.header}>Editar Parroquia</Text> 
-			<Input name="Nombre" value={name} onChangeText={setName} required />
-			<Input name="Dirección" value={address} onChangeText={setAddress} required />
-			<Input name="Colonia" value={colonia} onChangeText={setColonia} required />
-			<Input name="Municipio" value={municipio} onChangeText={setMunicipio} required />
-			<Input name="Telefono 1" value={telefono1} onChangeText={setTelefono1} />
-			<Input name="Telefono 2" value={telefono2} onChangeText={setTelefono2} />
-			{listDecanatos ? (
-				<Picker onValueChange={setDecanato} name="Seleccionar decanato" items={listDecanatos} select={getDecanato()} required />
-			) : (
-				<ActivityIndicator style={{ height: 80 }} />
-			)}
-			<Button text="Registrar" loading={loading} onPress={doRegister} />
+			<View style={{ padding: 15 }}>
+				<Input name="Nombre" value={name} onChangeText={setName} required />
+				<Input name="Dirección" value={address} onChangeText={setAddress} required />
+				<Input name="Colonia" value={colonia} onChangeText={setColonia} required />
+				<Input name="Municipio" value={municipio} onChangeText={setMunicipio} required />
+				<Input name="Telefono 1" value={telefono1} onChangeText={setTelefono1} keyboard={'phone-pad'} />
+				<Input name="Telefono 2" value={telefono2} onChangeText={setTelefono2} keyboard={'phone-pad'} />
+				{listDecanatos ? (
+					<Picker onValueChange={setDecanato} name="Seleccionar decanato" items={listDecanatos} select={getDecanato()} required />
+				) : (
+					<ActivityIndicator style={{ height: 80 }} />
+				)}
+				<Button text="Guardar" loading={loading} onPress={doRegister} />
+			</View>
 		</KeyboardAwareScrollView>
 	)
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	loginContainer: {
-		height: '70%', 
-		width: '100%', 
-		padding: 10
-	},
 	header: {
 		fontSize: 24,
 		fontWeight: '600',
 		textAlign: 'center',
-		marginBottom: 20,
-		marginTop: 20,
+		marginTop: 15,
 	}
 })
