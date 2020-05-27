@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Item } from '../components'
 import { API } from '../lib';
+
 
 export default (props)=>{
 	var [user, setUser] = useState(false);
@@ -18,7 +19,7 @@ export default (props)=>{
 		Alert.alert('Cerrar sesión', '¿Deseas cerrar sesión?', [
 			{ text: 'Cerrar sesión', onPress: props.route.params.logout },
 			{ text: 'Cancelar', style: 'cancel' }
-		])
+		]);
 	}
 
 	var changePassword = ()=>{
@@ -32,12 +33,17 @@ export default (props)=>{
 		props.navigation.navigate('AdminUsers');
 	}
 
+	var reports = async ()=>{
+		props.navigation.navigate('Reports');
+	}
+
 	return (
 		<ScrollView style={styles.container}>
 			{user.type=='admin' ? (
 				<View style={{ marginBottom: 20 }}>
 					<Text style={styles.section}>Administrador</Text>
 					<Item text="Usuarios" onPress={adminUsers} />
+					<Item text="Reportes" onPress={reports} />
 				</View>
 			) : null}
 

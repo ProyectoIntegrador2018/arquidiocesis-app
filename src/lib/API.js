@@ -779,6 +779,11 @@ async function getParticipantes(capacitacion){
 	else return res.data;
 }
 
+async function formatURL(url){
+	var u = await getUser();
+	return ROOT_URL+url+'?token='+u.token;
+}
+
 export default {
 	getLogin,
 	getUser,
@@ -844,5 +849,6 @@ export default {
 	editParticipante,
 	getParticipantes,
 	changeCapacitacionEncargado,
-	editCapilla
+	editCapilla,
+	formatURL
 }

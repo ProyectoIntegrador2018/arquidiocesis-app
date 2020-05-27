@@ -4,6 +4,7 @@ import Login from './Login';
 import ZonasList from './ZonasList';
 import Zona from './Zona';
 import ChangePassword from './ChangePassword';
+import Reports from './Reports';
 
 import RegistroCapilla from './capilla/RegistroCapilla';
 import DetalleCapilla from './capilla/DetalleCapilla';
@@ -26,6 +27,7 @@ import EditGrupo from './grupos/EditGrupo';
 import ChangeCoordinador from './grupos/ChangeCoordinador';
 import GrupoBajasTemporales from './grupos/GrupoBajasTemporales';
 import AsistenciaGrupo from './grupos/AsistenciaGrupo';
+import SelectGroup from './grupos/SelectGroup';
 
 import RegistroAdmin from './admin/RegistroAdmin';
 import AdminUsers from './admin/AdminUsers';
@@ -47,6 +49,7 @@ import DetalleParticipante from './capacitacion/DetalleParticipante';
 import EditarParticipante from './capacitacion/EditarParticipante';
 import ChangeEncargado from './capacitacion/ChangeEncargado';
 import AsistenciaCapacitacion from './capacitacion/AsistenciaCapacitacion';
+import SelectCapacitacion from './capacitacion/SelectCapacitacion';
 
 import RegistroAcompanante from './acompanante/RegistroAcompanante';
 import EditAcompanante from './acompanante/EditAcompanante';
@@ -97,5 +100,8 @@ export {
 	EditarParticipante,
 	ChangeEncargado,
 	EditarCapilla,
-	AsistenciaCapacitacion
+	AsistenciaCapacitacion,
+	Reports,
+	SelectGroup,
+	SelectCapacitacion
 }

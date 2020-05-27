@@ -9,6 +9,12 @@ export default (props)=>{
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 
+	var { onSelect } = props.route.params;
+
+	props.navigation.setOptions({
+		headerTitle: 'Seleccionar grupo'
+	})
+
 	useEffect(()=>{
 		API.getUser().then(setUser);
 		API.getGrupos().then(grupos=>{
@@ -41,24 +47,8 @@ export default (props)=>{
 	}
 
 	var onPress = (item)=>{
-		props.navigation.navigate('Grupo', {
-			grupo: item,
-			onDelete: id=>{
-				setData(d=>d.filter(a=>a.id!=id));
-			},	
-			onEdit: (id, new_grupo)=>{
-				setData([...data.filter(a=>a.id!=id), new_grupo]);
-			}
-		});
-	}
-
-	var addGrupo = ()=>{
-		props.navigation.navigate('RegistroGrupo', {
-			onAdd: (p)=>{
-				if(!data) return;
-				setData([...data, p]);
-			}
-		});
+		if(onSelect) onSelect(item)
+		props.navigation.goBack();
 	}
 
 	var renderItem = (data)=>{
@@ -86,10 +76,9 @@ export default (props)=>{
 		<RefreshControl refreshing={refreshing} onRefresh={getGrupos} />
 	}>
 		{error ? (
-			<ErrorView message={'Hubo un error cargando los grupos...'} refreshing={refreshing} retry={getGrupos} />
+			<ErrorView message={'Hubo un error cargando las parroquias...'} refreshing={refreshing} retry={getGrupos} />
 		) : (
 			<View>
-				{user && (user.type=='admin' || user.type=='superadmin') ? <Button text="Agregar grupo" style={{ width: 250, alignSelf: 'center' }} onPress={addGrupo} /> : null}
 				{data.length>0 ? (
 					<AlphabetList data={data} onSelect={onPress} scroll renderItem={renderItem} sort={'nombre'} />
 				) : (
@@ -102,14 +91,3 @@ export default (props)=>{
 	</ScrollView>
 
 }
-
-const styles = StyleSheet.create({
-	testText: {
-		fontSize: 20
-	},
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
-	}
-})
