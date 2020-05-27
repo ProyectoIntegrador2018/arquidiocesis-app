@@ -38,11 +38,8 @@ var Screen = (props)=>{
 				if(err.code==34){
 					props.route.params.onDelete(date);
 				}
-				Alert.alert('Error cargando asistencia', 'La asistencia solicitada no existe.', [
-					{ style: 'cancel', onPress: ()=>{
-						props.navigation.goBack();
-					} }
-				])
+				Alert.alert('Error cargando asistencia', 'La asistencia solicitada no existe.')
+				props.navigation.goBack();
 			})
 		}
 	}, [])

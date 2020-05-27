@@ -19,8 +19,8 @@ export default (props)=>{
 	var orderItems = (items)=>{
 		return items.map(a=>{
 			if(typeof a === 'string'){
-				return { label: a, value: a }
-			}else return a;
+				return { label: a, value: a, color: 'black' }
+			}else return { ...a, color: 'black' };
 		})
 	}
 
@@ -48,9 +48,13 @@ export default (props)=>{
 					textInputProps={{
 						style: styles.pickerStyle,
 					}}
+					touchableWrapperProps={{
+						style: { width: '100%' }
+					}}
+					style={{ width: '100%' }}
 				>
-					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
-						<Text style={{ fontSize: 18, width: '100%', color: !orderItems(items)[select-1] ? 'gray' : 'black' }}>{(orderItems(items)[select-1] || placeholder).label}</Text>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '100%', width: '100%' }}>
+						<Text style={{ fontSize: 18, width: '100%', color: !orderItems(items)[select-1] ? 'gray' : 'black', flexGrow: 100 }}>{(orderItems(items)[select-1] || placeholder).label}</Text>
 						<FontAwesome5 name={'caret-down'} size={20} style={{ marginLeft: -15 }} />
 					</View>
 				</RNPickerSelect>
@@ -78,7 +82,6 @@ const styles = StyleSheet.create({
 	pickerStyle: {
 		height: '100%',
 		width: '100%',
-		backgroundColor: 'red'
 	},
 	label: {
 		fontSize: 16,

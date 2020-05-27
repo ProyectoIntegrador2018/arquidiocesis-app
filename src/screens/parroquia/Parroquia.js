@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity, Alert } from 'react-native';
-import { AlphabetList, ErrorView, Input, Button, Picker, Item } from '../../components';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control'
+import { AlphabetList, ErrorView, Input, Item } from '../../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { API } from '../../lib';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props)=>{
 	var [parroquia, setParroquia] = useState(props.route.params);

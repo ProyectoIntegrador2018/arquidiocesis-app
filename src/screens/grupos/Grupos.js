@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control'
 import { AlphabetList, ErrorView, Button } from '../../components';
 import { API } from '../../lib';
 
@@ -23,6 +24,7 @@ export default (props)=>{
 
 	var getGrupos = ()=>{
 		setRefreshing(true);
+		setError(false)
 		API.getGrupos(true).then(d=>{
 			setData(d);
 			setError(false);
@@ -33,6 +35,10 @@ export default (props)=>{
 		})
 	}
 	
+	if(error){
+		return <ErrorView message={'Hubo un error cargando los grupos...'} refreshing={refreshing} retry={getGrupos} />;
+	}
+
 	if(data === false){
 		return <View style={{ marginTop: 50 }}>
 			<ActivityIndicator size="large" />
@@ -85,20 +91,16 @@ export default (props)=>{
 	return <ScrollView style={{ flex: 1 }} refreshControl={
 		<RefreshControl refreshing={refreshing} onRefresh={getGrupos} />
 	}>
-		{error ? (
-			<ErrorView message={'Hubo un error cargando los grupos...'} refreshing={refreshing} retry={getGrupos} />
-		) : (
-			<View>
-				{user && (user.type=='admin' || user.type=='superadmin') ? <Button text="Agregar grupo" style={{ width: 250, alignSelf: 'center' }} onPress={addGrupo} /> : null}
-				{data.length>0 ? (
-					<AlphabetList data={data} onSelect={onPress} scroll renderItem={renderItem} sort={'nombre'} />
-				) : (
-					<View>
-						<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No perteneces a un grupo.</Text>
-					</View>
-				)}
-			</View>
-		)}
+		<View>
+			{user && (user.type=='admin' || user.type=='superadmin') ? <Button text="Agregar grupo" style={{ width: 250, alignSelf: 'center' }} onPress={addGrupo} /> : null}
+			{data.length>0 ? (
+				<AlphabetList data={data} onSelect={onPress} scroll renderItem={renderItem} sort={'nombre'} />
+			) : (
+				<View>
+					<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No perteneces a un grupo.</Text>
+				</View>
+			)}
+		</View>
 	</ScrollView>
 
 }

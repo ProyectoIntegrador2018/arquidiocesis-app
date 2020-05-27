@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
-import { AlphabetList, ErrorView, Button } from '../../components';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control'
+import { AlphabetList, ErrorView } from '../../components';
 import { API } from '../../lib';
 
 export default (props)=>{

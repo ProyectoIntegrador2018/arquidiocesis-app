@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Util } from '../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
+import { RefreshControl } from 'react-native-web-refresh-control'
 
 export default  (props)=>{
 	var components = []

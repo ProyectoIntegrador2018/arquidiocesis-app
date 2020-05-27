@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl, Alert } from 'react-native';
-import { List, ErrorView, Button, Item } from '../../components';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control'
+import { List, ErrorView } from '../../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { API } from '../../lib';
 import moment from 'moment/min/moment-with-locales'

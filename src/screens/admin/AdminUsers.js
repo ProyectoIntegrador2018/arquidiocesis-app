@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control'
 import { API } from '../../lib';
 import { AlphabetList } from '../../components';
 import { FontAwesome5 } from '@expo/vector-icons'

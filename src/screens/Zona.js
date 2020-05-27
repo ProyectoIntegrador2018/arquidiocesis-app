@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control'
 import { AlphabetList, ErrorView, Item } from '../components';
 import { API } from '../lib';
 

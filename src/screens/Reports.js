@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Text, ScrollView, Alert, StyleSheet } from 'react-native';
+import { Text, ScrollView, Alert, StyleSheet, Platform, Linking } from 'react-native';
 import { Item } from '../components';
 import * as FileSystem from 'expo-file-system';
 import * as MailComposer from 'expo-mail-composer';
@@ -13,6 +13,16 @@ export default (props)=>{
 	props.navigation.setOptions({
 		headerTitle: 'Reportes'
 	});
+
+	var getFile = (url, name, setLoading)=>{
+		return Platform.select({
+			ios: emailFile,
+			android: emailFile,
+			web: ()=>{
+				Linking.openURL(url);
+			}
+		})(url, name, setLoading)
+	}
 
 	var emailFile = (url, name, setLoading)=>{
 		setLoading(true);
@@ -35,7 +45,7 @@ export default (props)=>{
 		props.navigation.navigate('SelectGroup', {
 			onSelect: function(g){
 				API.formatURL('grupos/'+g.id+'/asistencia/reporte/'+moment().unix()+'.csv').then(url=>{
-					emailFile(url, 'Miembros-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
+					getFile(url, 'Miembros-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
 				})
 			}
 		})
@@ -46,7 +56,7 @@ export default (props)=>{
 		props.navigation.navigate('SelectGroup', {
 			onSelect: g=>{
 				API.formatURL('grupos/'+g.id+'/asistencia/reportefechas/'+moment().unix()+'.csv').then(url=>{
-					emailFile(url, 'GrupoAsistencias-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
+					getFile(url, 'GrupoAsistencias-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
 				})
 			}
 		})
@@ -57,7 +67,7 @@ export default (props)=>{
 		props.navigation.navigate('SelectCapacitacion', {
 			onSelect: g=>{
 				API.formatURL('capacitacion/'+g.id+'/asistencia/reporte/'+moment().unix()+'.csv').then(url=>{
-					emailFile(url, 'Participantes-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
+					getFile(url, 'Participantes-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
 				})
 			}
 		})
@@ -68,7 +78,7 @@ export default (props)=>{
 		props.navigation.navigate('SelectCapacitacion', {
 			onSelect: g=>{
 				API.formatURL('capacitacion/'+g.id+'/asistencia/reportefechas/'+moment().unix()+'.csv').then(url=>{
-					emailFile(url, 'CapacitacionAsistencias-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
+					getFile(url, 'CapacitacionAsistencias-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
 				})
 			}
 		})

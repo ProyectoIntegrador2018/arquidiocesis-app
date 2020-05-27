@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control'
 import { AlphabetList, Button, ErrorView } from '../../components';
 import { API } from '../../lib';
 
@@ -18,6 +19,7 @@ export default (props)=>{
 			setData(d);
 			setError(false);
 		}).catch(err=>{
+			setRefreshing(true);
 			setError(true);
 		})
 	}, [])
@@ -33,6 +35,10 @@ export default (props)=>{
 			setRefreshing(false);
 			setError(true);
 		})
+	}
+
+	if(error){
+		return <ErrorView message={'Hubo un error cargando los coordinadores...'} refreshing={refreshing} retry={getCoordinadores} />
 	}
 	
 	if(data === false){
@@ -69,20 +75,16 @@ export default (props)=>{
 	return <ScrollView style={{ flex: 1 }} refreshControl={
 		<RefreshControl refreshing={refreshing} onRefresh={getCoordinadores} />
 	}>
-		{error ? (
-			<ErrorView message={'Hubo un error cargando los coordinadores...'} refreshing={refreshing} retry={getZona} />
-		) : (
-			<View>
-				{user && (user.type=='admin' || user.type=='superadmin') && <Button text="Registro coordinador" style={{ width: 250, alignSelf: 'center' }} onPress={addCoordinador} />}
-				{data.length==0 ? (
-					<View>
-						<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No hay coordinadores en el sistema.</Text>
-					</View>
-				) : (
-					<AlphabetList data={formatData()} onSelect={detalleCoord} scroll sort={'nombre_completo'} />
-				)}
-			</View>
-		)}
+		<View>
+			{user && (user.type=='admin' || user.type=='superadmin') && <Button text="Registro coordinador" style={{ width: 250, alignSelf: 'center' }} onPress={addCoordinador} />}
+			{data.length==0 ? (
+				<View>
+					<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No hay coordinadores en el sistema.</Text>
+				</View>
+			) : (
+				<AlphabetList data={formatData()} onSelect={detalleCoord} scroll sort={'nombre_completo'} />
+			)}
+		</View>
 	</ScrollView>
 
 }

@@ -314,13 +314,13 @@ var changeCapacitacionEncargado = (cap, encargado)=>{
 
 
 var clearCache = ()=>{
-	miembros = [];
-	grupos = [];
-	coordinadores = [];
-	capillas = [];
-	parroquias = [];
-	decanatos = [];
-	zonas = [];
+	miembros = false;
+	grupos = false;
+	coordinadores = false;
+	capillas = false;
+	parroquias = false;
+	decanatos = false;
+	zonas = false;
 }
 
 

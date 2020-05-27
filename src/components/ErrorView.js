@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'
 import Button from './Button';
+import { RefreshControl } from 'react-native-web-refresh-control'
 
 export default (props)=>{
 	if(props.scroll!==undefined){

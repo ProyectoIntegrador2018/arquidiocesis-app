@@ -91,28 +91,7 @@ export default (props)=>{
 			Alert.alert('Error', 'Hubo un error editado la capacitación.');
 			setLoading(false);
 		})
-
-		// setLoading(true);
-		// API.addCapacitacion(data).then(done=>{
-		// 	setLoading(false);
-		// 	Alert.alert('Exito', 'Se ha agregado la capacitación.');
-		// 	props.navigation.goBack();
-		// 	onAdd(data);
-		// }).catch(err=>{
-		// 	setLoading(false);
-		// 	console.log(err);
-		// 	if(err.code==999){
-		// 		Alert.alert('Error', 'No tienes acceso a esta acción.');
-		// 	}else{
-		// 		Alert.alert('Error', 'Hubo un error agregando la capacitación.');
-		// 	}
-		// })
 	}
-
-	// var getCoordinadorIndex = ()=>{
-	// 	if(!coordinaList) return -1;
-	// 	return coordinaList.findIndex(a=>a.id==capacitacion.encargado);
-	// }
 
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
@@ -123,15 +102,7 @@ export default (props)=>{
 			<Input name="Fecha fin" value={formatDate(dateEnd)} readonly required onPress={()=>{
 				pickerEndRef.current.onPressDate()
 			}} />
-			{/* {coordinaList!==false ? (
-				<Picker name="Encargado" items={formatCoordinadores()} placeholder={{ label: 'Selecciona coordinador' }} required onValueChange={setCoordinador} select={getCoordinadorIndex()} />
-			) : (
-				<ActivityIndicator style={{ height: 80 }} />
-			)} */}
-
 			<Button text="Guardar" onPress={save} loading={loading} />
-
-
 
 			<DatePicker
 				ref={pickerStartRef}
@@ -147,7 +118,6 @@ export default (props)=>{
 				locale={'es'}
 				onDateChange={d=>setDateStart(d)}
 			/>
-
 
 			<DatePicker
 				ref={pickerEndRef}

@@ -86,24 +86,6 @@ export default (props) => {
 			Alert.alert('Error', "Hubo un error editando el miembro.");
 			setLoading(false);
 		})
-		
-		// setLoading(true);
-		// API.editMiembro(persona.id, data).then(done=>{
-		// 	setLoading(false)
-		// 	if(!done) return Alert.alert('Error', "Hubo un error editando el miembro.");
-			// data.fecha_nacimiento = {
-			// 	_seconds: moment(birthday, 'YYYY-MM-DD').unix()
-			// }
-			// onEdit(data);
-		// 	Alert.alert('Exito', "Se ha editado el miembro.");
-		// }).catch(err=>{
-		// 	if(err.code && err.code==999){
-		// 		Alert.alert('Error', "No tienes acceso a este grupo.");
-		// 	}else{
-		// 		Alert.alert('Error', "Hubo un error editando el miembro.");
-		// 	}
-		// 	setLoading(false);
-		// })
 	}
 
 	var formatDate = a=>{

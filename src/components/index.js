@@ -6,9 +6,11 @@ import Picker from './Picker';
 import List from './List';
 import LoadingView from './LoadingView';
 import Item from './Item';
+import Alert from './Alert';
 
 
 export {
+	Alert,
 	Input,
 	Button,
 	AlphabetList,
