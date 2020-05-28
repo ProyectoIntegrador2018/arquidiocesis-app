@@ -180,6 +180,9 @@ export default (props)=>{
 
 	// This function runs when the screen is shown.
 	useEffect(()=>{
+		API.setOnLogout(()=>{
+			setLogin(null);
+		})
 		checkLogin()
 	}, [])
 	

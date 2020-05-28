@@ -18,7 +18,7 @@ export default (props)=>{
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 
-	var canEdit = (user && capacitacion && (user.type=='admin' || user.type=='superadmin' || user.id==capacitacion.encargado))	
+	var canEdit = (user && capacitacion && (user.type=='admin' || user.type=='superadmin' || user.id==capacitacion.encargado || user.type.startsWith('acompañante')))	
 	
 	props.navigation.setOptions({
 		headerStyle: {
@@ -207,7 +207,7 @@ export default (props)=>{
 						<Input name="Fecha fin" value={formatUnix(capacitacion.fin._seconds)} readonly />
 					</View>
 
-					{ user && (user.type=='admin' || user.type=='superadmin') ? (
+					{ user && (user.type=='admin' || user.type=='superadmin' || user.type.startsWith('acompañante')) ? (
 						<View style={{ marginTop: 20 }}>
 							<Item text="Cambiar encargado" onPress={changeEncargado} />
 							<Item text="Eliminar capacitación" onPress={deleteCapacitacion}  loading={deleting}/>
@@ -237,12 +237,6 @@ const styles = StyleSheet.create({
 		paddingRight: 15,
 		color: 'white',
 		fontSize: 25
-	},	
-	headerText: {
-		fontSize: 30,
-		fontWeight: '700',
-		color: 'white',
-		padding: 15
 	},
 	sectionText: {
 		fontSize: 14,

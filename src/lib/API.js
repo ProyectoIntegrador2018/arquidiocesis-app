@@ -1,9 +1,15 @@
 import axios from 'axios';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, EventEmitter } from 'react-native';
 import Cache from './Cache';
 import moment from 'moment';
 
-const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
+// const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
+const ROOT_URL = 'http://192.168.0.131:8000/api/'
+var onLogout = null;
+
+function setOnLogout(cb){
+	onLogout = cb
+};
 
 async function post(endpoint, data){
 	var u = await getUser();
@@ -14,6 +20,9 @@ async function post(endpoint, data){
 	try{
 		console.log("POST /"+endpoint);
 		var res = await axios.post(ROOT_URL+endpoint, data);
+		if(res.data && res.data.error && res.data.code==900){
+			logout();
+		}
 		return res.data;
 	}catch(err){
 		return {
@@ -34,6 +43,9 @@ async function get(endpoint, data){
 		var res = await axios.get(ROOT_URL+endpoint, {
 			params: data
 		});
+		if(res.data && res.data.error && res.data.code==900){
+			logout();
+		}
 		return res.data;
 	}catch(e){
 		return {
@@ -54,6 +66,9 @@ async function sendDelete(endpoint, data){
 		var res = await axios.delete(ROOT_URL+endpoint, {
 			params: data
 		});
+		if(res.data && res.data.error && res.data.code==900){
+			logout();
+		}
 		return res.data;
 	}catch(e){
 		return {
@@ -140,6 +155,7 @@ async function logout(){
 
 	// Clear cache
 	Cache.clearCache();
+	if(onLogout) onLogout();
 
 	// Delete user info from storage.
 	await AsyncStorage.removeItem('login')
@@ -785,6 +801,7 @@ async function formatURL(url){
 }
 
 export default {
+	setOnLogout,
 	getLogin,
 	getUser,
 	login,

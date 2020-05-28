@@ -36,7 +36,7 @@ export default (props)=>{
 	}
 
 	if(error){
-		return <ErrorView refreshing={refreshing} retry={getZonas} scroll />
+		return <ErrorView refreshing={refreshing} retry={getZonas} message="Hubo un error cargando las zonas..." />
 	}
 	
 	if(data === false){

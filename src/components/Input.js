@@ -14,7 +14,7 @@ export default (props)=>{
 				{required && <Text style={styles.required}> *</Text>}
 			</Text>
 			{ !readonly ? (
-				<TextInput multiline={multiline} style={[styles.input, { height: (props.height || 45) }]} placeholder={(props.placeholder || props.name)} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} keyboardType={props.keyboard} secureTextEntry={typeof props.password !== 'undefined'}/>
+				<TextInput multiline={multiline} style={[styles.input, { height: (props.height || 45) , fontSize: 20 }]} placeholder={(props.placeholder || props.name)} value={props.value} onChangeText={props.onChangeText} textContentType={props.textContentType} keyboardType={props.keyboard} secureTextEntry={typeof props.password !== 'undefined'}/>
 			) : (
 				<TouchableWithoutFeedback onPress={props.onPress}>
 					<View style={[styles.input, { justifyContent: 'center', height: (props.height || 45) }]}>
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
 	input: {
 		backgroundColor: '#FDFDFD',
 		height: 45,
-		fontSize: 20,
 		paddingHorizontal: 10,
 		borderRadius: 4,
 		borderColor: '#CCC',

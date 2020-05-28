@@ -19,7 +19,7 @@ export default (props)=>{
 			setData(d);
 			setError(false);
 		}).catch(err=>{
-			setRefreshing(true);
+			setRefreshing(false);
 			setError(true);
 		})
 	}, [])

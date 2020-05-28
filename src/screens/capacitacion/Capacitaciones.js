@@ -14,18 +14,20 @@ export default (props)=>{
 	var [user, setUser] = useState(false);
 
 	useEffect(()=>{
+		setError(false);
 		API.getUser().then(setUser);
 		API.getCapacitaciones(false).then(c=>{
 			setData(c);
 			setError(false);
 		}).catch(err=>{
-			setError(true);
 			setRefreshing(false);
+			setError(true);
 		})
 	}, [])
 
 	var getCapacitacion = ()=>{
 		setRefreshing(true);
+		setError(false);
 		API.getCapacitaciones(true).then(c=>{
 			setRefreshing(false);
 			setData(c);
@@ -34,6 +36,10 @@ export default (props)=>{
 			setRefreshing(false);
 			setError(true);
 		})
+	}
+
+	if(error){
+		return <ErrorView message={'Hubo un error cargando las capacitaciones...'} refreshing={refreshing} retry={getCapacitacion} />
 	}
 
 	if(data === false){
@@ -93,38 +99,29 @@ export default (props)=>{
 	return <ScrollView style={{ flex: 1 }} refreshControl={
 		<RefreshControl refreshing={refreshing} onRefresh={getCapacitacion} />
 	}>
-		{error ? (
-			<ErrorView message={'Hubo un error cargando las capacitaciones...'} refreshing={refreshing} retry={getCapacitacion} />
-		) : data===false ? (
-			<View style={{ marginTop: 50 }}>
-				<ActivityIndicator size="large" />
-				<Text style={{ marginTop: 10, textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Cargando datos...</Text>
-			</View>
-		) : (
-			<View>
-				{ user && (user.type=='admin' || user.type=='superadmin' || user.type.startsWith('acompañante')) && <Button text="Agregar Capacitacion" style={{ width: 250, alignSelf: 'center' }} onPress={addCapacitacion} /> }
-				{ (data.length>0) ? (
-					<>
-						{caps.active.length>0 ? (
-							<View>
-								<Text style={styles.header}>Capacitaciones activas</Text>
-								<List data={caps.active} onSelect={viewCapacitacion} scroll headers={false} renderItem={renderCapacitacion} scroll={false} />
-							</View>
-						) : null}
-						{caps.old.length>0 ? (
-							<View>
-								<Text style={styles.header}>Capacitaciones pasadas</Text>
-								<List data={caps.old} onSelect={viewCapacitacion} scroll headers={false} renderItem={renderCapacitacion} scroll={false}/>
-							</View>
-						) : null}
-					</>
-				) : (
-					<View>
-						<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No perteneces a una capacitación.</Text>
-					</View>
-				)}
-			</View>
-		)}
+		<View>
+			{ user && (user.type=='admin' || user.type=='superadmin' || user.type.startsWith('acompañante')) && <Button text="Agregar Capacitacion" style={{ width: 250, alignSelf: 'center' }} onPress={addCapacitacion} /> }
+			{ (data.length>0) ? (
+				<>
+					{caps.active.length>0 ? (
+						<View>
+							<Text style={styles.header}>Capacitaciones activas</Text>
+							<List data={caps.active} onSelect={viewCapacitacion} scroll headers={false} renderItem={renderCapacitacion} scroll={false} />
+						</View>
+					) : null}
+					{caps.old.length>0 ? (
+						<View>
+							<Text style={styles.header}>Capacitaciones pasadas</Text>
+							<List data={caps.old} onSelect={viewCapacitacion} scroll headers={false} renderItem={renderCapacitacion} scroll={false}/>
+						</View>
+					) : null}
+				</>
+			) : (
+				<View>
+					<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No perteneces a una capacitación.</Text>
+				</View>
+			)}
+		</View>
 	</ScrollView>
 
 }
