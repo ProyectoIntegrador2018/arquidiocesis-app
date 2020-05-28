@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Text, ScrollView, Alert, StyleSheet, Platform, Linking } from 'react-native';
-import { Item } from '../components';
+import { Text, ScrollView, StyleSheet, Platform, Linking } from 'react-native';
+import { Item, Alert } from '../components';
 import * as FileSystem from 'expo-file-system';
 import * as MailComposer from 'expo-mail-composer';
 import { API } from '../lib';

@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import React, { useState, useRef } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
 import DatePicker from 'react-native-datepicker';
@@ -98,9 +98,7 @@ export default (props)=>{
 			<Input name="Nombre" value={name} onChangeText={setName}/>
 			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno}/>
 			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno}/>
-			<Input value={formatDate(birthday)} name={'Fecha de nacimiento'} readonly onPress={()=>{
-				pickerRef.current.onPressDate()
-			}} />
+			<DatePicker onDateChange={d=>setBirthday(d)} date={birthday} name="Fecha" />
 			<Picker name="Estado Civil" items={[
 				{ label: 'Soltero', value: 'Soltero' },
 				{ label: 'Casado', value: 'Casado' },
@@ -142,23 +140,6 @@ export default (props)=>{
 			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} keyboard={'phone-pad'} />
 
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
-
-			<DatePicker
-				ref={pickerRef}
-				date={birthday}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={d=>{
-					setBirthday(d);
-				}}
-			/>
 		</KeyboardAwareScrollView>
 	)
 }

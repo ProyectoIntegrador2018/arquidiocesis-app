@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import React, { useState } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
-import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
@@ -25,7 +24,6 @@ export default (props)=>{
 	var [oficio, setOficio] = useState(false);
 	var [password, setPassword] = useState('');
 	var [password2, setPassword2] = useState('');
-	var pickerRef = useRef(null);
 
 	var { onAdd, zona, decanato } = props.route.params;
 
@@ -101,11 +99,6 @@ export default (props)=>{
 		})	
 	}
 
-	var formatDate = a=>{
-		var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-		return f.charAt(0).toUpperCase() + f.substr(1);
-	}
-
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
 			<Text style={styles.header}>Registrar Acompañante</Text> 
@@ -113,9 +106,8 @@ export default (props)=>{
 			<Input name="Nombre" value={name} onChangeText={setName} required/>
 			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} required/>
 			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno} />
-			<Input value={formatDate(birthday)} name={'Fecha de nacimiento'} required readonly onPress={()=>{
-				pickerRef.current.onPressDate()
-			}} />
+			<DatePicker onDateChange={d=>setBirthday(d)} date={birthday} name="Fecha de nacimiento" />
+
 			<Picker name="Estado Civil" required items={[
 				{ label: 'Soltero', value: 'Soltero' },
 				{ label: 'Casado', value: 'Casado' },
@@ -162,23 +154,6 @@ export default (props)=>{
 			<Input name="Repetir Contraseña" required value={password2} onChangeText={setPassword2} textContentType={'password'} password />
 
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
-
-			<DatePicker
-				ref={pickerRef}
-				date={birthday}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={d=>{
-					setBirthday(d);
-				}}
-			/>
 		</KeyboardAwareScrollView>
 	)
 }

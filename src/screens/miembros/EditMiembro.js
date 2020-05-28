@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import React, { useState, useRef } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
 import DatePicker from 'react-native-datepicker';
@@ -119,9 +119,8 @@ export default (props) => {
 			<Input name="Nombre" value={name} onChangeText={setName}/>
 			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno}/>
 			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno}/>
-			<Input value={formatDate(birthday)} name={'Fecha de nacimiento'} readonly onPress={()=>{
-				pickerRef.current.onPressDate()
-			}} />
+			<DatePicker onDateChange={d=>setBirthday(d)} date={birthday} name="Fecha de nacimiento" />
+
 			<Picker name="Estado Civil" items={['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado']} onValueChange={setEstadoCivil} select={getEstadoCivil()} />
 			<Picker name="Sexo" items={['Masculino', 'Femenino', 'Sin especificar']} onValueChange={setGender} select={getGenero()} />
 			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'}/>
@@ -145,23 +144,6 @@ export default (props) => {
 			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} keyboard={'phone-pad'} />
 
 			<Button text="Guardar" loading={loading} onPress={save} />
-
-			<DatePicker
-				ref={pickerRef}
-				date={birthday || moment().format('YYYY-MM-DD')}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={d=>{
-					setBirthday(d);
-				}}
-			/>
 		</KeyboardAwareScrollView>
 	)
 }

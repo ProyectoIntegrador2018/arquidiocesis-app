@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
 
 export default (props)=>{

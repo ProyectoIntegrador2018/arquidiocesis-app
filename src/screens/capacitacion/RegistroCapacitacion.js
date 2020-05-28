@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import { Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
-import DatePicker from 'react-native-datepicker'
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
-var formatDate = (a)=>{
-	var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-	return f.charAt(0).toUpperCase() + f.substr(1);
-}
 
 export default (props)=>{
-
 	var today = moment();
 
 	var [loading, setLoading] = useState(false);
@@ -21,9 +15,6 @@ export default (props)=>{
 	var [dateStart, setDateStart] = useState(today.format('YYYY-MM-DD'));
 	var [dateEnd, setDateEnd] = useState(today.add('d', 1).format('YYYY-MM-DD'));
 	var [coordinador, setCoordinador] = useState(null);
-
-	var pickerStartRef = useRef(null);
-	var pickerEndRef = useRef(null);
 
 	var [coordinaList, setCoordinaList] = useState(false);
 	var onAdd = props.route.params.onAdd;
@@ -106,12 +97,8 @@ export default (props)=>{
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
 			<Text style={styles.header}>Nueva Capacitación</Text> 
 			<Input name="Nombre" required value={name} onChangeText={setName} />
-			<Input name="Fecha inicio" value={formatDate(dateStart)} readonly required onPress={()=>{
-				pickerStartRef.current.onPressDate()
-			}} />
-			<Input name="Fecha fin" value={formatDate(dateEnd)} readonly required onPress={()=>{
-				pickerEndRef.current.onPressDate()
-			}} />
+			<DatePicker onDateChange={d=>setDateStart(d)} date={dateStart} name="Fecha inicio" />
+			<DatePicker onDateChange={d=>setDateEnd(d)} date={dateEnd} name="Fecha fin" />
 			{coordinaList!==false ? (
 				<Picker name="Encargado" items={formatCoordinadores()} placeholder={{ label: 'Selecciona coordinador' }} required onValueChange={setCoordinador} />
 			) : (
@@ -119,39 +106,6 @@ export default (props)=>{
 			)}
 
 			<Button text="Registrar" onPress={doRegister} loading={loading} />
-
-
-
-			<DatePicker
-				ref={pickerStartRef}
-				date={dateStart}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={p=>setDateStart(p)}
-			/>
-
-
-			<DatePicker
-				ref={pickerEndRef}
-				date={dateEnd}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={d=>setDateEnd(d)}
-			/>
 		</KeyboardAwareScrollView>
 	)
 }

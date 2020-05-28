@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Input, Button } from '../../components'
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Input, Button, Alert } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
 

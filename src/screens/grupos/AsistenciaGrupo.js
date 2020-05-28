@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator,TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator,TouchableOpacity } from 'react-native';
 import { CheckBox } from 'react-native-elements'
-import { Input } from '../../components'
+import { Input, Alert, DatePicker } from '../../components'
 import { Util, API } from '../../lib'
-import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
@@ -122,9 +121,7 @@ var Screen = (props)=>{
 
 	return <View style={StyleSheet.absoluteFillObject}>
 		<View style={{ paddingHorizontal: 20, marginTop: 10 }}>
-			<Input value={formatDate(date)} name={'Fecha'} readonly onPress={()=>{
-				if(isNew) pickerRef.current.onPressDate()
-			}} />
+			<DatePicker onDateChange={d=>setDate(d)} date={date} name="Fecha" />
 		</View>
 		<ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers}>
 			{components}
@@ -138,22 +135,6 @@ var Screen = (props)=>{
 				)}
 			</TouchableOpacity>
 		</View>
-		<DatePicker
-			ref={pickerRef}
-        	date={date}
-        	mode="date"
-        	format="YYYY-MM-DD"
-        	confirmBtnText="Confirmar"
-        	cancelBtnText="Cancelar"
-			customStyles={{
-				dateIcon: { display: 'none' },
-				dateInput: { display: 'none' }
-			}}
-			locale={'es'}
-			onDateChange={d=>{
-				setDate(d);
-		  	}}
-      />
 	</View>
 }
 

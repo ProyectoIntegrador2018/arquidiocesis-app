@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { API } from '../../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Input, Item, LoadingView } from '../../components';
+import { Input, Item, LoadingView, Alert } from '../../components';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 

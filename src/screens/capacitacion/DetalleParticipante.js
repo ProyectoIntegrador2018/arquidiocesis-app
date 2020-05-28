@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { Input, Item, LoadingView, ErrorView } from '../../components'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Input, Item, LoadingView, ErrorView, Alert } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API } from '../../lib';
 import { FontAwesome5 } from '@expo/vector-icons'

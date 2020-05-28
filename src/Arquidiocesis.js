@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, StatusBar, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, StatusBar, TouchableOpacity, Alert, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -100,7 +100,7 @@ var Home = (props)=>{
 					break;
 					default: iconName = 'exclamation-circle'
 				}
-            return <FontAwesome5 name={iconName} size={size} color={color} style={{ paddingTop: 5 }} />;
+            return <FontAwesome5 name={iconName} size={size} color={color} style={{ paddingTop: 5 }} solid />;
           },
 		})}>
 			{user.type!='coordinador' ? (
@@ -122,7 +122,8 @@ var App = (props)=>{
 		<NavigationContainer>
 			<Stack.Navigator user={props.user} initialRouteName='Home' screenOptions={{
 				headerStyle: { backgroundColor: '#002E60' },
-				headerTintColor: 'white'
+				headerTintColor: 'white',
+				gestureEnabled: Platform.select({ web: false, android: true, ios: true })
 			}}>
 				<Stack.Screen name="Home" component={Home} initialParams={{ logout: props.logout }} />
 				<Stack.Screen name="RegistroAdmin" component={RegistroAdmin}/>

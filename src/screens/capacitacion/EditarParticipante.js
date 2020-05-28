@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import React, { useState, useRef } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
-import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es');
 
@@ -30,7 +29,6 @@ export default (props) => {
 	var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
 	var [escolaridad, setEscolaridad] = useState(false);
 	var [oficio, setOficio] = useState(false);
-	var pickerRef = useRef(null);
 	
 	props.navigation.setOptions({
 		headerTitle: 'Editar Participante'
@@ -117,9 +115,8 @@ export default (props) => {
 			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno}/>
 			<Input name="Nombre Corto" value={nombreCorto} onChangeText={setNombreCorto}/>
 			<Picker name="Sexo" items={['Masculino', 'Femenino', 'Sin especificar']} onValueChange={setGender} select={getGenero()} required />
-			<Input value={formatDate(birthday)} name={'Fecha de nacimiento'} required readonly onPress={()=>{
-				pickerRef.current.onPressDate()
-			}} />
+			<DatePicker onDateChange={d=>setBirthday(d)} date={birthday} name="Fecha de nacimiento" />
+
 			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'}/>
 			<Picker name="Estado Civil" items={['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado']} onValueChange={setEstadoCivil} required select={getEstadoCivil()} />
 			<Picker name="Grado escolaridad" required items={[
@@ -143,22 +140,6 @@ export default (props) => {
 
 			<Button text="Guardar" loading={loading} onPress={save} />
 
-			<DatePicker
-				ref={pickerRef}
-				date={birthday || moment().format('YYYY-MM-DD')}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={d=>{
-					setBirthday(d);
-				}}
-			/>
 		</KeyboardAwareScrollView>
 	)
 }

@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
-import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
@@ -27,7 +26,6 @@ export default (props)=>{
 	var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
 	var [escolaridad, setEscolaridad] = useState(false);
 	var [oficio, setOficio] = useState(false);
-	var pickerRef = useRef(null);
 
 	props.navigation.setOptions({
 		headerTitle: 'Editar Acompañante'
@@ -93,11 +91,6 @@ export default (props)=>{
 		})	
 	}
 
-	var formatDate = a=>{
-		var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-		return f.charAt(0).toUpperCase() + f.substr(1);
-	}
-
 	var getEstadoCivil = ()=>{
 		return ['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado'].indexOf(persona.estado_civil);
 	}
@@ -119,9 +112,8 @@ export default (props)=>{
 			<Input name="Nombre" value={name} onChangeText={setName} required/>
 			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} required/>
 			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno} />
-			<Input value={formatDate(birthday)} name={'Fecha de nacimiento'} required readonly onPress={()=>{
-				pickerRef.current.onPressDate()
-			}} />
+			<DatePicker onDateChange={d=>setBirthday(d)} date={birthday} name="Fecha de nacimiento" />
+
 			<Picker name="Estado Civil" items={['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado']} onValueChange={setEstadoCivil} select={getEstadoCivil()} />
 			<Picker name="Sexo" items={['Masculino', 'Femenino', 'Sin especificar']} onValueChange={setGender} select={getGenero()} />
 			<Picker name="Grado escolaridad" items={[
@@ -144,23 +136,6 @@ export default (props)=>{
 			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} keyboard={'phone-pad'} />
 
 			<Button text="Guardar" loading={loading} onPress={doRegister} />
-
-			<DatePicker
-				ref={pickerRef}
-				date={birthday}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={d=>{
-					setBirthday(d);
-				}}
-			/>
 		</KeyboardAwareScrollView>
 	)
 }

@@ -1,16 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { Input, Button, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
-import DatePicker from 'react-native-datepicker'
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
-
-var formatDate = (a)=>{
-	var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-	return f.charAt(0).toUpperCase() + f.substr(1);
-}
 
 export default (props)=>{ 
 	var { capacitacion, onEdit } = props.route.params;
@@ -22,31 +16,10 @@ export default (props)=>{
 	var [name, setName] = useState(capacitacion.nombre);
 	var [dateStart, setDateStart] = useState(fi);
 	var [dateEnd, setDateEnd] = useState(ff);
-	// var [coordinador, setCoordinador] = useState(false);
-
-	var pickerStartRef = useRef(null);
-	var pickerEndRef = useRef(null);
-
-	// var [coordinaList, setCoordinaList] = useState(false);
 
 	props.navigation.setOptions({
 		headerTitle: 'Editar capacitación'
 	});
-
-	// useEffect(()=>{
-	// 	API.getCoordinadores().then(c=>{
-	// 		if(c.length==0){
-	// 			API.getCoordinadores(true).then(setCoordinaList);
-	// 		}else{
-	// 			setCoordinaList(c);
-	// 		}
-	// 	})
-	// }, [])
-
-	// var formatCoordinadores = ()=>{
-	// 	if(!coordinaList) return []
-	// 	return coordinaList.map(a=>({ label: `${a.nombre} ${a.apellido_paterno} ${a.apellido_materno}`.trim(), value: a.id }))
-	// }
 
 	var save = ()=>{
 		var data = {
@@ -96,43 +69,9 @@ export default (props)=>{
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
 			<Input name="Nombre" required value={name} onChangeText={setName} />
-			<Input name="Fecha inicio" value={formatDate(dateStart)} readonly required onPress={()=>{
-				pickerStartRef.current.onPressDate()
-			}} />
-			<Input name="Fecha fin" value={formatDate(dateEnd)} readonly required onPress={()=>{
-				pickerEndRef.current.onPressDate()
-			}} />
+			<DatePicker onDateChange={d=>setDateStart(d)} date={dateStart} name="Fecha inicio" />
+			<DatePicker onDateChange={d=>setDateEnd(d)} date={dateEnd} name="Fecha fin" />
 			<Button text="Guardar" onPress={save} loading={loading} />
-
-			<DatePicker
-				ref={pickerStartRef}
-				date={dateStart}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={d=>setDateStart(d)}
-			/>
-
-			<DatePicker
-				ref={pickerEndRef}
-				date={dateEnd}
-				mode="date"
-				format="YYYY-MM-DD"
-				confirmBtnText="Confirmar"
-				cancelBtnText="Cancelar"
-				customStyles={{
-					dateIcon: { display: 'none' },
-					dateInput: { display: 'none' }
-				}}
-				locale={'es'}
-				onDateChange={d=>setDateEnd(d)}
-			/>
 		</KeyboardAwareScrollView>
 	)
 }
