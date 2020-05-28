@@ -22,8 +22,8 @@ APP de Arquidiocesis de Monterrey
 
 ### Environment URLS
 
-* **Production** - [TBD](TBD)
-* **Development** - [TBD](TBD)
+* **Production** - https://arquidiocesis.netlify.app/
+* **Development** - N/A
 
 ### Team
 
@@ -44,9 +44,9 @@ APP de Arquidiocesis de Monterrey
 
 You should ask for access to this tools if you don't have it already:
 
-* [Github repo](https://github.com/)
+* [Github repo](https://github.com/ProyectoIntegrador2018/arquidiocesis-app)
 * Backlog (Microsoft Teams)
-* [Heroku](https://arquidiocesis.herokuapp.com/)
+* [Netlify](https://netlify.com/)
 * Documentation (Microsoft Teams)
 
 ## Development
