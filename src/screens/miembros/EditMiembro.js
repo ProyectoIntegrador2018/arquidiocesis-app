@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { Input, Button, Picker, Alert } from '../../components'
+import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
-import DatePicker from 'react-native-datepicker';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es');
 
