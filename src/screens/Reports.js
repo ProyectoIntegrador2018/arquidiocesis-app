@@ -40,10 +40,25 @@ export default (props)=>{
 		})
 	}
 
+	var reportAllGrupos = (setLoading)=>{
+		if(downloading) return;
+		API.formatURL('grupos/dump').then(url=>{
+			getFile(url, 'Grupos.csv', setLoading);
+		})
+	}
+
+	var reportAllCapacitaciones = (setLoading)=>{
+		if(downloading) return;
+		API.formatURL('capacitacion/dump').then(url=>{
+			getFile(url, 'Capacitaciones.csv', setLoading);
+		})
+	}
+
 	var reportGroup = (setLoading)=>{
 		if(downloading) return;
 		props.navigation.navigate('SelectGroup', {
 			onSelect: function(g){
+				// Added unix to the end to prevent Cache on iOS file download.
 				API.formatURL('grupos/'+g.id+'/asistencia/reporte/'+moment().unix()+'.csv').then(url=>{
 					getFile(url, 'Miembros-'+g.nombre.replace(/ /g, '_')+'.csv', setLoading);
 				})
@@ -84,14 +99,76 @@ export default (props)=>{
 		})
 	}
 
-	return <ScrollView>
+	var reportParroquias = (setLoading)=>{
+		if(downloading) return;
+		API.formatURL('parroquias/dump/'+moment().unix()+'.csv').then(url=>{
+			getFile(url, 'Parroquias.csv', setLoading);
+		})
+	}
+
+	var reportCapillas = (setLoading)=>{
+		if(downloading) return;
+		API.formatURL('capillas/dump/'+moment().unix()+'.csv').then(url=>{
+			getFile(url, 'Capillas.csv', setLoading);
+		})
+	}
+
+	var reportAcompanantes = (setLoading)=>{
+		if(downloading) return;
+		API.formatURL('reporte/acompanantes').then(url=>{
+			getFile(url, 'Acompanantes.csv', setLoading);
+		})
+	}
+
+	var reportAdministradores = setLoading=>{
+		if(downloading) return;
+		API.formatURL('reporte/admins').then(url=>{
+			getFile(url, 'Administradores.csv', setLoading);
+		})
+	}
+
+	var reportCoordinadores = setLoading=>{
+		if(downloading) return;
+		API.formatURL('reporte/coordinadores').then(url=>{
+			getFile(url, 'Coordinadores.csv', setLoading);
+		})
+	}
+
+	var reportDecanatos = setLoading=>{
+		if(downloading) return;
+		API.formatURL('reporte/decanatos').then(url=>{
+			getFile(url, 'Decanatos.csv', setLoading);
+		})
+	}
+
+	var reportZonas = setLoading=>{
+		if(downloading) return;
+		API.formatURL('reporte/zonas').then(url=>{
+			getFile(url, 'Zonas.csv', setLoading);
+		})
+	}
+
+	return <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
 		<Text style={[styles.sectionText, { marginTop: 10 }]}>GRUPOS</Text>
+		<Item text="Todos los grupos" onPress={reportAllGrupos} />
 		<Item text="Miembros de grupo" onPress={reportGroup} />
 		<Item text="Asistencia de grupo por fecha" onPress={reportGroupAssistance} />
 
 		<Text style={styles.sectionText}>CAPACITACIONES</Text>
+		<Item text="Todas las capacitaciones" onPress={reportAllCapacitaciones} />
 		<Item text="Participantes de capacitación" onPress={reportCapacitacion} />
 		<Item text="Asistencia de capacitación" onPress={reportCapacitacionAssistance} />
+
+		<Text style={styles.sectionText}>PARROQUIAS</Text>
+		<Item text="Parroquias" onPress={reportParroquias} />
+		<Item text="Capillas" onPress={reportCapillas} />
+
+		<Text style={styles.sectionText}>OTROS</Text>
+		<Item text="Acompañantes" onPress={reportAcompanantes} />
+		<Item text="Administradores" onPress={reportAdministradores} />
+		<Item text="Coordinadores" onPress={reportCoordinadores} />
+		<Item text="Decanatos" onPress={reportDecanatos} />
+		<Item text="Zonas" onPress={reportZonas} />
 	</ScrollView>;
 }
 
@@ -101,6 +178,6 @@ const styles = StyleSheet.create({
 		color: 'gray',
 		marginBottom: 10,
 		paddingLeft: 15,
-		marginTop: 20,
+		marginTop: 40,
 	}
 });
