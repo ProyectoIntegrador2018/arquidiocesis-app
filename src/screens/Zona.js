@@ -1,3 +1,9 @@
+/* 
+Nombre: Zona.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para ver la lista de parroquias de una zona,
+			 el acompañante de la zona y los decanatos de la zona
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

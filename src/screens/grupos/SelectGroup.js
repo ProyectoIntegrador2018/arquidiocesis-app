@@ -1,3 +1,8 @@
+/* 
+Nombre: SelectGroup.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para seleccionar un grupo HEMA de una parroquia o capilla
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

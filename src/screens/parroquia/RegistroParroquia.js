@@ -1,3 +1,8 @@
+/* 
+Nombre: RegistroParroquia.js
+Usuario con acceso: Admin
+Descripción: Pantalla para registrar parroquias en el sistema
+*/
 import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Input, Button, Picker, Alert } from '../../components'

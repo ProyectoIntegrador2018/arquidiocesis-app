@@ -1,3 +1,8 @@
+/* 
+Nombre: DetalleCoordinador.js
+Usuario con acceso: Admin, acompañante
+Descripción: Pantalla para ver la información personal de los coordinadores en el sistema
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { API } from '../../lib';

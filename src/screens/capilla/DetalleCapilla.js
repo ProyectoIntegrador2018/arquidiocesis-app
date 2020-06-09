@@ -1,3 +1,8 @@
+/* 
+Nombre: DetalleCapilla.js
+Usuario con acceso: Admin, Acompañante, Coordinador 
+Descripción: Pantalla para seleccionar un grupo de capacitación para un asistente
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { API } from '../../lib';

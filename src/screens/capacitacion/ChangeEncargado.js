@@ -1,3 +1,8 @@
+/* 
+Nombre: ChangeEncargado.js
+Usuario con acceso: Admin, Acompañante
+Descripción: Pantalla para cambiar un encargado de capacitación
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Button, Picker, Alert } from '../../components';

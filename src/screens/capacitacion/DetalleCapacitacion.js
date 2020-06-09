@@ -1,3 +1,9 @@
+/* 
+Nombre: DetalleCapacitacion.js
+Usuario con acceso: Admin, Acompañante, Coordinador
+Descripción: Pantalla para ver la información a detalle de un grupo de capacitación
+			Tambien presenta opción para eliminar
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

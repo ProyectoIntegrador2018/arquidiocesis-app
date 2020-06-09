@@ -1,3 +1,8 @@
+/* 
+Nombre: EditAcompañante.js
+Usuario con acceso: Admin
+Descripción: Pantalla que edita la información de los acompañantes de zona y decanato
+*/
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'

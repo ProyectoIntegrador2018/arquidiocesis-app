@@ -1,3 +1,8 @@
+/* 
+Nombre: EditGrupo.js
+Usuario con acceso: Admin
+Descripción: Pantalla para editar la información de los grupos HEMA
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Switch } from 'react-native';
 import { AlphabetList, ErrorView, Input, Button, Picker } from '../../components';

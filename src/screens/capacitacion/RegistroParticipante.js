@@ -1,3 +1,8 @@
+/* 
+Nombre: RegistroParticipante.js
+Usuario con acceso: Admin, Acompañante
+Descripción: Pantalla para registrar un participante de un grupo de Capacitación 
+*/
 import React, { useState, useRef } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'

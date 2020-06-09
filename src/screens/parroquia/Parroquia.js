@@ -1,3 +1,8 @@
+/* 
+Nombre: Parroquia.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para ver la información de un parroquia
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

@@ -1,3 +1,8 @@
+/* 
+Nombre: EditarCapacitación.js
+Usuario con acceso: Admin, Acompañante
+Descripción: Pantalla para editar la información a detalle de un grupo de capacitación 
+*/
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Input, Button, Alert, DatePicker } from '../../components'

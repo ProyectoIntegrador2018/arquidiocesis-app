@@ -1,3 +1,8 @@
+/* 
+Nombre: DetalleAdmin.js
+Usuario con acceso: Admin
+Descripción: Pantalla que muestra la información de un usuario registrado en el sistema
+*/
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { API } from '../../lib';

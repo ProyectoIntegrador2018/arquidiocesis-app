@@ -1,3 +1,8 @@
+/* 
+Nombre: SelectCapacitación.js
+Usuario con acceso: Admin, Acompañante
+Descripción: Pantalla para seleccionar un grupo de capacitación para un asistente
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

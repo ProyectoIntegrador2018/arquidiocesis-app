@@ -1,3 +1,8 @@
+/* 
+Nombre: AsistenciaCapacitacion.js
+Usuario con acceso: Admin, Acompañante, Coordinador
+Descripción: Pantalla que permite tomar asistencia en los grupos de capacitación
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { CheckBox } from 'react-native-elements'

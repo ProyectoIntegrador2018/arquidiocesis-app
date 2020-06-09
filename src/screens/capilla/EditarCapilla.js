@@ -1,3 +1,8 @@
+/* 
+Nombre: EditarCapilla.js
+Usuario con acceso: Admin, Acompañante
+Descripción: Pantalla para editar la información de las capillas
+*/
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Input, Button, Alert } from '../../components'

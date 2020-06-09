@@ -1,3 +1,8 @@
+/* 
+Nombre: ChangePassword.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para que un usuario registrado pueda cambiar su contraseña
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { Input, Button, Alert } from '../components'

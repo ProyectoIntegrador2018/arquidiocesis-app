@@ -1,3 +1,8 @@
+/* 
+Nombre: Coordinadores.js
+Usuario con acceso: Admin
+Descripción: Pantalla para ver la información de todos los coordinadores en el sistema
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

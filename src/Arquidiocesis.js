@@ -1,3 +1,8 @@
+/* 
+Nombre: Arquidiócesis.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Archivo que gestiona el tab navigation bar y el stack de pantallas de la aplicación
+*/
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, StatusBar, TouchableOpacity, Alert, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';

@@ -1,3 +1,8 @@
+/* 
+Nombre: Reports.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para gestionar la generación de reportes del sistema
+*/
 import React, { useState, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, Platform, Linking } from 'react-native';
 import { Item, Alert } from '../components';

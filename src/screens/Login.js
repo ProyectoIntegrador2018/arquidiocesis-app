@@ -1,3 +1,8 @@
+/* 
+Nombre: Login.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para que un usuario registrado pueda iniciar sesión
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, StatusBar } from 'react-native';
 import { Input, Button } from '../components'

@@ -1,3 +1,8 @@
+/* 
+Nombre: EditParroquia.js
+Usuario con acceso: Admin
+Descripción: Pantalla para editar la información de una parroquia
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Input, Button, Picker, Alert } from '../../components'

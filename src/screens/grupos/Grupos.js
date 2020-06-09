@@ -1,3 +1,8 @@
+/* 
+Nombre: Grupos.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para ver los grupos HEMA
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

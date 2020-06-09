@@ -1,3 +1,8 @@
+/* 
+Nombre: GrupoBajasTemporales.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para ver la información de las bajas temporales registradas en un grupo HEMA
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

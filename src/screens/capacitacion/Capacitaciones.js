@@ -1,3 +1,8 @@
+/* 
+Nombre: Capacitaciones.js
+Usuario con acceso: Admin, Acompañante, Coordinador
+Descripción: Pantalla que muestra los grupos de capacitaciones
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Alert } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

@@ -1,3 +1,8 @@
+/* 
+Nombre: AdminUsers.js
+Usuario con acceso: Admin
+Descripción: Pantalla que muestra la información de los usuarios que tienen acceso al sistema, así como sus permisos
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'

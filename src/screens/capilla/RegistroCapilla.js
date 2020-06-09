@@ -1,3 +1,8 @@
+/* 
+Nombre: RegistrarCapilla.js
+Usuario con acceso: Admin
+Descripción: Pantalla para registrar la información de las capillas
+*/
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Input, Button, Alert } from '../../components'

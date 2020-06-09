@@ -1,3 +1,8 @@
+/* 
+Nombre: RegistroCoordinador.js
+Usuario con acceso: Admin
+Descripción: Pantalla para registrar un nuevo coordinador en el sistema
+*/
 import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'

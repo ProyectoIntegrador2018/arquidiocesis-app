@@ -1,3 +1,8 @@
+/* 
+Nombre: DetalleAcompañante.js
+Usuario con acceso: Admin
+Descripción: Pantalla que muestra la información de los acompañantes de zona y decanato
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { API } from '../../lib';

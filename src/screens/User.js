@@ -1,3 +1,8 @@
+/* 
+Nombre: User.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para que un usuario registrado pueda gestionar su perfil
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Item, Alert } from '../components'

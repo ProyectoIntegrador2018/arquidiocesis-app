@@ -1,3 +1,8 @@
+/* 
+Nombre: FichaMedica.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para ver la ficha medica de un miembro de un grupo HEMA
+*/
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 import { API } from '../../lib';

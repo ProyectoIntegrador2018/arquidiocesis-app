@@ -1,3 +1,8 @@
+/* 
+Nombre: RegistroGrupo.js
+Usuario con acceso: Admin
+Descripción: Pantalla para registrar un grupo HEMA
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet,  Switch, ActivityIndicator} from 'react-native';
 import { Input, Button, Picker } from '../../components'

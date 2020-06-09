@@ -1,3 +1,9 @@
+/* 
+Nombre: DetalleParticipante.js
+Usuario con acceso: Admin, Acompañante, Coordinador
+Descripción: Pantalla para ver la información a detalle de un participante de una capacitación 
+			Tambien presenta opción para eliminar el participante
+*/
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input, Item, LoadingView, ErrorView, Alert } from '../../components'

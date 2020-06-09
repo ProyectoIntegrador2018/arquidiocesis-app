@@ -1,3 +1,8 @@
+/* 
+Nombre: Parroquias.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para ver la lista de parroquias en el sistema
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { AlphabetList, ErrorView, Button } from '../../components';

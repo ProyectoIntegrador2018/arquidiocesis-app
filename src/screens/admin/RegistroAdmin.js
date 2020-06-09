@@ -1,3 +1,8 @@
+/* 
+Nombre: RegistroAdmin.js
+Usuario con acceso: Admin
+Descripción: Pantalla para registrar la información de un usuario que tendrá acceso al sistema
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { API, Util } from '../../lib';

@@ -1,3 +1,8 @@
+/* 
+Nombre: RegistroAcompañante.js
+Usuario con acceso: Admin
+Descripción: Pantalla que muestra los campos para el registro de los acompañantes de zona y decanato
+*/
 import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'

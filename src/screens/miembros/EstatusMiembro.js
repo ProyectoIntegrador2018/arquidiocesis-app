@@ -1,3 +1,9 @@
+/* 
+Nombre: EstatusMiembro.js
+Usuario con acceso: Admin
+Descripción: Pantalla para editar el estatus de un miembro de un grupo HEMA 
+			(baja definitiva, activo, baja temporal)
+*/
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, Picker, Alert } from '../../components';

@@ -1,3 +1,8 @@
+/* 
+Nombre: ZonasList.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para ver la lista de zonas en el sistema
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { AlphabetList, ErrorView } from '../components';

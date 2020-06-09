@@ -1,3 +1,8 @@
+/* 
+Nombre: EditMiembro.js
+Usuario con acceso: Admin
+Descripción: Pantalla para editar la información personal de un miembro de un grupo HEMA
+*/
 import React, { useState, useRef } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'

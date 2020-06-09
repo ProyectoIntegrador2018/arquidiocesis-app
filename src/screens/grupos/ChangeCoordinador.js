@@ -1,3 +1,8 @@
+/* 
+Nombre: ChangeCoordinador.js
+Usuario con acceso: Admin
+Descripción: Pantalla para cambiar coordinadores de los grupos HEMA
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Button, Picker } from '../../components';

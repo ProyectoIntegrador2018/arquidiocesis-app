@@ -1,3 +1,8 @@
+/* 
+Nombre: EditarParticipante.js
+Usuario con acceso: Admin, Acompañante
+Descripción: Pantalla para editar la información a detalle de un participante en un grupo de capacitación 
+*/
 import React, { useState, useRef } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'

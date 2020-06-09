@@ -1,3 +1,8 @@
+/* 
+Nombre: AsistenciaGrupo.js
+Usuario con acceso: Admin, acompañante, coordinador
+Descripción: Pantalla para tomar asistencia en los grupos HEMA
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator,TouchableOpacity } from 'react-native';
 import { CheckBox } from 'react-native-elements'

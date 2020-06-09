@@ -1,3 +1,8 @@
+/* 
+Nombre: RegistroCapacitación.js
+Usuario con acceso: Admin, Acompañante
+Descripción: Pantalla para registrar un grupo de capacitación 
+*/
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'

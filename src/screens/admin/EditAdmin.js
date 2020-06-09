@@ -1,3 +1,8 @@
+/* 
+Nombre: EditAdmin.js
+Usuario con acceso: Admin
+Descripción: Pantalla para editar la información de un usuario registrado en el sistema
+*/
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
