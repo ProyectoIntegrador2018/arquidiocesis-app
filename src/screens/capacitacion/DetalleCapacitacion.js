@@ -229,6 +229,10 @@ export default (props)=>{
 							<Item text="Eliminar capacitación" onPress={deleteCapacitacion}  loading={deleting}/>
 						</View>
 					) : null}
+					
+					{capacitacion.fecha_creada && capacitacion.fecha_creada._seconds && (
+						<Text style={{ textAlign: 'center', fontSize: 18, color: '#5e5e5e', marginVertical: 20, backgroundColor: '#ececec', padding: 10 }}>Fecha creación: {moment.unix(capacitacion.fecha_creada._seconds).format('DD/MMMM/YYYY')}</Text>
+					)}
 				</>
 			) : (
 				<LoadingView />

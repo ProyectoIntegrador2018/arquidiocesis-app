@@ -298,6 +298,10 @@ export default (props)=>{
 					{ user && (user.type=='admin' || user.type=='superadmin') && <Item text="Cambiar coordinador" onPress={changeCoordinador} /> }
 					<Item text="Ver bajas temporales" onPress={bajasTemporales} />
 					{ user && (user.type=='admin' || user.type=='superadmin') && <Item text="Eliminar grupo" onPress={deleteGroup}  loading={sending}/> }
+
+					{grupo.fecha_creada && grupo.fecha_creada._seconds && (
+						<Text style={{ textAlign: 'center', fontSize: 18, color: '#5e5e5e', marginVertical: 20, backgroundColor: '#ececec', padding: 10 }}>Fecha creación: {moment.unix(grupo.fecha_creada._seconds).format('DD/MMMM/YYYY')}</Text>
+					)}
 				</View>
 			) : (
 				<View style={{ marginTop: 50 }}>
