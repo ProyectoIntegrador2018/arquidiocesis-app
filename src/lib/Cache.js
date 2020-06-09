@@ -1,7 +1,7 @@
 let zonas = false;
 let zonas_dirty = false;
 var getZonas = ()=>zonas;
-var getZona = id=>zonas.find(a=>a.id==id && a.cached);
+var getZona = id=>zonas ? zonas.find(a=>a.id==id && a.cached) : null;
 var isZonasDirty = ()=>zonas_dirty;
 var setZona = (i)=>{
 	i.cached = true;
@@ -30,7 +30,7 @@ var setZonaAcompanante = (id, acompanante)=>{
 let decanatos = false;
 let decanatos_dirty = false;
 var getDecanatos = ()=>decanatos;
-var getDecanato = id=>decanatos.find(a=>a.id==id && a.cached);
+var getDecanato = id=>decanatos ? decanatos.find(a=>a.id==id && a.cached) : null;
 var isDecanatosDirty = ()=>decanatos_dirty;
 var setDecanato = (i)=>{
 	i.cached = true;
@@ -59,7 +59,7 @@ var setDecanatoAcompanante = (id, acompanante)=>{
 let parroquias = false;
 let parroquias_dirty = false;
 var getParroquias = ()=>parroquias;
-var getParroquia = id=>parroquias.find(a=>a.id==id && a.cached);
+var getParroquia = id=>parroquias ? parroquias.find(a=>a.id==id && a.cached) : null;
 var isParroquiasDirty = ()=>parroquias_dirty;
 var setParroquias = z=>{
 	parroquias =  z;
@@ -115,7 +115,7 @@ var addParroquia = i=>{
 let capillas = false;
 let capillas_dirty = false;
 var getCapillas = ()=>capillas;
-var getCapilla = id=>parroquias.find(a=>a.id==id && a.cached);
+var getCapilla = id=>capillas ? capillas.find(a=>a.id==id && a.cached) : null;
 var isCapillasDirty = ()=>capillas_dirty;
 var setCapillas = z=>{
 	capillas =  z;
@@ -140,7 +140,7 @@ var addCapilla = i=>{
 let coordinadores = false;
 let coordinadores_dirty = false;
 var getCoordinadores = ()=>coordinadores;
-var getCoordinador = id=>coordinadores.find(a=>a.id==id && a.cached);
+var getCoordinador = id=>coordinadores ? coordinadores.find(a=>a.id==id && a.cached) : null;
 var isCoordinadoresDirty = ()=>coordinadores_dirty;
 var setCoordinadores = z=>{
 	coordinadores =  z;
@@ -164,7 +164,7 @@ var addCoordinador = i=>{
 let grupos = false;
 let grupos_dirty = false;
 var getGrupos = ()=>grupos;
-var getGrupo = id=>grupos.find(a=>a.id==id && a.cached);
+var getGrupo = id=>grupos ? grupos.find(a=>a.id==id && a.cached) : null;
 var isGruposDirty = ()=>grupos_dirty;
 var setGrupos = z=>{
 	grupos =  z;
@@ -240,7 +240,7 @@ var setMiembroFicha = (id, ficha)=>{
 
 let capacitaciones = false;
 var getCapacitaciones = ()=>capacitaciones;
-var getCapacitacion = id=>capacitaciones.find(a=>a.id==id && a.cached);
+var getCapacitacion = id=>capacitaciones ? capacitaciones.find(a=>a.id==id && a.cached) : null;
 var setCapacitaciones = z=>{
 	capacitaciones = z;
 }
@@ -314,7 +314,7 @@ var changeCapacitacionEncargado = (cap, encargado)=>{
 
 
 var clearCache = ()=>{
-	miembros = false;
+	miembros = [];
 	grupos = false;
 	coordinadores = false;
 	capillas = false;

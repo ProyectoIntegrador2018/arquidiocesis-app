@@ -334,6 +334,7 @@ async function getGrupo(id, force=false){
 	var res = await get('grupos/'+id);
 	if(res.error) throw res;
 	else {
+		res.data.id = id;
 		Cache.setGrupo(res.data);
 		return res.data;
 	}
