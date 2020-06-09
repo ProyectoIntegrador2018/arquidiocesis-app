@@ -9,9 +9,10 @@ export default (props)=>{
 			data: props.data,
 			organize: props.organize,
 			renderItem: props.renderItem,
-			onSelect: props.onSelect
+			onSelect: props.onSelect,
+			sort: (props.sort || 'nombre'),
 		})
 	}
 
-	return <Input name={props.name} value={props.value} readonly onPress={selectValue} icon="chevron-right" />
+	return <Input name={props.name} value={props.value} readonly onPress={selectValue} icon="chevron-right" required={props.required} />
 }

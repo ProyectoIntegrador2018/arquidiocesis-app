@@ -170,6 +170,15 @@ export default (props)=>{
 			id: a
 		}))
 	}
+
+	var gotoEncargado = ()=>{
+		if(!capacitacion || !capacitacion.encargado){
+			Alert.alert('Error', 'La capacitacion no tiene encargado.');
+		}
+		props.navigation.navigate('DetalleCoordinador', {
+			persona: { id: capacitacion.encargado }
+		});
+	}
 	
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
@@ -215,6 +224,7 @@ export default (props)=>{
 
 					{ user && (user.type=='admin' || user.type=='superadmin' || user.type.startsWith('acompañante')) ? (
 						<View style={{ marginTop: 20 }}>
+							<Item text="Ver encargado" onPress={gotoEncargado} />
 							<Item text="Cambiar encargado" onPress={changeEncargado} />
 							<Item text="Eliminar capacitación" onPress={deleteCapacitacion}  loading={deleting}/>
 						</View>

@@ -5,7 +5,7 @@ Descripción: Pantalla para registrar un grupo HEMA
 */
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet,  Switch, ActivityIndicator} from 'react-native';
-import { Input, Button, Picker } from '../../components'
+import { Input, Button, Picker, PickerScreen } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API } from '../../lib';
 
@@ -48,7 +48,7 @@ export default (props)=>{
 		if(!parroquia) return alert("Favor de seleccionar una parroquia");
 
 		setLoading(true);
-		API.addGrupo(name, coordinador.value, (capilla && isEnabled ? null : parroquia.value), (capilla ? capilla.value : null)).then(new_grupo=>{
+		API.addGrupo(name, coordinador.id, (capilla && isEnabled ? null : parroquia.id), (capilla ? capilla.id : null)).then(new_grupo=>{
 			setLoading(false);
 			if(!new_grupo) return alert("Hubo un error registrando el coordinador");
 			new_grupo.new = true;
@@ -67,7 +67,7 @@ export default (props)=>{
 		setCapilla(null);
 		setCapillasList(false)
 		if(!isEnabled && !state) return;
-		API.getParroquia(p.value).then(c=>{
+		API.getParroquia(p.id).then(c=>{
 			setCapillasList(c.capillas || []);
 		});
 	}
@@ -85,24 +85,17 @@ export default (props)=>{
 			<Text style={styles.header}>Registrar Grupo</Text> 
 			<Input name="Nombre" value={name} onChangeText={setName} />
 			{coordinadorList ? (
-				<Picker name={'Seleccionar coordinador'} items={coordinadorList.map(a=>({ label: a.nombre, value: a.id, ...a }))} onValueChange={setCoordinador} />
+				<PickerScreen name={'Seleccionar coordinador'} data={coordinadorList} value={coordinador ? `${coordinador.nombre} ${coordinador.apellido_paterno} ${coordinador.apellido_materno}` : ''} onSelect={setCoordinador} navigation={props.navigation} renderItem={i=>{
+					return <View>
+						<Text style={{ fontSize: 18 }}>{i.nombre} {i.apellido_paterno} {i.apellido_materno}</Text>
+						<Text style={{ color: 'gray' }}>{i.email}</Text>
+					</View>
+				}} />
 			) : (
 				<ActivityIndicator style={{ height: 80 }} />
 			)}
-			{coordinador ? (
-				<View style={{ marginBottom: 10 }}>
-					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-						<Text style={{ marginRight: 5, fontSize: 16 }}>Nombre:</Text>
-						<Text style={{ fontSize: 16 }}>{coordinador.nombre}</Text>
-					</View>
-					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-						<Text style={{ marginRight: 5, fontSize: 16 }}>Correo:</Text>
-						<Text style={{ fontSize: 16 }}>{coordinador.email}</Text>
-					</View>
-				</View>
-			) : null}
 			{parroquiasList ? (
-				<Picker name={'Seleccionar Parroquia'} items={parroquiasList.map(a=>({ label: a.nombre, value: a.id }))} onValueChange={parroquiaSelected} />
+				<PickerScreen value={parroquia ? parroquia.nombre : ''} name={'Seleccionar Parroquia'} data={parroquiasList} sort={'nombre'} onSelect={parroquiaSelected} navigation={props.navigation} />
 			) : (
 				<ActivityIndicator style={{ height: 80 }} />
 			)}
@@ -122,7 +115,7 @@ export default (props)=>{
 			{isEnabled ? (
 				capillasList ? (
 					capillasList.length>0 ? (
-						<Picker name={'Seleccionar Capilla'} items={capillasList.map(a=>({ label: a.nombre, value: a.id }))} onValueChange={setCapilla} />
+						<PickerScreen value={capilla ? capilla.nombre : ''} name={'Seleccionar Capilla'} data={capillasList} sort={'nombre'} onSelect={setCapilla} navigation={props.navigation} />
 					) : (
 						<Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 10, backgroundColor: 'white' }}>Esta parroquia no tiene capillas.</Text>
 					)

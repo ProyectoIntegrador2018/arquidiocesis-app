@@ -5,16 +5,17 @@ Descripción: Pantalla para cambiar un encargado de capacitación
 */
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { Button, Picker, Alert } from '../../components';
+import { Button, PickerScreen, Alert } from '../../components';
 import { API } from '../../lib';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props)=>{
+	var { id, encargado, onEdit } = props.route.params;
+
 	var [loading, setLoading] = useState(false);
 	var [coordinador, setCoordinador]= useState(false);
 	var [coordinadorList, setCoordinadorList] = useState(false);
 
-	var { id, encargado, onEdit } = props.route.params;
 
 	props.navigation.setOptions({
 		headerTitle: 'Cambiar encargado',
@@ -23,13 +24,9 @@ export default (props)=>{
 	useEffect(()=>{
 		API.getCoordinadores().then(c=>{
 			setCoordinadorList(c);
+			setCoordinador(c.find(a=>a.id==encargado));
 		})
 	}, []);
-
-	var getCoordinadorIndex = ()=>{
-		if(!coordinadorList) return;
-		return coordinadorList.findIndex(a=>a.id==encargado);
-	}
 
 	var save = ()=>{
 		if(!encargado) return alert("Favor de seleccionar un coordinador");
@@ -54,7 +51,12 @@ export default (props)=>{
 
 	return <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
 		{coordinadorList ? (
-			<Picker name={'Seleccionar encargado'} items={coordinadorList.map(a=>({ label: `${a.nombre} ${a.apellido_paterno} ${a.apellido_materno}`.trim(), value: a.id, ...a }))} onValueChange={setCoordinador} select={getCoordinadorIndex()} />
+			<PickerScreen name="Encargado" data={coordinadorList} value={coordinador ? `${coordinador.nombre} ${coordinador.apellido_paterno} ${coordinador.apellido_materno}` : ''} sort={'nombre'} required onSelect={setCoordinador} navigation={props.navigation} renderItem={i=>{
+				return <View>
+					<Text style={{ fontSize: 18 }}>{i.nombre} {i.apellido_paterno} {i.apellido_materno}</Text>
+					<Text style={{ color: 'gray' }}>{i.email}</Text>
+				</View>
+			}} />
 		) : (
 			<ActivityIndicator style={{ height: 80 }} />
 		)}

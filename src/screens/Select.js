@@ -17,7 +17,7 @@ export default (props)=>{
 		props.route.params.onRefresh ? (<RefreshControl refreshing={props.route.params.refreshing} onRefresh={props.route.params.onRefresh} />) : null
 	}>
 		{/* <List data={props.route.params.data} sort={props.route.params.sort || 'nombre'} renderItem={(props.route.params.renderItem || null)} /> */}
-		<AlphabetList data={props.route.params.data} organize={props.route.params.organize} renderItem={(props.route.params.renderItem || null)} onSelect={onSelect} />
+		<AlphabetList data={props.route.params.data} organize={props.route.params.organize} sort={props.route.params.sort} renderItem={(props.route.params.renderItem || null)} onSelect={onSelect} />
 	</ScrollView>
 }
 

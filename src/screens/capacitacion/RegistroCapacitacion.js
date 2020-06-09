@@ -4,8 +4,8 @@ Usuario con acceso: Admin, Acompañante
 Descripción: Pantalla para registrar un grupo de capacitación 
 */
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Input, Button, Alert, DatePicker, PickerScreen } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
 import moment from 'moment/min/moment-with-locales'
@@ -38,18 +38,15 @@ export default (props)=>{
 		})
 	}, [])
 
-	var formatCoordinadores = ()=>{
-		if(!coordinaList) return []
-		return coordinaList.map(a=>({ label: `${a.nombre} ${a.apellido_paterno} ${a.apellido_materno}`.trim(), value: a.id }))
-	}
-
 	var doRegister = ()=>{
 		var data = {
 			nombre: name,
 			inicio: dateStart,
 			fin: dateEnd,
-			encargado: coordinador ? coordinador.value : null
+			encargado: coordinador ? coordinador.id : null
 		}
+
+		console.log(data);
 		var { valid, prompt } = Util.validateForm(data, {
 			nombre: { type: 'empty', prompt: 'Favor de introducir el nombre de la capacitación.' },
 			inicio: { type: 'empty', prompt: 'Favor de introducir la fecha de inicio de la capacitación.' },
@@ -105,7 +102,12 @@ export default (props)=>{
 			<DatePicker onDateChange={d=>setDateStart(d)} date={dateStart} name="Fecha inicio" />
 			<DatePicker onDateChange={d=>setDateEnd(d)} date={dateEnd} name="Fecha fin" />
 			{coordinaList!==false ? (
-				<Picker name="Encargado" items={formatCoordinadores()} placeholder={{ label: 'Selecciona coordinador' }} required onValueChange={setCoordinador} />
+				<PickerScreen name="Encargado" data={coordinaList} value={coordinador ? `${coordinador.nombre} ${coordinador.apellido_paterno} ${coordinador.apellido_materno}` : ''} sort={'nombre'} required onSelect={setCoordinador} navigation={props.navigation} renderItem={i=>{
+					return <View>
+						<Text style={{ fontSize: 18 }}>{i.nombre} {i.apellido_paterno} {i.apellido_materno}</Text>
+						<Text style={{ color: 'gray' }}>{i.email}</Text>
+					</View>
+				}} />
 			) : (
 				<ActivityIndicator style={{ height: 80 }} />
 			)}
