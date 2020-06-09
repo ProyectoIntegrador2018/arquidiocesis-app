@@ -312,6 +312,23 @@ async function getCoordinadores(force=false){
 	}
 }
 
+async function getCoordinador(id, force=false){
+	if(!force){
+		var coordCache = Cache.getCoordinador(id);
+		if(coordCache){
+			return coordCache;
+		}
+	}
+
+
+	var p = await get('coordinadores/'+id);
+	if(p.error) throw p;
+	else {
+		Cache.setCoordinador(p.data);
+		return p.data;
+	}
+}
+
 async function getGrupos(force=false){
 	if(!force && Cache.getGrupos()){
 		return Cache.getGrupos();
@@ -868,5 +885,6 @@ export default {
 	getParticipantes,
 	changeCapacitacionEncargado,
 	editCapilla,
-	formatURL
+	formatURL,
+	getCoordinador
 }

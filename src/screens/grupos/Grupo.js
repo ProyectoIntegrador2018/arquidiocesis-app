@@ -98,6 +98,7 @@ export default (props)=>{
 	var goCapilla = ()=>{
 		var p = grupo.capilla;
 		p.readonly = true;
+		p.showParroquia = true;
 		props.navigation.navigate('DetalleCapilla', p)
 	}
 

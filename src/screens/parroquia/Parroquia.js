@@ -134,6 +134,11 @@ export default (props)=>{
 		});
 	}
 
+	var gotoDecanato = ()=>{
+		if(!(parroquia && parroquia.decanato && parroquia.decanato.id)) return;
+		props.navigation.navigate('Decanato', parroquia.decanato);
+	}
+
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{parroquia.nombre}</Text>
@@ -177,6 +182,7 @@ export default (props)=>{
 						</View>
 					)}
 
+					{ parroquia && parroquia.decanato && parroquia.decanato.id && <Item text="Ver decanato" onPress={gotoDecanato} /> }
 					{!readonly && (user && (user.type=='admin' || user.type=='superadmin')) && <Item text="Eliminar parroquia" onPress={deleteParroquia} loading={deleting} />}
 				</View>
 			) : (

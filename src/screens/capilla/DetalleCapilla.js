@@ -93,10 +93,17 @@ export default (props)=>{
 		});
 	}
 
+	var gotoParroquia = ()=>{
+		props.navigation.navigate('Parroquia', {
+			showCapillas: false,
+			id: capilla.parroquia
+		})
+	}
+
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{props.route.params.nombre || capilla.nombre}</Text>
-			{user && (user.type=='admin' || user.type=='superadmin') ? (
+			{user && (user.type=='admin' || user.type=='superadmin') && !props.route.params.readonly ? (
 				<TouchableOpacity onPress={editCapilla}>
 					<FontAwesome5 name="edit" style={styles.editIcon} />
 				</TouchableOpacity>
@@ -119,9 +126,10 @@ export default (props)=>{
 					{grupos && grupos.length>0 && (
 						<View>
 							<Text style={styles.sectionText}>GRUPOS</Text>
-							<List data={grupos} sort={'nombre'} onSelect={gotoGroup} />
+							<List data={grupos} sort={'nombre'} onSelect={gotoGroup} contentStyle={{ paddingBottom: 20 }} />
 						</View>
 					)}
+					{props.route.params.showParroquia && <Item text="Ver parroquia" onPress={gotoParroquia} />}
 
 					{user && (user.type=='admin' || user.type=='superadmin') && <Item text="Eliminar capilla" onPress={deleteCapilla} loading={deleting} />}
 				</View>
@@ -162,8 +170,7 @@ const styles = StyleSheet.create({
 	sectionText: {
 		fontSize: 14,
 		color: 'gray',
-		marginVertical: 10,
-		marginTop: 30,
+		marginBottom: 10,
 		paddingLeft: 15,
 	}
 })

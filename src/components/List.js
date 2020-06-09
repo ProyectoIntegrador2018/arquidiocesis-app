@@ -18,7 +18,7 @@ export default  (props)=>{
 
 	if(props.scroll!==false){
 		return (
-			<ScrollView style={props.style} contentContainerStyle={{ paddingBottom: 50 }} refreshControl={
+			<ScrollView style={props.style} contentContainerStyle={[{ paddingBottom: 50 }, props.contentStyle]} refreshControl={
 				(props.refreshing !== undefined) ? <RefreshControl refreshing={(props.refreshing || false)} onRefresh={props.onRefresh} /> : null
 			}>
 				{renderChild()}

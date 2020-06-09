@@ -33,6 +33,7 @@ export default (props)=>{
 			setRefreshing(false);
 			setError(false);
 		}).catch(err=>{
+			console.log(err);
 			setError(true);
 			setRefreshing(false);
 		})
@@ -40,6 +41,7 @@ export default (props)=>{
 
 	var getDecanato = ()=>{
 		setRefreshing(true);
+		setError(false);
 		API.getDecanato(decanato.id, true).then(d=>{
 			d.id = decanato.id;
 			setDecanato(d);

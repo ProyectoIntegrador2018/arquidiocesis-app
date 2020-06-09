@@ -7,7 +7,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { API } from '../../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Input, Alert, Item } from '../../components';
+import { RefreshControl } from 'react-native-web-refresh-control'
+import { Input, Alert, Item, List, LoadingView } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
@@ -15,11 +16,11 @@ moment.locale('es')
 export default (props)=>{
 	var { onEdit, onDelete } = props.route.params;
 
-	var [persona, setPersona] = useState(props.route.params.persona)
-	var [error, setError] = useState(false);
-	var [refreshing, setRefreshing] = useState(false);
+	var [persona, setPersona] = useState(false)
 	var [deleting, setDeleting] = useState(false);
 	var [user, setUser] = useState(false);
+	var [refreshing, setRefreshing] = useState(false);
+	var [error, setError] = useState(false);
 
 	props.navigation.setOptions({
 		headerStyle: {
@@ -36,7 +37,25 @@ export default (props)=>{
 
 	useEffect(()=>{
 		API.getUser().then(setUser);
+		getCoordinador();
 	}, [])
+
+	var getCoordinador = (ref)=>{
+		if(ref) setRefreshing(true);
+		setError(false);
+		API.getCoordinador(props.route.params.persona.id, ref).then(data=>{
+			setPersona(data);
+			setError(false);
+			setRefreshing(false);
+		}).catch(err=>{
+			setError(true);
+			setRefreshing(false);
+		})
+	}
+
+	if(!persona){
+		return <LoadingView />
+	}
 
 	var deleteCoordinador = ()=>{
 		Alert.alert('¿Eliminar coordinador?', 'Esto eliminará los datos del coordinador y sus grupos se quedarán sin coordinador.', [
@@ -84,8 +103,53 @@ export default (props)=>{
 		return f.charAt(0).toUpperCase() + f.substr(1);
 	}
 
+	var gotoCapilla = i=>{
+		i.showParroquia = true;
+		props.navigation.navigate('DetalleCapilla', i);
+	}
+
+	var gotoParroquia = i=>{
+		props.navigation.navigate('DetalleParroquia', i);
+	}
+
+	var gotoGroup = i=>{
+		props.navigation.navigate('Grupo', {
+			grupo: i
+		});
+	}
+
+	var gotoDecanato = i=>{
+		props.navigation.navigate('Decanato', i);
+	}
+
 	return (
-		<KeyboardAwareScrollView contentContainerStyle={{ paddingBottom: 50 }}>
+		<KeyboardAwareScrollView contentContainerStyle={{ paddingBottom: 50 }} refreshControl={
+			<RefreshControl refreshing={refreshing} onRefresh={()=>getCoordinador(true)} />
+		}>
+			{persona.grupos && persona.grupos.length>0 && (
+				<View>
+					<Text style={styles.sectionText}>GRUPOS</Text>
+					<List data={persona.grupos} sort={'nombre'} onSelect={gotoGroup} contentStyle={{ paddingBottom: 0 }} />
+				</View>
+			)}
+			{persona.decanatos && persona.decanatos.length>0 && (
+				<View>
+					<Text style={styles.sectionText}>DECANATOS</Text>
+					<List data={persona.decanatos} sort={'nombre'} onSelect={gotoDecanato} contentStyle={{ paddingBottom: 0 }} />
+				</View>
+			)}
+			{persona.parroquias && persona.parroquias.length>0 && (
+				<View>
+					<Text style={styles.sectionText}>PARROQUIAS</Text>
+					<List data={persona.parroquias} sort={'nombre'} onSelect={gotoParroquia} contentStyle={{ paddingBottom: 0 }} />
+				</View>
+			)}
+			{persona.capillas && persona.capillas.length>0 && (
+				<View>
+					<Text style={styles.sectionText}>CAPILLAS</Text>
+					<List data={persona.capillas} sort={'nombre'} onSelect={gotoCapilla} contentStyle={{ paddingBottom: 0 }} />
+				</View>
+			)}
 			<View style={{ padding: 15 }}>
 				<Input name='Correo Electrónico' value={persona.email} readonly />
 				<Input name="Nombre" value={persona.nombre} readonly/>
@@ -121,5 +185,11 @@ const styles = StyleSheet.create({
 		color: 'grey',
 		marginBottom: 10,
 		marginTop: 20,
-  	}
+  	},
+	sectionText: {
+		fontSize: 14,
+		color: 'gray',
+		marginVertical: 10,
+		paddingLeft: 15,
+	}
 })
