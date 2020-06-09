@@ -20,9 +20,9 @@ export default (props)=>{
 	var [error, setError] = useState(false);
 	var [sending, setSending] = useState(false);
 	var [user, setUser] = useState(false);
+	var [coordinador, setCoordinador] = useState(false);
 
-	var onDelete = props.route.params.onDelete;
-	var onEdit = props.route.params.onEdit;
+	var { showOwner, onDelete, onEdit } = props.route.params;
 
 	props.navigation.setOptions({
 		headerStyle: {
@@ -48,6 +48,7 @@ export default (props)=>{
 			setMiembros(d.miembros || []);
 			setAsistencias(d.asistencias || []);
 			setError(false);
+			getCoordinador();
 		}).catch(err=>{
 			if(err.code==999){
 				Alert.alert('Error', 'No tienes acceso a este grupo');
@@ -56,6 +57,16 @@ export default (props)=>{
 			setError(true);
 		})
 	}, [])
+
+	var getCoordinador = ()=>{
+		if(grupo && grupo.coordinador){
+			API.getCoordinadores(false).then(c=>{
+				setCoordinador(c.find(a=>a.id==grupo.coordinador))
+			}).catch(err=>{
+				
+			})
+		}
+	}
 
 	var getGrupo = ()=>{
 		setRefreshing(true);
@@ -68,6 +79,7 @@ export default (props)=>{
 			setAsistencias(d.asistencias || []);
 			setRefreshing(false);
 			setError(false);
+			getCoordinador();
 		}).catch(err=>{
 			if(err.code==999){
 				Alert.alert('Error', 'No tienes acceso a este grupo');
@@ -154,7 +166,7 @@ export default (props)=>{
 			grupo,
 			onEdit: (new_grupo)=>{
 				setGrupo(new_grupo);
-				onEdit(new_grupo.id, new_grupo);
+				if(onEdit) onEdit(new_grupo.id, new_grupo);
 			}
 		})
 	}
@@ -207,6 +219,15 @@ export default (props)=>{
 		]);
 	}
 
+	var gotoCoordinador = i=>{
+		if(!coordinador){
+			Alert.alert('Error', 'El grupo no tiene coordinador.');
+		}
+		props.navigation.navigate('DetalleCoordinador', {
+			persona: coordinador
+		});
+	}
+
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText} numberOfLines={1}>{grupo.nombre}</Text>
@@ -224,7 +245,7 @@ export default (props)=>{
 			) : miembros!==false ? (
 				<View>
 					{miembros.length>0 && (user && (user.type == 'admin' || user.type == 'superadmin' || user.id==grupo.coordinador)) && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={assistance} />}
-					{ grupo.parroquia ? (
+					{ grupo.parroquia && showOwner!==false ? (
 						<View>
 							<Text style={styles.sectionText}>VER PARROQUIA</Text>
 							<TouchableOpacity onPress={goParroquia}>
@@ -236,7 +257,7 @@ export default (props)=>{
 								</View>
 							</TouchableOpacity>
 						</View>
-					) : grupo.capilla ? (
+					) : grupo.capilla && showOwner!==false ? (
 						<View>
 							<Text style={styles.sectionText}>VER CAPILLA</Text>
 							<TouchableOpacity onPress={goCapilla}>
@@ -272,6 +293,7 @@ export default (props)=>{
 						</View>
 					)}
 					<View style={{ marginTop: 40 }} />
+					{ coordinador && <Item text="Ver coordinador" onPress={gotoCoordinador} /> }
 					{ user && (user.type=='admin' || user.type=='superadmin') && <Item text="Cambiar coordinador" onPress={changeCoordinador} /> }
 					<Item text="Ver bajas temporales" onPress={bajasTemporales} />
 					{ user && (user.type=='admin' || user.type=='superadmin') && <Item text="Eliminar grupo" onPress={deleteGroup}  loading={sending}/> }

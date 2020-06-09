@@ -3,8 +3,8 @@ import { AsyncStorage, EventEmitter } from 'react-native';
 import Cache from './Cache';
 import moment from 'moment';
 
-const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
-// const ROOT_URL = 'http://192.168.0.131:8000/api/'
+// const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
+const ROOT_URL = 'http://192.168.0.131:8000/api/'
 var onLogout = null;
 
 function setOnLogout(cb){

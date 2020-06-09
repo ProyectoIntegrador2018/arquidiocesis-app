@@ -58,7 +58,8 @@ import {
 	EditarCapilla,
 	Reports,
 	SelectGroup,
-	SelectCapacitacion
+	SelectCapacitacion,
+	Select
 } from './screens';
 import { API } from './lib'
 
@@ -173,6 +174,7 @@ var App = (props)=>{
 				<Stack.Screen name="Reports" component={Reports}/>
 				<Stack.Screen name="SelectGroup" component={SelectGroup}/>
 				<Stack.Screen name="SelectCapacitacion" component={SelectCapacitacion}/>
+				<Stack.Screen name="Select" component={Select}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

@@ -8,6 +8,7 @@ import LoadingView from './LoadingView';
 import Item from './Item';
 import Alert from './Alert';
 import DatePicker from './DatePicker';
+import PickerScreen from './PickerScreen';
 
 
 export {
@@ -20,5 +21,6 @@ export {
 	List,
 	Item,
 	LoadingView,
-	DatePicker
+	DatePicker,
+	PickerScreen
 }

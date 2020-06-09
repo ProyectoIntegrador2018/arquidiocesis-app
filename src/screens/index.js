@@ -5,6 +5,7 @@ import ZonasList from './ZonasList';
 import Zona from './Zona';
 import ChangePassword from './ChangePassword';
 import Reports from './Reports';
+import Select from './Select';
 
 import RegistroCapilla from './capilla/RegistroCapilla';
 import DetalleCapilla from './capilla/DetalleCapilla';
@@ -103,5 +104,6 @@ export {
 	AsistenciaCapacitacion,
 	Reports,
 	SelectGroup,
-	SelectCapacitacion
+	SelectCapacitacion,
+	Select
 }

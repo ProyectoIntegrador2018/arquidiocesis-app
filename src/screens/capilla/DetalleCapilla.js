@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { API } from '../../lib';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Input, ErrorView, Item, Alert } from '../../components';
+import { Input, ErrorView, Item, Alert, List } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props)=>{
@@ -16,6 +16,7 @@ export default (props)=>{
 	var [error, setError] = useState(false);
 	var [deleting, setDeleting] = useState(false);
 	var [user, setUser] = useState(false);
+	var [grupos, setGroups] = useState(false);
 
 	var onDelete = props.route.params.onDelete;
 	var onEdit = props.route.params.onEdit;
@@ -40,9 +41,16 @@ export default (props)=>{
 			d.id = id;
 			setCapilla(d);
 			setError(false);
+			getGrupos(id);
 		}).catch(err=>{
 			setRefreshing(false);
 			setError(true);
+		})
+	}
+
+	var getGrupos = (capilla_id)=>{
+		API.getGrupos(false).then(grupos=>{
+			setGroups(grupos.filter(a=>a.capilla.id==capilla_id));
 		})
 	}
 
@@ -78,6 +86,13 @@ export default (props)=>{
 		})
 	}
 
+	var gotoGroup = i=>{
+		props.navigation.navigate('Grupo', {
+			grupo: i,
+			showOwner: false,
+		});
+	}
+
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText}>{props.route.params.nombre || capilla.nombre}</Text>
@@ -100,6 +115,14 @@ export default (props)=>{
 						<Input name={'Telefono 1'} value={capilla.telefono1} readonly />
 						<Input name={'Telefono 2'} value={capilla.telefono2} readonly />
 					</View>
+
+					{grupos && grupos.length>0 && (
+						<View>
+							<Text style={styles.sectionText}>GRUPOS</Text>
+							<List data={grupos} sort={'nombre'} onSelect={gotoGroup} />
+						</View>
+					)}
+
 					{user && (user.type=='admin' || user.type=='superadmin') && <Item text="Eliminar capilla" onPress={deleteCapilla} loading={deleting} />}
 				</View>
 			) : (

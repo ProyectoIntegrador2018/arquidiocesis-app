@@ -6,7 +6,7 @@ Descripción: Pantalla para ver la información de un parroquia
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, ErrorView, Input, Item, Alert } from '../../components';
+import { AlphabetList, ErrorView, Input, Item, Alert, List } from '../../components';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { API } from '../../lib';
 
@@ -17,6 +17,7 @@ export default (props)=>{
 	var [error, setError] = useState(false);
 	var [deleting, setDeleting] = useState(false);
 	var [user, setUser] = useState(false);
+	var [grupos, setGrupos] = useState(false);
 
 	var readonly = props.route.params.readonly;
 	var onDelete = props.route.params.onDelete;
@@ -40,6 +41,10 @@ export default (props)=>{
 		API.getUser().then(setUser);
 		setError(false);
 		var id = parroquia.id;
+
+		API.getGrupos(false).then(grupos=>{
+			setGrupos(grupos.filter(a=>(a.parroquia && a.parroquia.id==id)));
+		})
 		API.getParroquia(id).then(d=>{
 			d.id = id;
 			setParroquia(d);
@@ -117,9 +122,16 @@ export default (props)=>{
 					p[i] = new_parroquia[i];
 				}
 				setParroquia(p);
-				onEdit(p);
+				if(onEdit) onEdit(p);
 			}
 		})
+	}
+
+	var gotoGroup = i=>{
+		props.navigation.navigate('Grupo', {
+			grupo: i,
+			showOwner: false
+		});
 	}
 
 	return <View style={{ flex: 1 }}>
@@ -157,6 +169,14 @@ export default (props)=>{
 						<Input name="Telefono 1" value={parroquia.telefono1} readonly />
 						<Input name="Telefono 2" value={parroquia.telefono2} readonly />
 					</View>
+						
+					{grupos && grupos.length>0 && (
+						<View>
+							<Text style={styles.sectionText}>GRUPOS</Text>
+							<List data={grupos} sort={'nombre'} onSelect={gotoGroup} />
+						</View>
+					)}
+
 					{!readonly && (user && (user.type=='admin' || user.type=='superadmin')) && <Item text="Eliminar parroquia" onPress={deleteParroquia} loading={deleting} />}
 				</View>
 			) : (

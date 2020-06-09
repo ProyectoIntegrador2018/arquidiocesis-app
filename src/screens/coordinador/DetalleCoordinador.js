@@ -71,7 +71,7 @@ export default (props)=>{
 					p[i] = data[i];
 				}
 				setPersona(p);
-				onEdit(p.id, p);
+				if(onEdit) onEdit(p.id, p);
 			}
 		})
 	}

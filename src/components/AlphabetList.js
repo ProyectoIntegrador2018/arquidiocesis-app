@@ -7,7 +7,7 @@ import { RefreshControl } from 'react-native-web-refresh-control'
 export default  (props)=>{
 	var components = []
 	var headers = []
-	var organizedData = props.headers!==false ? Util.organizeListData(props.data, (props.sort || 'name')) : { 'A': props.data }
+	var organizedData = props.headers!==false ? (props.organize!==false ? Util.organizeListData(props.data, (props.sort || 'name')) : props.data) : { 'A': props.data }
 
 	for(var i in organizedData){
 		if(props.headers!==false){
@@ -57,7 +57,7 @@ export default  (props)=>{
 
 var ListItem = (props)=>{
 	return <TouchableOpacity onPress={()=>{
-		props.onPress(props.data)
+		if(props.onPress) props.onPress(props.data)
 	}}>
 		<View style={{ backgroundColor: 'white' }}>
 			<View style={styles.item}>

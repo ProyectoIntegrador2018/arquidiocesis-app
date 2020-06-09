@@ -4,8 +4,8 @@ Usuario con acceso: Admin
 Descripción: Pantalla para registrar parroquias en el sistema
 */
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { Input, Button, Picker, Alert } from '../../components'
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Input, Button, Picker, Alert, PickerScreen } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
 
@@ -27,7 +27,7 @@ export default (props)=>{
 	var doRegister = ()=>{
 		var data = {
 			nombre: name,
-			decanato: (decanato ? decanato.value : null),
+			decanato: (decanato ? decanato.id : null),
 			direccion: address,
 			colonia,
 			municipio,
@@ -60,12 +60,15 @@ export default (props)=>{
 	}
 
 	useEffect(()=>{
-		API.getDecanatos(true).then(decanatos=>{
-			var d = decanatos.map(a=>{
-				return { label: a.nombre, value: a.id }
-			})
-			setListDecanatos(d);
-		});
+		API.getZonas(true).then(zonas=>{
+			API.getDecanatos(true).then(decanatos=>{
+				var dec = {}
+				for(var i of zonas){
+					dec[i.nombre] = decanatos.filter(a=>a.zona==i.id);
+				}
+				setListDecanatos(dec);
+			});
+		})
 	}, [])
 
 	props.navigation.setOptions({
@@ -82,7 +85,7 @@ export default (props)=>{
 			<Input name="Telefono 1" value={telefono1} onChangeText={setTelefono1} keyboard={'phone-pad'} />
 			<Input name="Telefono 2" value={telefono2} onChangeText={setTelefono2} keyboard={'phone-pad'} />
 			{listDecanatos ? (
-				<Picker onValueChange={setDecanato} name="Seleccionar decanato" items={listDecanatos} required />
+				<PickerScreen value={decanato ? decanato.nombre : ''} name="Decanato" navigation={props.navigation} data={listDecanatos} organize={false} onSelect={setDecanato} />
 			) : (
 				<ActivityIndicator style={{ height: 80 }} />
 			)}
