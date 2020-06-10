@@ -7,10 +7,21 @@ const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
 // const ROOT_URL = 'http://192.168.0.131:8000/api/'
 var onLogout = null;
 
+/**
+ * Set the function to call on logout.
+ * Used on main stack to goto Login screen
+ * on logout.
+ * @param {function} cb The function to call
+ */
 function setOnLogout(cb){
 	onLogout = cb
 };
 
+/**
+ * Do a POST request to the API server.
+ * @param {string} endpoint The endpoint to POST
+ * @param {object} data The data to send to the endpoint
+ */
 async function post(endpoint, data){
 	var u = await getUser();
 	if(u){
@@ -32,6 +43,11 @@ async function post(endpoint, data){
 	}
 }
 
+/**
+ * Do a GET request to the API server.
+ * @param {string} endpoint The endpoint to GET
+ * @param {object} data The data to send to the endpoint
+ */
 async function get(endpoint, data){
 	var u = await getUser();
 	if(u){
@@ -55,6 +71,11 @@ async function get(endpoint, data){
 	}
 }
 
+/**
+ * Do a DELETE request to the API server.
+ * @param {string} endpoint The endpoint to DELETE
+ * @param {object} data The data to send to the endpoint
+ */
 async function sendDelete(endpoint, data){
 	var u = await getUser();
 	if(u){
@@ -134,6 +155,11 @@ async function login(email, password){
 	return user;
 }
 
+/**
+ * Change the user's password. Needs old to verify the users validity.
+ * @param {string} old_password The old password of the account
+ * @param {string} new_password The new password to change
+ */
 async function changePassword(old_password, new_password){
 	var u = await post('password/change', { old_password, new_password });
 	if(!u) return false;
@@ -221,6 +247,10 @@ async function getDecanato(id, force=false){
 	}
 }
 
+/**
+ * Get the parroquias list
+ * @param {boolean} force Bypass the cache
+ */
 async function getParroquias(force=false){
 	if(!force && Cache.getParroquias()){
 		return Cache.getParroquias();
@@ -234,6 +264,11 @@ async function getParroquias(force=false){
 	}
 }
 
+/**
+ * Get a parroquia from id.
+ * @param {string} id The parroquia id.
+ * @param {boolean} force Bypass the cache
+ */
 async function getParroquia(id, force=false){
 	if(!force){
 		var parroquiaCache = Cache.getParroquia(id);
@@ -250,6 +285,10 @@ async function getParroquia(id, force=false){
 	}
 }
 
+/**
+ * Add a parroquia to the database.
+ * @param {object} data The parroquia data.
+ */
 async function addParroquia(data){
 	var payload = {
 		nombre: data.nombre,
@@ -265,6 +304,11 @@ async function addParroquia(data){
 	else return res.data;
 }
 
+/**
+ * Edit a parroquia data.
+ * @param {string} id The parroquia to edit
+ * @param {object} data The new data of the parroquia.
+ */
 async function editParroquia(id, data){	
 	var res = await post('parroquias/edit', {
 		parroquia: id,
@@ -274,6 +318,11 @@ async function editParroquia(id, data){
 	else return res.data;
 }
 
+/**
+ * Add a parroquia's capilla to the database
+ * @param {string} parroquia_id The capilla's parrouia id
+ * @param {object} data The new capilla data
+ */
 async function addCapilla(parroquia_id, data){
 	var payload = {
 		...data,
@@ -288,6 +337,10 @@ async function addCapilla(parroquia_id, data){
 	}
 }
 
+/**
+ * Get the list of decanatos
+ * @param {boolean} force Bypass the cachce
+ */
 async function getDecanatos(force=false){
 	if(!force && Cache.getDecanatos()){
 		return Cache.getDecanatos();
@@ -300,6 +353,10 @@ async function getDecanatos(force=false){
 	}
 }
 
+/**
+ * Get the list of coordinadores
+ * @param {boolean} force Bypass the cache
+ */
 async function getCoordinadores(force=false){
 	if(!force && Cache.getCoordinadores()){
 		return Cache.getCoordinadores();
@@ -312,6 +369,11 @@ async function getCoordinadores(force=false){
 	}
 }
 
+/**
+ * Get a coordinador from id.
+ * @param {string} id The coordinador id
+ * @param {boolean} force Bypass the cache
+ */
 async function getCoordinador(id, force=false){
 	if(!force){
 		var coordCache = Cache.getCoordinador(id);
@@ -319,7 +381,6 @@ async function getCoordinador(id, force=false){
 			return coordCache;
 		}
 	}
-
 
 	var p = await get('coordinadores/'+id);
 	if(p.error) throw p;
@@ -329,6 +390,10 @@ async function getCoordinador(id, force=false){
 	}
 }
 
+/**
+ * Get the list of grupos
+ * @param {boolean} force Bypass the cache
+ */
 async function getGrupos(force=false){
 	if(!force && Cache.getGrupos()){
 		return Cache.getGrupos();
@@ -341,6 +406,11 @@ async function getGrupos(force=false){
 	}
 }
 
+/**
+ * Get a grupo from id
+ * @param {string} id The id of the grupo
+ * @param {boolean} force Bypass the cache
+ */
 async function getGrupo(id, force=false){
 	if(!force){
 		var cacheGrupo = Cache.getGrupo(id);
@@ -357,6 +427,15 @@ async function getGrupo(id, force=false){
 	}
 }
 
+/**
+ * Create a grupo and add it to the database.
+ * The parroquia and capilla param are exclusive,
+ * only one should be present, not both.
+ * @param {string} name The name of the new grupo
+ * @param {string} coordinador The ID of the grupo's coordinador
+ * @param {string} parroquia The ID of the grupo's parrouia
+ * @param {string} capilla The ID of the grupo's capilla
+ */
 async function addGrupo(name, coordinador, parroquia, capilla){
 	var payload = {
 		name,
@@ -370,12 +449,21 @@ async function addGrupo(name, coordinador, parroquia, capilla){
 	else return res.data;
 }
 
+/**
+ * Create a coordinador and add it to the databse.
+ * @param {object} data The data of the new coordinador
+ */
 async function registerCoordinador(data){
 	var res = await post('coordinadores', data);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Register a member to the grupo.
+ * @param {string} grupo The member's grupo id
+ * @param {object} data The new member's data
+ */
 async function registerMember(grupo, data){
 	var payload = {
 		grupo,
@@ -387,12 +475,25 @@ async function registerMember(grupo, data){
 	else return res.data;
 }
 
+/**
+ * Get a asistencia from a group from the database.
+ * The date must be 'YYYY-MM-DD'
+ * @param {string} grupo_id The asistencia's grupo
+ * @param {string} fecha The asistencia's date in format 'YYYY-MM-DD'
+ */
 async function getAsistencia(grupo_id, fecha){
 	var res = await get('grupos/'+grupo_id+'/asistencia/'+fecha);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Register an asistencia for a group on a date.
+ * @param {string} grupo_id The grupo's id
+ * @param {string} fecha The asistencia's fecha in format 'YYYY-MM-DD'
+ * @param {array} miembros Array of member ids
+ * @param {boolean} force Overwrite the asistencia if there is already one on this date?
+ */
 async function registerAsistencia(grupo_id, fecha, miembros, force=false){
 	var payload = {
 		fecha, miembros, force
@@ -405,18 +506,34 @@ async function registerAsistencia(grupo_id, fecha, miembros, force=false){
 	}
 }
 
+/**
+ * Save an already made asistencia
+ * @param {string} grupo_id The grupo's id
+ * @param {string} fecha The asistencia's fecha in format 'YYYY-MM-DD'
+ * @param {array} miembros Array of member ids
+ */
 async function saveAsistencia(grupo_id, fecha, miembros){
 	var res = await post('grupos/'+grupo_id+'/asistencia/'+fecha, { miembros });
 	if(res.error) throw res;
 	else return res.data
 }
 
+/**
+ * Get a capilla from id
+ * @param {string} capilla_id The capilla's id
+ */
 async function getCapilla(capilla_id){
 	var res = await get('capillas/'+capilla_id);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Edit a capilla's data.
+ * @param {string} capilla_id The capilla's id
+ * @param {string} data The capilla's new data
+ * @param {string} parroquia_id The capilla's parroquia, used for Cache saving.
+ */
 async function editCapilla(capilla_id, data, parroquia_id){
 	var payload = {
 		id: capilla_id,
@@ -434,6 +551,11 @@ async function editCapilla(capilla_id, data, parroquia_id){
 	}
 }
 
+/**
+ * Delete a capilla from the database.
+ * @param {string} parroquia_id The capilla's parroquia id. Used for Cache editing.
+ * @param {string} capilla_id The capilla's id
+ */
 async function deleteCapilla(parroquia_id, capilla_id){
 	var res = await sendDelete('capillas/'+capilla_id);
 	if(res.error) throw res;
@@ -443,6 +565,10 @@ async function deleteCapilla(parroquia_id, capilla_id){
 	}
 }
 
+/**
+ * Delete a parroquia from the database
+ * @param {string} parroquia_id The parroquia's id
+ */
 async function deleteParroquia(parroquia_id){
 	var res = await sendDelete('parroquias/'+parroquia_id);
 	if(res.error) throw res;
@@ -452,6 +578,11 @@ async function deleteParroquia(parroquia_id){
 	}
 }
 
+/**
+ * Get a miembro from the databse.
+ * @param {string} miembro_id The member's id
+ * @param {boolean} force Bypass the cache
+ */
 async function getMiembro(miembro_id, force=false){
 	if(!force){
 		var m = Cache.getMiembro(miembro_id);
@@ -460,7 +591,6 @@ async function getMiembro(miembro_id, force=false){
 		}
 	}
 
-	
 	var res = await get('grupos/miembro/'+miembro_id);
 	if(res.error) throw res;
 	else{
@@ -472,36 +602,61 @@ async function getMiembro(miembro_id, force=false){
 	}
 }
 
+/**
+ * Get the admin users from the database.
+ */
 async function adminGetUsers(){
 	var res = await get('admin/users');
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Get an admin from the database from its email.
+ * @param {string} email The admin's email
+ */
 async function getAdmin(email){
 	var res = await post('admin/users/get', { email });
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Register a new admin to the database.
+ * @param {object} data The new admin's data
+ */
 async function registerAdmin(data){
 	var res = await post('admin/users/add', data);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Change an admin's password on the database.
+ * @param {string} email The admin's database
+ * @param {string} password The new password
+ */
 async function changeAdminPassword(email, password){
 	var res = await post('admin/users/password', { email, password });
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Delete an admin from the database.
+ * @param {string} email The admin's email
+ */
 async function deleteAdmin(email){
 	var res = await post('admin/users/delete', { email });
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Edit an admin from the database.
+ * @param {string} old_email The current admin's email
+ * @param {string} data The new admin's data.
+ */
 async function editAdmin(old_email, data){
 	var res = await post('admin/users/edit', {
 		id: old_email,
@@ -511,6 +666,11 @@ async function editAdmin(old_email, data){
 	else return res.data;
 }
 
+/**
+ * Edit a grupo from the database
+ * @param {string} id The grupo's id
+ * @param {object} data The grupo's new data.
+ */
 async function editGrupo(id, data){
 	var res = await post('grupos/edit', {
 		id,
@@ -523,6 +683,11 @@ async function editGrupo(id, data){
 	};
 }
 
+/**
+ * Edit a miembro on the database
+ * @param {string} id The miembro's id
+ * @param {object} data The miembro's new data.
+ */
 async function editMiembro(id, data){
 	var res = await post('grupos/miembro/'+id+'/edit', data);
 	
@@ -533,12 +698,21 @@ async function editMiembro(id, data){
 	}
 }
 
+/**
+ * Delete a grupo from the database.
+ * @param {string} id The grupo's id
+ */
 async function deleteGrupo(id){
 	var res = await sendDelete('grupos/'+id);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Change a grupo's coordinador
+ * @param {string} grupo_id The grupo's id
+ * @param {string} coordinador_id The coordinador's id
+ */
 async function changeCoordinador(grupo_id, coordinador_id){
 	var res = await post('grupos/'+grupo_id+'/coordinador', {
 		coordinador: coordinador_id
@@ -547,6 +721,14 @@ async function changeCoordinador(grupo_id, coordinador_id){
 	else return res.data;
 }
 
+/**
+ * Edit a miembro's status.
+ * 0 => Activo
+ * 1 => Baja temporal
+ * 2 => Baja definitiva (delete)
+ * @param {string} id The miembro's id
+ * @param {number} status The new miembro's status (0-2)
+ */
 async function editMiembroStatus(id, status){
 	var res = await post('grupos/miembro/'+id+'/edit/status', { status });
 	if(res.error) throw res;
@@ -556,12 +738,22 @@ async function editMiembroStatus(id, status){
 	}
 }
 
+/**
+ * Get the list of users that are on status 1
+ * @param {string} id The grupo's id
+ */
 async function getGrupoBajasTemporales(id){
 	var res = await get('grupos/'+id+'/bajas');
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * DEPRECATED
+ * Get the ficha medica from the user.
+ * @param {string} id The member's id
+ * @param {boolean} force Bypass the cache
+ */
 async function getFichaMedica(id, force=false){
 	if(!force){
 		var f = Cache.getMiembroFicha(id);
@@ -576,6 +768,11 @@ async function getFichaMedica(id, force=false){
 	}
 }
 
+/**
+ * Change a member's ficha medica.
+ * @param {string} id The member's id
+ * @param {object} data The member's new ficha medica
+ */
 async function setFichaMedica(id, data){
 	var res = await post('grupos/miembro/'+id+'/edit/ficha', {
 		id,
@@ -588,6 +785,11 @@ async function setFichaMedica(id, data){
 	}
 }
 
+/**
+ * Register a acompañante for a zona.
+ * @param {string} zona The zona's id
+ * @param {object} data The new acompañante's data
+ */
 async function registerAcompananteZona(zona, data){
 	var res = await post('acompanante/zona', {
 		zona,
@@ -602,6 +804,11 @@ async function registerAcompananteZona(zona, data){
 	}
 }
 
+/**
+ * Register a acompañante for a decanato.
+ * @param {string} decanato The decanato's id
+ * @param {object} data The new acompañante's data
+ */
 async function registerAcompananteDecanato(decanato, data){
 	var res = await post('acompanante/decanato', {
 		decanato,
@@ -616,14 +823,20 @@ async function registerAcompananteDecanato(decanato, data){
 	}
 }
 
-
-
+/**
+ * Get an acompañante's data.
+ * @param {string} id The acompañante's id
+ */
 async function getAcompanante(id){
 	var res = await get('acompanante/'+id);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Delete a zona's acompañante.
+ * @param {string} zona The zona's id
+ */
 async function deleteAcompananteZona(zona){
 	var res = await sendDelete('zonas/'+zona+'/acompanante');
 	if(res.error) throw res;
@@ -633,6 +846,10 @@ async function deleteAcompananteZona(zona){
 	}
 }
 
+/**
+ *	Delete a decanato's acompañante
+ * @param {string} decanato The decanato's id
+ */
 async function deleteAcompananteDecanato(decanato){
 	var res = await sendDelete('decanatos/'+decanato+'/acompanante');
 	if(res.error) throw res;
@@ -642,6 +859,11 @@ async function deleteAcompananteDecanato(decanato){
 	}
 }
 
+/**
+ * Edit a acompañante, decanato or zona.
+ * @param {string} id The acompañante's id
+ * @param {object} data The acompañante's new data.
+ */
 async function editAcompanante(id, data){
 	var res = await post('acompanante/edit', {
 		id,
@@ -651,24 +873,42 @@ async function editAcompanante(id, data){
 	else return res.data;
 }
 
+/**
+ * Delete a coordinador from the database.
+ * All of their groups and capacitaciones are left without coordinador.
+ * @param {string} id The coordinador's id
+ */
 async function deleteCoordinador(id){
 	var res = await sendDelete('coordinadores/'+id);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Edit a coordinador's data.
+ * @param {string} id The coordinador's id
+ * @param {object} data The coordinador's new data
+ */
 async function editCoordinador(id, data){
 	var res = await post('coordinadores/'+id+'/edit', data);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Add a new capacitacion to the database.
+ * @param {object} data The new capactiacions data
+ */
 async function addCapacitacion(data){
 	var res = await post('capacitacion', data);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Get the list of capacitaciones
+ * @param {boolean} force Bypass the cache
+ */
 async function getCapacitaciones(force=false){
 	if(!force && Cache.getCapacitaciones()){
 		return Cache.getCapacitaciones();
@@ -681,6 +921,11 @@ async function getCapacitaciones(force=false){
 	}
 }
 
+/**
+ * Get a capacitacion from id
+ * @param {string} id The capacitacións id
+ * @param {boolean} force Bypass the cache
+ */
 async function getCapacitacion(id, force=false){
 	if(!force){
 		var cacheCap = Cache.getCapacitacion(id);
@@ -694,6 +939,11 @@ async function getCapacitacion(id, force=false){
 	}
 }
 
+/**
+ * Edit a capacitacion
+ * @param {string} id The capacitación's id
+ * @param {object} data The capacitacións new data.
+ */
 async function editCapacitacion(id, data){
 	var res = await post('capacitacion/edit', {
 		id,
@@ -712,6 +962,10 @@ async function editCapacitacion(id, data){
 	}
 }
 
+/**
+ * Remove a capacitación from the database.
+ * @param {string} id The capacitación's data
+ */
 async function removeCapacitacion(id){
 	var res = await sendDelete('capacitacion/'+id);
 	if(res.error) throw res;
@@ -721,6 +975,13 @@ async function removeCapacitacion(id){
 	}
 }
 
+/**
+ * Register an asistencia for a capacitación on a date.
+ * @param {string} id The capacitación's id
+ * @param {string} fecha The asistencia's fecha in format 'YYYY-MM-DD'
+ * @param {array} miembros Array of member ids
+ * @param {boolean} force Overwrite the asistencia if there is already one on this date?
+ */
 async function registerCapacitacionAsistencia(id, fecha, miembros, force=false){
 	var payload = {
 		fecha, miembros, force
@@ -733,18 +994,36 @@ async function registerCapacitacionAsistencia(id, fecha, miembros, force=false){
 	}
 }
 
+/**
+ * Save an already made asistencia
+ * @param {string} id The capacitación's id
+ * @param {string} fecha The asistencia's fecha in format 'YYYY-MM-DD'
+ * @param {array} miembros Array of member ids
+ */
 async function saveCapacitacionAsistencia(id, fecha, miembros){
 	var res = await post('capacitacion/'+id+'/asistencia/'+fecha, { miembros });
 	if(res.error) throw res;
 	else return res.data
 }
 
+/**
+ * Get a asistencia from a capacitación from the database.
+ * The date must be 'YYYY-MM-DD'
+ * @param {string} grupo_id The asistencia's grupo
+ * @param {string} fecha The asistencia's date in format 'YYYY-MM-DD'
+ */
 async function getCapacitacionAsistencia(id, fecha){
 	var res = await get('capacitacion/'+id+'/asistencia/'+fecha);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Edit a participante from the database.
+ * @param {string} capacitacion The capacitación's id
+ * @param {string} id The participante's id
+ * @param {object} data The participantes new data
+ */
 async function editParticipante(capacitacion, id, data){
 	var res = await post('participante/edit', {
 		id, 
@@ -763,12 +1042,21 @@ async function editParticipante(capacitacion, id, data){
 	}
 }
 
+/**
+ * Get a participante from the database.
+ * @param {string} id The participante's id
+ */
 async function getParticipante(id){
 	var res = await get('participante/'+id);
 	if(res.error) throw res;
 	else return res.data;
 }
 
+/**
+ * Add a participante to a capacitación
+ * @param {string} capacitacion The capacitación's id
+ * @param {object} data The new participante's data
+ */
 async function addCapacitacionParticipante(capacitacion, data){
 	var res = await post('participante', {
 		capacitacion,
@@ -785,6 +1073,11 @@ async function addCapacitacionParticipante(capacitacion, data){
 	}
 }
 
+/**
+ * Remove a participante from a capacitación (and the database)
+ * @param {string} capacitacion The capacitación's id
+ * @param {string} id The participante's id to remove
+ */
 async function removeCapacitacionParticipante(capacitacion, id){
 	var res = await sendDelete('participante/'+id);
 	if(res.error) throw res;
@@ -794,7 +1087,11 @@ async function removeCapacitacionParticipante(capacitacion, id){
 	}
 }
 
-
+/**
+ * Change the encargado (coordinador) of a capacitación.
+ * @param {string} capacitacion The capacitación's id
+ * @param {string} encargado The coordinador's id
+ */
 async function changeCapacitacionEncargado(capacitacion, encargado){
 	var res = await post('capacitacion/edit/encargado', {
 		id: capacitacion,
@@ -807,12 +1104,21 @@ async function changeCapacitacionEncargado(capacitacion, encargado){
 	}
 }
 
+/**
+ * Get the participantes from a capcitación
+ * @param {string} capacitacion The capacitación's id
+ */
 async function getParticipantes(capacitacion){
 	var res = await get('capacitacion/'+capacitacion+'/participantes');
 	if(res.error) throw err;
 	else return res.data;
 }
 
+/**
+ * Format a GET url and add the token to the params.
+ * Used for reporte downloading.
+ * @param {string} url The endpoint of the url
+ */
 async function formatURL(url){
 	var u = await getUser();
 	return ROOT_URL+url+'?token='+u.token;

@@ -4,7 +4,7 @@ Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Archivo que gestiona el tab navigation bar y el stack de pantallas de la aplicación
 */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, StatusBar, TouchableOpacity, Alert, Platform } from 'react-native';
+import { StyleSheet, View, StatusBar, TouchableOpacity, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -121,9 +121,10 @@ var Home = (props)=>{
 		</Tab.Navigator>
 	)
 }
+
+// The app's main stack.
 var Stack = createStackNavigator();
 var App = (props)=>{
-	
 	return (
 		<NavigationContainer>
 			<Stack.Navigator user={props.user} initialRouteName='Home' screenOptions={{
@@ -187,6 +188,8 @@ export default (props)=>{
 
 	// This function runs when the screen is shown.
 	useEffect(()=>{
+		// Set the logout function that will be run when
+		// the user logs out.
 		API.setOnLogout(()=>{
 			setLogin(null);
 		})
@@ -216,7 +219,7 @@ export default (props)=>{
 			<StatusBar barStyle={'light-content'} />
 			{!login ? (
 				<Login user={login} onLogin={onLogin} />
-			) : ( 							// User is logged in
+			) : ( // User is logged in
 				<App user={login} logout={logout} />
 			)}
 		</View>
