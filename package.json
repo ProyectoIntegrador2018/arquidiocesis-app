@@ -1,11 +1,14 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "start": "expo start",
     "android": "expo start --android",
+    "commit": "git-cz",
+    "eject": "expo eject",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
+    "start": "expo start",
+    "web": "expo start --web"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.5",
@@ -14,6 +17,7 @@
     "@react-navigation/stack": "^5.2.6",
     "axios": "^0.19.2",
     "expo": "~36.0.0",
+    "expo-cli": "^3.27.4",
     "expo-file-system": "~8.0.0",
     "expo-mail-composer": "~8.0.0",
     "express": "^4.17.1",
@@ -38,8 +42,22 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@commitlint/cli": "8.3.5",
+    "@commitlint/config-conventional": "8.3.4",
     "@expo/webpack-config": "^0.12.11",
-    "babel-preset-expo": "~8.0.0"
+    "babel-preset-expo": "~8.0.0",
+    "commitizen": "4.1.2",
+    "cz-conventional-changelog": "3.2.0",
+    "husky": "4.2.5"
   },
-  "private": true
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
 }
