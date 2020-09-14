@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "expo start",
     "android": "expo start --android",
+    "commit": "git-cz",
+    "eject": "expo eject",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
+    "start": "expo start",
+    "web": "expo start --web"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.5",
@@ -45,7 +46,14 @@
     "@commitlint/config-conventional": "8.3.4",
     "@expo/webpack-config": "^0.12.11",
     "babel-preset-expo": "~8.0.0",
+    "commitizen": "4.1.2",
+    "cz-conventional-changelog": "3.2.0",
     "husky": "4.2.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "husky": {
     "hooks": {
