@@ -5,15 +5,29 @@
  */
 function organizeListData(data, key){
 	if(!key) key = 'name';
-	data = data.sort((a,b)=>(a[key] ? a[key].toUpperCase() : null)>(b[key] ? b[key].toUpperCase() : null));
+	data = data.sort((a,b)=> compare(a, b, key));
 	var orderedData = {}
-	for(var i of data.sort((a,b)=>a[key]-b[key])){
+	for(var i of data){
 		if(!i[key])continue;
 		var c = (i[key][0]).toUpperCase();
 		if(!orderedData[c]) orderedData[c] = []
 		orderedData[c].push(i);
 	}
 	return orderedData;
+}
+
+function compare(a, b, key) {
+	const keyA = a[key].toUpperCase();
+	const keyB = b[key].toUpperCase();
+
+	let comparison = 0;
+	if (keyA > keyB) {
+		comparison = 1;
+	} else if (keyA < keyB) {
+		comparison = -1;
+	}
+
+	return comparison;
 }
 
 function validateEmail(email) {
