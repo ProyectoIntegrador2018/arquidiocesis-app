@@ -27,8 +27,12 @@ export default (props)=>{
 	var [phoneMobile, setPhoneMobile] = useState('');
 	var [phoneMobile, setPhoneMobile] = useState('');
 	var [escolaridad, setEscolaridad] = useState(false);
-	var [oficio, setOficio] = useState(false);
-	var pickerRef = useRef(null);
+  var [oficio, setOficio] = useState(false);
+  var [laptop, setLaptop] = useState('');
+  var [smartphone, setSmartphone] = useState('');
+  var [facebook, setFacebook] = useState('');
+  var pickerRef = useRef(null);
+
 
 	var onAdd = props.route.params.onAdd;
 	var group = props.route.params.grupo;
@@ -56,7 +60,10 @@ export default (props)=>{
 				municipio: municipio,
 				telefono_casa: phoneHome,
 				telefono_movil: phoneMobile,
-			}
+      },
+      laptop: laptop ? laptop.value : false,
+      smartphone: smartphone ? smartphone.value : false,
+      facebook: facebook ? facebook.value : false
 		}
 
 		var { valid, prompt } = Util.validateForm(data, {
