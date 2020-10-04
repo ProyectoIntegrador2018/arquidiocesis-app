@@ -4,7 +4,7 @@ import Cache from './Cache';
 import moment from 'moment';
 
 const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
-// const ROOT_URL = 'http://192.168.0.131:8000/api/'
+// const ROOT_URL = 'http://localhost:8000/api/'
 var onLogout = null;
 
 /**
@@ -824,6 +824,34 @@ async function registerAcompananteDecanato(decanato, data){
 }
 
 /**
+ * Get an acompañantes data.
+ */
+async function getAcompanantes(){
+	const res = await get('acompanantes');
+	
+	if (res.error) {
+		throw res;
+	} else {
+		return res.data;
+	}
+}
+
+
+/**
+ * Get an acompañante's zona or decanato.
+ * @param {string} id The acompañante's id
+ */
+async function getAcompananteZonaOrDecanato(id){
+	const res = await get('acompanantes/'+id+'/place');
+	
+	if (res.error) {
+		throw res;
+	} else {
+		return res.data;
+	}
+}
+
+/**
  * Get an acompañante's data.
  * @param {string} id The acompañante's id
  */
@@ -1168,6 +1196,8 @@ export default {
 	getFichaMedica,
 	setFichaMedica,
 	editParroquia,
+	getAcompanantes,
+	getAcompananteZonaOrDecanato,
 	getAcompanante,
 	registerAcompananteZona,
 	registerAcompananteDecanato,
