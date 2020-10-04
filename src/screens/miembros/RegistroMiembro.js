@@ -30,7 +30,7 @@ export default (props)=>{
   var [oficio, setOficio] = useState(false);
   var [laptop, setLaptop] = useState('');
   var [smartphone, setSmartphone] = useState('');
-  var [facebook, setFacebook] = useState('');
+  var [tablet, setTablet] = useState('');
   var pickerRef = useRef(null);
 
 
@@ -63,7 +63,7 @@ export default (props)=>{
       },
       laptop: laptop ? laptop.value : false,
       smartphone: smartphone ? smartphone.value : false,
-      facebook: facebook ? facebook.value : false
+      tablet: tablet ? tablet.value : false
 		}
 
 		var { valid, prompt } = Util.validateForm(data, {
