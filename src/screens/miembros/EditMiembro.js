@@ -145,18 +145,18 @@ export default (props) => {
 				'Albañil', 'Pintor', 'Mecánico',
 				'Músico', 'Chofer'
 			]} onValueChange={setOficio} select={getOficio()} />
-			<Text style={styles.section}>Indica los dispositivos que tenga</Text>
-			<View>
-				<CheckBox value={hasLaptop} onValueChange={setHasLaptop} />
-				<Text>Laptop</Text>
+			<Text style={styles.dispositivosHeader}>Indica los dispositivos que tenga</Text>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasLaptop} onValueChange={setHasLaptop} />
+				<Text style={styles.dispositivos}>Laptop</Text>
 			</View>
-			<View>
-				<CheckBox value={hasTablet} onValueChange={setHasTablet} />
-				<Text>Tablet</Text>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasTablet} onValueChange={setHasTablet} />
+				<Text style={styles.dispositivos}>Tablet</Text>
 			</View>
-			<View>
-				<CheckBox value={hasSmartphone} onValueChange={setHasSmartphone} />
-				<Text>Smartphone</Text>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasSmartphone} onValueChange={setHasSmartphone} />
+				<Text style={styles.dispositivos}>Smartphone</Text>
 			</View>
 			<Text style={styles.section}>Domicilio</Text>
 			<Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
@@ -204,5 +204,26 @@ const styles = StyleSheet.create({
 		color: 'grey',
 		marginBottom: 10,
 		marginTop: 20,
+	},
+	checkbox: {
+		height: 25,
+		width: 25
+	},
+	dispositivosHeader: {
+		fontSize: 16,
+		color: 'gray',
+		marginBottom: 10,
+		fontWeight: '500'
+	},
+	dispositivos: {
+		fontSize: 20,
+		marginLeft: 10,
+		textAlignVertical: "center"
+	},
+	view: {
+		flexDirection: "row",
+		justifyContent: 'flex-start',
+		marginBottom: 10,
+		marginTop: 10
 	}
 })

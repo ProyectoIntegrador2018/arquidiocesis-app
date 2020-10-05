@@ -131,20 +131,21 @@ export default (props) => {
 						<Input name='Correo Electrónico' value={persona.email} readonly />
 						<Input name='Grado escolaridad' value={persona.escolaridad} readonly />
 						<Input name='Oficio' value={persona.oficio} readonly />
+						<Text style={styles.dispositivosHeader}>Dispositivos del miembro</Text>
 						{persona.laptop &&
-							<View>
-								<CheckBox value={persona.laptop} readonly />
-								<Text>Laptop</Text>
+							<View style={styles.view}>
+								<CheckBox style={styles.checkbox} value={persona.laptop} readonly />
+								<Text style={styles.dispositivos}>Laptop</Text>
 							</View>}
 						{persona.tablet &&
-							<View>
-								<CheckBox value={persona.tablet} readonly />
-								<Text>Tablet</Text>
+							<View style={styles.view}>
+								<CheckBox style={styles.checkbox} value={persona.tablet} readonly />
+								<Text style={styles.dispositivos}>Tablet</Text>
 							</View>}
 						{persona.smartphone &&
-							<View>
-								<CheckBox value={persona.smartphone} readonly />
-								<Text>Smartphone</Text>
+							<View style={styles.view}>
+								<CheckBox style={styles.checkbox} value={persona.smartphone} readonly />
+								<Text style={styles.dispositivos}>Smartphone</Text>
 							</View>}
 
 						<Text style={styles.infoSection}>Domicilio</Text>
@@ -155,8 +156,9 @@ export default (props) => {
 						<Input name="Teléfono Móvil" value={persona.domicilio.telefono_movil} readonly />
 					</View>
 				</ScrollView>
-			)}
-	</View>
+			)
+		}
+	</View >
 }
 
 
@@ -193,5 +195,26 @@ const styles = StyleSheet.create({
 		marginTop: 30,
 		fontWeight: '500',
 		paddingLeft: 15,
+	},
+	checkbox: {
+		height: 25,
+		width: 25
+	},
+	dispositivosHeader: {
+		fontSize: 16,
+		color: 'gray',
+		marginBottom: 10,
+		fontWeight: '500'
+	},
+	dispositivos: {
+		fontSize: 20,
+		marginLeft: 10,
+		textAlignVertical: "center"
+	},
+	view: {
+		flexDirection: "row",
+		justifyContent: 'flex-start',
+		marginBottom: 10,
+		marginTop: 10
 	}
 })
