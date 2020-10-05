@@ -4,7 +4,7 @@ import Cache from './Cache';
 import moment from 'moment';
 
 const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
-// const ROOT_URL = 'http://192.168.0.131:8000/api/'
+// const ROOT_URL = 'http://localhost:8000/api/'
 var onLogout = null;
 
 /**
@@ -13,7 +13,7 @@ var onLogout = null;
  * on logout.
  * @param {function} cb The function to call
  */
-function setOnLogout(cb){
+function setOnLogout(cb) {
 	onLogout = cb
 };
 
@@ -22,20 +22,20 @@ function setOnLogout(cb){
  * @param {string} endpoint The endpoint to POST
  * @param {object} data The data to send to the endpoint
  */
-async function post(endpoint, data){
+async function post(endpoint, data) {
 	var u = await getUser();
-	if(u){
-		if(!data) data = { token: u.token }
+	if (u) {
+		if (!data) data = { token: u.token }
 		else data.token = u.token;
 	}
-	try{
-		console.log("POST /"+endpoint);
-		var res = await axios.post(ROOT_URL+endpoint, data);
-		if(res.data && res.data.error && res.data.code==900){
+	try {
+		console.log("POST /" + endpoint);
+		var res = await axios.post(ROOT_URL + endpoint, data);
+		if (res.data && res.data.error && res.data.code == 900) {
 			logout();
 		}
 		return res.data;
-	}catch(err){
+	} catch (err) {
 		return {
 			error: true,
 			message: 'No hubo conexión con el servidor.'
@@ -48,22 +48,22 @@ async function post(endpoint, data){
  * @param {string} endpoint The endpoint to GET
  * @param {object} data The data to send to the endpoint
  */
-async function get(endpoint, data){
+async function get(endpoint, data) {
 	var u = await getUser();
-	if(u){
-		if(!data) data = { token: u.token };
+	if (u) {
+		if (!data) data = { token: u.token };
 		else data.token = u.token;
 	}
-	try{
-		console.log("GET /"+endpoint);
-		var res = await axios.get(ROOT_URL+endpoint, {
+	try {
+		console.log("GET /" + endpoint);
+		var res = await axios.get(ROOT_URL + endpoint, {
 			params: data
 		});
-		if(res.data && res.data.error && res.data.code==900){
+		if (res.data && res.data.error && res.data.code == 900) {
 			logout();
 		}
 		return res.data;
-	}catch(e){
+	} catch (e) {
 		return {
 			error: true,
 			message: 'No hubo conexión con el servidor.'
@@ -76,22 +76,22 @@ async function get(endpoint, data){
  * @param {string} endpoint The endpoint to DELETE
  * @param {object} data The data to send to the endpoint
  */
-async function sendDelete(endpoint, data){
+async function sendDelete(endpoint, data) {
 	var u = await getUser();
-	if(u){
-		if(!data) data = { token: u.token };
+	if (u) {
+		if (!data) data = { token: u.token };
 		else data.token = u.token;
 	}
-	try{
-		console.log("DELETE /"+endpoint);
-		var res = await axios.delete(ROOT_URL+endpoint, {
+	try {
+		console.log("DELETE /" + endpoint);
+		var res = await axios.delete(ROOT_URL + endpoint, {
 			params: data
 		});
-		if(res.data && res.data.error && res.data.code==900){
+		if (res.data && res.data.error && res.data.code == 900) {
 			logout();
 		}
 		return res.data;
-	}catch(e){
+	} catch (e) {
 		return {
 			error: true,
 			message: 'No hubo conexión con el servidor.'
@@ -104,12 +104,12 @@ async function sendDelete(endpoint, data){
  * Should only be used when you are certain
  * the user is already logged in.
  */
-async function getUser(){
+async function getUser() {
 	var user = await AsyncStorage.getItem('login');
-	if(!user) return false;
-	
+	if (!user) return false;
+
 	user = JSON.parse(user);
-	if(!user) return false;
+	if (!user) return false;
 
 	return user;
 }
@@ -122,12 +122,12 @@ async function getUser(){
  * - Checks with API if login is valid.
  * - Returns user object if valid.
  */
-async function getLogin(){
+async function getLogin() {
 	var user = await AsyncStorage.getItem('login');
-	if(!user) return null;
-	
+	if (!user) return null;
+
 	user = JSON.parse(user);
-	if(!user) return null;
+	if (!user) return null;
 
 	//TODO: Check with API if the saved user is valid.
 
@@ -141,15 +141,15 @@ async function getLogin(){
  * @param {String} email The user's email
  * @param {String} password The user's password
  */
-async function login(email, password){
-	try{
+async function login(email, password) {
+	try {
 		var u = await post('login', { email, password });
-		if(!u) return false;
-		if(u.error) return false;
+		if (!u) return false;
+		if (u.error) return false;
 
 		var user = u.data;
 		await AsyncStorage.setItem('login', JSON.stringify(user));
-	}catch(err){
+	} catch (err) {
 		throw err;
 	}
 	return user;
@@ -160,10 +160,10 @@ async function login(email, password){
  * @param {string} old_password The old password of the account
  * @param {string} new_password The new password to change
  */
-async function changePassword(old_password, new_password){
+async function changePassword(old_password, new_password) {
 	var u = await post('password/change', { old_password, new_password });
-	if(!u) return false;
-	if(!u.error) await AsyncStorage.removeItem('login')
+	if (!u) return false;
+	if (!u.error) await AsyncStorage.removeItem('login')
 	return u;
 }
 
@@ -173,15 +173,15 @@ async function changePassword(old_password, new_password){
  * - If no user is logged in, does nothing, returns true.
  * @returns {Boolean}
  */
-async function logout(){
+async function logout() {
 	var user = await getUser();
 
 	// If user is not logged in, return true.
-	if(!user) return true;
+	if (!user) return true;
 
 	// Clear cache
 	Cache.clearCache();
-	if(onLogout) onLogout();
+	if (onLogout) onLogout();
 
 	// Delete user info from storage.
 	await AsyncStorage.removeItem('login')
@@ -192,14 +192,14 @@ async function logout(){
  * Get the list of zonas.
  *	@param {Boolean} force Should skip cached data. 
  */
-async function getZonas(force=false){
-	if(!force && Cache.getZonas()){
+async function getZonas(force = false) {
+	if (!force && Cache.getZonas()) {
 		return Cache.getZonas()
 	}
 
 	var p = await get('zonas');
-	if(p.error) throw p;
-	else{
+	if (p.error) throw p;
+	else {
 		Cache.setZonas(p.data);
 		return p.data;
 	}
@@ -210,16 +210,16 @@ async function getZonas(force=false){
  * @param {Number} id The zone id
  * @param {Boolean} force Should skip cached data
  */
-async function getZona(id, force=false){
-	if(!force){
+async function getZona(id, force = false) {
+	if (!force) {
 		var zonaCache = Cache.getZona(id);
-		if(zonaCache) {
+		if (zonaCache) {
 			return zonaCache;
 		}
 	}
 
-	var p = await get('zonas/'+id);
-	if(p.error) throw p;
+	var p = await get('zonas/' + id);
+	if (p.error) throw p;
 	else {
 		Cache.setZona(p.data);
 		return p.data;
@@ -231,16 +231,16 @@ async function getZona(id, force=false){
  * @param {Number} id The decanato ID
  * @param {Boolean} force Should skip cached data
  */
-async function getDecanato(id, force=false){
-	if(!force){
+async function getDecanato(id, force = false) {
+	if (!force) {
 		var decanatoCache = Cache.getDecanato(id);
-		if(decanatoCache){
+		if (decanatoCache) {
 			return decanatoCache;
 		}
 	}
 
-	var p = await get('decanatos/'+id);
-	if(p.error) throw p;
+	var p = await get('decanatos/' + id);
+	if (p.error) throw p;
 	else {
 		Cache.setDecanato(p.data);
 		return p.data;
@@ -251,14 +251,14 @@ async function getDecanato(id, force=false){
  * Get the parroquias list
  * @param {boolean} force Bypass the cache
  */
-async function getParroquias(force=false){
-	if(!force && Cache.getParroquias()){
+async function getParroquias(force = false) {
+	if (!force && Cache.getParroquias()) {
 		return Cache.getParroquias();
 	}
 
 	var p = await get('parroquias');
-	if(p.error) throw p;
-	else{
+	if (p.error) throw p;
+	else {
 		Cache.setParroquias(p.data);
 		return p.data;
 	}
@@ -269,16 +269,16 @@ async function getParroquias(force=false){
  * @param {string} id The parroquia id.
  * @param {boolean} force Bypass the cache
  */
-async function getParroquia(id, force=false){
-	if(!force){
+async function getParroquia(id, force = false) {
+	if (!force) {
 		var parroquiaCache = Cache.getParroquia(id);
-		if(parroquiaCache){
+		if (parroquiaCache) {
 			return parroquiaCache;
 		}
 	}
 
-	var p = await get('parroquias/'+id);
-	if(p.error) throw p;
+	var p = await get('parroquias/' + id);
+	if (p.error) throw p;
 	else {
 		Cache.setParroquia(p.data);
 		return p.data;
@@ -289,7 +289,7 @@ async function getParroquia(id, force=false){
  * Add a parroquia to the database.
  * @param {object} data The parroquia data.
  */
-async function addParroquia(data){
+async function addParroquia(data) {
 	var payload = {
 		nombre: data.nombre,
 		direccion: data.direccion,
@@ -300,7 +300,7 @@ async function addParroquia(data){
 		decanato: data.decanato
 	}
 	var res = await post('parroquias', payload);
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -309,12 +309,12 @@ async function addParroquia(data){
  * @param {string} id The parroquia to edit
  * @param {object} data The new data of the parroquia.
  */
-async function editParroquia(id, data){	
+async function editParroquia(id, data) {
 	var res = await post('parroquias/edit', {
 		parroquia: id,
 		...data
 	});
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -323,13 +323,13 @@ async function editParroquia(id, data){
  * @param {string} parroquia_id The capilla's parrouia id
  * @param {object} data The new capilla data
  */
-async function addCapilla(parroquia_id, data){
+async function addCapilla(parroquia_id, data) {
 	var payload = {
 		...data,
 		parroquia: parroquia_id
 	};
 	var res = await post('capillas', payload);
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else {
 		Cache.parroquiaAddCapilla(parroquia_id, res.data);
 		Cache.addCapilla(res.data);
@@ -341,12 +341,12 @@ async function addCapilla(parroquia_id, data){
  * Get the list of decanatos
  * @param {boolean} force Bypass the cachce
  */
-async function getDecanatos(force=false){
-	if(!force && Cache.getDecanatos()){
+async function getDecanatos(force = false) {
+	if (!force && Cache.getDecanatos()) {
 		return Cache.getDecanatos();
 	}
 	var p = await get('decanatos');
-	if(p.error) throw p;
+	if (p.error) throw p;
 	else {
 		Cache.setDecanatos(p.data);
 		return p.data;
@@ -357,12 +357,12 @@ async function getDecanatos(force=false){
  * Get the list of coordinadores
  * @param {boolean} force Bypass the cache
  */
-async function getCoordinadores(force=false){
-	if(!force && Cache.getCoordinadores()){
+async function getCoordinadores(force = false) {
+	if (!force && Cache.getCoordinadores()) {
 		return Cache.getCoordinadores();
 	}
 	var p = await get('coordinadores');
-	if(p.error) throw p;
+	if (p.error) throw p;
 	else {
 		Cache.setCoordinadores(p.data);
 		return p.data;
@@ -374,16 +374,16 @@ async function getCoordinadores(force=false){
  * @param {string} id The coordinador id
  * @param {boolean} force Bypass the cache
  */
-async function getCoordinador(id, force=false){
-	if(!force){
+async function getCoordinador(id, force = false) {
+	if (!force) {
 		var coordCache = Cache.getCoordinador(id);
-		if(coordCache){
+		if (coordCache) {
 			return coordCache;
 		}
 	}
 
-	var p = await get('coordinadores/'+id);
-	if(p.error) throw p;
+	var p = await get('coordinadores/' + id);
+	if (p.error) throw p;
 	else {
 		Cache.setCoordinador(p.data);
 		return p.data;
@@ -394,12 +394,12 @@ async function getCoordinador(id, force=false){
  * Get the list of grupos
  * @param {boolean} force Bypass the cache
  */
-async function getGrupos(force=false){
-	if(!force && Cache.getGrupos()){
+async function getGrupos(force = false) {
+	if (!force && Cache.getGrupos()) {
 		return Cache.getGrupos();
 	}
 	var res = await get('grupos');
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else {
 		Cache.setGrupos(res.data);
 		return res.data;
@@ -411,15 +411,15 @@ async function getGrupos(force=false){
  * @param {string} id The id of the grupo
  * @param {boolean} force Bypass the cache
  */
-async function getGrupo(id, force=false){
-	if(!force){
+async function getGrupo(id, force = false) {
+	if (!force) {
 		var cacheGrupo = Cache.getGrupo(id);
-		if(cacheGrupo){
+		if (cacheGrupo) {
 			return cacheGrupo;
 		}
 	}
-	var res = await get('grupos/'+id);
-	if(res.error) throw res;
+	var res = await get('grupos/' + id);
+	if (res.error) throw res;
 	else {
 		res.data.id = id;
 		Cache.setGrupo(res.data);
@@ -436,7 +436,7 @@ async function getGrupo(id, force=false){
  * @param {string} parroquia The ID of the grupo's parrouia
  * @param {string} capilla The ID of the grupo's capilla
  */
-async function addGrupo(name, coordinador, parroquia, capilla){
+async function addGrupo(name, coordinador, parroquia, capilla) {
 	var payload = {
 		name,
 		coordinador,
@@ -445,7 +445,7 @@ async function addGrupo(name, coordinador, parroquia, capilla){
 	}
 
 	var res = await post('grupos', payload);
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -453,9 +453,9 @@ async function addGrupo(name, coordinador, parroquia, capilla){
  * Create a coordinador and add it to the databse.
  * @param {object} data The data of the new coordinador
  */
-async function registerCoordinador(data){
+async function registerCoordinador(data) {
 	var res = await post('coordinadores', data);
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -464,14 +464,14 @@ async function registerCoordinador(data){
  * @param {string} grupo The member's grupo id
  * @param {object} data The new member's data
  */
-async function registerMember(grupo, data){
+async function registerMember(grupo, data) {
 	var payload = {
 		grupo,
 		...data,
 	}
 
 	var res = await post('grupos/register', payload);
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -481,9 +481,9 @@ async function registerMember(grupo, data){
  * @param {string} grupo_id The asistencia's grupo
  * @param {string} fecha The asistencia's date in format 'YYYY-MM-DD'
  */
-async function getAsistencia(grupo_id, fecha){
-	var res = await get('grupos/'+grupo_id+'/asistencia/'+fecha);
-	if(res.error) throw res;
+async function getAsistencia(grupo_id, fecha) {
+	var res = await get('grupos/' + grupo_id + '/asistencia/' + fecha);
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -494,12 +494,12 @@ async function getAsistencia(grupo_id, fecha){
  * @param {array} miembros Array of member ids
  * @param {boolean} force Overwrite the asistencia if there is already one on this date?
  */
-async function registerAsistencia(grupo_id, fecha, miembros, force=false){
+async function registerAsistencia(grupo_id, fecha, miembros, force = false) {
 	var payload = {
 		fecha, miembros, force
 	}
-	var res = await post('grupos/'+grupo_id+'/asistencia', payload);
-	if(res.error) throw res;
+	var res = await post('grupos/' + grupo_id + '/asistencia', payload);
+	if (res.error) throw res;
 	else {
 		Cache.registerAsistencia(grupo_id, res.data);
 		return res.data
@@ -512,9 +512,9 @@ async function registerAsistencia(grupo_id, fecha, miembros, force=false){
  * @param {string} fecha The asistencia's fecha in format 'YYYY-MM-DD'
  * @param {array} miembros Array of member ids
  */
-async function saveAsistencia(grupo_id, fecha, miembros){
-	var res = await post('grupos/'+grupo_id+'/asistencia/'+fecha, { miembros });
-	if(res.error) throw res;
+async function saveAsistencia(grupo_id, fecha, miembros) {
+	var res = await post('grupos/' + grupo_id + '/asistencia/' + fecha, { miembros });
+	if (res.error) throw res;
 	else return res.data
 }
 
@@ -522,9 +522,9 @@ async function saveAsistencia(grupo_id, fecha, miembros){
  * Get a capilla from id
  * @param {string} capilla_id The capilla's id
  */
-async function getCapilla(capilla_id){
-	var res = await get('capillas/'+capilla_id);
-	if(res.error) throw res;
+async function getCapilla(capilla_id) {
+	var res = await get('capillas/' + capilla_id);
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -534,14 +534,14 @@ async function getCapilla(capilla_id){
  * @param {string} data The capilla's new data
  * @param {string} parroquia_id The capilla's parroquia, used for Cache saving.
  */
-async function editCapilla(capilla_id, data, parroquia_id){
+async function editCapilla(capilla_id, data, parroquia_id) {
 	var payload = {
 		id: capilla_id,
 		...data
 	}
 
 	var res = await post('capillas/edit', payload);
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else {
 		Cache.parroquiaEditCapilla(parroquia_id, {
 			id: capilla_id,
@@ -556,10 +556,10 @@ async function editCapilla(capilla_id, data, parroquia_id){
  * @param {string} parroquia_id The capilla's parroquia id. Used for Cache editing.
  * @param {string} capilla_id The capilla's id
  */
-async function deleteCapilla(parroquia_id, capilla_id){
-	var res = await sendDelete('capillas/'+capilla_id);
-	if(res.error) throw res;
-	else{
+async function deleteCapilla(parroquia_id, capilla_id) {
+	var res = await sendDelete('capillas/' + capilla_id);
+	if (res.error) throw res;
+	else {
 		Cache.deleteParroquiaCapilla(parroquia_id, capilla_id)
 		return res.data
 	}
@@ -569,10 +569,10 @@ async function deleteCapilla(parroquia_id, capilla_id){
  * Delete a parroquia from the database
  * @param {string} parroquia_id The parroquia's id
  */
-async function deleteParroquia(parroquia_id){
-	var res = await sendDelete('parroquias/'+parroquia_id);
-	if(res.error) throw res;
-	else{
+async function deleteParroquia(parroquia_id) {
+	var res = await sendDelete('parroquias/' + parroquia_id);
+	if (res.error) throw res;
+	else {
 		Cache.deleteParroquia(parroquia_id);
 		return res.data
 	}
@@ -583,18 +583,18 @@ async function deleteParroquia(parroquia_id){
  * @param {string} miembro_id The member's id
  * @param {boolean} force Bypass the cache
  */
-async function getMiembro(miembro_id, force=false){
-	if(!force){
+async function getMiembro(miembro_id, force = false) {
+	if (!force) {
 		var m = Cache.getMiembro(miembro_id);
-		if(m){
+		if (m) {
 			return m;
 		}
 	}
 
-	var res = await get('grupos/miembro/'+miembro_id);
-	if(res.error) throw res;
-	else{
-		if(res.data){
+	var res = await get('grupos/miembro/' + miembro_id);
+	if (res.error) throw res;
+	else {
+		if (res.data) {
 			res.data.id = miembro_id;
 			Cache.addMiembro(res.data);
 		}
@@ -605,9 +605,9 @@ async function getMiembro(miembro_id, force=false){
 /**
  * Get the admin users from the database.
  */
-async function adminGetUsers(){
+async function adminGetUsers() {
 	var res = await get('admin/users');
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -615,9 +615,9 @@ async function adminGetUsers(){
  * Get an admin from the database from its email.
  * @param {string} email The admin's email
  */
-async function getAdmin(email){
+async function getAdmin(email) {
 	var res = await post('admin/users/get', { email });
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -625,9 +625,9 @@ async function getAdmin(email){
  * Register a new admin to the database.
  * @param {object} data The new admin's data
  */
-async function registerAdmin(data){
+async function registerAdmin(data) {
 	var res = await post('admin/users/add', data);
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -636,9 +636,9 @@ async function registerAdmin(data){
  * @param {string} email The admin's database
  * @param {string} password The new password
  */
-async function changeAdminPassword(email, password){
+async function changeAdminPassword(email, password) {
 	var res = await post('admin/users/password', { email, password });
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -646,9 +646,9 @@ async function changeAdminPassword(email, password){
  * Delete an admin from the database.
  * @param {string} email The admin's email
  */
-async function deleteAdmin(email){
+async function deleteAdmin(email) {
 	var res = await post('admin/users/delete', { email });
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -657,12 +657,12 @@ async function deleteAdmin(email){
  * @param {string} old_email The current admin's email
  * @param {string} data The new admin's data.
  */
-async function editAdmin(old_email, data){
+async function editAdmin(old_email, data) {
 	var res = await post('admin/users/edit', {
 		id: old_email,
 		...data
 	});
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -671,13 +671,13 @@ async function editAdmin(old_email, data){
  * @param {string} id The grupo's id
  * @param {object} data The grupo's new data.
  */
-async function editGrupo(id, data){
+async function editGrupo(id, data) {
 	var res = await post('grupos/edit', {
 		id,
 		...data
 	});
-	if(res.error) throw res;
-	else{
+	if (res.error) throw res;
+	else {
 		Cache.setGrupoDirty(id);
 		return res.data;
 	};
@@ -688,11 +688,11 @@ async function editGrupo(id, data){
  * @param {string} id The miembro's id
  * @param {object} data The miembro's new data.
  */
-async function editMiembro(id, data){
-	var res = await post('grupos/miembro/'+id+'/edit', data);
-	
-	if(res.error) throw res;
-	else{
+async function editMiembro(id, data) {
+	var res = await post('grupos/miembro/' + id + '/edit', data);
+
+	if (res.error) throw res;
+	else {
 		Cache.setMiembroDirty(id);
 		return res.data;
 	}
@@ -702,9 +702,9 @@ async function editMiembro(id, data){
  * Delete a grupo from the database.
  * @param {string} id The grupo's id
  */
-async function deleteGrupo(id){
-	var res = await sendDelete('grupos/'+id);
-	if(res.error) throw res;
+async function deleteGrupo(id) {
+	var res = await sendDelete('grupos/' + id);
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -713,11 +713,11 @@ async function deleteGrupo(id){
  * @param {string} grupo_id The grupo's id
  * @param {string} coordinador_id The coordinador's id
  */
-async function changeCoordinador(grupo_id, coordinador_id){
-	var res = await post('grupos/'+grupo_id+'/coordinador', {
+async function changeCoordinador(grupo_id, coordinador_id) {
+	var res = await post('grupos/' + grupo_id + '/coordinador', {
 		coordinador: coordinador_id
 	});
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -729,10 +729,10 @@ async function changeCoordinador(grupo_id, coordinador_id){
  * @param {string} id The miembro's id
  * @param {number} status The new miembro's status (0-2)
  */
-async function editMiembroStatus(id, status){
-	var res = await post('grupos/miembro/'+id+'/edit/status', { status });
-	if(res.error) throw res;
-	else{
+async function editMiembroStatus(id, status) {
+	var res = await post('grupos/miembro/' + id + '/edit/status', { status });
+	if (res.error) throw res;
+	else {
 		Cache.setMiembroStatus(id, status);
 		return res.data
 	}
@@ -742,9 +742,9 @@ async function editMiembroStatus(id, status){
  * Get the list of users that are on status 1
  * @param {string} id The grupo's id
  */
-async function getGrupoBajasTemporales(id){
-	var res = await get('grupos/'+id+'/bajas');
-	if(res.error) throw res;
+async function getGrupoBajasTemporales(id) {
+	var res = await get('grupos/' + id + '/bajas');
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -754,15 +754,15 @@ async function getGrupoBajasTemporales(id){
  * @param {string} id The member's id
  * @param {boolean} force Bypass the cache
  */
-async function getFichaMedica(id, force=false){
-	if(!force){
+async function getFichaMedica(id, force = false) {
+	if (!force) {
 		var f = Cache.getMiembroFicha(id);
-		if(f!==false) return f;
+		if (f !== false) return f;
 	}
 
-	var res = await get('grupos/miembro/'+id+'/ficha');
-	if(res.error) throw res;
-	else{
+	var res = await get('grupos/miembro/' + id + '/ficha');
+	if (res.error) throw res;
+	else {
 		Cache.setMiembroFicha(id, res.data);
 		return res.data;
 	}
@@ -773,13 +773,13 @@ async function getFichaMedica(id, force=false){
  * @param {string} id The member's id
  * @param {object} data The member's new ficha medica
  */
-async function setFichaMedica(id, data){
-	var res = await post('grupos/miembro/'+id+'/edit/ficha', {
+async function setFichaMedica(id, data) {
+	var res = await post('grupos/miembro/' + id + '/edit/ficha', {
 		id,
 		...data
 	});
-	if(res.error) throw res;
-	else{
+	if (res.error) throw res;
+	else {
 		Cache.setMiembroFicha(id, data);
 		return res.data;
 	}
@@ -790,14 +790,14 @@ async function setFichaMedica(id, data){
  * @param {string} zona The zona's id
  * @param {object} data The new acompañante's data
  */
-async function registerAcompananteZona(zona, data){
+async function registerAcompananteZona(zona, data) {
 	var res = await post('acompanante/zona', {
 		zona,
 		...data
 	});
-	if(res.error) throw res;
-	else{
-		if(res.data){
+	if (res.error) throw res;
+	else {
+		if (res.data) {
 			Cache.setZonaAcompanante(zona, res.data);
 		}
 		return res.data;
@@ -809,14 +809,14 @@ async function registerAcompananteZona(zona, data){
  * @param {string} decanato The decanato's id
  * @param {object} data The new acompañante's data
  */
-async function registerAcompananteDecanato(decanato, data){
+async function registerAcompananteDecanato(decanato, data) {
 	var res = await post('acompanante/decanato', {
 		decanato,
 		...data
 	});
-	if(res.error) throw res;
-	else{
-		if(res.data){
+	if (res.error) throw res;
+	else {
+		if (res.data) {
 			Cache.setDecanatoAcompanante(decanato, res.data);
 		}
 		return res.data;
@@ -827,9 +827,9 @@ async function registerAcompananteDecanato(decanato, data){
  * Get an acompañante's data.
  * @param {string} id The acompañante's id
  */
-async function getAcompanante(id){
-	var res = await get('acompanante/'+id);
-	if(res.error) throw res;
+async function getAcompanante(id) {
+	var res = await get('acompanante/' + id);
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -837,10 +837,10 @@ async function getAcompanante(id){
  * Delete a zona's acompañante.
  * @param {string} zona The zona's id
  */
-async function deleteAcompananteZona(zona){
-	var res = await sendDelete('zonas/'+zona+'/acompanante');
-	if(res.error) throw res;
-	else{
+async function deleteAcompananteZona(zona) {
+	var res = await sendDelete('zonas/' + zona + '/acompanante');
+	if (res.error) throw res;
+	else {
 		Cache.setZonaAcompanante(zona, null);
 		return res.data;
 	}
@@ -850,10 +850,10 @@ async function deleteAcompananteZona(zona){
  *	Delete a decanato's acompañante
  * @param {string} decanato The decanato's id
  */
-async function deleteAcompananteDecanato(decanato){
-	var res = await sendDelete('decanatos/'+decanato+'/acompanante');
-	if(res.error) throw res;
-	else{
+async function deleteAcompananteDecanato(decanato) {
+	var res = await sendDelete('decanatos/' + decanato + '/acompanante');
+	if (res.error) throw res;
+	else {
 		Cache.setDecanatoAcompanante(decanato, null);
 		return res.data;
 	}
@@ -864,12 +864,12 @@ async function deleteAcompananteDecanato(decanato){
  * @param {string} id The acompañante's id
  * @param {object} data The acompañante's new data.
  */
-async function editAcompanante(id, data){
+async function editAcompanante(id, data) {
 	var res = await post('acompanante/edit', {
 		id,
 		...data
 	});
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -878,9 +878,9 @@ async function editAcompanante(id, data){
  * All of their groups and capacitaciones are left without coordinador.
  * @param {string} id The coordinador's id
  */
-async function deleteCoordinador(id){
-	var res = await sendDelete('coordinadores/'+id);
-	if(res.error) throw res;
+async function deleteCoordinador(id) {
+	var res = await sendDelete('coordinadores/' + id);
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -889,9 +889,9 @@ async function deleteCoordinador(id){
  * @param {string} id The coordinador's id
  * @param {object} data The coordinador's new data
  */
-async function editCoordinador(id, data){
-	var res = await post('coordinadores/'+id+'/edit', data);
-	if(res.error) throw res;
+async function editCoordinador(id, data) {
+	var res = await post('coordinadores/' + id + '/edit', data);
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -899,9 +899,9 @@ async function editCoordinador(id, data){
  * Add a new capacitacion to the database.
  * @param {object} data The new capactiacions data
  */
-async function addCapacitacion(data){
+async function addCapacitacion(data) {
 	var res = await post('capacitacion', data);
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -909,12 +909,12 @@ async function addCapacitacion(data){
  * Get the list of capacitaciones
  * @param {boolean} force Bypass the cache
  */
-async function getCapacitaciones(force=false){
-	if(!force && Cache.getCapacitaciones()){
+async function getCapacitaciones(force = false) {
+	if (!force && Cache.getCapacitaciones()) {
 		return Cache.getCapacitaciones();
 	}
 	var res = await get('capacitacion');
-	if(res.error) throw res;
+	if (res.error) throw res;
 	else {
 		Cache.setCapacitaciones(res.data);
 		return res.data;
@@ -926,13 +926,13 @@ async function getCapacitaciones(force=false){
  * @param {string} id The capacitacións id
  * @param {boolean} force Bypass the cache
  */
-async function getCapacitacion(id, force=false){
-	if(!force){
+async function getCapacitacion(id, force = false) {
+	if (!force) {
 		var cacheCap = Cache.getCapacitacion(id);
-		if(cacheCap) return cacheCap;
+		if (cacheCap) return cacheCap;
 	}
-	var res = await get('capacitacion/'+id);
-	if(res.error) throw res;
+	var res = await get('capacitacion/' + id);
+	if (res.error) throw res;
 	else {
 		Cache.setCapacitacion(res.data);
 		return res.data;
@@ -944,13 +944,13 @@ async function getCapacitacion(id, force=false){
  * @param {string} id The capacitación's id
  * @param {object} data The capacitacións new data.
  */
-async function editCapacitacion(id, data){
+async function editCapacitacion(id, data) {
 	var res = await post('capacitacion/edit', {
 		id,
 		...data
 	});
-	if(res.error) throw res;
-	else{
+	if (res.error) throw res;
+	else {
 		data.inicio = {
 			_seconds: moment(data.inicio, 'YYYY-MM-DD').unix()
 		}
@@ -966,10 +966,10 @@ async function editCapacitacion(id, data){
  * Remove a capacitación from the database.
  * @param {string} id The capacitación's data
  */
-async function removeCapacitacion(id){
-	var res = await sendDelete('capacitacion/'+id);
-	if(res.error) throw res;
-	else{
+async function removeCapacitacion(id) {
+	var res = await sendDelete('capacitacion/' + id);
+	if (res.error) throw res;
+	else {
 		Cache.removeCapacitacion(id);
 		return res.data;
 	}
@@ -982,12 +982,12 @@ async function removeCapacitacion(id){
  * @param {array} miembros Array of member ids
  * @param {boolean} force Overwrite the asistencia if there is already one on this date?
  */
-async function registerCapacitacionAsistencia(id, fecha, miembros, force=false){
+async function registerCapacitacionAsistencia(id, fecha, miembros, force = false) {
 	var payload = {
 		fecha, miembros, force
 	}
-	var res = await post('capacitacion/'+id+'/asistencia', payload);
-	if(res.error) throw res;
+	var res = await post('capacitacion/' + id + '/asistencia', payload);
+	if (res.error) throw res;
 	else {
 		Cache.registerCapacitacionAsistencia(id, res.data);
 		return res.data
@@ -1000,9 +1000,9 @@ async function registerCapacitacionAsistencia(id, fecha, miembros, force=false){
  * @param {string} fecha The asistencia's fecha in format 'YYYY-MM-DD'
  * @param {array} miembros Array of member ids
  */
-async function saveCapacitacionAsistencia(id, fecha, miembros){
-	var res = await post('capacitacion/'+id+'/asistencia/'+fecha, { miembros });
-	if(res.error) throw res;
+async function saveCapacitacionAsistencia(id, fecha, miembros) {
+	var res = await post('capacitacion/' + id + '/asistencia/' + fecha, { miembros });
+	if (res.error) throw res;
 	else return res.data
 }
 
@@ -1012,9 +1012,9 @@ async function saveCapacitacionAsistencia(id, fecha, miembros){
  * @param {string} grupo_id The asistencia's grupo
  * @param {string} fecha The asistencia's date in format 'YYYY-MM-DD'
  */
-async function getCapacitacionAsistencia(id, fecha){
-	var res = await get('capacitacion/'+id+'/asistencia/'+fecha);
-	if(res.error) throw res;
+async function getCapacitacionAsistencia(id, fecha) {
+	var res = await get('capacitacion/' + id + '/asistencia/' + fecha);
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -1024,13 +1024,13 @@ async function getCapacitacionAsistencia(id, fecha){
  * @param {string} id The participante's id
  * @param {object} data The participantes new data
  */
-async function editParticipante(capacitacion, id, data){
+async function editParticipante(capacitacion, id, data) {
 	var res = await post('participante/edit', {
-		id, 
+		id,
 		...data
 	});
-	if(res.error) throw res;
-	else{
+	if (res.error) throw res;
+	else {
 		data.fecha_nacimiento = {
 			_seconds: moment(data.fecha_nacimiento, 'YYYY-MM-DD').unix()
 		}
@@ -1046,9 +1046,9 @@ async function editParticipante(capacitacion, id, data){
  * Get a participante from the database.
  * @param {string} id The participante's id
  */
-async function getParticipante(id){
-	var res = await get('participante/'+id);
-	if(res.error) throw res;
+async function getParticipante(id) {
+	var res = await get('participante/' + id);
+	if (res.error) throw res;
 	else return res.data;
 }
 
@@ -1057,14 +1057,14 @@ async function getParticipante(id){
  * @param {string} capacitacion The capacitación's id
  * @param {object} data The new participante's data
  */
-async function addCapacitacionParticipante(capacitacion, data){
+async function addCapacitacionParticipante(capacitacion, data) {
 	var res = await post('participante', {
 		capacitacion,
 		...data
 	});
 
-	if(res.error) throw res;
-	else{
+	if (res.error) throw res;
+	else {
 		data.fecha_nacimiento = {
 			_seconds: moment(data.fecha_nacimiento, 'YYYY-MM-DD').unix()
 		}
@@ -1078,9 +1078,9 @@ async function addCapacitacionParticipante(capacitacion, data){
  * @param {string} capacitacion The capacitación's id
  * @param {string} id The participante's id to remove
  */
-async function removeCapacitacionParticipante(capacitacion, id){
-	var res = await sendDelete('participante/'+id);
-	if(res.error) throw res;
+async function removeCapacitacionParticipante(capacitacion, id) {
+	var res = await sendDelete('participante/' + id);
+	if (res.error) throw res;
 	else {
 		Cache.removeParticipante(capacitacion, id)
 		return res.data;
@@ -1092,13 +1092,13 @@ async function removeCapacitacionParticipante(capacitacion, id){
  * @param {string} capacitacion The capacitación's id
  * @param {string} encargado The coordinador's id
  */
-async function changeCapacitacionEncargado(capacitacion, encargado){
+async function changeCapacitacionEncargado(capacitacion, encargado) {
 	var res = await post('capacitacion/edit/encargado', {
 		id: capacitacion,
 		coordinador: encargado
 	});
-	if(res.error) throw res;
-	else{
+	if (res.error) throw res;
+	else {
 		Cache.changeCapacitacionEncargado(capacitacion, encargado);
 		return res.data;
 	}
@@ -1108,9 +1108,9 @@ async function changeCapacitacionEncargado(capacitacion, encargado){
  * Get the participantes from a capcitación
  * @param {string} capacitacion The capacitación's id
  */
-async function getParticipantes(capacitacion){
-	var res = await get('capacitacion/'+capacitacion+'/participantes');
-	if(res.error) throw err;
+async function getParticipantes(capacitacion) {
+	var res = await get('capacitacion/' + capacitacion + '/participantes');
+	if (res.error) throw err;
 	else return res.data;
 }
 
@@ -1119,9 +1119,9 @@ async function getParticipantes(capacitacion){
  * Used for reporte downloading.
  * @param {string} url The endpoint of the url
  */
-async function formatURL(url){
+async function formatURL(url) {
 	var u = await getUser();
-	return ROOT_URL+url+'?token='+u.token;
+	return ROOT_URL + url + '?token=' + u.token;
 }
 
 export default {

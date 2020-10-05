@@ -4,7 +4,7 @@ Usuario con acceso: Admin
 Descripción: Pantalla para editar la información personal de un miembro de un grupo HEMA
 */
 import React, { useState, useRef } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, CheckBox, View } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
@@ -16,7 +16,7 @@ export default (props) => {
 	var { persona } = props.route.params;
 
 	var bd = moment.unix(persona.fecha_nacimiento._seconds)
-	if(!bd.isValid()) bd = moment();
+	if (!bd.isValid()) bd = moment();
 
 	var [loading, setLoading] = useState(false);
 	var [name, setName] = useState(persona.nombre);
@@ -33,18 +33,21 @@ export default (props) => {
 	var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
 	var [escolaridad, setEscolaridad] = useState(false);
 	var [oficio, setOficio] = useState(false);
+	let [hasLaptop, setHasLaptop] = useState(false);
+	let [hasTablet, setHasTablet] = useState(false);
+	let [hasSmartphone, setHasSmartphone] = useState(false);
 	var pickerRef = useRef(null);
 
 	var { onEdit } = props.route.params;
 
-	
+
 	props.navigation.setOptions({
 		headerTitle: 'Editar Miembro'
 	});
 
 	var save = () => {
-		if(loading) return;
-		var data =  {
+		if (loading) return;
+		var data = {
 			nombre: name,
 			apellido_paterno: apPaterno,
 			apellido_materno: apMaterno,
@@ -60,7 +63,10 @@ export default (props) => {
 				municipio: municipio,
 				telefono_casa: phoneHome,
 				telefono_movil: phoneMobile,
-			}
+			},
+			laptop: hasLaptop,
+			smartphone: hasSmartphone,
+			tablet: hasTablet
 		}
 
 		var { valid, prompt } = Util.validateForm(data, {
@@ -73,74 +79,86 @@ export default (props) => {
 			oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
 		});
 
-		if(!valid){
+		if (!valid) {
 			return Alert.alert('Error', prompt);
 		}
-		
+
 		setLoading(true);
-		API.editMiembro(persona.id, data).then(done=>{
+		API.editMiembro(persona.id, data).then(done => {
 			setLoading(false)
-			if(!done) return Alert.alert('Error', "Hubo un error editando el miembro.");
+			if (!done) return Alert.alert('Error', "Hubo un error editando el miembro.");
 			data.fecha_nacimiento = {
 				_seconds: moment(birthday, 'YYYY-MM-DD').unix()
 			}
 			onEdit(data);
 			Alert.alert('Exito', "Se ha editado el miembro.");
-		}).catch(err=>{
-			if(err.code && err.code==999){
+		}).catch(err => {
+			if (err.code && err.code == 999) {
 				Alert.alert('Error', "No tienes acceso a este grupo.");
-			}else{
+			} else {
 				Alert.alert('Error', "Hubo un error editando el miembro.");
 			}
 			setLoading(false);
 		})
 	}
 
-	var formatDate = a=>{
+	var formatDate = a => {
 		var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
 		return f.charAt(0).toUpperCase() + f.substr(1);
 	}
 
-	var getEstadoCivil = ()=>{
+	var getEstadoCivil = () => {
 		return ['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado'].indexOf(persona.estado_civil);
 	}
 
-	var getGenero = ()=>{
+	var getGenero = () => {
 		return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo);
 	}
 
-	var getEscolaridad = ()=>{
+	var getEscolaridad = () => {
 		return ['Ninguno', 'Primaria', 'Secundaria', 'Técnica carrera', 'Maestría', 'Doctorado'].indexOf(persona.escolaridad);
 	}
 
-	var getOficio = ()=>{
+	var getOficio = () => {
 		return ['Ninguno', 'Plomero', 'Electricista', 'Carpintero', 'Albañil', 'Pintor', 'Mecánico', 'Músico', 'Chofer'].indexOf(persona.oficio);
 	}
 
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
-			<Text style={styles.header}>Editar Miembro</Text> 
-			<Input name="Nombre" value={name} onChangeText={setName}/>
-			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno}/>
-			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno}/>
-			<DatePicker onDateChange={d=>setBirthday(d)} date={birthday} name="Fecha de nacimiento" />
+			<Text style={styles.header}>Editar Miembro</Text>
+			<Input name="Nombre" value={name} onChangeText={setName} />
+			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} />
+			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno} />
+			<DatePicker onDateChange={d => setBirthday(d)} date={birthday} name="Fecha de nacimiento" />
 
 			<Picker name="Estado Civil" items={['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado']} onValueChange={setEstadoCivil} select={getEstadoCivil()} />
 			<Picker name="Sexo" items={['Masculino', 'Femenino', 'Sin especificar']} onValueChange={setGender} select={getGenero()} />
-			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'}/>
+			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'} />
 			<Picker name="Grado escolaridad" items={[
 				'Ninguno', 'Primaria',
-				'Secundaria', 'Técnica carrera', 
+				'Secundaria', 'Técnica carrera',
 				'Maestría', 'Doctorado'
 			]} onValueChange={setEscolaridad} select={getEscolaridad()} />
 			<Picker name="Oficio" items={[
-				'Ninguno', 'Plomero', 
-				'Electricista', 'Carpintero', 
-				'Albañil', 'Pintor', 'Mecánico', 
+				'Ninguno', 'Plomero',
+				'Electricista', 'Carpintero',
+				'Albañil', 'Pintor', 'Mecánico',
 				'Músico', 'Chofer'
 			]} onValueChange={setOficio} select={getOficio()} />
-
-			<Text style={styles.section}>Domicilio</Text> 
+			<Text style={styles.section}>Indica los dispositivos que tenga</Text>
+			<View>
+				<CheckBox value={hasLaptop} onValueChange={setHasLaptop} />
+				<Text>Laptop</Text>
+			</View>
+			<View>
+				<CheckBox value={hasTablet} onValueChange={setHasTablet} />
+				<Text>Tablet</Text>
+			</View>
+			<View>
+				<CheckBox value={hasSmartphone} onValueChange={setHasSmartphone} />
+				<Text>Smartphone</Text>
+			</View>
+			<Text style={styles.section}>Domicilio</Text>
 			<Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
 			<Input name="Colonia" value={colonia} onChangeText={setColonia} />
 			<Input name="Municipio" value={municipio} onChangeText={setMunicipio} />
@@ -162,8 +180,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	loginContainer: {
-		height: '70%', 
-		width: '100%', 
+		height: '70%',
+		width: '100%',
 		padding: 10
 	},
 	header: {
