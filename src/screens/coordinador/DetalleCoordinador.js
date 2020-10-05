@@ -151,6 +151,9 @@ export default (props)=>{
 				</View>
 			)}
 			<View style={{ padding: 15 }}>
+				{ persona.identificador &&
+					<Input name="Identificador" value={persona.identificador} readonly />
+				}
 				<Input name='Correo Electrónico' value={persona.email} readonly />
 				<Input name="Nombre" value={persona.nombre} readonly/>
 				<Input name="Apellido Paterno" value={persona.apellido_paterno} readonly/>
