@@ -166,6 +166,9 @@ export default (props)=>{
 						)}
 					</View>
 					<View style={{ padding: 15, marginTop: 10 }}>
+						{ parroquia.identificador &&
+							<Input name="Identificador" value={parroquia.identificador} readonly />
+						}
 						<Input name="Nombre" value={parroquia.nombre} readonly />
 						<Input name="Decanato" value={parroquia.decanato ? parroquia.decanato.nombre : null} readonly />
 						<Input name="Dirección" value={parroquia.direccion} readonly />

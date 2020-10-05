@@ -291,6 +291,7 @@ async function getParroquia(id, force=false){
  */
 async function addParroquia(data){
 	var payload = {
+		identificador: data.identificador,
 		nombre: data.nombre,
 		direccion: data.direccion,
 		colonia: data.colonia,
@@ -299,9 +300,13 @@ async function addParroquia(data){
 		telefono2: data.telefono2,
 		decanato: data.decanato
 	}
-	var res = await post('parroquias', payload);
-	if(res.error) throw res;
-	else return res.data;
+	const res = await post('parroquias', payload);
+	
+	if (res.error) {
+		throw res;
+	}	else {
+		return res.data;
+	}
 }
 
 /**
