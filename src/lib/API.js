@@ -3,8 +3,8 @@ import { AsyncStorage, EventEmitter } from 'react-native';
 import Cache from './Cache';
 import moment from 'moment';
 
-// const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
-const ROOT_URL = 'http://localhost:8000/api/'
+const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
+// const ROOT_URL = 'http://localhost:8000/api/'
 var onLogout = null;
 
 /**
@@ -300,8 +300,11 @@ async function addParroquia(data) {
 		decanato: data.decanato
 	}
 	var res = await post('parroquias', payload);
-	if (res.error) throw res;
-	else return res.data;
+	if (res.error) {
+		throw res;
+	} else {
+		return res.data;
+	}
 }
 
 /**
