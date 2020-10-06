@@ -17,6 +17,7 @@ export default (props)=>{
 	var bd = moment.unix(persona.fecha_nacimiento._seconds)
 	if(!bd.isValid()) bd = moment();
 
+	var [identificador, setIdentificador] = useState((persona.identificador || ''));
 	var [loading, setLoading] = useState(false);
 	var [name, setName] = useState(persona.nombre);
 	var [apPaterno, setApPaterno] = useState(persona.apellido_paterno);
@@ -114,6 +115,9 @@ export default (props)=>{
 
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
+			{ identificador !== '' &&
+				<Input name="Identificador" value={identificador} readonly />
+			}
 			<Input name="Nombre" value={name} onChangeText={setName} required/>
 			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} required/>
 			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno} />
