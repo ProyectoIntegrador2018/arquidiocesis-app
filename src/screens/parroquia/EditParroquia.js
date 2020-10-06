@@ -14,6 +14,7 @@ export default (props)=>{
 	var [loading, setLoading] = useState(false);
 	var [listDecanatos, setListDecanatos] = useState(false);
 	
+	var [identificador, setIdentificador] = useState((parroquia.identificador || ''));
 	var [name, setName] = useState((parroquia.nombre || ''));
 	var [address, setAddress]= useState((parroquia.direccion || ''));
 	var [decanato, setDecanato] = useState(false);
@@ -42,7 +43,9 @@ export default (props)=>{
 			municipio: { type: 'empty', prompt: 'Favor de introducir el municipio.' }
 		})
 
-		if(!valid) return Alert.alert('Error', prompt);
+		if (!valid) {
+			return Alert.alert('Error', prompt);
+		}
 	
 		setLoading(true);
 		API.editParroquia(parroquia.id, data).then(done=>{
@@ -83,6 +86,9 @@ export default (props)=>{
 		<KeyboardAwareScrollView bounces={false} contentContainerStyle={{ paddingBottom: 50 }}>
 			<Text style={styles.header}>Editar Parroquia</Text> 
 			<View style={{ padding: 15 }}>
+				{ identificador !== '' &&
+						<Input name="Identificador" value={identificador} readonly />
+				}
 				<Input name="Nombre" value={name} onChangeText={setName} required />
 				<Input name="Dirección" value={address} onChangeText={setAddress} required />
 				<Input name="Colonia" value={colonia} onChangeText={setColonia} required />

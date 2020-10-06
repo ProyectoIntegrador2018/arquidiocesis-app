@@ -291,6 +291,7 @@ async function getParroquia(id, force = false) {
  */
 async function addParroquia(data) {
 	var payload = {
+		identificador: data.identificador,
 		nombre: data.nombre,
 		direccion: data.direccion,
 		colonia: data.colonia,
@@ -299,10 +300,13 @@ async function addParroquia(data) {
 		telefono2: data.telefono2,
 		decanato: data.decanato
 	}
-	var res = await post('parroquias', payload);
+
+	const res = await post('parroquias', payload);
+	
 	if (res.error) {
 		throw res;
-	} else {
+	}	else {
+
 		return res.data;
 	}
 }
@@ -827,6 +831,34 @@ async function registerAcompananteDecanato(decanato, data) {
 }
 
 /**
+ * Get an acompañantes data.
+ */
+async function getAcompanantes(){
+	const res = await get('acompanantes');
+	
+	if (res.error) {
+		throw res;
+	} else {
+		return res.data;
+	}
+}
+
+
+/**
+ * Get an acompañante's zona or decanato.
+ * @param {string} id The acompañante's id
+ */
+async function getAcompananteZonaOrDecanato(id){
+	const res = await get('acompanantes/'+id+'/place');
+	
+	if (res.error) {
+		throw res;
+	} else {
+		return res.data;
+	}
+}
+
+/**
  * Get an acompañante's data.
  * @param {string} id The acompañante's id
  */
@@ -1171,6 +1203,8 @@ export default {
 	getFichaMedica,
 	setFichaMedica,
 	editParroquia,
+	getAcompanantes,
+	getAcompananteZonaOrDecanato,
 	getAcompanante,
 	registerAcompananteZona,
 	registerAcompananteDecanato,

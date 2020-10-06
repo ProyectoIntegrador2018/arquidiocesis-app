@@ -13,13 +13,20 @@ moment.locale('es')
 
 
 export default (props)=>{
-	var { zona, decanato, onDelete } = props.route.params;
+	var { acompanante, zona, decanato, onDelete } = props.route.params;
 
-	var acompanante = zona ? zona.acompanante : decanato.acompanante;
+	var acompananteDatos;
+
+	if (acompanante) {
+		acompananteDatos = acompanante;
+	} else {
+		acompananteDatos = zona ? zona.acompanante : decanato.acompanante;
+	}
 
 	var [persona, setPersona] = useState(false)
 	var [user, setUser] = useState(false);
 	var [deleting, setDeleting] = useState(false);
+	var [place, setPlace] = useState(false);
 
 	props.navigation.setOptions({
 		headerTitle: 'Detalle Acompañante',
@@ -34,14 +41,21 @@ export default (props)=>{
 	useEffect(()=>{
 		API.getUser().then(setUser);
 
-		if(!acompanante){
+		if (acompanante) {
+			setPersona(acompanante);
+			getZonaOrDecanatoForAcompanante();
+			return;
+		}
+
+		if(!acompananteDatos){
 			onDelete();
 			props.navigation.goBack();
 			Alert.alert('Error', 'Esta zona no tiene acompañante.');
 			return;
 		}
-		API.getAcompanante(acompanante).then(a=>{
+		API.getAcompanante(acompananteDatos).then(a=>{
 			setPersona(a);
+			getZonaOrDecanatoForAcompanante(acompananteDatos);
 		}).catch(err=>{
 			if(err.code==910){
 				onDelete();
@@ -65,6 +79,26 @@ export default (props)=>{
 				setPersona(p);
 			}
 		});
+	}
+
+	const getZonaOrDecanatoForAcompanante = async (id = acompananteDatos.id) => {
+		try {
+			const data = await API.getAcompananteZonaOrDecanato(id);
+			console.log('place :>> ', place);
+			
+			if (data.zona) {
+				setPlace({ id: data.zona.id, kind: 'Zona', name: data.zona.nombre });
+			} else if (data.decanato) {
+				setPlace({ id: data.zona.id, kind: 'Decanato', name: data.zona.nombre });
+			}
+		} catch (error) {
+			console.log('error :>> ', error);
+			Alert.alert('Error', 'Hubo un error al recuperar la zona o decanato del acompañante.')
+		}
+	}
+
+	const showPlace = () => {
+		props.navigation.navigate('Zona', { id: place.id, nombre: place.name });
 	}
 
 	var changePassword = ()=>{
@@ -103,6 +137,12 @@ export default (props)=>{
 			<LoadingView />
 		) : (
 			<ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
+				{place && 
+					<View>
+						<Text style={[styles.section, { marginTop: 10 }]}>{place.kind}</Text>
+						<Item text={place.name} onPress={showPlace} />
+					</View>
+				}
 				{ user && (user.type=='admin' || user.type=='superadmin') ? (
 					<View>
 						<Text style={[styles.section, { marginTop: 10 }]}>Opciones</Text>
@@ -115,7 +155,7 @@ export default (props)=>{
 					<Input name="Nombre" value={persona.nombre} readonly />
 					<Input name="Apellido Paterno" value={persona.apellido_paterno} readonly />
 					<Input name="Apellido Materno" value={persona.apellido_materno} readonly />
-					<Input name='Fecha de nacimiento' value={getFechaNacimiento()}readonly />
+					<Input name='Fecha de nacimiento' value={getFechaNacimiento()} readonly />
 					<Input name='Estado Civil' value={persona.estado_civil} readonly />
 					<Input name='Sexo' value={persona.sexo} readonly />
 					<Input name='Grado escolaridad' value={persona.escolaridad} readonly />
