@@ -84,12 +84,11 @@ export default (props)=>{
 	const getZonaOrDecanatoForAcompanante = async (id = acompananteDatos.id) => {
 		try {
 			const data = await API.getAcompananteZonaOrDecanato(id);
-			console.log('place :>> ', place);
 			
 			if (data.zona) {
 				setPlace({ id: data.zona.id, kind: 'Zona', name: data.zona.nombre });
 			} else if (data.decanato) {
-				setPlace({ id: data.zona.id, kind: 'Decanato', name: data.zona.nombre });
+				setPlace({ id: data.decanato.id, kind: 'Decanato', name: data.decanato.nombre });
 			}
 		} catch (error) {
 			console.log('error :>> ', error);
