@@ -4,20 +4,20 @@ Usuario con acceso: Admin
 Descripción: Pantalla para registrar un miembro de un grupo HEMA
 */
 import React, { useState, useRef } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, CheckBox, View } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
 import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
-export default (props)=>{
+export default (props) => {
 	var [loading, setLoading] = useState(false);
 	var [name, setName] = useState('');
 	var [apPaterno, setApPaterno] = useState('');
 	var [apMaterno, setApMaterno] = useState('');
 	var [email, setEmail] = useState('');
-	var [birthday, setBirthday] = useState (moment().format('YYYY-MM-DD'));
+	var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'));
 	var [gender, setGender] = useState(false);
 	var [estadoCivil, setEstadoCivil] = useState(false);
 	var [domicilio, setDomicilio] = useState('');
@@ -28,6 +28,9 @@ export default (props)=>{
 	var [phoneMobile, setPhoneMobile] = useState('');
 	var [escolaridad, setEscolaridad] = useState(false);
 	var [oficio, setOficio] = useState(false);
+	let [hasLaptop, setHasLaptop] = useState(false);
+	let [hasTablet, setHasTablet] = useState(false);
+	let [hasSmartphone, setHasSmartphone] = useState(false);
 	var pickerRef = useRef(null);
 
 	var onAdd = props.route.params.onAdd;
@@ -37,8 +40,8 @@ export default (props)=>{
 		headerTitle: 'Registro Miembro'
 	});
 
-	var doRegister = ()=>{
-		if(loading) return;
+	var doRegister = () => {
+		if (loading) return;
 
 		var data = {
 			nombre: name,
@@ -56,7 +59,10 @@ export default (props)=>{
 				municipio: municipio,
 				telefono_casa: phoneHome,
 				telefono_movil: phoneMobile,
-			}
+			},
+			laptop: hasLaptop,
+			smartphone: hasSmartphone,
+			tablet: hasTablet
 		}
 
 		var { valid, prompt } = Util.validateForm(data, {
@@ -69,40 +75,40 @@ export default (props)=>{
 			oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
 		});
 
-		if(!valid){
+		if (!valid) {
 			return Alert.alert('Error', prompt);
 		}
 
 		setLoading(true);
-		API.registerMember(group.id, data).then(new_member=>{
+		API.registerMember(group.id, data).then(new_member => {
 			setLoading(false);
-			if(!new_member) return Alert.alert('Error', "Hubo un error registrando el miembro");
-			if(onAdd) onAdd(new_member)
+			if (!new_member) return Alert.alert('Error', "Hubo un error registrando el miembro");
+			if (onAdd) onAdd(new_member)
 			Alert.alert('Exito', "Se ha agregado el miembro al grupo.");
 			props.navigation.goBack();
-		}).catch(err=>{
-			if(err.code && err.code==999){
+		}).catch(err => {
+			if (err.code && err.code == 999) {
 				Alert.alert('Error', "No tienes acceso a este grupo.");
-			}else{
+			} else {
 				Alert.alert('Error', "Hubo un error registrando el miembro");
 			}
 			setLoading(false);
 		})
 	}
 
-	var formatDate = a=>{
+	var formatDate = a => {
 		var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
 		return f.charAt(0).toUpperCase() + f.substr(1);
 	}
 
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
-			<Text style={styles.header}>Registrar Miembro</Text> 
+			<Text style={styles.header}>Registrar Miembro</Text>
 			<Text style={styles.subHeader}>{group.nombre}</Text>
-			<Input name="Nombre" value={name} onChangeText={setName}/>
-			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno}/>
-			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno}/>
-			<DatePicker onDateChange={d=>setBirthday(d)} date={birthday} name="Fecha" />
+			<Input name="Nombre" value={name} onChangeText={setName} />
+			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} />
+			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno} />
+			<DatePicker onDateChange={d => setBirthday(d)} date={birthday} name="Fecha" />
 			<Picker name="Estado Civil" items={[
 				{ label: 'Soltero', value: 'Soltero' },
 				{ label: 'Casado', value: 'Casado' },
@@ -115,7 +121,7 @@ export default (props)=>{
 				{ label: 'Femenino', value: 'Femenino' },
 				{ label: 'Sin especificar', value: 'Sin especificar' }
 			]} onValueChange={setGender} />
-			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'}/>
+			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'} />
 			<Picker name="Grado escolaridad" items={[
 				{ label: 'Ninguno', value: 'Ninguno' },
 				{ label: 'Primaria', value: 'Primaria' },
@@ -135,8 +141,20 @@ export default (props)=>{
 				{ label: 'Músico', value: 'Músico' },
 				{ label: 'Chofer', value: 'Chofer' },
 			]} onValueChange={setOficio} />
-
-			<Text style={styles.section}>Domicilio</Text> 
+			<Text style={styles.dispositivosHeader}>Indica los dispositivos que tenga</Text>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasLaptop} onValueChange={setHasLaptop} />
+				<Text style={styles.dispositivos}>Laptop</Text>
+			</View>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasTablet} onValueChange={setHasTablet} />
+				<Text style={styles.dispositivos}>Tablet</Text>
+			</View>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasSmartphone} onValueChange={setHasSmartphone} />
+				<Text style={styles.dispositivos}>Smartphone</Text>
+			</View>
+			<Text style={styles.section}>Domicilio</Text>
 			<Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
 			<Input name="Colonia" value={colonia} onChangeText={setColonia} />
 			<Input name="Municipio" value={municipio} onChangeText={setMunicipio} />
@@ -158,8 +176,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	loginContainer: {
-		height: '70%', 
-		width: '100%', 
+		height: '70%',
+		width: '100%',
 		padding: 10
 	},
 	header: {
@@ -182,5 +200,26 @@ const styles = StyleSheet.create({
 		color: 'grey',
 		marginBottom: 10,
 		marginTop: 20,
+	},
+	checkbox: {
+		height: 25,
+		width: 25
+	},
+	dispositivosHeader: {
+		fontSize: 16,
+		color: 'gray',
+		marginBottom: 10,
+		fontWeight: '500'
+	},
+	dispositivos: {
+		fontSize: 20,
+		marginLeft: 10,
+		textAlignVertical: "center"
+	},
+	view: {
+		flexDirection: "row",
+		justifyContent: 'flex-start',
+		marginBottom: 10,
+		marginTop: 10
 	}
 })
