@@ -302,10 +302,10 @@ async function addParroquia(data) {
 	}
 
 	const res = await post('parroquias', payload);
-	
+
 	if (res.error) {
 		throw res;
-	}	else {
+	} else {
 
 		return res.data;
 	}
@@ -833,9 +833,9 @@ async function registerAcompananteDecanato(decanato, data) {
 /**
  * Get an acompañantes data.
  */
-async function getAcompanantes(){
+async function getAcompanantes() {
 	const res = await get('acompanantes');
-	
+
 	if (res.error) {
 		throw res;
 	} else {
@@ -848,9 +848,9 @@ async function getAcompanantes(){
  * Get an acompañante's zona or decanato.
  * @param {string} id The acompañante's id
  */
-async function getAcompananteZonaOrDecanato(id){
-	const res = await get('acompanantes/'+id+'/place');
-	
+async function getAcompananteZonaOrDecanato(id) {
+	const res = await get('acompanantes/' + id + '/place');
+
 	if (res.error) {
 		throw res;
 	} else {

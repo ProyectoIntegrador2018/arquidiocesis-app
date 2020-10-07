@@ -33,9 +33,9 @@ export default (props) => {
 	var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
 	var [escolaridad, setEscolaridad] = useState(false);
 	var [oficio, setOficio] = useState(false);
-	let [hasLaptop, setHasLaptop] = useState(false);
-	let [hasTablet, setHasTablet] = useState(false);
-	let [hasSmartphone, setHasSmartphone] = useState(false);
+	let [hasLaptop, setHasLaptop] = useState(persona.laptop);
+	let [hasTablet, setHasTablet] = useState(persona.tablet);
+	let [hasSmartphone, setHasSmartphone] = useState(persona.smartphone);
 	var pickerRef = useRef(null);
 
 	var { onEdit } = props.route.params;
