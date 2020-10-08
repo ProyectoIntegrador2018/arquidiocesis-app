@@ -52,6 +52,7 @@ import ChangeEncargado from './capacitacion/ChangeEncargado';
 import AsistenciaCapacitacion from './capacitacion/AsistenciaCapacitacion';
 import SelectCapacitacion from './capacitacion/SelectCapacitacion';
 
+import Acompanantes from './acompanante/Acompanantes';
 import RegistroAcompanante from './acompanante/RegistroAcompanante';
 import EditAcompanante from './acompanante/EditAcompanante';
 import DetalleAcompanante from './acompanante/DetalleAcompanante';
@@ -87,6 +88,7 @@ export {
 	ChangeCoordinador, 
 	EstatusMiembro,
 	EditParroquia,
+	Acompanantes,
 	RegistroAcompanante,
 	EditAcompanante,
 	DetalleCoordinador,

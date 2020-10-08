@@ -12,6 +12,7 @@ import moment from 'moment/min/moment-with-locales'
 moment.locale('es')
 
 export default (props)=>{
+	const [identificador, setIdentificador] = useState('');
 	var [loading, setLoading] = useState(false);
 	var [name, setName] = useState('');
 	var [apPaterno, setApPaterno] = useState('');
@@ -40,6 +41,7 @@ export default (props)=>{
 		if(loading) return;
 
 		var data = {
+			identificador,
 			nombre: name,
 			apellido_paterno: apPaterno,
 			apellido_materno: apMaterno,
@@ -60,6 +62,7 @@ export default (props)=>{
 		}
 
 		var { valid, prompt } = Util.validateForm(data, {
+			identificador: { type: 'empty', prompt: 'Favor de introducir el identificador de la parroquia.' },
 			nombre: { type: 'minLength', value: 3, prompt: 'Favor de introducir el nombre.' },
 			apellido_paterno: { type: 'empty', prompt: 'Favor de introducir el apelldio paterno.' },
 			fecha_nacimiento: { type: 'empty', prompt: 'Favor de introducir la fecha de nacimiento.' },
@@ -70,7 +73,7 @@ export default (props)=>{
 			password: { type: 'minLength', value: 5, prompt: 'Favor de introducir la contraseña, minimo 5 caracteres' }
 		});
 
-		if(!valid){
+		if (!valid){
 			return Alert.alert('Error', prompt);
 		}
 
@@ -83,14 +86,20 @@ export default (props)=>{
 			props.navigation.goBack();
 		}).catch(err=>{
 			console.log(err);
-			Alert.alert('Error', "Hubo un error registrando el coordinador");
 			setLoading(false);
+
+			if (err.message === 'Ya existe un coordinador con el identificador proporcionado.') {
+				Alert.alert('Error', err.message);
+			} else {
+				Alert.alert('Error', "Hubo un error agregando la parroquia.");
+			}
 		})
 	}
 
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
 			<Text style={styles.header}>Registrar Coordinador</Text> 
+			<Input name="Identificador" value={identificador} onChangeText={(newIdentificador) => setIdentificador(newIdentificador.trim())} required />
 			<Input name="Nombre" value={name} onChangeText={setName} required/>
 			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} required/>
 			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno}/>

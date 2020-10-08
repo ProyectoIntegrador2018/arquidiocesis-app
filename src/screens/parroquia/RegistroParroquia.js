@@ -13,6 +13,7 @@ export default (props)=>{
 	var [loading, setLoading] = useState(false);
 	var [listDecanatos, setListDecanatos] = useState(false);
 	
+	var [identificador, setIdentificador] = useState('');
 	var [name, setName] = useState('');
 	var [address, setAddress]= useState('');
 	var [decanato, setDecanato] = useState(false);
@@ -26,6 +27,7 @@ export default (props)=>{
 
 	var doRegister = ()=>{
 		var data = {
+			identificador,
 			nombre: name,
 			decanato: (decanato ? decanato.id : null),
 			direccion: address,
@@ -36,6 +38,7 @@ export default (props)=>{
 		};
 
 		var { valid, prompt } = Util.validateForm(data, {
+			identificador: { type: 'empty', prompt: 'Favor de introducir el identificador de la parroquia.' },
 			nombre: { type: 'empty', prompt: 'Favor de introducir el nombre de la parroquia.' },
 			decanato: { type: 'empty', prompt: 'Favor de seleccionar el decanato.' },
 			direccion: { type: 'empty', prompt: 'Favor de introducir la dirección.' },
@@ -43,7 +46,9 @@ export default (props)=>{
 			municipio: { type: 'empty', prompt: 'Favor de introducir el municipio.' }
 		})
 
-		if(!valid) return Alert.alert('Error', prompt);
+		if (!valid) {
+			return Alert.alert('Error', prompt);
+		}
 
 		setLoading(true);
 		API.addParroquia(data).then(new_parroquia=>{
@@ -55,7 +60,12 @@ export default (props)=>{
 		}).catch(err=>{
 			console.log(err);
 			setLoading(false);
-			Alert.alert('Error', "Hubo un error agregando la parroquia.");
+
+			if (err.message === 'Ya existe una parroquia con el identificador proporcionado.') {
+				Alert.alert('Error', err.message);
+			} else {
+				Alert.alert('Error', "Hubo un error agregando la parroquia.");
+			}
 		});
 	}
 
@@ -78,6 +88,7 @@ export default (props)=>{
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={false} contentContainerStyle={{ paddingBottom: 50 }}>
 			<Text style={styles.header}>Registrar Parroquia</Text> 
+			<Input name="Identificador" value={identificador} onChangeText={(newIdentificador) => setIdentificador(newIdentificador.trim())} required />
 			<Input name="Nombre" value={name} onChangeText={setName} required />
 			<Input name="Dirección" value={address} onChangeText={setAddress} required />
 			<Input name="Colonia" value={colonia} onChangeText={setColonia} required />

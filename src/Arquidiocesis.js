@@ -59,7 +59,8 @@ import {
 	Reports,
 	SelectGroup,
 	SelectCapacitacion,
-	Select
+	Select,
+	Acompanantes
 } from './screens';
 import { API } from './lib'
 
@@ -96,7 +97,7 @@ var Home = (props)=>{
 				switch(route.name){
 					case 'Parroquias': iconName = 'church';
 					break;
-					case 'Zonas': iconName = 'globe-americas'
+					case 'Acompañantes': iconName = 'globe-americas'
 					break;
 					case 'Coordina': iconName = 'user-circle'
 					break;
@@ -112,7 +113,7 @@ var Home = (props)=>{
 			{user.type!='coordinador' ? (
 				<>
 					<Tab.Screen name="Parroquias" component={Parroquias} />
-					<Tab.Screen name="Zonas" component={ZonasList} />
+					<Tab.Screen name="Acompañantes" component={Acompanantes} />
 					<Tab.Screen name="Coordina" component={Coordinadores} />
 				</>
 			) : null}
