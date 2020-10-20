@@ -490,8 +490,10 @@ async function registerMember(grupo, data) {
  */
 async function getAsistencia(grupo_id, fecha) {
 	var res = await get('grupos/' + grupo_id + '/asistencia/' + fecha);
-	if (res.error) throw res;
-	else return res.data;
+  if (res.error) throw res;
+	else {
+    return res.data;
+  }
 }
 
 /**
@@ -501,9 +503,9 @@ async function getAsistencia(grupo_id, fecha) {
  * @param {array} miembros Array of member ids
  * @param {boolean} force Overwrite the asistencia if there is already one on this date?
  */
-async function registerAsistencia(grupo_id, fecha, miembros, force = false) {
+async function registerAsistencia(grupo_id, fecha, miembros, agenda, force = false) {
 	var payload = {
-		fecha, miembros, force
+		fecha, miembros, force, agenda
 	}
 	var res = await post('grupos/' + grupo_id + '/asistencia', payload);
 	if (res.error) throw res;
@@ -519,8 +521,8 @@ async function registerAsistencia(grupo_id, fecha, miembros, force = false) {
  * @param {string} fecha The asistencia's fecha in format 'YYYY-MM-DD'
  * @param {array} miembros Array of member ids
  */
-async function saveAsistencia(grupo_id, fecha, miembros) {
-	var res = await post('grupos/' + grupo_id + '/asistencia/' + fecha, { miembros });
+async function saveAsistencia(grupo_id, fecha, miembros, agenda) {
+	var res = await post('grupos/' + grupo_id + '/asistencia/' + fecha, { miembros, agenda });
 	if (res.error) throw res;
 	else return res.data
 }
