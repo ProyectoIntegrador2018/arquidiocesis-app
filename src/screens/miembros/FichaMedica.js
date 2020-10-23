@@ -70,6 +70,7 @@ export default (props)=>{
 		API.setFichaMedica(persona.id, data).then(done=>{
 			setLoading(false);
 			Alert.alert('Exito', 'Se ha guardado la ficha medica.')
+			props.navigation.goBack();
 		}).catch(err=>{
 			console.log(err);
 			setLoading(false);
