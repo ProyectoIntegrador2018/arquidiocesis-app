@@ -4,7 +4,7 @@ Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la ficha medica de un miembro de un grupo HEMA
 */
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch } from 'react-native';
+import { View, Text, StyleSheet, Switch, CheckBox } from 'react-native';
 import { API } from '../../lib';
 import { Input, Button, Picker, Alert } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -14,19 +14,33 @@ export default (props)=>{
 	var { persona, canEdit } = props.route.params;
 	if(!persona.ficha_medica){
 		persona.ficha_medica = {
-			tipo_sangre: '',
-			alergico: false,
+			tipo_sangre: false,
 			servicio_medico: false,
-			ambulancia: false,
-			padecimientos: ''
+			alergico: false,
+			alergico_desc: '',
+			p_cardiovascular: false,
+			p_azucar: false,
+			p_hipertension: false,
+			p_sobrepeso: false,
+			seguridad_social: false,
+			discapacidad: false,
+			discapacidad_desc: '',
+			ambulancia: false
 		}
 	}
 
-	var [bloodType, setBloodType] = useState(false);
+	var [bloodType, setBloodType] = useState(persona.ficha_medica.tipo_sangre);
+	var [medicalService, setMedicalService] = useState(persona.ficha_medica.servicio_medico);
 	var [alergic, setAlergic] = useState(persona.ficha_medica.alergico);
-	var [medicalSerivce, setMedicalService] = useState(false);
+	var [alergicDesc, setAlergicDesc] = useState(persona.ficha_medica.alergico_desc);
+	var [cardiovascular, setCardiovascular] = useState(persona.ficha_medica.p_cardiovascular);
+	var [azucar, setAzucar] = useState(persona.ficha_medica.p_azucar);
+	var [hipertension, setHipertension] = useState(persona.ficha_medica.p_hipertension);
+	var [sobrepeso, setSobrepeso] = useState(persona.ficha_medica.p_sobrepeso);
+	var [socialSecurity, setSocialSecurity] = useState(persona.ficha_medica.seguridad_social);
+	var [disability, setDisability] = useState(persona.ficha_medica.discapacidad);
+	var [disabilityDesc, setDisabilityDesc] = useState(persona.ficha_medica.discapacidad_desc);
 	var [ambulance, setAmbulance] = useState(persona.ficha_medica.ambulancia);
-	var [padecimientos, setPadecimientos] = useState(persona.ficha_medica.padecimientos);
 	var [loading, setLoading] = useState(false);
 
 	props.navigation.setOptions({
@@ -35,11 +49,22 @@ export default (props)=>{
 	
 	var saveFicha=()=>{
 		var data = {
-			tipo_sangre: (bloodType || ''),
+			tipo_sangre: bloodType,
+			servicio_medico: medicalService,
 			alergico: alergic,
-			servicio_medico: (medicalSerivce || ''),
-			ambulancia: ambulance,
-			padecimientos
+			alergico_desc: alergic ? alergicDesc : '',
+			p_cardiovascular: cardiovascular,
+			p_azucar: azucar,
+			p_hipertension: hipertension,
+			p_sobrepeso: sobrepeso,
+			seguridad_social: socialSecurity,
+			discapacidad: disability,
+			discapacidad_desc: disability ? disabilityDesc : '',
+			ambulancia: ambulance
+		}
+		if (bloodType === undefined) {
+			Alert.alert('Error', 'Error: Tipo de sangre no escogido')
+			return;
 		}
 		setLoading(true);
 		API.setFichaMedica(persona.id, data).then(done=>{
@@ -53,8 +78,13 @@ export default (props)=>{
 	}
 
 	var getServicioMedico = ()=>{
-		if(!persona.ficha_medica.servicio_medico) return -1;
-		return [ 'Ninguno', 'IMSS', 'ISSTE', 'SSA', 'NOVA', 'Otro' ].indexOf(persona.ficha_medica.servicio_medico);
+		if(!persona.ficha_medica.servicio_medico) return '';
+		return [ 'Ninguno', 'Público', 'Privado' ].indexOf(persona.ficha_medica.servicio_medico);
+	}
+
+	var getSocialSecurity = ()=>{
+		if(!persona.ficha_medica.seguridad_social) return '';
+		return [ 'Ninguno', 'Pensionado', 'Jubilado', 'Apoyo Federal' ].indexOf(persona.ficha_medica.seguridad_social);
 	}
 
 	var getBloodType = ()=>{
@@ -80,8 +110,18 @@ export default (props)=>{
 			) : (
 				<Input value={persona.ficha_medica.tipo_sangre} name="Tipo de Sangre" readonly={true} />
 			)}
+			{canEdit ? (
+				<Picker
+					name={'Servicio Médico'} 
+					items={[ 'Ninguno', 'Público', 'Privado' ]}
+					select={getServicioMedico()}
+					onValueChange={setMedicalService}
+				/>
+			) : (
+				<Input value={persona.ficha_medica.servicio_medico} name="Servicio Médico" readonly={true} />
+			)}
 			
-			<Text style={styles.label}>¿Alergico a Medicamentos?</Text>
+			<Text style={styles.label}>¿Alergias?</Text>
 			<View style={styles.checkboxContainer}>
 				<Switch
 					disabled={!canEdit}
@@ -91,16 +131,28 @@ export default (props)=>{
 					value={alergic}
 				/>
 			</View>
-			{canEdit ? (
-				<Picker
-					name={'Servicio Médico'} 
-					items={[ 'Ninguno', 'IMSS', 'ISSTE', 'SSA', 'NOVA', 'Otro' ]}
-					select={getServicioMedico()}
-					onValueChange={setMedicalService}
-				/>
-			) : (
-				<Input value={persona.ficha_medica.servicio_medico} name="Servicio Médico" readonly={true} />
+			{alergic && (
+				<Input name="Descripción de alergia" value={alergicDesc} onChangeText={setAlergicDesc} />
 			)}
+
+			<Text style={styles.label}>Padecimientos</Text>
+			<View style={styles.checkboxContainer}>
+				<CheckBox style={styles.checkbox} value={cardiovascular} onValueChange={setCardiovascular} />
+				<Text style={styles.padecimientos}>Problema Cardiovascular</Text>
+			</View>
+			<View style={styles.checkboxContainer}>
+				<CheckBox style={styles.checkbox} value={azucar} onValueChange={setAzucar} />
+				<Text style={styles.padecimientos}>Problema de Azúcar</Text>
+			</View>
+			<View style={styles.checkboxContainer}>
+				<CheckBox style={styles.checkbox} value={hipertension} onValueChange={setHipertension} />
+				<Text style={styles.padecimientos}>Hipertensión</Text>
+			</View>
+			<View style={styles.checkboxContainer}>
+				<CheckBox style={styles.checkbox} value={sobrepeso} onValueChange={setSobrepeso} />
+				<Text style={styles.padecimientos}>Sobrepeso</Text>
+			</View>
+			
 			<Text style={styles.label}>Servicio de Ambulancia</Text>
 			<View style={styles.checkboxContainer}>
 				<Switch
@@ -111,8 +163,31 @@ export default (props)=>{
 					value={ambulance}
 				/>
 			</View>
-			{/* fin switch ambulancia */}
-			<Input multiline={true} name={'Padecimientos'} value={padecimientos} height={200} onChangeText={setPadecimientos} placeholder={'Padecimientos'} readonly={!canEdit} />
+
+			{canEdit ? (
+				<Picker
+					name={'Seguridad Social'} 
+					items={[ 'Ninguno', 'Pensionado', 'Jubilado', 'Apoyo Federal' ]}
+					select={getSocialSecurity()}
+					onValueChange={setSocialSecurity}
+				/>
+			) : (
+				<Input value={persona.ficha_medica.socialSecurity} name="Seguridad Social" readonly={true} />
+			)}
+
+			<Text style={styles.label}>¿Discapacidad?</Text>
+			<View style={styles.checkboxContainer}>
+				<Switch
+					disabled={!canEdit}
+					trackColor={{ false: "#767577", true: "#32CD32" }}
+					thumbColor={disability ? "#FFFFFF" : "#f4f3f4"}
+					onValueChange={setDisability}
+					value={disability}
+				/>
+			</View>
+			{disability && (
+				<Input name="Descripción de discapacidad" value={disabilityDesc} onChangeText={setDisabilityDesc} />
+			)}
 			{ canEdit && <Button text={'Guardar'} onPress={saveFicha} loading={loading} />}
 		</KeyboardAwareScrollView>		
 	)
@@ -151,7 +226,17 @@ const styles = StyleSheet.create({
 		fontWeight: '500'
 	},
 	checkboxContainer: {
-		alignItems: 'flex-start',
-		marginBottom: 10
-	}
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		marginBottom: 10,
+	},
+	checkbox: {
+		height: 25,
+		width: 25
+	},
+	padecimientos: {
+		fontSize: 15,
+		marginLeft: 10,
+		textAlignVertical: "center"
+	},
 })
