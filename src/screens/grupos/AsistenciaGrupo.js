@@ -18,6 +18,7 @@ var Screen = (props)=>{
 	var [sending, setSending] = useState(false);
   var [assistance, setAssistance] = useState([]);
   var [agenda, setAgenda] = useState('');
+  var [commentarios, setCommentarios] = useState('');
 	var pickerRef = useRef(null)
 
 	props.navigation.setOptions({
@@ -41,6 +42,7 @@ var Screen = (props)=>{
 				setData(d.miembros);
         setAssistance(d.miembros.filter(a=>a.assist).map(a=>a.id));
         setAgenda(d.agenda);
+        setCommentarios(d.commentarios);
 			}).catch(err=>{
 				if(err.code==34){
 					props.route.params.onDelete(date);
@@ -97,7 +99,7 @@ var Screen = (props)=>{
 	var saveAsistencia = (force=false)=>{
 		setSending(true);
 		if(isNew){
-			API.registerAsistencia(props.route.params.grupo.id, date, assistance, agenda, force).then(done=>{
+			API.registerAsistencia(props.route.params.grupo.id, date, assistance, agenda, commentarios, force).then(done=>{
 				setSending(false);
 				props.route.params.onAssistance(done);
 				alert("Se ha guardado la asistencia.");
@@ -111,7 +113,7 @@ var Screen = (props)=>{
 				}
 			})
 		}else{
-			API.saveAsistencia(props.route.params.grupo.id, date, assistance, agenda).then(done=>{
+			API.saveAsistencia(props.route.params.grupo.id, date, assistance, agenda, commentarios).then(done=>{
 				if(done.deleted){
 					props.route.params.onDelete(done.date);
 				}
@@ -136,6 +138,9 @@ var Screen = (props)=>{
       ) : (
         <Input name="Agenda" value={agenda} multiline={true} height={135} readonly/>
       )}
+    </View>
+    <View style={{paddingHorizontal: 20}}> 
+      <Input name="Comentarios finales" value={commentarios} onChangeText={setCommentarios} multiline={true} height={135} />
     </View>
 		<ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 50 }} stickyHeaderIndices={headers}>
 			{components}
