@@ -135,9 +135,13 @@ var Screen = (props)=>{
     <View style={{paddingHorizontal: 20}}>
       { isNew ? (
         <Input name="Agenda" value={agenda} onChangeText={setAgenda} multiline={true} height={135}/>
-      ) : (
-        <Input name="Agenda" value={agenda} multiline={true} height={135} readonly/>
-      )}
+      ) :
+        agenda === "" ? (
+          <Text style={{ marginTop: 10, textAlign: 'center', fontWeight: '600', fontSize: 16 }}>Sin agenda</Text>
+        ) : (
+          <Input name="Agenda" value={agenda} multiline={true} height={135} readonly/>
+        )
+      }
     </View>
     <View style={{paddingHorizontal: 20}}> 
       <Input name="Comentarios finales" value={commentarios} onChangeText={setCommentarios} multiline={true} height={135} />
