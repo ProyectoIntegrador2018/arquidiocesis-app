@@ -17,7 +17,7 @@ export default (props)=>{
 	var bd = moment.unix(persona.fecha_nacimiento._seconds)
 	if(!bd.isValid()) bd = moment();
 
-	var [identificador, setIdentificador] = useState((persona.identificador || ''));
+	var [identificador, setIdentificador] = useState((persona.identificador || undefined));
 	var [loading, setLoading] = useState(false);
 	var [name, setName] = useState(persona.nombre);
 	var [apPaterno, setApPaterno] = useState(persona.apellido_paterno);
@@ -41,6 +41,7 @@ export default (props)=>{
 		if(loading) return;
 
 		var data = {
+			identificador,
 			nombre: name,
 			apellido_paterno: apPaterno,
 			apellido_materno: apMaterno,
@@ -59,6 +60,7 @@ export default (props)=>{
 		}
 
 		var { valid, prompt } = Util.validateForm(data, {
+			identificador: { type: 'empty', prompt: 'Favor de introducir el identificador del coordinador.' },
 			nombre: { type: 'minLength', value: 3, prompt: 'Favor de introducir el nombre.' },
 			apellido_paterno: { type: 'empty', prompt: 'Favor de introducir el apelldio paterno.' },
 			fecha_nacimiento: { type: 'empty', prompt: 'Favor de introducir la fecha de nacimiento.' },
@@ -80,14 +82,21 @@ export default (props)=>{
 				_seconds: moment(birthday, 'YYYY-MM-DD').unix()
 			}
 			onEdit(data);
-			Alert.alert('Exito', 'Se ha editando el coordinador.');
+			Alert.alert('Exito', 'Se ha editado el coordinador.');
 			return;
 		}).catch(err=>{
+			console.log(err);
 			setLoading(false);
+
 			if(err.code==999){
 				props.navigation.goBack();
 				return Alert.alert('Error', 'No tienes acceso a esta acción.');
 			}
+
+			if (err.message === 'Ya existe un coordinador con el identificador proporcionado.') {
+				return Alert.alert('Error', err.message);
+			}
+
 			return Alert.alert('Error', 'Hubo un error editando el coordinador.');
 		})
 	}
@@ -115,8 +124,8 @@ export default (props)=>{
 
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
-			{ identificador !== '' &&
-				<Input name="Identificador" value={identificador} readonly />
+			{ identificador !== undefined &&
+				<Input name="Identificador" value={identificador} onChangeText={(newIdentificador) => setIdentificador(newIdentificador.trim())} required />
 			}
 			<Input name="Nombre" value={name} onChangeText={setName} required/>
 			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} required/>
