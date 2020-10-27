@@ -3,8 +3,8 @@ Nombre: RegistroAcompañante.js
 Usuario con acceso: Admin
 Descripción: Pantalla que muestra los campos para el registro de los acompañantes de zona y decanato
 */
-import React, { useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, Switch } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
@@ -29,6 +29,11 @@ export default (props)=>{
 	var [oficio, setOficio] = useState(false);
 	var [password, setPassword] = useState('');
 	var [password2, setPassword2] = useState('');
+	const [assignedToZona, setAssignedToZona] = useState(true);
+	const [zonas, setZonas] = useState(undefined);
+	const [zonaSelected, setZonaSelected] = useState(undefined);
+	const [decanatos, setDecanatos] = useState(undefined);
+	const [decanatoSelected, setDecanatoSelected] = useState(undefined);
 
 	var { onAdd, zona, decanato } = props.route.params;
 
@@ -36,8 +41,30 @@ export default (props)=>{
 		headerTitle: 'Registro Acompañante'
 	});
 
+	useEffect(()=>{
+		const populatePlaces = async () => {
+			try {
+				const zonas = await API.getZonas(true);
+				const parsedZonas = zonas.map(zona => ({ label: zona.nombre, value: zona.id }))
+				setZonas(parsedZonas);
+
+				const decanatos = await API.getDecanatos(true);
+				const parsedDecanatos = decanatos.map(decanato => ({ label: decanato.nombre, value: decanato.id }))
+				setDecanatos(parsedDecanatos);
+			} catch (error) {
+				console.log('RegistroAcompanante', error.message);
+			}
+		}
+
+		if (!zona && !decanato) {
+			populatePlaces();
+		}
+	}, [])
+
 	var doRegister = ()=>{
-		if(loading) return;
+		if (loading) {
+			return;
+		}
 
 		var data = {
 			nombre: name,
@@ -74,40 +101,68 @@ export default (props)=>{
 			],
 		});
 
-		if(!valid){
+		if (!valid) {
 			return Alert.alert('Error', prompt);
+		}
+
+		let prom;
+
+		if (!zona && !decanato) {
+			if (assignedToZona && zonaSelected === undefined) {
+				return Alert.alert('Error', 'Favor de escoger una zona');
+			} else if (!assignedToZona && decanatoSelected === undefined) {
+				return Alert.alert('Error', 'Favor de escoger un decanato');
+			}
+
+			prom = assignedToZona ? API.registerAcompananteZona(zonaSelected.value, data) : API.registerAcompananteDecanato(decanatoSelected.value, data);
+		} else {
+			prom = zona ? API.registerAcompananteZona(zona.id, data) : API.registerAcompananteDecanato(decanato.id, data);
 		}
 
 		setLoading(true);
 
-		var prom = zona ? API.registerAcompananteZona(zona.id, data) : API.registerAcompananteDecanato(decanato.id, data);
-
 		prom.then(done=>{
 			setLoading(false);
-			if(!done){
+
+			if(!done) {
 				return Alert.alert('Error', 'Hubo un error agregando el acompañante.');
 			}
+			
 			onAdd(done);
 			Alert.alert('Exito', 'Se ha agregado el acompañante.');
 			return props.navigation.goBack();
 		}).catch(err=>{
 			setLoading(false);
-			if(err.code==999){
+
+			if (err.code==999) {
 				Alert.alert('Error', 'No tienes acceso a esta acción.');
-			}else if(err.code==1283){
-				Alert.alert('Error', (zona ? 'La zona' : 'El decanato')+' ya tiene un acompañante.');
-			}else if(err.code==623){
+			} else if (err.code==1283) {
+				if (zona || decanato) {
+					Alert.alert('Error', (zona ? 'La zona' : 'El decanato')+' ya tiene un acompañante.');
+				} else {
+					Alert.alert('Error', (assignedToZona ? 'La zona' : 'El decanato')+' ya tiene un acompañante.');
+				}
+			} else if (err.code==623) {
 				Alert.alert('Error', 'Ya existe un usuario con ese correo electrónico.');
-			}else{
+			} else {
 				Alert.alert('Error', 'Hubo un error agregando el acompañante.');
 			}
-		})	
+		})
+	}
+
+	const renderSubheader = () => {
+		if (!zona && !decanato) {
+			return null;
+		}
+
+		return <Text style={styles.subHeader}>{zona ? zona.nombre : decanato.nombre}</Text>;
 	}
 
 	return (
 		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
 			<Text style={styles.header}>Registrar Acompañante</Text> 
-			<Text style={styles.subHeader}>{zona ? zona.nombre : decanato.nombre}</Text>
+			{renderSubheader()}
+		
 			<Input name="Nombre" value={name} onChangeText={setName} required/>
 			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} required/>
 			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno} />
@@ -145,6 +200,49 @@ export default (props)=>{
 				{ label: 'Chofer', value: 'Chofer' },
 			]} onValueChange={setOficio} />
 
+			{ (zonas || decanatos) ?
+				<>
+					<Text style={styles.section}>Asignar a zona o decanato</Text> 
+
+					<View style={{
+						display: 'flex',
+						flexDirection: 'row',
+						alignItems: 'center',
+						width: '50%',
+						marginHorizontal: 'auto',
+						justifyContent: 'space-around'
+					}}>
+						<Text style={styles.text}>Decanato</Text> 
+						<Switch
+							trackColor={{ false: '#767577', true: '#81b0ff' }}
+							thumbColor={assignedToZona ? '#f5dd4b' : '#f4f3f4'}
+							ios_backgroundColor="#3e3e3e"
+							onValueChange={() => {
+								setAssignedToZona(previousState => !previousState);
+							}}
+							value={assignedToZona}
+						/>
+						<Text style={styles.text}>Zona</Text> 
+					</View>
+					{
+						zonas ? (
+							<Picker name="Zonas" required items={zonas} onValueChange={setZonaSelected} style={!assignedToZona && { display: 'none' }} />
+						) : (
+							<ActivityIndicator style={{ height: 80 }} />
+						)
+					}
+					
+					{
+						decanatos ? (
+							<Picker name="Decanatos" required items={decanatos} onValueChange={setDecanatoSelected} style={assignedToZona && { display: 'none' }} />
+						) : (
+							<ActivityIndicator style={{ height: 80 }} />
+						)
+					}
+				</>
+				: null
+			}
+
 			<Text style={styles.section}>Domicilio</Text> 
 			<Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
 			<Input name="Colonia" value={colonia} onChangeText={setColonia} />
@@ -152,7 +250,6 @@ export default (props)=>{
 			<Input name="Teléfono Casa" value={phoneHome} onChangeText={setPhoneHome} keyboard={'phone-pad'} />
 			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} keyboard={'phone-pad'} />
 
-			
 			<Text style={styles.section}>Credenciales</Text> 
 			<Input name="Correo electrónico" required value={email} onChangeText={setEmail} textContentType={'emailAddress'} keyboard={'email-address'} />
 			<Input name="Contraseña" required value={password} onChangeText={setPassword} textContentType={'password'} password />
@@ -191,6 +288,14 @@ const styles = StyleSheet.create({
 	},
 	section: {
 		fontSize: 20,
+		fontWeight: '600',
+		textAlign: 'center',
+		color: 'grey',
+		marginBottom: 10,
+		marginTop: 20,
+	},
+	text: {
+		fontSize: 16,
 		fontWeight: '600',
 		textAlign: 'center',
 		color: 'grey',
