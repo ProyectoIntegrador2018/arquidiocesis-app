@@ -148,6 +148,23 @@ export default (props) => {
 								<Text style={styles.dispositivos}>Smartphone</Text>
 							</View>}
 
+						<Text style={styles.dispositivosHeader}>Redes Sociales del miembro</Text>
+						{persona.facebook &&
+							<View style={styles.view}>
+								<CheckBox style={styles.checkbox} value={persona.facebook} readonly />
+								<Text style={styles.dispositivos}>Facebook</Text>
+							</View>}
+						{persona.twitter &&
+							<View style={styles.view}>
+								<CheckBox style={styles.checkbox} value={persona.twitter} readonly />
+								<Text style={styles.dispositivos}>Twitter</Text>
+							</View>}
+						{persona.instagram &&
+							<View style={styles.view}>
+								<CheckBox style={styles.checkbox} value={persona.instagram} readonly />
+								<Text style={styles.dispositivos}>Instagram</Text>
+							</View>}
+
 						<Text style={styles.infoSection}>Domicilio</Text>
 						<Input name="Domicilio" value={persona.domicilio.domicilio} readonly />
 						<Input name="Colonia" value={persona.domicilio.colonia} readonly />

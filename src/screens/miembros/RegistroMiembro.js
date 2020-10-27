@@ -31,6 +31,9 @@ export default (props) => {
 	let [hasLaptop, setHasLaptop] = useState(false);
 	let [hasTablet, setHasTablet] = useState(false);
 	let [hasSmartphone, setHasSmartphone] = useState(false);
+	let [hasFacebook, setHasFacebook] = useState(false);
+	let [hasTwitter, setHasTwitter] = useState(false);
+	let [hasInstagram, setHasInstagram] = useState(false);
 	var pickerRef = useRef(null);
 
 	var onAdd = props.route.params.onAdd;
@@ -62,7 +65,10 @@ export default (props) => {
 			},
 			laptop: hasLaptop,
 			smartphone: hasSmartphone,
-			tablet: hasTablet
+			tablet: hasTablet,
+			facebook: hasFacebook,
+			twitter: hasTwitter,
+			instagram: hasInstagram
 		}
 
 		var { valid, prompt } = Util.validateForm(data, {
@@ -153,6 +159,19 @@ export default (props) => {
 			<View style={styles.view}>
 				<CheckBox style={styles.checkbox} value={hasSmartphone} onValueChange={setHasSmartphone} />
 				<Text style={styles.dispositivos}>Smartphone</Text>
+			</View>
+			<Text style={styles.dispositivosHeader}>Indica las redes sociales que tenga</Text>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasFacebook} onValueChange={setHasFacebook} />
+				<Text style={styles.dispositivos}>Facebook</Text>
+			</View>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasTwitter} onValueChange={setHasTwitter} />
+				<Text style={styles.dispositivos}>Twitter</Text>
+			</View>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hasInstagram} onValueChange={setHasInstagram} />
+				<Text style={styles.dispositivos}>Instagram</Text>
 			</View>
 			<Text style={styles.section}>Domicilio</Text>
 			<Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
