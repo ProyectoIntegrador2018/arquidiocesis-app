@@ -97,7 +97,11 @@ export default (props)=>{
 	}
 
 	const showPlace = () => {
-		props.navigation.navigate('Zona', { id: place.id, nombre: place.name });
+		if (place.kind == "Zona") {
+			props.navigation.navigate('Zona', { id: place.id, nombre: place.name });
+		} else {
+			props.navigation.navigate('Decanato', { id: place.id, nombre: place.name });
+		}
 	}
 
 	var changePassword = ()=>{
