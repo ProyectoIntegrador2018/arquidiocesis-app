@@ -49,6 +49,10 @@ var addDecanato = i=>{
 	decanatos.push(i);
 }
 var setDecanatoAcompanante = (id, acompanante)=>{
+	if (decanatos === false) {
+		return;
+	}
+
 	var ix = decanatos.findIndex(a=>a.id==id);
 	if(ix==-1) return;
 	decanatos[ix].acompanante = acompanante;

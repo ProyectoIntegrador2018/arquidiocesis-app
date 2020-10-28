@@ -111,7 +111,13 @@ export default (props)=>{
 			{ text: 'Cancelar', style: 'cancel' },
 			{ text: 'Eliminar', style: 'destructive', onPress: ()=>{
 				setDeleting(true);
-				var prom = zona ? API.deleteAcompananteZona(zona.id) : API.deleteAcompananteDecanato(decanato.id)
+
+				if (acompanante) {
+					var prom = place.kind === 'Zona' ? API.deleteAcompananteZona(place.id) : API.deleteAcompananteDecanato(place.id);
+				} else {
+					var prom = zona ? API.deleteAcompananteZona(zona.id) : API.deleteAcompananteDecanato(decanato.id);
+				}
+
 				prom.then(done=>{
 					setDeleting(false);
 					Alert.alert('Exito', 'Se ha eliminado el acompañante.');
