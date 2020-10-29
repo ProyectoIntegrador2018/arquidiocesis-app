@@ -81,7 +81,7 @@ export default (props) => {
   }
 
   var detalleAcompanante = (item) => {
-		console.log('item :>> ', item);
+    console.log("item :>> ", item);
     props.navigation.navigate("DetalleAcompanante", {
       acompanante: item,
       onEdit: (id, coord) => {
@@ -93,13 +93,23 @@ export default (props) => {
     });
   };
 
-  // var addAcompanante = () => {
-  //   props.navigation.navigate("RegistroAcompanante", {
-  //     onAdd: (c) => {
-  //       setData([...data, c]);
-  //     },
-  //   });
-  // };
+  const addAcompanante = () => {
+    console.log("addAcompanante start");
+    props.navigation.navigate("RegistroAcompanante", {
+      onAdd: (c) => {
+        if (c.id === undefined) {
+          getAcompanantes();
+          return;
+        }
+
+        if (!data) {
+          return;
+        }
+
+        setData([...data, c]);
+      },
+    });
+  };
 
   var formatData = () => {
     return data.map((a) => ({
@@ -116,13 +126,13 @@ export default (props) => {
       }
     >
       <View>
-        {/* {user && (user.type == "admin" || user.type == "superadmin") && (
+        {user && (user.type == "admin" || user.type == "superadmin") && (
           <Button
-            text="Registro acompañante"
+            text="Agregar acompañante"
             style={{ width: 250, alignSelf: "center" }}
             onPress={addAcompanante}
           />
-        )} */}
+        )}
         {data.length == 0 ? (
           <View>
             <Text

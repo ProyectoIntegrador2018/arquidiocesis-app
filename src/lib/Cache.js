@@ -20,6 +20,10 @@ var addZona = i=>{
 	zonas.push(i);
 }
 var setZonaAcompanante = (id, acompanante)=>{
+	if (zonas === false) {
+		return;
+	}
+
 	var ix = zonas.findIndex(a=>a.id==id);
 	if(ix==-1) return;
 	zonas[ix].acompanante = acompanante;
@@ -49,6 +53,10 @@ var addDecanato = i=>{
 	decanatos.push(i);
 }
 var setDecanatoAcompanante = (id, acompanante)=>{
+	if (decanatos === false) {
+		return;
+	}
+
 	var ix = decanatos.findIndex(a=>a.id==id);
 	if(ix==-1) return;
 	decanatos[ix].acompanante = acompanante;
