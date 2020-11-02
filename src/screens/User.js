@@ -42,6 +42,10 @@ export default (props)=>{
 		props.navigation.navigate('Reports');
 	}
 
+	var statistics = async ()=>{
+		props.navigation.navigate('Statistics');
+	}
+
 	return (
 		<ScrollView style={styles.container}>
 			{user.type=='admin' ? (
@@ -49,6 +53,7 @@ export default (props)=>{
 					<Text style={styles.section}>Administrador</Text>
 					<Item text="Usuarios" onPress={adminUsers} />
 					<Item text="Reportes" onPress={reports} />
+					<Item text="Estadísticas de miembros" onPress={statistics} />
 				</View>
 			) : null}
 
