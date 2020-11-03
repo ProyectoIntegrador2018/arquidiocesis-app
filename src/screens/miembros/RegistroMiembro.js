@@ -4,7 +4,7 @@ Usuario con acceso: Admin
 Descripción: Pantalla para registrar un miembro de un grupo HEMA
 */
 import React, { useState, useRef } from 'react';
-import { Text, StyleSheet, CheckBox, View } from 'react-native';
+import { Text, StyleSheet, CheckBox, View, Switch } from 'react-native';
 import { Input, Button, Picker, Alert, DatePicker } from '../../components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
@@ -34,6 +34,20 @@ export default (props) => {
 	let [hasFacebook, setHasFacebook] = useState(false);
 	let [hasTwitter, setHasTwitter] = useState(false);
 	let [hasInstagram, setHasInstagram] = useState(false);
+
+	var [bloodType, setBloodType] = useState(false);
+	var [medicalService, setMedicalService] = useState(false);
+	var [alergic, setAlergic] = useState(false);
+	var [alergicDesc, setAlergicDesc] = useState('');
+	var [cardiovascular, setCardiovascular] = useState(false);
+	var [azucar, setAzucar] = useState(false);
+	var [hipertension, setHipertension] = useState(false);
+	var [sobrepeso, setSobrepeso] = useState(false);
+	var [socialSecurity, setSocialSecurity] = useState(false);
+	var [disability, setDisability] = useState(false);
+	var [disabilityDesc, setDisabilityDesc] = useState('');
+	var [ambulance, setAmbulance] = useState(false);
+
 	var pickerRef = useRef(null);
 
 	var onAdd = props.route.params.onAdd;
@@ -70,18 +84,18 @@ export default (props) => {
 			twitter: hasTwitter,
 			instagram: hasInstagram,
 			ficha_medica: {
-				tipo_sangre: false,
-				servicio_medico: false,
-				alergico: false,
-				alergico_desc: '',
-				p_cardiovascular: false,
-				p_azucar: false,
-				p_hipertension: false,
-				p_sobrepeso: false,
-				seguridad_social: false,
-				discapacidad: false,
-				discapacidad_desc: '',
-				ambulancia: false
+				tipo_sangre: bloodType,
+				servicio_medico: medicalService,
+				alergico: alergic,
+				alergico_desc: alergic ? alergicDesc : '',
+				p_cardiovascular: cardiovascular,
+				p_azucar: azucar,
+				p_hipertension: hipertension,
+				p_sobrepeso: sobrepeso,
+				seguridad_social: socialSecurity,
+				discapacidad: disability,
+				discapacidad_desc: disability ? disabilityDesc : '',
+				ambulancia: ambulance
 			}
 		}
 
@@ -97,6 +111,10 @@ export default (props) => {
 
 		if (!valid) {
 			return Alert.alert('Error', prompt);
+		}
+
+		if(!bloodType || !medicalService || !socialSecurity) {
+			return Alert.alert('Error', "Favor de llenar información de ficha médica.");
 		}
 
 		setLoading(true);
@@ -193,6 +211,62 @@ export default (props) => {
 			<Input name="Municipio" value={municipio} onChangeText={setMunicipio} />
 			<Input name="Teléfono Casa" value={phoneHome} onChangeText={setPhoneHome} keyboard={'phone-pad'} />
 			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} keyboard={'phone-pad'} />
+			<Text style={styles.section}>Ficha Médica</Text>
+			<Picker name={'Tipo de Sangre'} items={['O-','O+','A-','A+','B-','B+','AB-','AB+',]} onValueChange={setBloodType} />
+			<Picker name={'Servicio Médico'} items={[ 'Ninguno', 'Público', 'Privado' ]} onValueChange={setMedicalService} />
+			<Text style={styles.dispositivosHeader}>¿Alergias?</Text>
+			<View style={styles.view}>
+				<Switch
+					trackColor={{ false: "#767577", true: "#32CD32" }}
+					thumbColor={alergic ? "#FFFFFF" : "#f4f3f4"}
+					onValueChange={setAlergic}
+					value={alergic}
+				/>
+			</View>
+			{alergic && (
+				<Input name="Descripción de alergia" value={alergicDesc} onChangeText={setAlergicDesc} />
+			)}
+			<Text style={styles.dispositivosHeader}>Padecimientos</Text>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={cardiovascular} onValueChange={setCardiovascular} />
+				<Text style={styles.dispositivos}>Problema Cardiovascular</Text>
+			</View>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={azucar} onValueChange={setAzucar} />
+				<Text style={styles.dispositivos}>Problema de Azúcar</Text>
+			</View>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={hipertension} onValueChange={setHipertension} />
+				<Text style={styles.dispositivos}>Hipertensión</Text>
+			</View>
+			<View style={styles.view}>
+				<CheckBox style={styles.checkbox} value={sobrepeso} onValueChange={setSobrepeso} />
+				<Text style={styles.dispositivos}>Sobrepeso</Text>
+			</View>
+			
+			<Text style={styles.dispositivosHeader}>Servicio de Ambulancia</Text>
+			<View style={styles.view}>
+				<Switch
+					trackColor={{ false: "#767577", true: "#32CD32" }}
+					thumbColor={ambulance ? "#FFFFFF" : "#f4f3f4"}
+					onValueChange={setAmbulance}
+					value={ambulance}
+				/>
+			</View>
+			<Picker name={'Seguridad Social'} items={[ 'Ninguno', 'Pensionado', 'Jubilado', 'Apoyo Federal' ]} 
+				onValueChange={setSocialSecurity} />
+			<Text style={styles.dispositivosHeader}>¿Discapacidad?</Text>
+			<View style={styles.view}>
+				<Switch
+					trackColor={{ false: "#767577", true: "#32CD32" }}
+					thumbColor={disability ? "#FFFFFF" : "#f4f3f4"}
+					onValueChange={setDisability}
+					value={disability}
+				/>
+			</View>
+			{disability && (
+				<Input name="Descripción de discapacidad" value={disabilityDesc} onChangeText={setDisabilityDesc} />
+			)}
 
 			<Button text="Registrar" loading={loading} onPress={doRegister} />
 		</KeyboardAwareScrollView>
