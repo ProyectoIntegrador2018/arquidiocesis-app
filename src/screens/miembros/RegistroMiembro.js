@@ -132,9 +132,9 @@ export default (props) => {
 				{ label: 'Ninguno', value: 'Ninguno' },
 				{ label: 'Primaria', value: 'Primaria' },
 				{ label: 'Secundaria', value: 'Secundaria' },
-				{ label: 'Técnica carrera', value: 'Técnica carrera' },
-				{ label: 'Maestría', value: 'Maestría' },
-				{ label: 'Doctorado', value: 'Doctorado' },
+				{ label: 'Preparatoria', value: 'Preparatoria' },
+				{ label: 'Carrera Técnica', value: 'Carrera Técnica' },
+				{ label: 'Profesional', value: 'Profesional' },
 			]} onValueChange={setEscolaridad} />
 			<Picker name="Oficio" items={[
 				{ label: 'Ninguno', value: 'Ninguno' },
