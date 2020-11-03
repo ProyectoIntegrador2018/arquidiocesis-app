@@ -68,7 +68,21 @@ export default (props) => {
 			tablet: hasTablet,
 			facebook: hasFacebook,
 			twitter: hasTwitter,
-			instagram: hasInstagram
+			instagram: hasInstagram,
+			ficha_medica: {
+				tipo_sangre: false,
+				servicio_medico: false,
+				alergico: false,
+				alergico_desc: '',
+				p_cardiovascular: false,
+				p_azucar: false,
+				p_hipertension: false,
+				p_sobrepeso: false,
+				seguridad_social: false,
+				discapacidad: false,
+				discapacidad_desc: '',
+				ambulancia: false
+			}
 		}
 
 		var { valid, prompt } = Util.validateForm(data, {
