@@ -21,6 +21,9 @@ import Parroquia from './parroquia/Parroquia'
 import RegistroParroquia from './parroquia/RegistroParroquia';
 import EditParroquia from './parroquia/EditParroquia';
 
+import Calendar from './calendar/Calendar';
+import RegistroEvento from './calendar/RegistroEvento';
+
 import Grupos from './grupos/Grupos';
 import RegistroGrupo from './grupos/RegistroGrupo';
 import Grupo from './grupos/Grupo';
@@ -107,5 +110,7 @@ export {
 	Reports,
 	SelectGroup,
 	SelectCapacitacion,
-	Select
+	Select,
+	Calendar,
+	RegistroEvento
 }
