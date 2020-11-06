@@ -109,7 +109,7 @@ export default (props)=>{
 	}
 
 	var gotoParroquia = i=>{
-		props.navigation.navigate('DetalleParroquia', i);
+		props.navigation.navigate('Parroquia', i);
 	}
 
 	var gotoGroup = i=>{
