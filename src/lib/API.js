@@ -457,6 +457,32 @@ async function addGrupo(name, coordinador, parroquia, capilla) {
 }
 
 /**
+ * Create a calendar eveent and add it to the database.
+ * The parroquia and capilla param are exclusive,
+ * only one should be present, not both.
+ * @param {string} name The name of the new event
+ * @param {string} eventResponsible The name of the event responsible
+ * @param {string} eventDates The dates of the event
+ */
+async function addEvent(name, eventResponsible, eventDates) {
+	console.log('addEvent start');
+	
+	const payload = {
+		name,
+		eventResponsible,
+		eventDates,
+	}
+
+	const response = await post('eventos', payload);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
  * Create a coordinador and add it to the databse.
  * @param {object} data The data of the new coordinador
  */
@@ -1231,5 +1257,6 @@ export default {
 	changeCapacitacionEncargado,
 	editCapilla,
 	formatURL,
-	getCoordinador
+	getCoordinador,
+	addEvent
 }
