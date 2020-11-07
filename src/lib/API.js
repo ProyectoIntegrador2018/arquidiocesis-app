@@ -497,6 +497,20 @@ async function addEvent(name, eventResponsible, eventDates) {
 }
 
 /**
+ * Delete an event from the database.
+ * @param {string} id The event's id
+ */
+async function deleteEvent(id) {
+	const response = await sendDelete('eventos/' + id);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
  * Create a coordinador and add it to the databse.
  * @param {object} data The data of the new coordinador
  */
@@ -1286,6 +1300,7 @@ export default {
 	formatURL,
 	getCoordinador,
 	getStats,
+	getEvents,
 	addEvent,
-	getEvents
+	deleteEvent
 }
