@@ -126,7 +126,7 @@ export default (props)=>{
 					setDeleting(false);
 					Alert.alert('Exito', 'Se ha eliminado el acompañante.');
 					props.navigation.goBack();
-					onDelete();
+					onDelete(persona.id);
 				}).catch(err=>{
 					console.log(err);
 					setDeleting(false);
