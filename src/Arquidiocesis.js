@@ -62,7 +62,8 @@ import {
 	Select,
 	Acompanantes,
 	Calendar,
-	RegistroEvento
+	RegistroEvento,
+	Evento
 } from './screens';
 import { API } from './lib'
 
@@ -183,6 +184,7 @@ var App = (props)=>{
 				<Stack.Screen name="SelectCapacitacion" component={SelectCapacitacion}/>
 				<Stack.Screen name="Select" component={Select}/>
 				<Stack.Screen name="RegistroEvento" component={RegistroEvento}/>
+				<Stack.Screen name="Evento" component={Evento}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
