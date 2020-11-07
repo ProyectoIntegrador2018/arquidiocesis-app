@@ -63,7 +63,8 @@ import {
 	Acompanantes,
 	Calendar,
 	RegistroEvento,
-	Evento
+	Evento,
+	EditEvento
 } from './screens';
 import { API } from './lib'
 
@@ -185,6 +186,7 @@ var App = (props)=>{
 				<Stack.Screen name="Select" component={Select}/>
 				<Stack.Screen name="RegistroEvento" component={RegistroEvento}/>
 				<Stack.Screen name="Evento" component={Evento}/>
+				<Stack.Screen name="EditEvento" component={EditEvento}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

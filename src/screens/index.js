@@ -24,6 +24,7 @@ import EditParroquia from './parroquia/EditParroquia';
 import Calendar from './calendar/Calendar';
 import RegistroEvento from './calendar/RegistroEvento';
 import Evento from './calendar/Evento';
+import EditEvento from './calendar/EditEvento';
 
 import Grupos from './grupos/Grupos';
 import RegistroGrupo from './grupos/RegistroGrupo';
@@ -114,5 +115,6 @@ export {
 	Select,
 	Calendar,
 	RegistroEvento,
-	Evento
+	Evento,
+	EditEvento
 }

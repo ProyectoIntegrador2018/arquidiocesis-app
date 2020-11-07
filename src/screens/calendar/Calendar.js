@@ -77,8 +77,9 @@ export default (props) => {
       onDelete: (id) => {
         setData((d) => d.filter((a) => a.id != id));
       },
-      onEdit: (id, new_grupo) => {
-        setData([...data.filter((a) => a.id != id), new_grupo]);
+      onEdit: (id, new_event) => {
+        const filteredData = data.filter((a) => a.id != id);
+        setData([...filteredData, new_event]);
       },
     });
   };
@@ -142,7 +143,7 @@ export default (props) => {
                 padding: 15,
               }}
             >
-              No existe ningún evento.
+              No existe ningún evento en el calendario.
             </Text>
           </View>
         )}

@@ -497,6 +497,21 @@ async function addEvent(name, eventResponsible, eventDates) {
 }
 
 /**
+ * Edit an event's data.
+ * @param {string} id The event's id
+ * @param {object} data The event's new data
+ */
+async function editEvent(id, data) {
+	const response = await post('eventos/' + id + '/edit', data);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
  * Delete an event from the database.
  * @param {string} id The event's id
  */
@@ -1288,5 +1303,6 @@ export default {
 	getCoordinador,
 	getEvents,
 	addEvent,
-	deleteEvent
+	deleteEvent,
+	editEvent
 }
