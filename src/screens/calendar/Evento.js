@@ -55,12 +55,12 @@ export default (props) => {
         style: "destructive",
         onPress: () => {
           setDeleting(true);
-          API.deleteCoordinador(persona.id)
+          API.deleteEvent(evento.id)
             .then((done) => {
               setDeleting(false);
               alert("Se ha eliminado el evento.");
               props.navigation.goBack();
-              if (onDelete) onDelete(persona.id);
+              if (onDelete) onDelete(evento.id);
             })
             .catch((err) => {
               setDeleting(false);
