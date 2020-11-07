@@ -17,7 +17,7 @@ moment.locale("es");
 export default (props) => {
   var { evento, onEdit, onDelete } = props.route.params;
 
-  var [persona, setPersona] = useState(false);
+  var [event, setEvent] = useState(evento);
   var [deleting, setDeleting] = useState(false);
   var [user, setUser] = useState(false);
   var [refreshing, setRefreshing] = useState(false);
@@ -32,7 +32,7 @@ export default (props) => {
     headerRight: () =>
       user &&
       (user.type == "admin" || user.type == "superadmin") && (
-        <TouchableOpacity onPress={editCoordinador}>
+        <TouchableOpacity onPress={editEvent}>
           <FontAwesome5
             name={"edit"}
             size={24}
@@ -55,12 +55,12 @@ export default (props) => {
         style: "destructive",
         onPress: () => {
           setDeleting(true);
-          API.deleteEvent(evento.id)
+          API.deleteEvent(event.id)
             .then((done) => {
               setDeleting(false);
               alert("Se ha eliminado el evento.");
               props.navigation.goBack();
-              if (onDelete) onDelete(evento.id);
+              if (onDelete) onDelete(event.id);
             })
             .catch((err) => {
               setDeleting(false);
@@ -71,38 +71,33 @@ export default (props) => {
     ]);
   };
 
-  var editCoordinador = () => {
-    props.navigation.navigate("EditCoordinador", {
-      persona,
+  const editEvent = () => {
+    props.navigation.navigate("EditEvento", {
+      evento,
       onEdit: (data) => {
-        var p = { ...persona };
+        var event = { ...evento };
         for (var i in data) {
-          p[i] = data[i];
+          event[i] = data[i];
         }
-        setPersona(p);
-        if (onEdit) onEdit(p.id, p);
+        setEvent(event);
+
+        if (onEdit) {
+          onEdit(event.id, event);
+        }
       },
     });
   };
 
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={{ paddingBottom: 50 }}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => getCoordinador(true)}
-        />
-      }
-    >
+    <KeyboardAwareScrollView contentContainerStyle={{ paddingBottom: 50 }}>
       <View style={{ padding: 15 }}>
-        <Input name="Nombre del evento" value={evento.nombre} readonly />
+        <Input name="Nombre del evento" value={event.nombre} readonly />
         <Input
           name="Responsable del evento"
-          value={evento.responsable}
+          value={event.responsable}
           readonly
         />
-        <Input name="Fechas del evento" value={evento.fechas} readonly />
+        <Input name="Fechas del evento" value={event.fechas} readonly />
       </View>
 
       {user && (user.type == "admin" || user.type == "superadmin") && (
