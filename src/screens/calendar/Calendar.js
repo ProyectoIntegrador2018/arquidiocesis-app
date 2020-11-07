@@ -24,23 +24,23 @@ export default (props) => {
 
   useEffect(() => {
     API.getUser().then(setUser);
-    getGrupos();
+    getEvents();
   }, []);
 
-  const getGrupos = () => {
+  const getEvents = async () => {
     setRefreshing(true);
     setError(false);
 
-    API.getGrupos(true)
-      .then((d) => {
-        setData(d);
-        setError(false);
-        setRefreshing(false);
-      })
-      .catch((err) => {
-        setRefreshing(false);
-        setError(true);
-      });
+    try {
+      const data = await API.getEvents();
+      setData(data);
+      setError(false);
+      setRefreshing(false);
+    } catch (error) {
+      console.log("error :>> ", error);
+      setRefreshing(false);
+      setError(true);
+    }
   };
 
   if (error) {
@@ -48,7 +48,7 @@ export default (props) => {
       <ErrorView
         message={"Hubo un error cargando los grupos..."}
         refreshing={refreshing}
-        retry={getGrupos}
+        retry={getEvents}
       />
     );
   }
@@ -72,8 +72,8 @@ export default (props) => {
   }
 
   var onPress = (item) => {
-    props.navigation.navigate("Grupo", {
-      grupo: item,
+    props.navigation.navigate("Evento", {
+      evento: item,
       onDelete: (id) => {
         setData((d) => d.filter((a) => a.id != id));
       },
@@ -98,33 +98,12 @@ export default (props) => {
         <Text style={{ fontSize: 18 }} numberOfLines={1}>
           {data.nombre}
         </Text>
-        {data.new ? (
-          <Text
-            style={{ color: "green", fontStyle: "italic" }}
-            numberOfLines={1}
-          >
-            ¡Nuevo!
-          </Text>
-        ) : data.parroquia || data.capilla ? (
-          <Text
-            style={{
-              color: "gray",
-              fontStyle: !data.parroquia && !data.capilla ? "italic" : "normal",
-            }}
-            numberOfLines={1}
-          >
-            {data.parroquia
-              ? "Parroquia: " + data.parroquia.nombre
-              : "Capilla: " + data.capilla.nombre}
-          </Text>
-        ) : (
-          <Text
-            style={{ color: "gray", fontStyle: "italic" }}
-            numberOfLines={1}
-          >
-            Sin parroquia
-          </Text>
-        )}
+        <Text style={{ color: "gray", fontStyle: "italic" }} numberOfLines={1}>
+          {data.responsable}
+        </Text>
+        <Text style={{ color: "gray" }} numberOfLines={1}>
+          {data.fechas}
+        </Text>
       </View>
     );
   };
@@ -133,7 +112,7 @@ export default (props) => {
     <ScrollView
       style={{ flex: 1 }}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={getGrupos} />
+        <RefreshControl refreshing={refreshing} onRefresh={getEvents} />
       }
     >
       <View>
@@ -163,7 +142,7 @@ export default (props) => {
                 padding: 15,
               }}
             >
-              No perteneces a un grupo.
+              No existe ningún evento.
             </Text>
           </View>
         )}

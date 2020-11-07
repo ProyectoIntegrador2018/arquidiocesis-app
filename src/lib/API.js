@@ -457,6 +457,20 @@ async function addGrupo(name, coordinador, parroquia, capilla) {
 }
 
 /**
+ * Get the list of events.
+ */
+async function getEvents() {
+	const response = await get('eventos');
+
+	if (response.error) {
+		throw response;
+	}
+
+	return response.data;
+}
+
+
+/**
  * Create a calendar eveent and add it to the database.
  * The parroquia and capilla param are exclusive,
  * only one should be present, not both.
@@ -1272,5 +1286,6 @@ export default {
 	formatURL,
 	getCoordinador,
 	getStats,
-	addEvent
+	addEvent,
+	getEvents
 }
