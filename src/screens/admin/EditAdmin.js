@@ -58,10 +58,13 @@ export default (props)=>{
 	var getAccess = ()=>{
 		switch(tipo){
 			case 'admin': return 0;
-			case 'coordinador_general': return 1;
-			case 'acompañante_operativo': return 2;
+			case 'integrante_chm': return 1
+			case 'coordinador': return 2;
+			case 'acompañante_zona': return 3;
+			case 'acompañante_decanato' : return 4;
+			case 'capacitacion': return 5;
 		}
-		return 0;
+		return -1;
 	}
 
 	var getGenero = ()=>{
@@ -84,9 +87,12 @@ export default (props)=>{
 				<Input name="Acceso" value="Superadmin" readonly />
 			) : (
 				<Picker name="Acceso" items={[
-					{ label: 'Administrador', value: 'admin' },
-					{ label: 'Coordinador General', value: 'coordinador_general' },
-					{ label: 'Acompañante Operativo', value: 'acompañante_operativo' }
+					{ label: 'Administrador General', value: 'admin' },
+					{ label: 'Integrante de la CHM', value: 'integrante_chm' },
+					{ label: 'Coordinador de Grupo', value: 'coordinador' },
+					{ label: 'Acompañante de Zona', value: 'acompañante_zona' },
+					{ label: 'Acompañante de Decanato', value: 'acompañante_decanato' },
+					{ label: 'Capacitación', value: 'capacitacion' }
 				]} onValueChange={v=>setTipo(v ? v.value : null)} select={getAccess()} />
 			)}
 

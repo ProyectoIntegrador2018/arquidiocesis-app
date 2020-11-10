@@ -58,9 +58,12 @@ export default (props)=>{
 			<Picker name="Sexo" items={[ 'Masculino', 'Femenino', 'Sin especificar' ]} onValueChange={setValue('sexo')} />
 
 			<Picker name="Acceso" items={[
-				{ label: 'Administrador', value: 'admin' },
-				{ label: 'Coordinador General', value: 'coordinador_general' },
-				{ label: 'Acompañante Operativo', value: 'acompañante_operativo' }
+				{ label: 'Administrador General', value: 'admin' },
+				{ label: 'Integrante de la CHM', value: 'integrante_chm' },
+				{ label: 'Coordinador de Grupo', value: 'coordinador' },
+				{ label: 'Acompañante de Zona', value: 'acompañante_zona' },
+				{ label: 'Acompañante de Decanato', value: 'acompañante_decanato' },
+				{ label: 'Capacitación', value: 'capacitacion' }
 			]} onValueChange={v=>setValue('tipo')(v ? v.value : null)} />
 
 			<Text style={styles.subHeader}>Credenciales</Text>
