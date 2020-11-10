@@ -6,6 +6,7 @@ import Zona from './Zona';
 import ChangePassword from './ChangePassword';
 import Reports from './Reports';
 import Select from './Select';
+import Statistics from './Statistics';
 
 import RegistroCapilla from './capilla/RegistroCapilla';
 import DetalleCapilla from './capilla/DetalleCapilla';
@@ -107,5 +108,6 @@ export {
 	Reports,
 	SelectGroup,
 	SelectCapacitacion,
-	Select
+	Select,
+	Statistics
 }

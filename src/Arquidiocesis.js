@@ -60,7 +60,8 @@ import {
 	SelectGroup,
 	SelectCapacitacion,
 	Select,
-	Acompanantes
+	Acompanantes,
+	Statistics
 } from './screens';
 import { API } from './lib'
 
@@ -177,6 +178,7 @@ var App = (props)=>{
 				<Stack.Screen name="SelectGroup" component={SelectGroup}/>
 				<Stack.Screen name="SelectCapacitacion" component={SelectCapacitacion}/>
 				<Stack.Screen name="Select" component={Select}/>
+				<Stack.Screen name="Statistics" component={Statistics}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

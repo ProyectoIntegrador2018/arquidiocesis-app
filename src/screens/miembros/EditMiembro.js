@@ -24,15 +24,15 @@ export default (props) => {
 	var [apMaterno, setApMaterno] = useState(persona.apellido_materno);
 	var [email, setEmail] = useState(persona.email);
 	var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'));
-	var [gender, setGender] = useState(false);
-	var [estadoCivil, setEstadoCivil] = useState(false);
+	var [gender, setGender] = useState(persona.sexo);
+	var [estadoCivil, setEstadoCivil] = useState(persona.estado_civil);
 	var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio);
 	var [colonia, setColonia] = useState(persona.domicilio.colonia);
 	var [municipio, setMunicipio] = useState(persona.domicilio.municipio);
 	var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa);
 	var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
-	var [escolaridad, setEscolaridad] = useState(false);
-	var [oficio, setOficio] = useState(false);
+	var [escolaridad, setEscolaridad] = useState(persona.escolaridad);
+	var [oficio, setOficio] = useState(persona.oficio);
 	let [hasLaptop, setHasLaptop] = useState(persona.laptop);
 	let [hasTablet, setHasTablet] = useState(persona.tablet);
 	let [hasSmartphone, setHasSmartphone] = useState(persona.smartphone);
@@ -42,7 +42,6 @@ export default (props) => {
 	var pickerRef = useRef(null);
 
 	var { onEdit } = props.route.params;
-
 
 	props.navigation.setOptions({
 		headerTitle: 'Editar Miembro'
@@ -122,7 +121,7 @@ export default (props) => {
 	}
 
 	var getEscolaridad = () => {
-		return ['Ninguno', 'Primaria', 'Secundaria', 'Técnica carrera', 'Maestría', 'Doctorado'].indexOf(persona.escolaridad);
+		return ['Ninguno', 'Primaria', 'Secundaria', 'Preparatoria', 'Carrera Técnica', 'Profesional'].indexOf(persona.escolaridad);
 	}
 
 	var getOficio = () => {
@@ -140,11 +139,8 @@ export default (props) => {
 			<Picker name="Estado Civil" items={['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado']} onValueChange={setEstadoCivil} select={getEstadoCivil()} />
 			<Picker name="Sexo" items={['Masculino', 'Femenino', 'Sin especificar']} onValueChange={setGender} select={getGenero()} />
 			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'} />
-			<Picker name="Grado escolaridad" items={[
-				'Ninguno', 'Primaria',
-				'Secundaria', 'Técnica carrera',
-				'Maestría', 'Doctorado'
-			]} onValueChange={setEscolaridad} select={getEscolaridad()} />
+			<Picker name="Grado escolaridad" items={['Ninguno', 'Primaria', 'Secundaria', 'Preparatoria', 'Carrera Técnica', 'Profesional']} 
+			onValueChange={setEscolaridad} select={getEscolaridad()} />
 			<Picker name="Oficio" items={[
 				'Ninguno', 'Plomero',
 				'Electricista', 'Carpintero',

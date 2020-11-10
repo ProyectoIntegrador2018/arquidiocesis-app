@@ -1152,6 +1152,19 @@ async function getParticipantes(capacitacion) {
 }
 
 /**
+ * Get group members' stats
+ */
+async function getStats() {
+	const res = await get('estadisticas');
+
+	if (res.error) {
+		throw res.error;
+	} else {
+		return res;
+	}
+}
+
+/**
  * Format a GET url and add the token to the params.
  * Used for reporte downloading.
  * @param {string} url The endpoint of the url
@@ -1231,5 +1244,6 @@ export default {
 	changeCapacitacionEncargado,
 	editCapilla,
 	formatURL,
-	getCoordinador
+	getCoordinador,
+	getStats
 }
