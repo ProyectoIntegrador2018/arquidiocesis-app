@@ -136,8 +136,6 @@ export default (props)=>{
   
     setDescAlergias(stats.alergico_desc)
 
-    const ningun_prob_salud = 100 - (stats.p_hipertension + stats.p_sobrepeso + stats.p_cardiovascular + stats.p_azucar);
-  
     setProblemasSalud({
       interactivityEnabled: true,
       animationEnabled: true,
@@ -148,28 +146,39 @@ export default (props)=>{
         fontColor: "gray",
         padding: 15
       },
+      subtitles:[
+        {
+          text: `Total de personas: ${stats.total}`,
+          horizontalAlign: "left",
+          fontWeight: "normal",
+          fontColor: "gray",
+          fontSize: 14,
+          padding: 20
+        }
+      ],
       backgroundColor: "#F2F2F2",
       colorSet: "customColorSet1",
       width: 500,
       height: 275,
-      legend: {
-        horizontalAlign: "right",
-        verticalAlign: "center",
-        fontSize: 14,
-        fontWeight: "normal"
+      toolTip:{
+        enabled: true,
+        animationEnabled: true,
+        content: function(e) {
+          const dp = e.entries[0].dataPoint;
+          const pct = Math.round(dp.y / stats.total * 100)
+          return pct + "%"
+        }
       },
       data: [{
-        type: "pie",
-        showInLegend: true,
-        yValueFormatString: "#0'%'",
-        startAngle: 90,
-        legendText: "{name}: {y}",
+        type: "column",
+        yValueFormatString: "#0",
+        indexLabel: "{y}",
         dataPoints: [
-          { name: "Hipertensión", y: stats.p_hipertension },
-          { name: "Sobrepeso", y: stats.p_sobrepeso },
-          { name: "Problema Cardiovascular", y: stats.p_cardiovascular },
-          { name: "Azúcar", y: stats.p_azucar },
-          { name: "Ninguno", y: ningun_prob_salud }
+          { label: "Hipertensión", y: stats.p_hipertension },
+          { label: "Sobrepeso", y: stats.p_sobrepeso },
+          { label: "Problema Cardiovascular", y: stats.p_cardiovascular },
+          { label: "Azúcar", y: stats.p_azucar },
+          { label: "Ninguno", y: stats.p_ninguno }
         ]
       }]
     })
