@@ -63,6 +63,8 @@ import RegistroAcompanante from './acompanante/RegistroAcompanante';
 import EditAcompanante from './acompanante/EditAcompanante';
 import DetalleAcompanante from './acompanante/DetalleAcompanante';
 
+import Objetivos from './Objetivos';
+
 export {
 	Login,
 	Parroquias,
@@ -118,5 +120,6 @@ export {
 	Calendar,
 	RegistroEvento,
 	Evento,
-	EditEvento
+	EditEvento,
+	Objetivos
 }
