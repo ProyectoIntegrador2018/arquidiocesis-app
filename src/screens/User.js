@@ -20,30 +20,34 @@ export default (props)=>{
 		API.getUser().then(setUser);
 	}, [])
 
-	var logout = ()=>{
+	const logout = ()=>{
 		Alert.alert('Cerrar sesión', '¿Deseas cerrar sesión?', [
 			{ text: 'Cerrar sesión', onPress: props.route.params.logout },
 			{ text: 'Cancelar', style: 'cancel' }
 		]);
 	}
 
-	var changePassword = ()=>{
+	const changePassword = ()=>{
 		props.navigation.navigate('ChangePassword', {
 			admin_email: false,
 			logout: props.route.params.logout
 		});
 	}
 	
-	var adminUsers = ()=>{
+	const adminUsers = ()=>{
 		props.navigation.navigate('AdminUsers');
 	}
 
-	var reports = async ()=>{
+	const reports = async ()=>{
 		props.navigation.navigate('Reports');
 	}
 
-	var statistics = async ()=>{
+	const statistics = async ()=> {
 		props.navigation.navigate('Statistics');
+	}
+
+	const goToObjetivos = async () => {
+		props.navigation.navigate('Objetivos');
 	}
 
 	return (
@@ -54,6 +58,7 @@ export default (props)=>{
 					<Item text="Usuarios" onPress={adminUsers} />
 					<Item text="Reportes" onPress={reports} />
 					<Item text="Estadísticas de miembros" onPress={statistics} />
+					<Item text="Objetivos" onPress={goToObjetivos} />
 				</View>
 			) : null}
 
