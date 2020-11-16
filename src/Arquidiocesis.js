@@ -126,7 +126,7 @@ var Home = (props)=>{
 
       default:
         // Error 
-        return <Tab.Screen name="Error" component={Parroquias} />;
+        return <Tab.Screen name="Error" component={User} />;
         
     }
   }
