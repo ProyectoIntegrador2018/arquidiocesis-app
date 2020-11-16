@@ -24,7 +24,6 @@ export default (props)=>{
 					setRefreshing(false);
 					setData(d);
 					setError(false);
-					console.log(d);
 				}).catch(err=>{
 					setRefreshing(false);
 					setError(true);
@@ -48,14 +47,26 @@ export default (props)=>{
 	var getCoordinadores = ()=>{
 		setRefreshing(true);
 		setError(false);
-		API.getCoordinadores(true).then(d=>{
-			setRefreshing(false);
-			setData(d);
-			setError(false);
-		}).catch(err=>{
-			setRefreshing(false);
-			setError(true);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.getCoordinadoresForAcompanante(user.id).then(d=>{
+				setRefreshing(false);
+				setData(d);
+				setError(false);
+			}).catch(err=>{
+				setRefreshing(false);
+				setError(true);
+				console.log(err);
+			})
+		} else {
+			API.getCoordinadores(true).then(d=>{
+				setRefreshing(false);
+				setData(d);
+				setError(false);
+			}).catch(err=>{
+				setRefreshing(false);
+				setError(true);
+			})
+		}
 	}
 
 	if(error){
