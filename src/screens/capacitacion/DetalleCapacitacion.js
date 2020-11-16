@@ -127,14 +127,20 @@ export default (props)=>{
 	}
 
 	var showAsistencia = a=>{
-		props.navigation.navigate('AsistenciaCapacitacion', {
-			capacitacion: capacitacion.id,
-			date: a.id,
-			new: false,
-			onDelete: d=>{
-				setAsistencias(a=>a.filter(a=>a!=d));
-			}
-		})
+		if (user.type != "acompañante_decanato" && user.type != "acompañante_zona"){ 
+			props.navigation.navigate('AsistenciaCapacitacion', {
+				capacitacion: capacitacion.id,
+				date: a.id,
+				new: false,
+				onDelete: d=>{
+					setAsistencias(a=>a.filter(a=>a!=d));
+				}
+			})
+		}
+	}
+
+	var isAcompanante = () => {
+		return (user.type == "acompañante_decanato" || user.type == "acompañante_zona");
 	}
 	
 	var viewParticipante = p=>{
@@ -209,7 +215,7 @@ export default (props)=>{
 
 					<Text style={[styles.sectionText, { marginTop: 30 }]}>ASISTENCIAS</Text>
 					{asistencias && asistencias.length>0 ? (
-						<List data={formatAsistencias()} onSelect={showAsistencia} scroll={false} />
+						<List data={formatAsistencias()} onSelect={showAsistencia} scroll={false} clickable={!isAcompanante()} />
 					) : (
 						<View>
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No se han marcado asistencias.</Text>

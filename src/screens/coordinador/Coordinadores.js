@@ -16,17 +16,33 @@ export default (props)=>{
 	var [user, setUser] = useState(false);
 
 	useEffect(()=>{
-		API.getUser().then(setUser);
-
-		setRefreshing(true);
-		API.getCoordinadores(false).then(d=>{
-			setRefreshing(false);
-			setData(d);
-			setError(false);
-		}).catch(err=>{
-			setRefreshing(false);
-			setError(true);
-		})
+		API.getUser().then(u => {
+			setUser(u);
+			if (u.type == "acompañante_decanato" || u.type == "acompañante_zona") {
+				setRefreshing(true);
+				API.getCoordinadoresForAcompanante(u.id).then(d=>{
+					setRefreshing(false);
+					setData(d);
+					setError(false);
+					console.log(d);
+				}).catch(err=>{
+					setRefreshing(false);
+					setError(true);
+					console.log(err);
+				})
+			} else {
+				setRefreshing(true);
+				API.getCoordinadores(false).then(d=>{
+					setRefreshing(false);
+					setData(d);
+					setError(false);
+				}).catch(err=>{
+					setRefreshing(false);
+					setError(true);
+				})
+			}
+		});
+		
 	}, [])
 
 	var getCoordinadores = ()=>{
