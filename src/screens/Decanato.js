@@ -77,7 +77,7 @@ export default (props)=>{
 
 
 	var onPress = (item)=>{
-		props.navigation.navigate('Parroquia', item);
+		props.navigation.push('Parroquia', item);
 	}
 
 	return <View style={{ flex: 1 }}>
