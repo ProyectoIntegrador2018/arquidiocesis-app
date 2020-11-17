@@ -165,8 +165,14 @@ var Home = (props)=>{
 					default: iconName = 'exclamation-circle'
 				}
             return <FontAwesome5 name={iconName} size={size} color={color} style={{ paddingTop: 5 }} solid />;
-          },
-		})}>
+			},
+		})}
+		tabBarOptions={{
+			activeTintColor: '#002E60',
+			inactiveTintColor: 'gray',
+			labelPosition: 'below-icon'
+		}}
+		>
       {showTabs(user.type)}
 		</Tab.Navigator>
 	)
