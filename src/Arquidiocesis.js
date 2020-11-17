@@ -94,7 +94,47 @@ var Home = (props)=>{
 
 	useEffect(()=>{
 		API.getUser().then(setUser);
-	}, []);
+  }, []);
+  
+  var showTabs = (user_type) => {
+    switch(user_type){
+      case 'admin': 
+      return ( <>
+          <Tab.Screen name="Parroquias" component={Parroquias} />
+					<Tab.Screen name="Acompañantes" component={Acompanantes} />
+					<Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="HeMa" component={Grupos} />
+			    <Tab.Screen name="Capacitación" component={Capacitaciones} />
+      </> )
+
+      case 'integrante_chm':
+        return ( <>
+          <Tab.Screen name="Parroquias" component={Parroquias} />
+					<Tab.Screen name="Acompañantes" component={Acompanantes} />
+					<Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="HeMa" component={Grupos} />
+			    <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </> );
+
+      case 'coordinador': 
+        return <Tab.Screen name="HeMa" component={Grupos} />;
+
+      case 'acompañante_zona':
+      case 'acompañante_decanato':
+        return ( <>
+          <Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </> );
+
+      case 'capacitacion':
+        return <Tab.Screen name="Capacitación" component={Capacitaciones} />;
+
+      default:
+        // Error 
+        return <Tab.Screen name="Error" component={User} />;
+        
+    }
+  }
 
 	return (
 		<Tab.Navigator initialRouteName='Parroquias' screenOptions={({route})=>({
@@ -118,16 +158,7 @@ var Home = (props)=>{
             return <FontAwesome5 name={iconName} size={size} color={color} style={{ paddingTop: 5 }} solid />;
           },
 		})}>
-			{user.type!='coordinador' ? (
-				<>
-					<Tab.Screen name="Parroquias" component={Parroquias} />
-					<Tab.Screen name="Acompañantes" component={Acompanantes} />
-					<Tab.Screen name="Coordina" component={Coordinadores} />
-				</>
-			) : null}
-			<Tab.Screen name="HeMa" component={Grupos} />
-			<Tab.Screen name="Calendario" component={Calendar} />
-			<Tab.Screen name="Capacitación" component={Capacitaciones} />
+      {showTabs(user.type)}
 		</Tab.Navigator>
 	)
 }

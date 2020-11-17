@@ -22,15 +22,29 @@ export default (props)=>{
 	})
 
 	useEffect(()=>{
-		API.getUser().then(setUser);
-		API.getGrupos().then(grupos=>{
-			setData(grupos);
-			setRefreshing(false);
-			setError(false);
-		}).catch(err=>{
-			setRefreshing(false);
-			setError(true);
-		})
+		API.getUser().then(u => {
+			setUser(u);
+			if (u.type == "acompañante_decanato" || u.type == "acompañante_zona") {
+				API.getGruposForAcompanante(u.id).then(g=>{
+					setData(g);
+					setRefreshing(false);
+					setError(false);
+				}).catch(err=>{
+					setRefreshing(false);
+					setError(true);
+				})
+			} else {
+				API.getGrupos().then(grupos=>{
+					setData(grupos);
+					setRefreshing(false);
+					setError(false);
+				}).catch(err=>{
+					setRefreshing(false);
+					setError(true);
+				})
+			}
+		});
+		
 	}, [])
 
 	var getGrupos = ()=>{

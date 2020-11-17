@@ -5,6 +5,10 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 export default  (props)=>{
 	var renderChild = ()=>{
+		var clickable = true;
+		if (props.clickable == false) {
+			clickable = props.clickable;
+		}
 		return props.data.map((a, ix)=><View key={'item-'+ix}>
 			{props.renderItem ? (
 				<TouchableOpacity onPress={()=>{
@@ -12,7 +16,7 @@ export default  (props)=>{
 				}}>
 					<View style={[styles.item, { backgroundColor: 'white' }]}>{props.renderItem(a)}</View>
 				</TouchableOpacity>
-			) : <ListItem data={a} onPress={props.onSelect} />}
+			) : <ListItem data={a} onPress={props.onSelect} clickable={clickable}/>}
 		</View>)
 	}
 
@@ -41,7 +45,9 @@ var ListItem = (props)=>{
 		<View style={{ backgroundColor: 'white' }}>
 			<View style={styles.item}>
 				<Text>{(props.data.nombre || props.data.name)}</Text>
-				<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+				{props.clickable && (
+					<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+				)}
 			</View>
 		</View>
 	</TouchableOpacity>

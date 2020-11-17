@@ -63,8 +63,11 @@ export default (props)=>{
 	}
 
 	var admins = users.filter(a=>a.tipo=='admin');
-	var coordinador_general = users.filter(a=>a.tipo=='coordinador_general');
-	var acompOper = users.filter(a=>a.tipo=='acompañante_operativo');
+	var integrantes = users.filter(a=>a.tipo=='integrante_chm');
+	var coordinadores = users.filter(a=>a.tipo=='coordinador');
+	var acompZona = users.filter(a=>a.tipo=='acompañante_zona');
+	var acompDecan = users.filter(a=>a.tipo=='acompañante_decanato');
+	var capacitacion = users.filter(a=>a.tipo=='capacitacion');
 
 	var formatList = a=>a.map(a=>({ email: a.email, id: a.member_id }));
 
@@ -87,28 +90,52 @@ export default (props)=>{
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={getUsers} />
 		}>
-			<Text style={styles.section}>Administradores</Text>
-			<Text style={styles.description}>Puede editar y ver todo</Text>
+			<Text style={styles.section}>Administrador General</Text>
+			<Text style={styles.description}>Puede ver y editar todo</Text>
 			{ admins.length==0 ? (
 				<Text style={styles.empty}>No hay administradores.</Text>
 			) : (
 				<AlphabetList data={formatList(admins)} sort='email' headers={false} scroll={false} onSelect={showUser} />
 			)}
 
-			<Text style={styles.section}>Coordinador General</Text>
-			<Text style={styles.description}>Puede ver todo</Text>
-			{coordinador_general.length==0 ? (
-				<Text style={styles.empty}>No hay coordinadores generales.</Text>
+			<Text style={styles.section}>Integrantes de la CHM</Text>
+			<Text style={styles.description}>Puede ver y editar todo</Text>
+			{integrantes.length==0 ? (
+				<Text style={styles.empty}>No hay integrantes de la CHM.</Text>
 			) : (
-				<AlphabetList data={formatList(coordinador_general)} sort='email' headers={false} scroll={false} onSelect={showUser} />
+				<AlphabetList data={formatList(integrantes)} sort='email' headers={false} scroll={false} onSelect={showUser} />
 			)}
 
-			<Text style={styles.section}>Acompañante Operativo</Text>
-			<Text style={styles.description}>Puede ver todo y editar acompañantes de zona</Text>
-			{acompOper.length==0 ? (
+			<Text style={styles.section}>Acompañantes de Zona</Text>
+			<Text style={styles.description}>*Definir permisos*</Text>
+			{acompZona.length==0 ? (
+				<Text style={styles.empty}>No hay acompañanates de zona.</Text>
+			) : (
+				<AlphabetList data={formatList(acompZona)} sort='email' headers={false} scroll={false} onSelect={showUser} />
+			)}
+
+			<Text style={styles.section}>Acompañantes de Decanato</Text>
+			<Text style={styles.description}>*Definir permisos*</Text>
+			{acompDecan.length==0 ? (
 				<Text style={styles.empty}>No hay acompañanates operativos.</Text>
 			) : (
-				<AlphabetList data={formatList(acompOper)} sort='email' headers={false} scroll={false} onSelect={showUser} />
+				<AlphabetList data={formatList(acompDecan)} sort='email' headers={false} scroll={false} onSelect={showUser} />
+			)}
+
+			<Text style={styles.section}>Coordinadores de Grupo</Text>
+			<Text style={styles.description}>*Definir permisos*</Text>
+			{coordinadores.length==0 ? (
+				<Text style={styles.empty}>No hay coordinadores de grupos.</Text>
+			) : (
+				<AlphabetList data={formatList(coordinadores)} sort='email' headers={false} scroll={false} onSelect={showUser} />
+			)}
+
+			<Text style={styles.section}>Capacitación</Text>
+			<Text style={styles.description}>*Definir permisos*</Text>
+			{capacitacion.length==0 ? (
+				<Text style={styles.empty}>No hay encargados de capacitación.</Text>
+			) : (
+				<AlphabetList data={formatList(capacitacion)} sort='email' headers={false} scroll={false} onSelect={showUser} />
 			)}
 		</ScrollView>
 	)

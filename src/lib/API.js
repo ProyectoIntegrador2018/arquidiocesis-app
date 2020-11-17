@@ -398,6 +398,19 @@ async function getCoordinador(id, force = false) {
 }
 
 /**
+ * Get Coordinadores for groups in acompanante's zona or decanato 
+ * @param {string} acomId  The acompanante id
+ */
+async function getCoordinadoresForAcompanante(acomId) {
+	var res = await get('coordinadores/acompanante/' + acomId);
+	if (res.error) {
+		throw res;
+	} else {
+		return res.data;
+	}
+}
+
+/**
  * Get the list of grupos
  * @param {boolean} force Bypass the cache
  */
@@ -406,6 +419,22 @@ async function getGrupos(force = false) {
 		return Cache.getGrupos();
 	}
 	var res = await get('grupos');
+	if (res.error) throw res;
+	else {
+		Cache.setGrupos(res.data);
+		return res.data;
+	}
+}
+
+/**
+ * Get the list of groups for acompanante's zona or decanato
+ * @param {string} acomId  The acompanante id
+ */
+async function getGruposForAcompanante(acomId, force = false) {
+	if (!force && Cache.getGrupos()) {
+		return Cache.getGrupos();
+	}
+	var res = await get('grupos/acompanante/' + acomId);
 	if (res.error) throw res;
 	else {
 		Cache.setGrupos(res.data);
@@ -1260,7 +1289,9 @@ export default {
 	getDecanato,
 	getDecanatos,
 	getCoordinadores,
+	getCoordinadoresForAcompanante,
 	getGrupos,
+	getGruposForAcompanante,
 	getGrupo,
 	registerCoordinador,
 	registerMember,

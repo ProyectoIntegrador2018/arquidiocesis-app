@@ -56,13 +56,13 @@ export default (props)=>{
 				<View style={{ marginBottom: 20 }}>
 					<Text style={styles.section}>Administrador</Text>
 					<Item text="Usuarios" onPress={adminUsers} />
-					<Item text="Reportes" onPress={reports} />
 					<Item text="Estadísticas de miembros" onPress={statistics} />
 					<Item text="Objetivos" onPress={goToObjetivos} />
 				</View>
 			) : null}
 
 			<Text style={styles.section}>Opciones</Text>
+      <Item text="Reportes" onPress={reports} />
 			<Item text="Cambiar contraseña" onPress={changePassword} />
 			<Item text="Cerrar sesión" onPress={logout} />
 		</ScrollView>
