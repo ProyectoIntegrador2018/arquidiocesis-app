@@ -486,6 +486,75 @@ async function addGrupo(name, coordinador, parroquia, capilla) {
 }
 
 /**
+ * Get the list of events.
+ */
+async function getEvents() {
+	const response = await get('eventos');
+
+	if (response.error) {
+		throw response;
+	}
+
+	return response.data;
+}
+
+
+/**
+ * Create a calendar eveent and add it to the database.
+ * The parroquia and capilla param are exclusive,
+ * only one should be present, not both.
+ * @param {string} name The name of the new event
+ * @param {string} eventResponsible The name of the event responsible
+ * @param {string} eventDates The dates of the event
+ */
+async function addEvent(name, eventResponsible, eventDates) {
+	console.log('addEvent start');
+	
+	const payload = {
+		name,
+		eventResponsible,
+		eventDates,
+	}
+
+	const response = await post('eventos', payload);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
+ * Edit an event's data.
+ * @param {string} id The event's id
+ * @param {object} data The event's new data
+ */
+async function editEvent(id, data) {
+	const response = await post('eventos/' + id + '/edit', data);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
+ * Delete an event from the database.
+ * @param {string} id The event's id
+ */
+async function deleteEvent(id) {
+	const response = await sendDelete('eventos/' + id);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
  * Create a coordinador and add it to the databse.
  * @param {object} data The data of the new coordinador
  */
@@ -1276,5 +1345,9 @@ export default {
 	editCapilla,
 	formatURL,
 	getCoordinador,
-	getStats
+	getStats,
+	getEvents,
+	addEvent,
+	deleteEvent,
+	editEvent
 }

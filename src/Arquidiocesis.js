@@ -61,7 +61,12 @@ import {
 	SelectCapacitacion,
 	Select,
 	Acompanantes,
-	Statistics
+	Statistics,
+	Calendar,
+	RegistroEvento,
+	Evento,
+	EditEvento,
+	Objetivos
 } from './screens';
 import { API } from './lib'
 
@@ -144,6 +149,8 @@ var Home = (props)=>{
 					break;
 					case 'HeMa': iconName = 'users'; 
 					break;
+					case 'Calendario': iconName = 'calendar'; 
+					break;
 					case 'Capacitación': iconName = 'chalkboard-teacher';
 					break;
 					default: iconName = 'exclamation-circle'
@@ -211,6 +218,10 @@ var App = (props)=>{
 				<Stack.Screen name="SelectCapacitacion" component={SelectCapacitacion}/>
 				<Stack.Screen name="Select" component={Select}/>
 				<Stack.Screen name="Statistics" component={Statistics}/>
+				<Stack.Screen name="RegistroEvento" component={RegistroEvento}/>
+				<Stack.Screen name="Evento" component={Evento}/>
+				<Stack.Screen name="EditEvento" component={EditEvento}/>
+				<Stack.Screen name="Objetivos" component={Objetivos}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)

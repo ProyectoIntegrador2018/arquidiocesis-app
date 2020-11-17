@@ -22,6 +22,11 @@ import Parroquia from './parroquia/Parroquia'
 import RegistroParroquia from './parroquia/RegistroParroquia';
 import EditParroquia from './parroquia/EditParroquia';
 
+import Calendar from './calendar/Calendar';
+import RegistroEvento from './calendar/RegistroEvento';
+import Evento from './calendar/Evento';
+import EditEvento from './calendar/EditEvento';
+
 import Grupos from './grupos/Grupos';
 import RegistroGrupo from './grupos/RegistroGrupo';
 import Grupo from './grupos/Grupo';
@@ -57,6 +62,8 @@ import Acompanantes from './acompanante/Acompanantes';
 import RegistroAcompanante from './acompanante/RegistroAcompanante';
 import EditAcompanante from './acompanante/EditAcompanante';
 import DetalleAcompanante from './acompanante/DetalleAcompanante';
+
+import Objetivos from './Objetivos';
 
 export {
 	Login,
@@ -109,5 +116,10 @@ export {
 	SelectGroup,
 	SelectCapacitacion,
 	Select,
-	Statistics
+	Statistics,
+	Calendar,
+	RegistroEvento,
+	Evento,
+	EditEvento,
+	Objetivos
 }
