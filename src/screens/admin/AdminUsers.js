@@ -107,7 +107,7 @@ export default (props)=>{
 			)}
 
 			<Text style={styles.section}>Acompañantes de Zona</Text>
-			<Text style={styles.description}>*Definir permisos*</Text>
+			<Text style={styles.description}>Puede ver y editar lo correspondiente a su Zona</Text>
 			{acompZona.length==0 ? (
 				<Text style={styles.empty}>No hay acompañanates de zona.</Text>
 			) : (
@@ -115,7 +115,7 @@ export default (props)=>{
 			)}
 
 			<Text style={styles.section}>Acompañantes de Decanato</Text>
-			<Text style={styles.description}>*Definir permisos*</Text>
+			<Text style={styles.description}>Puede ver y editar lo correspondiente a su Decanato</Text>
 			{acompDecan.length==0 ? (
 				<Text style={styles.empty}>No hay acompañanates operativos.</Text>
 			) : (
@@ -123,7 +123,7 @@ export default (props)=>{
 			)}
 
 			<Text style={styles.section}>Coordinadores de Grupo</Text>
-			<Text style={styles.description}>*Definir permisos*</Text>
+			<Text style={styles.description}>Puede ver y editar lo correspondiente a sus grupos e integrantes</Text>
 			{coordinadores.length==0 ? (
 				<Text style={styles.empty}>No hay coordinadores de grupos.</Text>
 			) : (
@@ -131,7 +131,7 @@ export default (props)=>{
 			)}
 
 			<Text style={styles.section}>Capacitación</Text>
-			<Text style={styles.description}>*Definir permisos*</Text>
+			<Text style={styles.description}>Puede ver y editar lo correspondiente a las capacitaciones e integrantes</Text>
 			{capacitacion.length==0 ? (
 				<Text style={styles.empty}>No hay encargados de capacitación.</Text>
 			) : (
