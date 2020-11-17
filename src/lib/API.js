@@ -427,6 +427,22 @@ async function getGrupos(force = false) {
 }
 
 /**
+ * Get the list of groups for acompanante's zona or decanato
+ * @param {string} acomId  The acompanante id
+ */
+async function getGruposForAcompanante(acomId, force = false) {
+	if (!force && Cache.getGrupos()) {
+		return Cache.getGrupos();
+	}
+	var res = await get('grupos/acompanante/' + acomId);
+	if (res.error) throw res;
+	else {
+		Cache.setGrupos(res.data);
+		return res.data;
+	}
+}
+
+/**
  * Get a grupo from id
  * @param {string} id The id of the grupo
  * @param {boolean} force Bypass the cache
@@ -1206,6 +1222,7 @@ export default {
 	getCoordinadores,
 	getCoordinadoresForAcompanante,
 	getGrupos,
+	getGruposForAcompanante,
 	getGrupo,
 	registerCoordinador,
 	registerMember,

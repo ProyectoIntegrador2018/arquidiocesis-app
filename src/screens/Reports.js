@@ -111,16 +111,28 @@ export default (props)=>{
 
 	var reportParroquias = (setLoading)=>{
 		if(downloading) return;
-		API.formatURL('parroquias/dump/'+moment().unix()+'.csv').then(url=>{
-			getFile(url, 'Parroquias.csv', setLoading);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.formatURL('parroquias/dumpAcompanante/' + user.id).then(url=>{
+				getFile(url, 'Parroquias.csv', setLoading);
+			})
+		} else {
+			API.formatURL('parroquias/dump/'+moment().unix()+'.csv').then(url=>{
+				getFile(url, 'Parroquias.csv', setLoading);
+			})
+		}
 	}
 
 	var reportCapillas = (setLoading)=>{
 		if(downloading) return;
-		API.formatURL('capillas/dump/'+moment().unix()+'.csv').then(url=>{
-			getFile(url, 'Capillas.csv', setLoading);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.formatURL('capillas/dumpAcompanante/' + user.id).then(url=>{
+				getFile(url, 'Capillas.csv', setLoading);
+			})
+		} else {
+			API.formatURL('capillas/dump/'+moment().unix()+'.csv').then(url=>{
+				getFile(url, 'Capillas.csv', setLoading);
+			})
+		}
 	}
 
 	var reportAcompanantes = (setLoading)=>{
@@ -139,16 +151,28 @@ export default (props)=>{
 
 	var reportCoordinadores = setLoading=>{
 		if(downloading) return;
-		API.formatURL('reporte/coordinadores').then(url=>{
-			getFile(url, 'Coordinadores.csv', setLoading);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.formatURL('reporte/coordinadoresAcompanante/' + user.id).then(url=>{
+				getFile(url, 'Coordinadores.csv', setLoading);
+			})
+		} else {
+			API.formatURL('reporte/coordinadores').then(url=>{
+				getFile(url, 'Coordinadores.csv', setLoading);
+			})
+		}
 	}
 
 	var reportDecanatos = setLoading=>{
 		if(downloading) return;
-		API.formatURL('reporte/decanatos').then(url=>{
-			getFile(url, 'Decanatos.csv', setLoading);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.formatURL('reporte/decanatosAcompanante/' + user.id).then(url=>{
+				getFile(url, 'Decanatos.csv', setLoading);
+			})
+		} else {
+			API.formatURL('reporte/decanatos').then(url=>{
+				getFile(url, 'Decanatos.csv', setLoading);
+			})
+		}
 	}
 
 	var reportZonas = setLoading=>{
@@ -192,12 +216,11 @@ export default (props)=>{
 		<Item text="Coordinadores" onPress={reportCoordinadores} />
     : null }
     {["admin", "integrante_chm", "capacitacion",
-    "acompañante_decanato"].includes(user.type) ?
+    "acompañante_decanato", "acompañante_zona"].includes(user.type) ?
 		<Item text="Decanatos" onPress={reportDecanatos} />
     : null }
      
-    {["admin", "integrante_chm", "capacitacion",
-    "acompañante_zona"].includes(user.type) ?
+    {["admin", "integrante_chm", "capacitacion"].includes(user.type) ?
 		<Item text="Zonas" onPress={reportZonas} />
     : null }
 	</ScrollView>;
