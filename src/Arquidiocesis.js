@@ -104,6 +104,7 @@ var Home = (props)=>{
 					<Tab.Screen name="Acompañantes" component={Acompanantes} />
 					<Tab.Screen name="Coordina" component={Coordinadores} />
           <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
 			    <Tab.Screen name="Capacitación" component={Capacitaciones} />
       </> )
 
@@ -113,21 +114,29 @@ var Home = (props)=>{
 					<Tab.Screen name="Acompañantes" component={Acompanantes} />
 					<Tab.Screen name="Coordina" component={Coordinadores} />
           <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
 			    <Tab.Screen name="Capacitación" component={Capacitaciones} />
         </> );
 
       case 'coordinador': 
-        return <Tab.Screen name="HeMa" component={Grupos} />;
+        return ( <> 
+          <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+        </> );
 
       case 'acompañante_zona':
       case 'acompañante_decanato':
         return ( <>
           <Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="Calendario" component={Calendar} />
           <Tab.Screen name="Capacitación" component={Capacitaciones} />
         </> );
 
       case 'capacitacion':
-        return <Tab.Screen name="Capacitación" component={Capacitaciones} />;
+        return ( <>
+        <Tab.Screen name="Calendario" component={Calendar} />
+        <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </> );
 
       default:
         // Error 
