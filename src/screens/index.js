@@ -64,6 +64,7 @@ import EditAcompanante from './acompanante/EditAcompanante';
 import DetalleAcompanante from './acompanante/DetalleAcompanante';
 
 import Objetivos from './Objetivos';
+import ObjetivosDelAño from './ObjetivosDelAño';
 
 export {
 	Login,
@@ -121,5 +122,6 @@ export {
 	RegistroEvento,
 	Evento,
 	EditEvento,
-	Objetivos
+	Objetivos,
+	ObjetivosDelAño
 }
