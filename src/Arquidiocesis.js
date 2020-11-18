@@ -66,7 +66,8 @@ import {
 	RegistroEvento,
 	Evento,
 	EditEvento,
-	Objetivos
+	Objetivos,
+	ObjetivosDelAño
 } from './screens';
 import { API } from './lib'
 
@@ -237,6 +238,7 @@ var App = (props)=>{
 				<Stack.Screen name="Evento" component={Evento}/>
 				<Stack.Screen name="EditEvento" component={EditEvento}/>
 				<Stack.Screen name="Objetivos" component={Objetivos}/>
+				<Stack.Screen name="ObjetivosDelAño" component={ObjetivosDelAño}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
