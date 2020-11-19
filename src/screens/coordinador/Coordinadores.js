@@ -6,7 +6,7 @@ Descripción: Pantalla para ver la información de todos los coordinadores en el
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, Button, ErrorView } from '../../components';
+import { AlphabetList, Button, ErrorView, Alert } from '../../components';
 import { API } from '../../lib';
 
 export default (props)=>{
@@ -27,6 +27,7 @@ export default (props)=>{
 				}).catch(err=>{
 					setRefreshing(false);
 					setError(true);
+					Alert.alert('Error', err.message);
 					console.log(err);
 				})
 			} else {
