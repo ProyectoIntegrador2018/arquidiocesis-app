@@ -3,7 +3,7 @@ Nombre: Reports.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para gestionar la generación de reportes del sistema
 */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Text, ScrollView, StyleSheet, Platform, Linking } from 'react-native';
 import { Item, Alert } from '../components';
 import * as FileSystem from 'expo-file-system';
@@ -13,7 +13,8 @@ import moment from 'moment';
 
 export default (props)=>{
 
-	var [downloading, setDownloading] = useState(false);
+  var [downloading, setDownloading] = useState(false);
+  var [user, setUser] = useState(false);
 
 	props.navigation.setOptions({
 		headerTitle: 'Reportes'
@@ -27,7 +28,11 @@ export default (props)=>{
 				Linking.openURL(url);
 			}
 		})(url, name, setLoading)
-	}
+  }
+  
+  useEffect(()=>{
+    API.getUser().then(setUser);
+  }, []);
 
 	var emailFile = (url, name, setLoading)=>{
 		setLoading(true);
@@ -106,16 +111,28 @@ export default (props)=>{
 
 	var reportParroquias = (setLoading)=>{
 		if(downloading) return;
-		API.formatURL('parroquias/dump/'+moment().unix()+'.csv').then(url=>{
-			getFile(url, 'Parroquias.csv', setLoading);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.formatURL('parroquias/dumpAcompanante/' + user.id).then(url=>{
+				getFile(url, 'Parroquias.csv', setLoading);
+			})
+		} else {
+			API.formatURL('parroquias/dump/'+moment().unix()+'.csv').then(url=>{
+				getFile(url, 'Parroquias.csv', setLoading);
+			})
+		}
 	}
 
 	var reportCapillas = (setLoading)=>{
 		if(downloading) return;
-		API.formatURL('capillas/dump/'+moment().unix()+'.csv').then(url=>{
-			getFile(url, 'Capillas.csv', setLoading);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.formatURL('capillas/dumpAcompanante/' + user.id).then(url=>{
+				getFile(url, 'Capillas.csv', setLoading);
+			})
+		} else {
+			API.formatURL('capillas/dump/'+moment().unix()+'.csv').then(url=>{
+				getFile(url, 'Capillas.csv', setLoading);
+			})
+		}
 	}
 
 	var reportAcompanantes = (setLoading)=>{
@@ -134,16 +151,28 @@ export default (props)=>{
 
 	var reportCoordinadores = setLoading=>{
 		if(downloading) return;
-		API.formatURL('reporte/coordinadores').then(url=>{
-			getFile(url, 'Coordinadores.csv', setLoading);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.formatURL('reporte/coordinadoresAcompanante/' + user.id).then(url=>{
+				getFile(url, 'Coordinadores.csv', setLoading);
+			})
+		} else {
+			API.formatURL('reporte/coordinadores').then(url=>{
+				getFile(url, 'Coordinadores.csv', setLoading);
+			})
+		}
 	}
 
 	var reportDecanatos = setLoading=>{
 		if(downloading) return;
-		API.formatURL('reporte/decanatos').then(url=>{
-			getFile(url, 'Decanatos.csv', setLoading);
-		})
+		if (user.type == "acompañante_decanato" || user.type == "acompañante_zona") {
+			API.formatURL('reporte/decanatosAcompanante/' + user.id).then(url=>{
+				getFile(url, 'Decanatos.csv', setLoading);
+			})
+		} else {
+			API.formatURL('reporte/decanatos').then(url=>{
+				getFile(url, 'Decanatos.csv', setLoading);
+			})
+		}
 	}
 
 	var reportZonas = setLoading=>{
@@ -155,25 +184,45 @@ export default (props)=>{
 
 	return <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
 		<Text style={[styles.sectionText, { marginTop: 10 }]}>GRUPOS</Text>
-		<Item text="Todos los grupos" onPress={reportAllGrupos} />
-		<Item text="Miembros de grupo" onPress={reportGroup} />
+    {["admin", "integrante_chm"].includes(user.type) ?
+		<Item text="Todos los grupos" onPress={reportAllGrupos} /> : null}
+    {user.type!='capacitacion' ? <>
+		<Item text="Miembros de grupo" onPress={reportGroup} /> 
 		<Item text="Asistencia de grupo por fecha" onPress={reportGroupAssistance} />
+    </> : null }
 
+    {["admin", "integrante_chm", "acompañante_zona", 
+      "acompañante_decanato"].includes(user.type) ? <>
 		<Text style={styles.sectionText}>CAPACITACIONES</Text>
 		<Item text="Todas las capacitaciones" onPress={reportAllCapacitaciones} />
 		<Item text="Participantes de capacitación" onPress={reportCapacitacion} />
 		<Item text="Asistencia de capacitación" onPress={reportCapacitacionAssistance} />
+    </> : null }
 
+    {["admin", "integrante_chm", "acompañante_zona", 
+      "acompañante_decanato", "capacitacion"].includes(user.type) ? <>
 		<Text style={styles.sectionText}>PARROQUIAS</Text>
 		<Item text="Parroquias" onPress={reportParroquias} />
 		<Item text="Capillas" onPress={reportCapillas} />
+    </> : null }
 
 		<Text style={styles.sectionText}>OTROS</Text>
+    {["admin", "integrante_chm"].includes(user.type) ? <>
 		<Item text="Acompañantes" onPress={reportAcompanantes} />
 		<Item text="Administradores" onPress={reportAdministradores} />
+    </> : null }
+    {["admin", "integrante_chm", "capacitacion",
+    "acompañante_decanato", "acompañante_zona"].includes(user.type) ?
 		<Item text="Coordinadores" onPress={reportCoordinadores} />
+    : null }
+    {["admin", "integrante_chm", "capacitacion",
+    "acompañante_decanato", "acompañante_zona"].includes(user.type) ?
 		<Item text="Decanatos" onPress={reportDecanatos} />
+    : null }
+     
+    {["admin", "integrante_chm", "capacitacion"].includes(user.type) ?
 		<Item text="Zonas" onPress={reportZonas} />
+    : null }
 	</ScrollView>;
 }
 

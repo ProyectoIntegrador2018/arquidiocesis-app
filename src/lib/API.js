@@ -398,6 +398,19 @@ async function getCoordinador(id, force = false) {
 }
 
 /**
+ * Get Coordinadores for groups in acompanante's zona or decanato 
+ * @param {string} acomId  The acompanante id
+ */
+async function getCoordinadoresForAcompanante(acomId) {
+	var res = await get('coordinadores/acompanante/' + acomId);
+	if (res.error) {
+		throw res;
+	} else {
+		return res.data;
+	}
+}
+
+/**
  * Get the list of grupos
  * @param {boolean} force Bypass the cache
  */
@@ -406,6 +419,22 @@ async function getGrupos(force = false) {
 		return Cache.getGrupos();
 	}
 	var res = await get('grupos');
+	if (res.error) throw res;
+	else {
+		Cache.setGrupos(res.data);
+		return res.data;
+	}
+}
+
+/**
+ * Get the list of groups for acompanante's zona or decanato
+ * @param {string} acomId  The acompanante id
+ */
+async function getGruposForAcompanante(acomId, force = false) {
+	if (!force && Cache.getGrupos()) {
+		return Cache.getGrupos();
+	}
+	var res = await get('grupos/acompanante/' + acomId);
 	if (res.error) throw res;
 	else {
 		Cache.setGrupos(res.data);
@@ -454,6 +483,88 @@ async function addGrupo(name, coordinador, parroquia, capilla) {
 	var res = await post('grupos', payload);
 	if (res.error) throw res;
 	else return res.data;
+}
+
+/**
+ * Get the list of events.
+ */
+async function getEvents() {
+	const response = await get('eventos');
+
+	if (response.error) {
+		throw response;
+	}
+
+	return response.data;
+}
+
+
+/**
+ * Create a calendar eveent and add it to the database.
+ * The parroquia and capilla param are exclusive,
+ * only one should be present, not both.
+ * @param {string} name The name of the new event
+ * @param {string} eventResponsible The name of the event responsible
+ * @param {string} eventDates The dates of the event
+ */
+async function addEvent(name, eventResponsible, eventDates) {
+	console.log('addEvent start');
+	
+	const payload = {
+		name,
+		eventResponsible,
+		eventDates,
+	}
+
+	const response = await post('eventos', payload);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
+ * Edit an event's data.
+ * @param {string} id The event's id
+ * @param {object} data The event's new data
+ */
+async function editEvent(id, data) {
+	const response = await post('eventos/' + id + '/edit', data);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
+ * Delete an event from the database.
+ * @param {string} id The event's id
+ */
+async function deleteEvent(id) {
+	const response = await sendDelete('eventos/' + id);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+
+/**
+ * Get the list of events.
+ */
+async function getObjectivesByYear(year) {
+	const response = await get(`objetivos/${year}`);
+
+	if (response.error) {
+		throw response;
+	}
+
+	return response.data;
 }
 
 /**
@@ -1152,6 +1263,19 @@ async function getParticipantes(capacitacion) {
 }
 
 /**
+ * Get group members' stats
+ */
+async function getStats() {
+	const res = await get('estadisticas');
+
+	if (res.error) {
+		throw res.error;
+	} else {
+		return res;
+	}
+}
+
+/**
  * Format a GET url and add the token to the params.
  * Used for reporte downloading.
  * @param {string} url The endpoint of the url
@@ -1178,7 +1302,9 @@ export default {
 	getDecanato,
 	getDecanatos,
 	getCoordinadores,
+	getCoordinadoresForAcompanante,
 	getGrupos,
+	getGruposForAcompanante,
 	getGrupo,
 	registerCoordinador,
 	registerMember,
@@ -1231,5 +1357,11 @@ export default {
 	changeCapacitacionEncargado,
 	editCapilla,
 	formatURL,
-	getCoordinador
+	getCoordinador,
+	getStats,
+	getEvents,
+	addEvent,
+	deleteEvent,
+	editEvent,
+	getObjectivesByYear
 }

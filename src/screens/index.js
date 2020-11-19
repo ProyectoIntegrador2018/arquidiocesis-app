@@ -6,6 +6,7 @@ import Zona from './Zona';
 import ChangePassword from './ChangePassword';
 import Reports from './Reports';
 import Select from './Select';
+import Statistics from './Statistics';
 
 import RegistroCapilla from './capilla/RegistroCapilla';
 import DetalleCapilla from './capilla/DetalleCapilla';
@@ -20,6 +21,11 @@ import Parroquias from './parroquia/Parroquias';
 import Parroquia from './parroquia/Parroquia'
 import RegistroParroquia from './parroquia/RegistroParroquia';
 import EditParroquia from './parroquia/EditParroquia';
+
+import Calendar from './calendar/Calendar';
+import RegistroEvento from './calendar/RegistroEvento';
+import Evento from './calendar/Evento';
+import EditEvento from './calendar/EditEvento';
 
 import Grupos from './grupos/Grupos';
 import RegistroGrupo from './grupos/RegistroGrupo';
@@ -56,6 +62,10 @@ import Acompanantes from './acompanante/Acompanantes';
 import RegistroAcompanante from './acompanante/RegistroAcompanante';
 import EditAcompanante from './acompanante/EditAcompanante';
 import DetalleAcompanante from './acompanante/DetalleAcompanante';
+
+import Objetivos from './Objetivos';
+import ObjetivosDelAño from './ObjetivosDelAño';
+import ObjetivosDecanato from './ObjetivosDecanato';
 
 export {
 	Login,
@@ -107,5 +117,13 @@ export {
 	Reports,
 	SelectGroup,
 	SelectCapacitacion,
-	Select
+	Select,
+	Statistics,
+	Calendar,
+	RegistroEvento,
+	Evento,
+	EditEvento,
+	Objetivos,
+	ObjetivosDelAño,
+	ObjetivosDecanato
 }

@@ -60,7 +60,15 @@ import {
 	SelectGroup,
 	SelectCapacitacion,
 	Select,
-	Acompanantes
+	Acompanantes,
+	Statistics,
+	Calendar,
+	RegistroEvento,
+	Evento,
+	EditEvento,
+	Objetivos,
+	ObjetivosDelAño,
+	ObjetivosDecanato
 } from './screens';
 import { API } from './lib'
 
@@ -88,7 +96,56 @@ var Home = (props)=>{
 
 	useEffect(()=>{
 		API.getUser().then(setUser);
-	}, []);
+  }, []);
+  
+  var showTabs = (user_type) => {
+    switch(user_type){
+      case 'admin': 
+      return ( <>
+          <Tab.Screen name="Parroquias" component={Parroquias} />
+					<Tab.Screen name="Acompañantes" component={Acompanantes} />
+					<Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+			    <Tab.Screen name="Capacitación" component={Capacitaciones} />
+      </> )
+
+      case 'integrante_chm':
+        return ( <>
+          <Tab.Screen name="Parroquias" component={Parroquias} />
+					<Tab.Screen name="Acompañantes" component={Acompanantes} />
+					<Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+			    <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </> );
+
+      case 'coordinador': 
+        return ( <> 
+          <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+        </> );
+
+      case 'acompañante_zona':
+      case 'acompañante_decanato':
+        return ( <>
+          <Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+          <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </> );
+
+      case 'capacitacion':
+        return ( <>
+        <Tab.Screen name="Calendario" component={Calendar} />
+        <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </> );
+
+      default:
+        // Error 
+        return <Tab.Screen name="Error" component={User} />;
+        
+    }
+  }
 
 	return (
 		<Tab.Navigator initialRouteName='Parroquias' screenOptions={({route})=>({
@@ -103,22 +160,22 @@ var Home = (props)=>{
 					break;
 					case 'HeMa': iconName = 'users'; 
 					break;
+					case 'Calendario': iconName = 'calendar'; 
+					break;
 					case 'Capacitación': iconName = 'chalkboard-teacher';
 					break;
 					default: iconName = 'exclamation-circle'
 				}
             return <FontAwesome5 name={iconName} size={size} color={color} style={{ paddingTop: 5 }} solid />;
-          },
-		})}>
-			{user.type!='coordinador' ? (
-				<>
-					<Tab.Screen name="Parroquias" component={Parroquias} />
-					<Tab.Screen name="Acompañantes" component={Acompanantes} />
-					<Tab.Screen name="Coordina" component={Coordinadores} />
-				</>
-			) : null}
-			<Tab.Screen name="HeMa" component={Grupos} />
-			<Tab.Screen name="Capacitación" component={Capacitaciones} />
+			},
+		})}
+		tabBarOptions={{
+			activeTintColor: '#002E60',
+			inactiveTintColor: 'gray',
+			labelPosition: 'below-icon'
+		}}
+		>
+      {showTabs(user.type)}
 		</Tab.Navigator>
 	)
 }
@@ -177,6 +234,13 @@ var App = (props)=>{
 				<Stack.Screen name="SelectGroup" component={SelectGroup}/>
 				<Stack.Screen name="SelectCapacitacion" component={SelectCapacitacion}/>
 				<Stack.Screen name="Select" component={Select}/>
+				<Stack.Screen name="Statistics" component={Statistics}/>
+				<Stack.Screen name="RegistroEvento" component={RegistroEvento}/>
+				<Stack.Screen name="Evento" component={Evento}/>
+				<Stack.Screen name="EditEvento" component={EditEvento}/>
+				<Stack.Screen name="Objetivos" component={Objetivos}/>
+				<Stack.Screen name="ObjetivosDelAño" component={ObjetivosDelAño}/>
+				<Stack.Screen name="ObjetivosDecanato" component={ObjetivosDecanato}/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
