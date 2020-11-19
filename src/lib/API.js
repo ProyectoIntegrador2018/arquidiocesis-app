@@ -500,7 +500,7 @@ async function getEvents() {
 
 
 /**
- * Create a calendar eveent and add it to the database.
+ * Create a calendar event and add it to the database.
  * The parroquia and capilla param are exclusive,
  * only one should be present, not both.
  * @param {string} name The name of the new event
@@ -567,6 +567,20 @@ async function getObjectivesByYear(year) {
 	return response.data;
 }
 
+/**
+ * Edit an objective's data.
+ * @param {string} id The objective's id
+ * @param {object} data The objective's new data
+ */
+async function editObjective(id, data) {
+	const response = await post('eventos/' + id + '/edit', data);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
 /**
  * Create a coordinador and add it to the databse.
  * @param {object} data The data of the new coordinador
@@ -1363,5 +1377,6 @@ export default {
 	addEvent,
 	deleteEvent,
 	editEvent,
-	getObjectivesByYear
+	getObjectivesByYear,
+	editObjective
 }
