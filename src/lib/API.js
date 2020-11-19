@@ -555,6 +555,19 @@ async function deleteEvent(id) {
 }
 
 /**
+ * Get the list of events.
+ */
+async function getObjectivesByYear(year) {
+	const response = await get(`objetivos/${year}`);
+
+	if (response.error) {
+		throw response;
+	}
+
+	return response.data;
+}
+
+/**
  * Create a coordinador and add it to the databse.
  * @param {object} data The data of the new coordinador
  */
@@ -1349,5 +1362,6 @@ export default {
 	getEvents,
 	addEvent,
 	deleteEvent,
-	editEvent
+	editEvent,
+	getObjectivesByYear
 }

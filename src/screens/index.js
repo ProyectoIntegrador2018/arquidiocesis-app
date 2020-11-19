@@ -65,6 +65,7 @@ import DetalleAcompanante from './acompanante/DetalleAcompanante';
 
 import Objetivos from './Objetivos';
 import ObjetivosDelAño from './ObjetivosDelAño';
+import ObjetivosDecanato from './ObjetivosDecanato';
 
 export {
 	Login,
@@ -123,5 +124,6 @@ export {
 	Evento,
 	EditEvento,
 	Objetivos,
-	ObjetivosDelAño
+	ObjetivosDelAño,
+	ObjetivosDecanato
 }
