@@ -17,12 +17,12 @@ import { Input, Button, Picker, PickerScreen } from "../../components";
 import { API } from "../../lib";
 
 export default (props) => {
-  const { evento, onEdit } = props.route.params;
+  const { event, onEdit } = props.route.params;
 
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState(evento.nombre);
-  const [eventResponsible, setEventResponsible] = useState(evento.responsable);
-  const [eventDates, setEventDates] = useState(evento.fechas);
+  const [name, setName] = useState(event.nombre);
+  const [eventResponsible, setEventResponsible] = useState(event.responsable);
+  const [eventDates, setEventDates] = useState(event.fechas);
 
   props.navigation.setOptions({
     headerStyle: {
@@ -48,7 +48,7 @@ export default (props) => {
         responsable: eventResponsible,
         fechas: eventDates,
       };
-      const editedEvent = await API.editEvent(evento.id, data);
+      const editedEvent = await API.editEvent(event.id, data);
 
       if (onEdit) {
         onEdit(data);
