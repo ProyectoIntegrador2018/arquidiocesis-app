@@ -42,7 +42,7 @@ export default (props)=>{
 			return alert(prompt)
 		}
 		setLoading(true);
-		API.editAdmin(old_email, data).then(done=>{
+		API.editUserDetail(old_email, props.route.params.user.id, data).then(done=>{
 			setLoading(false);
 			if(!done){
 				return alert('Hubo un error editando el usuario.');
@@ -67,6 +67,18 @@ export default (props)=>{
 		return -1;
 	}
 
+	var getAccessName = ()=>{
+		switch(tipo){
+			case 'admin': return 'Administrador General';
+			case 'integrante_chm': return 'Integrante de la CHM';
+			case 'coordinador': return 'Coordinador de grupo';
+			case 'acompañante_zona': return 'Acompañante de Zona';
+			case 'acompañante_decanato' : return 'Acompañante de Decanato';
+			case 'capacitacion': return 'Capacitación';
+		}
+		return '';
+	}
+
 	var getGenero = ()=>{
 		switch(sexo){
 			case 'Masculino': return 0;
@@ -83,15 +95,12 @@ export default (props)=>{
 			<Input name="Apellido Materno" value={apMat} onChangeText={setApMat} />
 			<Picker name="Sexo" items={[ 'Masculino', 'Femenino', 'Sin especificar' ]} onValueChange={setSexo} select={getGenero()} />
 
-			{tipo=='superadmin' ? (
-				<Input name="Acceso" value="Superadmin" readonly />
+			{!['admin', 'integrante_chm', 'capacitacion'].includes(tipo) ? (
+				<Input name="Acceso" value={getAccessName()} readonly />
 			) : (
 				<Picker name="Acceso" items={[
 					{ label: 'Administrador General', value: 'admin' },
 					{ label: 'Integrante de la CHM', value: 'integrante_chm' },
-					{ label: 'Coordinador de Grupo', value: 'coordinador' },
-					{ label: 'Acompañante de Zona', value: 'acompañante_zona' },
-					{ label: 'Acompañante de Decanato', value: 'acompañante_decanato' },
 					{ label: 'Capacitación', value: 'capacitacion' }
 				]} onValueChange={v=>setTipo(v ? v.value : null)} select={getAccess()} />
 			)}
