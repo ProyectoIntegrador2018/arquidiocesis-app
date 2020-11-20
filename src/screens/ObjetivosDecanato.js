@@ -2,7 +2,7 @@
 Nombre: ObjetivosDecanato.js
 Descripción: Pantalla para editar la información de los objetivos de un decanato
 */
-import React, { useState, useRef,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   View,
@@ -16,52 +16,56 @@ import { Input, Button } from "../components";
 import { API } from "./../lib";
 
 export default (props) => {
-  const { objectiveData,onEdit } = props.route.params;
+  const { objectiveData, onEdit } = props.route.params;
   console.log("objectiveData :>> ", objectiveData);
 
   const [loading, setLoading] = useState(false);
-  const [p, setP] = useState(objectiveData.parroquia);
-  const [cg, setCg] = useState(objectiveData.grupo);
-  const [oc1, setOc1] = useState(objectiveData.objetivo1);
-  const [oc2, setOc2] = useState(objectiveData.objetivo2);
-  const [oc3, setOc3] = useState(objectiveData.objetivo3);
+  const [p, setP] = useState(String(objectiveData[1]));
+  const [cg, setCg] = useState(String(objectiveData[2]));
+  const [oc1, setOc1] = useState(String(objectiveData[3]));
+  const [oc2, setOc2] = useState(String(objectiveData[4]));
+  const [oc3, setOc3] = useState(String(objectiveData[5]));
 
   props.navigation.setOptions({
     headerStyle: {
       backgroundColor: "#002E60",
       shadowOpacity: 0,
     },
-    headerTitle:"Editar un objetivo",
+    headerTitle: "Editar un objetivo",
   });
 
   const editObjective = async () => {
     if (loading) return;
-    if (p.trim().length < 1 && typeof p != 'number') return alert("Por favor introduzca un número.");
-    if (cg.trim().length < 1 && typeof cg != 'number')
-      return alert("Por favor introduzca un número.");
-    if (oc1.trim().length < 1 && typeof oc1 != 'number')
-      return alert("Por favor introduzca un número.");
-    if (oc2.trim().length < 1 && typeof oc2 != 'number')
-      return alert("Por favor introduzca un número.");
-    if (oc3.trim().length < 1 && typeof oc3 != 'number')
-      return alert("Por favor introduzca un número.");
+
+    if (Number.isNaN(parseInt(p)))
+      return alert("Por favor introduzca un número para P.");
+    if (Number.isNaN(parseInt(cg)))
+      return alert("Por favor introduzca un número para CG.");
+    if (Number.isNaN(parseInt(oc1)))
+      return alert("Por favor introduzca un número para OC1.");
+    if (Number.isNaN(parseInt(oc2)))
+      return alert("Por favor introduzca un número para OC2.");
+    if (Number.isNaN(parseInt(oc3)))
+      return alert("Por favor introduzca un número para OC3.");
+    if (!objectiveData[6])
+      return alert(
+        "No se tiene el ID del objetivo actual, contacte a soporte."
+      );
 
     setLoading(true);
 
     try {
       const data = {
-        p:parroquia,
-        cg:grupo,
-        oc1:objetivo1,
-        oc2:objetivo2,
-        oc3:objetivo3,
+        id: objectiveData[6],
+        p: parseInt(p),
+        cg: parseInt(cg),
+        oc1: parseInt(oc1),
+        oc2: parseInt(oc2),
+        oc3: parseInt(oc3),
       };
-      const editedObjective = await API.editObjective(objectiveData.id, data);
+      const editedObjective = await API.editObjective(data);
 
-      if (onEdit) {
-        onEdit(data);
-      }
-
+      onEdit(data);
       alert("Se ha editado el objetivo");
       props.navigation.goBack();
     } catch (error) {
@@ -79,13 +83,9 @@ export default (props) => {
 
   return (
     <KeyboardAwareScrollView style={styles.container} bounces={false}>
-      <Text style={styles.header}>Editar Objetivo </Text>
+      <Text style={styles.header}>Objetivos de "{objectiveData[0]}"</Text>
       <Input name="Parroquias (P)" value={p} onChangeText={setP} />
-      <Input
-        name="Con grupo (CG)"
-        value={cg}
-        onChangeText={setCg}
-      />
+      <Input name="Con grupo (CG)" value={cg} onChangeText={setCg} />
       <Input
         name="Objetivo de Capacitación 1 (OC1)"
         value={oc1}

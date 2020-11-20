@@ -29,6 +29,7 @@ export default (props) => {
 
   const getObjectives = async () => {
     try {
+      setIsLoadingData(true);
       const objectives = await API.getObjectivesByYear(year);
       const tableData = [];
 
@@ -60,14 +61,17 @@ export default (props) => {
     }
   };
 
-  const goToObjectives = async (objectiveData) => {
-    console.log("goToObjectives", objectiveData);
-    props.navigation.navigate("ObjetivosDecanato", { objectiveData });
-  };
-
   useEffect(() => {
     getObjectives();
   }, []);
+
+  const onEdit = () => {
+    getObjectives();
+  };
+
+  const goToObjectives = async (objectiveData) => {
+    props.navigation.navigate("ObjetivosDecanato", { objectiveData, onEdit });
+  };
 
   if (loadingData || !info) {
     return (

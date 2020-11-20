@@ -572,8 +572,8 @@ async function getObjectivesByYear(year) {
  * @param {string} id The objective's id
  * @param {object} data The objective's new data
  */
-async function editObjective(id, data) {
-	const response = await post('eventos/' + id + '/edit', data);
+async function editObjective(data) {
+	const response = await post('objetivos', data);
 
 	if (response.error) {
 		throw response;
