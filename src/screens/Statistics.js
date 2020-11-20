@@ -81,8 +81,6 @@ export default (props)=>{
       }],
       backgroundColor: "#F2F2F2",
       colorSet: "customColorSet1",
-      width: 500,
-      height: 275,
       data: [{
         type: "doughnut",
         showInLegend: false,
@@ -119,8 +117,6 @@ export default (props)=>{
       }],
       backgroundColor: "#F2F2F2",
       colorSet: "customColorSet2",
-      width: 500,
-      height: 275,
       data: [{
         type: "doughnut",
         showInLegend: false,
@@ -158,8 +154,6 @@ export default (props)=>{
       ],
       backgroundColor: "#F2F2F2",
       colorSet: "customColorSet1",
-      width: 500,
-      height: 275,
       toolTip:{
         enabled: true,
         animationEnabled: true,
@@ -204,8 +198,6 @@ export default (props)=>{
       }],
       backgroundColor: "#F2F2F2",
       colorSet: "customColorSet1",
-      width: 500,
-      height: 275,
       data: [{
         type: "doughnut",
         showInLegend: false,
@@ -235,8 +227,6 @@ export default (props)=>{
       },
       backgroundColor: "#F2F2F2",
       colorSet: "customColorSet1",
-      width: 500,
-      height: 275,
       legend: {
         horizontalAlign: "right",
         verticalAlign: "center",
@@ -280,8 +270,6 @@ export default (props)=>{
       }],
       backgroundColor: "#F2F2F2",
       colorSet: "customColorSet2",
-      width: 500,
-      height: 275,
       data: [{
         type: "doughnut",
         showInLegend: false,
