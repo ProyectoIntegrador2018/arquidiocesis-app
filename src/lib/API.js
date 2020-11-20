@@ -1273,6 +1273,22 @@ async function changeCapacitacionEncargado(capacitacion, encargado) {
 }
 
 /**
+ * Get the list of capacitadores
+ * @param {boolean} force Bypass the cache
+ */
+async function getCapacitadores(force = false) {
+	if (!force && Cache.getCapacitadores()) {
+		return Cache.getCapacitadores();
+	}
+	var p = await get('capacitadores');
+	if (p.error) throw p;
+	else {
+		Cache.setCapacitadores(p.data);
+		return p.data;
+	}
+}
+
+/**
  * Get the participantes from a capcitación
  * @param {string} capacitacion The capacitación's id
  */
@@ -1375,6 +1391,7 @@ export default {
 	editParticipante,
 	getParticipantes,
 	changeCapacitacionEncargado,
+	getCapacitadores,
 	editCapilla,
 	formatURL,
 	getCoordinador,

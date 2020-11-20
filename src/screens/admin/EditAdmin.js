@@ -59,10 +59,7 @@ export default (props)=>{
 		switch(tipo){
 			case 'admin': return 0;
 			case 'integrante_chm': return 1
-			case 'coordinador': return 2;
-			case 'acompañante_zona': return 3;
-			case 'acompañante_decanato' : return 4;
-			case 'capacitacion': return 5;
+			case 'capacitacion': return 2;
 		}
 		return -1;
 	}
