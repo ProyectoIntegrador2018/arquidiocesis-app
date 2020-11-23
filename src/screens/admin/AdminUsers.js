@@ -69,7 +69,7 @@ export default (props)=>{
 	var acompDecan = users.filter(a=>a.tipo=='acompañante_decanato');
 	var capacitacion = users.filter(a=>a.tipo=='capacitacion');
 
-	var formatList = a=>a.map(a=>({ email: a.email, id: a.member_id }));
+	var formatList = a=>a.map(a=>({ email: a.email, id: a.member_id, tipo: a.tipo }));
 
 	var showUser = v=>{
 		props.navigation.navigate('DetalleAdmin', {

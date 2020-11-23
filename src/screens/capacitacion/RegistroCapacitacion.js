@@ -19,9 +19,8 @@ export default (props)=>{
 	var [name, setName] = useState('');
 	var [dateStart, setDateStart] = useState(today.format('YYYY-MM-DD'));
 	var [dateEnd, setDateEnd] = useState(today.add('d', 1).format('YYYY-MM-DD'));
-	var [coordinador, setCoordinador] = useState(null);
-
-	var [coordinaList, setCoordinaList] = useState(false);
+	var [capacitador, setCapacitador] = useState(null);
+	var [capacitadoresList, setCapacitadoresList] = useState(false);
 	var onAdd = props.route.params.onAdd;
 
 	props.navigation.setOptions({
@@ -29,11 +28,11 @@ export default (props)=>{
 	});
 
 	useEffect(()=>{
-		API.getCoordinadores().then(c=>{
+		API.getCapacitadores().then(c=>{
 			if(c.length==0){
-				API.getCoordinadores(true).then(setCoordinaList);
+				API.getCapacitadores(true).then(setCapacitadoresList);
 			}else{
-				setCoordinaList(c);
+				setCapacitadoresList(c);
 			}
 		})
 	}, [])
@@ -43,7 +42,7 @@ export default (props)=>{
 			nombre: name,
 			inicio: dateStart,
 			fin: dateEnd,
-			encargado: coordinador ? coordinador.id : null
+			encargado: capacitador ? capcitador.id : null
 		}
 
 		console.log(data);
@@ -101,8 +100,8 @@ export default (props)=>{
 			<Input name="Nombre" required value={name} onChangeText={setName} />
 			<DatePicker onDateChange={d=>setDateStart(d)} date={dateStart} name="Fecha inicio" />
 			<DatePicker onDateChange={d=>setDateEnd(d)} date={dateEnd} name="Fecha fin" />
-			{coordinaList!==false ? (
-				<PickerScreen name="Encargado" data={coordinaList} value={coordinador ? `${coordinador.nombre} ${coordinador.apellido_paterno} ${coordinador.apellido_materno}` : ''} sort={'nombre'} required onSelect={setCoordinador} navigation={props.navigation} renderItem={i=>{
+			{capacitadoresList!==false ? (
+				<PickerScreen name="Encargado" data={capacitadoresList} value={capacitador ? `${capacitador.nombre} ${capacitador.apellido_paterno} ${capacitador.apellido_materno}` : ''} sort={'nombre'} required onSelect={setCapacitador} navigation={props.navigation} renderItem={i=>{
 					return <View>
 						<Text style={{ fontSize: 18 }}>{i.nombre} {i.apellido_paterno} {i.apellido_materno}</Text>
 						<Text style={{ color: 'gray' }}>{i.email}</Text>
