@@ -182,6 +182,13 @@ export default (props)=>{
 		})
 	}
 
+	var reportEventos = setLoading=>{
+		if(downloading) return;
+		API.formatURL('eventos/dump/'+moment().unix()).then(url=>{
+			getFile(url, 'Eventos.csv', setLoading);
+		})
+	}
+
 	return <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
 		<Text style={[styles.sectionText, { marginTop: 10 }]}>GRUPOS</Text>
     {["admin", "integrante_chm"].includes(user.type) ?
@@ -223,6 +230,7 @@ export default (props)=>{
     {["admin", "integrante_chm", "capacitacion"].includes(user.type) ?
 		<Item text="Zonas" onPress={reportZonas} />
     : null }
+		<Item text="Eventos" onPress={reportEventos} />
 	</ScrollView>;
 }
 

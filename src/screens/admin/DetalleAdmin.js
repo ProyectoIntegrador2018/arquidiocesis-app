@@ -11,6 +11,7 @@ import { Input, LoadingView, Alert, Item } from '../../components';
 
 export default (props)=>{
 	var [user, setUser] = useState(false);
+	var [tipo, setTipo] = useState(props.route.params.tipo);
 	var [refreshing, setRefreshing] = useState(false);
 	
 	var onDelete = props.route.params.onDelete;
@@ -29,7 +30,8 @@ export default (props)=>{
 
 	var getUser = ()=>{
 		setRefreshing(true);
-		API.getAdmin(props.route.params.email).then(u=>{
+		const p = props.route.params;
+		API.getUserDetail(p.id, p.email, tipo).then(u=>{
 			if(!u){
 				setRefreshing(false);
 				alert("Hubo un error cargando el usuario.");
@@ -72,7 +74,7 @@ export default (props)=>{
 
 	var editUser = ()=>{
 		props.navigation.navigate('EditAdmin', {
-			user: {...user},
+			user: {id: props.route.params.id, ...user},
 			onEdit: (new_user)=>{
 				onEdit(user.email, new_user.tipo);
 				setUser(new_user);

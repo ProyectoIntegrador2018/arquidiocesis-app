@@ -315,6 +315,11 @@ var changeCapacitacionEncargado = (cap, encargado)=>{
 	if(ix==-1) return;
 	capacitaciones[ix].encargado = encargado;
 }
+let capacitadores = false;
+var getCapacitadores = ()=>capacitadores;
+var setCapacitadores= z=>{
+	capacitadores = z;
+}
 
 
 
@@ -413,4 +418,6 @@ export default {
 	removeParticipante,
 	editParticipante,
 	changeCapacitacionEncargado,
+	getCapacitadores,
+	setCapacitadores,
 }

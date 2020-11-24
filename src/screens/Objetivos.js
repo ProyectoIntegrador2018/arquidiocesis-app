@@ -22,7 +22,7 @@ export default (props) => {
     const years = [];
     const currentYear = new Date().getFullYear();
 
-    for (let year = currentYear; year >= 2019; year--) {
+    for (let year = currentYear; year >= 2020; year--) {
       years.push(
         <Item
           text={`${year}`}

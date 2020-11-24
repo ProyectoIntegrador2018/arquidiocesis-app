@@ -500,7 +500,7 @@ async function getEvents() {
 
 
 /**
- * Create a calendar eveent and add it to the database.
+ * Create a calendar event and add it to the database.
  * The parroquia and capilla param are exclusive,
  * only one should be present, not both.
  * @param {string} name The name of the new event
@@ -568,13 +568,30 @@ async function getObjectivesByYear(year) {
 }
 
 /**
+ * Edit an objective's data.
+ * @param {string} id The objective's id
+ * @param {object} data The objective's new data
+ */
+async function editObjective(data) {
+	const response = await post('objetivos', data);
+
+	if (response.error) {
+		throw response;
+	}
+	
+	return response.data;
+}
+/**
  * Create a coordinador and add it to the databse.
  * @param {object} data The data of the new coordinador
  */
 async function registerCoordinador(data) {
 	var res = await post('coordinadores', data);
 	if (res.error) throw res;
-	else return res.data;
+	else {
+		Cache.setCoordinadores(res.data);
+		return res.data;
+	}
 }
 
 /**
@@ -732,11 +749,12 @@ async function adminGetUsers() {
 }
 
 /**
- * Get an admin from the database from its email.
- * @param {string} email The admin's email
+ * Get a user's info
+ * @param {string} id The user's id
+ * @param {string} type the user's type
  */
-async function getAdmin(email) {
-	var res = await post('admin/users/get', { email });
+async function getUserDetail(id, email, type) {
+	var res = await post('admin/users/get', { id: id, email: email, type: type });
 	if (res.error) throw res;
 	else return res.data;
 }
@@ -773,13 +791,15 @@ async function deleteAdmin(email) {
 }
 
 /**
- * Edit an admin from the database.
- * @param {string} old_email The current admin's email
- * @param {string} data The new admin's data.
+ * Edit a user from the database.
+ * @param {string} old_email The current user's email
+ * @param {string} id The user's id
+ * @param {string} data The new user's data.
  */
-async function editAdmin(old_email, data) {
+async function editUserDetail(old_email, id, data) {
 	var res = await post('admin/users/edit', {
-		id: old_email,
+		id: id,
+		email: old_email,
 		...data
 	});
 	if (res.error) throw res;
@@ -1253,6 +1273,22 @@ async function changeCapacitacionEncargado(capacitacion, encargado) {
 }
 
 /**
+ * Get the list of capacitadores
+ * @param {boolean} force Bypass the cache
+ */
+async function getCapacitadores(force = false) {
+	if (!force && Cache.getCapacitadores()) {
+		return Cache.getCapacitadores();
+	}
+	var p = await get('capacitadores');
+	if (p.error) throw p;
+	else {
+		Cache.setCapacitadores(p.data);
+		return p.data;
+	}
+}
+
+/**
  * Get the participantes from a capcitación
  * @param {string} capacitacion The capacitación's id
  */
@@ -1318,10 +1354,10 @@ export default {
 	changePassword,
 	adminGetUsers,
 	registerAdmin,
-	getAdmin,
+	getUserDetail,
 	deleteAdmin,
 	changeAdminPassword,
-	editAdmin,
+	editUserDetail,
 	editGrupo,
 	deleteGrupo,
 	editMiembro,
@@ -1355,6 +1391,7 @@ export default {
 	editParticipante,
 	getParticipantes,
 	changeCapacitacionEncargado,
+	getCapacitadores,
 	editCapilla,
 	formatURL,
 	getCoordinador,
@@ -1363,5 +1400,6 @@ export default {
 	addEvent,
 	deleteEvent,
 	editEvent,
-	getObjectivesByYear
+	getObjectivesByYear,
+	editObjective
 }

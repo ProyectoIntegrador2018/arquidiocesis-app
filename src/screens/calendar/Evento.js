@@ -73,7 +73,7 @@ export default (props) => {
 
   const editEvent = () => {
     props.navigation.navigate("EditEvento", {
-      evento,
+      event,
       onEdit: (data) => {
         var event = { ...evento };
         for (var i in data) {
@@ -100,7 +100,7 @@ export default (props) => {
         <Input name="Fechas del evento" value={event.fechas} readonly />
       </View>
 
-      {user && (user.type == "admin" || user.type == "superadmin") && (
+      {user && (user.type == "admin" || user.type == "integrante_chm") && (
         <Item text="Eliminar evento" onPress={deleteEvent} loading={deleting} />
       )}
     </KeyboardAwareScrollView>
