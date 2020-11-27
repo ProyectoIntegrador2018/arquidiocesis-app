@@ -8,6 +8,10 @@ export default  (props)=>{
 	var components = []
 	var headers = []
 	var organizedData = props.headers!==false ? (props.organize!==false ? Util.organizeListData(props.data, (props.sort || 'name')) : props.data) : { 'A': props.data }
+	var clickable = true;
+	if (props.clickable == false) {
+		clickable = props.clickable;
+	}
 
 	for(var i in organizedData){
 		if(props.headers!==false){
@@ -24,17 +28,21 @@ export default  (props)=>{
 					<TouchableOpacity onPress={()=>props.onSelect(a)} >
 						<View style={[styles.item]}>
 							{props.renderItem(a, ix)}
-							<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+							{clickable && (
+								<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+							)}
 						</View>
 					</TouchableOpacity>
 				) : (
 					<View style={[styles.item]}>
 						{props.renderItem(a, ix)}
-						<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+						{clickable && (
+							<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+						)}
 					</View>
 				)}
 			</View>
-		) : <ListItem data={a} onPress={props.onSelect} key={'item'+i+'-'+ix} sort={props.sort} />))
+		) : <ListItem data={a} onPress={props.onSelect} key={'item'+i+'-'+ix} sort={props.sort} clickable={clickable}/>))
 	}
 
 	if(props.scroll!==false){
@@ -62,7 +70,9 @@ var ListItem = (props)=>{
 		<View style={{ backgroundColor: 'white' }}>
 			<View style={styles.item}>
 				<Text>{(props.sort ? props.data[props.sort] : props.data.nombre || props.data.name)}</Text>
-				<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+				{props.clickable && (
+					<FontAwesome5 name="chevron-right" style={{ marginRight: 30, color: 'gray', fontSize: 15 }} />
+				)}
 			</View>
 		</View>
 	</TouchableOpacity>

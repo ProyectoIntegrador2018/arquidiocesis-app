@@ -92,7 +92,9 @@ export default (props)=>{
 			</View>
 			
 			<Item text="Cambiar contraseña" onPress={changePassword} />
-			<Item text="Eliminar usuario" onPress={deleteAdmin} />
+			{['admin', 'integrante_chm', 'capacitacion'].includes(tipo) && (
+				<Item text="Eliminar usuario" onPress={deleteAdmin} />
+			)}
 		</ScrollView>
 	)
 }
