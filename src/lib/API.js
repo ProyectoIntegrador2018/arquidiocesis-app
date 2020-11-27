@@ -1263,7 +1263,7 @@ async function removeCapacitacionParticipante(capacitacion, id) {
 async function changeCapacitacionEncargado(capacitacion, encargado) {
 	var res = await post('capacitacion/edit/encargado', {
 		id: capacitacion,
-		coordinador: encargado
+		capacitador: encargado
 	});
 	if (res.error) throw res;
 	else {

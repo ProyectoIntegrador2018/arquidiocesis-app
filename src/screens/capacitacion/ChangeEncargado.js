@@ -13,8 +13,8 @@ export default (props)=>{
 	var { id, encargado, onEdit } = props.route.params;
 
 	var [loading, setLoading] = useState(false);
-	var [coordinador, setCoordinador]= useState(false);
-	var [coordinadorList, setCoordinadorList] = useState(false);
+	var [capacitador, setCapacitador] = useState(null);
+	var [capacitadoresList, setCapacitadoresList] = useState(false);
 
 
 	props.navigation.setOptions({
@@ -22,36 +22,43 @@ export default (props)=>{
 	});
 
 	useEffect(()=>{
-		API.getCoordinadores().then(c=>{
-			setCoordinadorList(c);
-			setCoordinador(c.find(a=>a.id==encargado));
+		API.getCapacitadores().then(c=>{
+			if(c.length==0){
+				API.getCapacitadores(true).then(cap=>{
+					setCapacitadoresList(cap);
+					setCapacitador(cap.find(a=>a.id==encargado));
+				});
+			}else{
+				setCapacitadoresList(c);
+				setCapacitador(c.find(a=>a.id==encargado));
+			}
 		})
 	}, []);
 
 	var save = ()=>{
-		if(!encargado) return alert("Favor de seleccionar un coordinador");
-		if(coordinador.id==encargado){
+		if(!encargado) return alert("Favor de seleccionar un capacitador");
+		if(capacitador.id==encargado){
 			// Fake change.
-			Alert.alert('Exito', "Se ha cambiado el coordinador.");
+			Alert.alert('Exito', "Se ha cambiado el capacitador.");
 			props.navigation.goBack();
 			return;
 		}
 		setLoading(true);
-		API.changeCapacitacionEncargado(id, coordinador.id).then(done=>{
+		API.changeCapacitacionEncargado(id, capacitador.id).then(done=>{
 			setLoading(false);
-			if(!done) return Alert.alert('Error', "Hubo un error cambiando el coordinador");
-			Alert.alert('Exito', "Se ha cambiado el coordinador.");
+			if(!done) return Alert.alert('Error', "Hubo un error cambiando el capacitador");
+			Alert.alert('Exito', "Se ha cambiado el capacitador.");
 			props.navigation.goBack();
-			onEdit(coordinador.id);
+			onEdit(capacitador.id);
 		}).catch(err=>{
 			setLoading(false);
-			return Alert.alert('Error', "Hubo un error cambiando el coordinador");
+			return Alert.alert('Error', err.message);
 		})
 	}
 
 	return <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
-		{coordinadorList ? (
-			<PickerScreen name="Encargado" data={coordinadorList} value={coordinador ? `${coordinador.nombre} ${coordinador.apellido_paterno} ${coordinador.apellido_materno}` : ''} sort={'nombre'} required onSelect={setCoordinador} navigation={props.navigation} renderItem={i=>{
+		{capacitadoresList ? (
+			<PickerScreen name="Encargado" data={capacitadoresList} value={capacitador ? `${capacitador.nombre} ${capacitador.apellido_paterno} ${capacitador.apellido_materno}` : ''} sort={'nombre'} required onSelect={setCapacitador} navigation={props.navigation} renderItem={i=>{
 				return <View>
 					<Text style={{ fontSize: 18 }}>{i.nombre} {i.apellido_paterno} {i.apellido_materno}</Text>
 					<Text style={{ color: 'gray' }}>{i.email}</Text>
@@ -60,15 +67,15 @@ export default (props)=>{
 		) : (
 			<ActivityIndicator style={{ height: 80 }} />
 		)}
-		{coordinador ? (
+		{capacitador ? (
 			<View style={{ marginBottom: 10 }}>
 				<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 					<Text style={{ marginRight: 5, fontSize: 16 }}>Nombre:</Text>
-					<Text style={{ fontSize: 16 }}>{coordinador.nombre} {coordinador.apellido_paterno} {coordinador.apellido_materno}</Text>
+					<Text style={{ fontSize: 16 }}>{capacitador.nombre} {capacitador.apellido_paterno} {capacitador.apellido_materno}</Text>
 				</View>
 				<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 					<Text style={{ marginRight: 5, fontSize: 16 }}>Correo:</Text>
-					<Text style={{ fontSize: 16 }}>{coordinador.email}</Text>
+					<Text style={{ fontSize: 16 }}>{capacitador.email}</Text>
 				</View>
 			</View>
 		) : null}
