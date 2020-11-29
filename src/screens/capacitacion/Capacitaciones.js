@@ -105,7 +105,7 @@ export default (props)=>{
 		<RefreshControl refreshing={refreshing} onRefresh={getCapacitacion} />
 	}>
 		<View>
-			{ user && (user.type=='admin' || user.type=='superadmin' || user.type.startsWith('acompañante')) && <Button text="Agregar Capacitacion" style={{ width: 250, alignSelf: 'center' }} onPress={addCapacitacion} /> }
+			{ user && (user.type=='admin' || user.type=='superadmin') && <Button text="Agregar Capacitacion" style={{ width: 250, alignSelf: 'center' }} onPress={addCapacitacion} /> }
 			{ (data.length>0) ? (
 				<>
 					{caps.active.length>0 ? (

@@ -126,6 +126,7 @@ export default (props) => {
 			}
 			onEdit(data);
 			Alert.alert('Exito', "Se ha editado el miembro.");
+			props.navigation.goBack();
 		}).catch(err => {
 			if (err.code && err.code == 999) {
 				Alert.alert('Error', "No tienes acceso a este grupo.");

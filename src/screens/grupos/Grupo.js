@@ -30,7 +30,7 @@ export default (props)=>{
 			shadowOpacity: 0
 		},
 		headerTitle: 'Grupo',
-		headerRight: ()=> (miembros!==false && (user && (user.type == 'admin' || user.type == 'superadmin' || user.id==grupo.coordinador))) ? (
+		headerRight: ()=> (miembros!==false && (user && (user.type == 'admin' || user.type == 'superadmin' || user.id==grupo.coordinador.id))) ? (
 			<TouchableOpacity onPress={addMember}>
 				<FontAwesome5 name={'plus'} size={24} style={{ paddingRight: 15 }} color={'white'} />
 			</TouchableOpacity>
@@ -126,14 +126,16 @@ export default (props)=>{
 	}
 	
 	var showAsistencia = (a)=>{
-		props.navigation.navigate('AsistenciaGrupo', {
-			grupo,
-			date: a.id,
-			new: false,
-			onDelete: d=>{
-				setAsistencias(a=>a.filter(a=>a!=d));
-			}
-		})
+		if (user.type != "acompañante_decanato" && user.type != "acompañante_zona") { 
+			props.navigation.navigate('AsistenciaGrupo', {
+				grupo,
+				date: a.id,
+				new: false,
+				onDelete: d=>{
+					setAsistencias(a=>a.filter(a=>a!=d));
+				}
+			})
+		}
 	}
 
 	var addMember = ()=>{
@@ -147,19 +149,21 @@ export default (props)=>{
 	}	
 	
 	var viewMember = (item)=>{
-		props.navigation.navigate('DetalleMiembro', {
-			grupo,
-			persona: item,
-			onEdit: (id, miembro)=>{
-				setMiembros([...miembros.filter(a=>a.id!=id), miembro])
-			},
-			onStatusChange: (id, status, miembro)=>{
-				if(status>0)setMiembros(miembros.filter(a=>a.id!=id));
-				else {
+		if (user.type != "acompañante_decanato" && user.type != "acompañante_zona") { 
+			props.navigation.navigate('DetalleMiembro', {
+				grupo,
+				persona: item,
+				onEdit: (id, miembro)=>{
 					setMiembros([...miembros.filter(a=>a.id!=id), miembro])
+				},
+				onStatusChange: (id, status, miembro)=>{
+					if(status>0)setMiembros(miembros.filter(a=>a.id!=id));
+					else {
+						setMiembros([...miembros.filter(a=>a.id!=id), miembro])
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	var editGroup = ()=>{
@@ -229,6 +233,10 @@ export default (props)=>{
 		});
 	}
 
+	var isAcompanante = () => {
+		return (user.type == "acompañante_decanato" || user.type == "acompañante_zona");
+	}
+
 	return <View style={{ flex: 1 }}>
 		<View style={styles.headerContainer}>
 			<Text style={styles.headerText} numberOfLines={1}>{grupo.nombre}</Text>
@@ -245,7 +253,7 @@ export default (props)=>{
 				<ErrorView message={'Hubo un error cargando el grupo...'} refreshing={refreshing} retry={getGrupo} />
 			) : miembros!==false ? (
 				<View>
-					{miembros.length>0 && (user && (user.type == 'admin' || user.type == 'superadmin' || user.id==grupo.coordinador)) && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={assistance} />}
+					{miembros.length>0 && (user && (user.type == 'admin' || user.type == 'superadmin' || user.id==grupo.coordinador.id)) && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={assistance} />}
 					{ grupo.parroquia && showOwner!==false ? (
 						<View>
 							<Text style={styles.sectionText}>VER PARROQUIA</Text>
@@ -279,7 +287,8 @@ export default (props)=>{
 
 					<Text style={styles.sectionText}>MIEMBROS</Text>
 					{miembros.length>0 ? (
-						<AlphabetList data={miembros.map(a=>({ ...a, nombre_completo: `${a.nombre} ${a.apellido_paterno}` }))} onSelect={viewMember} scroll={false} sort={'nombre_completo'} />
+						<AlphabetList data={miembros.map(a=>({ ...a, nombre_completo: `${a.nombre} ${a.apellido_paterno}` }))} onSelect={viewMember} 
+							scroll={false} sort={'nombre_completo'} clickable={!isAcompanante()} />
 					) : (
 						<View>
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Este grupo no tiene miembros agregados.</Text>
@@ -287,7 +296,7 @@ export default (props)=>{
 					)}
 					<Text style={[styles.sectionText, { marginTop: 30 }]}>ASISTENCIAS</Text>
 					{asistencias && asistencias.length>0 ? (
-						<List data={formatAsistencias()} onSelect={showAsistencia} scroll={false} />
+						<List data={formatAsistencias()} onSelect={showAsistencia} scroll={false} clickable={!isAcompanante()} />
 					) : (
 						<View>
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>No se han marcado asistencias.</Text>

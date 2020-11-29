@@ -20,7 +20,7 @@ export default (props) => {
 
 
 	var { onEdit, onStatusChange, grupo } = props.route.params;
-	var canEdit = user && (user.type == 'admin' || user.type == 'superadmin' || user.id == grupo.cooordinador)
+	var canEdit = user && (user.type == 'admin' || user.type == 'superadmin' || user.type == 'coordinador')
 
 	props.navigation.setOptions({
 		headerTitle: 'Detalle Miembro',
