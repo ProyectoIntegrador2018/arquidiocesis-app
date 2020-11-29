@@ -137,7 +137,7 @@ export default (props)=>{
 	}
 
 	var getFechaNacimiento = ()=>{
-		var f = moment.unix(persona.fecha_nacimiento._seconds).format('MMMM DD, YYYY')
+		const f = moment(persona.fecha_nacimiento).format('MMMM DD, YYYY');
 		return f.charAt(0).toUpperCase() + f.substr(1);
 	}
 
