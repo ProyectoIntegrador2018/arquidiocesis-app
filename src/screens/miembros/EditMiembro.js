@@ -45,7 +45,36 @@ export default (props) => {
 
 	props.navigation.setOptions({
 		headerTitle: 'Editar Miembro'
-	});
+  });
+  
+  const lista_oficios = [
+    'Ninguno', 
+    'Plomero', 
+    'Electricista', 
+    'Carpintero', 
+    'Albañil', 
+    'Pintor', 
+    'Mecánico', 
+    'Músico', 
+    'Chofer',
+    'Maestra',
+    'Ama de Casa',
+    'Enfermera',
+    'Obrera general',
+    'Trabajadora Social',
+    'Educadora',
+    'Doctora',
+    'Contadora',
+    'Cocinera',
+    'Psicologa',
+    'Costurera',
+    'Secretaria',
+    'Asistente',
+    'Vendedora',
+    'Demostradora',
+    'Dentista',
+    'Estilista',
+    'Policia'];
 
 	var save = () => {
 		if (loading) return;
@@ -125,7 +154,7 @@ export default (props) => {
 	}
 
 	var getOficio = () => {
-		return ['Ninguno', 'Plomero', 'Electricista', 'Carpintero', 'Albañil', 'Pintor', 'Mecánico', 'Músico', 'Chofer'].indexOf(persona.oficio);
+    return lista_oficios.indexOf(persona.oficio);
 	}
 
 	return (
@@ -141,12 +170,7 @@ export default (props) => {
 			<Input name="Correo electrónico" value={email} onChangeText={setEmail} placeholder={'Opcional...'} keyboard={'email-address'} />
 			<Picker name="Grado escolaridad" items={['Ninguno', 'Primaria', 'Secundaria', 'Preparatoria', 'Carrera Técnica', 'Profesional']} 
 			onValueChange={setEscolaridad} select={getEscolaridad()} />
-			<Picker name="Oficio" items={[
-				'Ninguno', 'Plomero',
-				'Electricista', 'Carpintero',
-				'Albañil', 'Pintor', 'Mecánico',
-				'Músico', 'Chofer'
-			]} onValueChange={setOficio} select={getOficio()} />
+			<Picker name="Oficio" items={lista_oficios} onValueChange={setOficio} select={getOficio()} />
 			<Text style={styles.dispositivosHeader}>Indica los dispositivos que tenga</Text>
 			<View style={styles.view}>
 				<CheckBox style={styles.checkbox} value={hasLaptop} onValueChange={setHasLaptop} />

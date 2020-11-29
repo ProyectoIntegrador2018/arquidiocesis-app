@@ -55,7 +55,38 @@ export default (props) => {
 
 	props.navigation.setOptions({
 		headerTitle: 'Registro Miembro'
-	});
+  });
+  
+
+  
+  const lista_oficios = [
+    {label:'Ninguno', value: 'Ninguno'},
+    {label:'Plomero', value: 'Plomero'},
+    {label:'Electricista', value: 'Electricista'},
+    {label:'Carpintero', value: 'Carpintero'},
+    {label:'Albañil', value: 'Albañil'},
+    {label:'Pintor', value: 'Pintor'},
+    {label:'Mecánico', value: 'Mecánico'},
+    {label:'Músico', value: 'Músico'},
+    {label:'Chofer', value: 'Chofer'},
+    {label:'Maestra', value: 'Maestra'},
+    {label:'Ama de Casa', value: 'Ama de Casa'},
+    {label:'Enfermera', value: 'Enfermera'},
+    {label:'Obrera general', value: 'Obrera general'},
+    {label:'Trabajadora Social', value: 'Trabajadora Social'},
+    {label:'Educadora', value: 'Educadora'},
+    {label:'Doctora', value: 'Doctora'},
+    {label:'Contadora', value: 'Contadora'},
+    {label:'Cocinera', value: 'Cocinera'},
+    {label:'Psicologa', value: 'Psicologa'},
+    {label:'Costurera', value: 'Costurera'},
+    {label:'Secretaria', value: 'Secretaria'},
+    {label:'Asistente', value: 'Asistente'},
+    {label:'Vendedora', value: 'Vendedora'},
+    {label:'Demostradora', value: 'Demostradora'},
+    {label:'Dentista', value: 'Dentista'},
+    {label:'Estilista', value: 'Estilista'},
+    {label:'Policia', value: 'Policia'}];
 
 	var doRegister = () => {
 		if (loading) return;
@@ -168,17 +199,7 @@ export default (props) => {
 				{ label: 'Carrera Técnica', value: 'Carrera Técnica' },
 				{ label: 'Profesional', value: 'Profesional' },
 			]} onValueChange={setEscolaridad} />
-			<Picker name="Oficio" items={[
-				{ label: 'Ninguno', value: 'Ninguno' },
-				{ label: 'Plomero', value: 'Plomero' },
-				{ label: 'Electricista', value: 'Electricista' },
-				{ label: 'Carpintero', value: 'Carpintero' },
-				{ label: 'Albañil', value: 'Albañil' },
-				{ label: 'Pintor', value: 'Pintor' },
-				{ label: 'Mecánico', value: 'Mecánico' },
-				{ label: 'Músico', value: 'Músico' },
-				{ label: 'Chofer', value: 'Chofer' },
-			]} onValueChange={setOficio} />
+			<Picker name="Oficio" items={lista_oficios} onValueChange={setOficio} />
 			<Text style={styles.dispositivosHeader}>Indica los dispositivos que tenga</Text>
 			<View style={styles.view}>
 				<CheckBox style={styles.checkbox} value={hasLaptop} onValueChange={setHasLaptop} />
