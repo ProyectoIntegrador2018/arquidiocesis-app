@@ -45,7 +45,7 @@ export default (props)=>{
 		API.getGrupos(false).then(grupos=>{
 			setGrupos(grupos.filter(a=>(a.parroquia && a.parroquia.id==id)));
 		})
-		API.getParroquia(id).then(d=>{
+		API.getParroquia(id, true).then(d=>{
 			d.id = id;
 			setParroquia(d);
 			setCapillas(d.capillas.filter(a=>a.nombre) || [])
