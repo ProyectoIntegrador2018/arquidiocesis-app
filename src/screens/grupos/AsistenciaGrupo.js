@@ -68,8 +68,9 @@ var Screen = (props)=>{
 		setAssistance(p=>checked ? Array.from(new Set([...p, id])) : p.filter(a=>a!=id));
 	}
 
-	// Ordenar datos
-	var orderedData = Util.organizeListData(data, 'nombre');
+  // Ordenar datos
+  var data_full_name = data.map(x => {return {...x, full_name:x.nombre + " " + x.apellido_paterno + " " + x.apellido_materno}});
+  var orderedData = Util.organizeListData(data_full_name, 'full_name');
 	var components = []
 	var headers = []
 	for(var i in orderedData){
