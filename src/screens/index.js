@@ -57,6 +57,7 @@ import EditarParticipante from './capacitacion/EditarParticipante';
 import ChangeEncargado from './capacitacion/ChangeEncargado';
 import AsistenciaCapacitacion from './capacitacion/AsistenciaCapacitacion';
 import SelectCapacitacion from './capacitacion/SelectCapacitacion';
+import DetalleEncargado from './capacitacion/DetalleEncargado';
 
 import Acompanantes from './acompanante/Acompanantes';
 import RegistroAcompanante from './acompanante/RegistroAcompanante';
@@ -117,6 +118,7 @@ export {
 	Reports,
 	SelectGroup,
 	SelectCapacitacion,
+	DetalleEncargado,
 	Select,
 	Statistics,
 	Calendar,

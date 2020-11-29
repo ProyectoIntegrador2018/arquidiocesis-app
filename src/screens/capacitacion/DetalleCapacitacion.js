@@ -181,8 +181,8 @@ export default (props)=>{
 		if(!capacitacion || !capacitacion.encargado){
 			Alert.alert('Error', 'La capacitacion no tiene encargado.');
 		}
-		props.navigation.navigate('DetalleCoordinador', {
-			persona: { id: capacitacion.encargado }
+		props.navigation.navigate('DetalleEncargado', {
+			encargado: capacitacion.encargado
 		});
 	}
 	

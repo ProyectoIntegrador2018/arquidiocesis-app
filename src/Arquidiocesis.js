@@ -49,6 +49,7 @@ import {
 	DetalleAcompanante,
 	EditAcompanante,
 	DetalleCoordinador,
+	DetalleEncargado,
 	EditCoordinador,
 	EditarCapacitacion,
 	DetalleParticipante,
@@ -214,6 +215,7 @@ var App = (props)=>{
 				<Stack.Screen name="EditGrupo" component={EditGrupo}/>
 				<Stack.Screen name="ChangeCoordinador" component={ChangeCoordinador}/>
 				<Stack.Screen name="DetalleCoordinador" component={DetalleCoordinador}/>
+				<Stack.Screen name="DetalleEncargado" component={DetalleEncargado}/>
 				<Stack.Screen name="RegistroCapacitacion"  component={RegistroCapacitacion}/>
 				<Stack.Screen name="EstatusMiembro" component={EstatusMiembro}/>
 				<Stack.Screen name="GrupoBajasTemporales" component={GrupoBajasTemporales}/>
