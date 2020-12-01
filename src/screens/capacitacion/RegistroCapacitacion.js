@@ -42,7 +42,7 @@ export default (props)=>{
 			nombre: name,
 			inicio: dateStart,
 			fin: dateEnd,
-			encargado: capacitador ? capcitador.id : null
+			encargado: capacitador ? capacitador.id : null
 		}
 
 		console.log(data);

@@ -24,7 +24,7 @@ export default (props)=>{
 	var [refreshing, setRefreshing] = useState(false);
 	var [error, setError] = useState(false);
 
-	var canEdit = (user && capacitacion && (user.type=='admin' || user.type=='superadmin' || user.id==capacitacion.encargado || user.type.startsWith('acompañante')))	
+	var canEdit = (user && capacitacion && (user.type=='admin' || user.type=='superadmin' || user.id==capacitacion.encargado))	
 	
 	props.navigation.setOptions({
 		headerStyle: {
@@ -144,17 +144,19 @@ export default (props)=>{
 	}
 	
 	var viewParticipante = p=>{
-		props.navigation.navigate('DetalleParticipante', {
-			id: p.id,
-			capacitacion_id: capacitacion.id,
-			canEdit,
-			onDelete: id=>{
-				setParticipantes(participantes.filter(a=>a.id!=id));
-			},
-			onEdit: data=>{
-				setParticipantes([...participantes.filter(a=>a.id!=data.id), data]);
-			}
-		})
+		if (!isAcompanante()) {
+			props.navigation.navigate('DetalleParticipante', {
+				id: p.id,
+				capacitacion_id: capacitacion.id,
+				canEdit,
+				onDelete: id=>{
+					setParticipantes(participantes.filter(a=>a.id!=id));
+				},
+				onEdit: data=>{
+					setParticipantes([...participantes.filter(a=>a.id!=data.id), data]);
+				}
+			})
+		}
 	}
 
 	var changeEncargado = ()=>{
@@ -181,8 +183,8 @@ export default (props)=>{
 		if(!capacitacion || !capacitacion.encargado){
 			Alert.alert('Error', 'La capacitacion no tiene encargado.');
 		}
-		props.navigation.navigate('DetalleCoordinador', {
-			persona: { id: capacitacion.encargado }
+		props.navigation.navigate('DetalleEncargado', {
+			encargado: capacitacion.encargado
 		});
 	}
 	
@@ -205,7 +207,8 @@ export default (props)=>{
 					{ participantes.length>0 && canEdit && <Button text={'Tomar asistencia'} style={{ width: 200, alignSelf: 'center', marginBottom: 0 }} onPress={tomarAsistencia} /> }
 					<Text style={styles.sectionText}>PARTICIPANTES</Text>
 					{participantes.length>0 ? (
-						<AlphabetList data={participantes.map(a=>({ ...a, nombre_completo: `${a.nombre} ${a.apellido_paterno}` }))} onSelect={viewParticipante} scroll={false} sort={'nombre_completo'} />
+						<AlphabetList data={participantes.map(a=>({ ...a, nombre_completo: `${a.nombre} ${a.apellido_paterno}` }))} 
+							onSelect={viewParticipante} scroll={false} sort={'nombre_completo'} clickable={!isAcompanante()}/>
 					) : (
 						<View>
 							<Text style={{ textAlign: 'center', fontSize: 16, color: 'gray', backgroundColor: 'white', padding: 15 }}>Esta capacitación no tiene participantes.</Text>
