@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { AsyncStorage, EventEmitter } from 'react-native';
-import Cache from './Cache';
-import moment from 'moment';
+import axios from 'axios'
+import { AsyncStorage, EventEmitter } from 'react-native'
+import Cache from './Cache'
+import moment from 'moment'
 
 const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/'
 // const ROOT_URL = 'http://localhost:8000/api/'
-var onLogout = null;
+var onLogout = null
 
 /**
  * Set the function to call on logout.
@@ -14,8 +14,8 @@ var onLogout = null;
  * @param {function} cb The function to call
  */
 function setOnLogout(cb) {
-	onLogout = cb
-};
+  onLogout = cb
+}
 
 /**
  * Do a POST request to the API server.
@@ -23,24 +23,24 @@ function setOnLogout(cb) {
  * @param {object} data The data to send to the endpoint
  */
 async function post(endpoint, data) {
-	var u = await getUser();
-	if (u) {
-		if (!data) data = { token: u.token }
-		else data.token = u.token;
-	}
-	try {
-		console.log("POST /" + endpoint);
-		var res = await axios.post(ROOT_URL + endpoint, data);
-		if (res.data && res.data.error && res.data.code == 900) {
-			logout();
-		}
-		return res.data;
-	} catch (err) {
-		return {
-			error: true,
-			message: 'No hubo conexión con el servidor.'
-		}
-	}
+  var u = await getUser()
+  if (u) {
+    if (!data) data = { token: u.token }
+    else data.token = u.token
+  }
+  try {
+    console.log('POST /' + endpoint)
+    var res = await axios.post(ROOT_URL + endpoint, data)
+    if (res.data && res.data.error && res.data.code == 900) {
+      logout()
+    }
+    return res.data
+  } catch (err) {
+    return {
+      error: true,
+      message: 'No hubo conexión con el servidor.',
+    }
+  }
 }
 
 /**
@@ -49,26 +49,26 @@ async function post(endpoint, data) {
  * @param {object} data The data to send to the endpoint
  */
 async function get(endpoint, data) {
-	var u = await getUser();
-	if (u) {
-		if (!data) data = { token: u.token };
-		else data.token = u.token;
-	}
-	try {
-		console.log("GET /" + endpoint);
-		var res = await axios.get(ROOT_URL + endpoint, {
-			params: data
-		});
-		if (res.data && res.data.error && res.data.code == 900) {
-			logout();
-		}
-		return res.data;
-	} catch (e) {
-		return {
-			error: true,
-			message: 'No hubo conexión con el servidor.'
-		}
-	}
+  var u = await getUser()
+  if (u) {
+    if (!data) data = { token: u.token }
+    else data.token = u.token
+  }
+  try {
+    console.log('GET /' + endpoint)
+    var res = await axios.get(ROOT_URL + endpoint, {
+      params: data,
+    })
+    if (res.data && res.data.error && res.data.code == 900) {
+      logout()
+    }
+    return res.data
+  } catch (e) {
+    return {
+      error: true,
+      message: 'No hubo conexión con el servidor.',
+    }
+  }
 }
 
 /**
@@ -77,26 +77,26 @@ async function get(endpoint, data) {
  * @param {object} data The data to send to the endpoint
  */
 async function sendDelete(endpoint, data) {
-	var u = await getUser();
-	if (u) {
-		if (!data) data = { token: u.token };
-		else data.token = u.token;
-	}
-	try {
-		console.log("DELETE /" + endpoint);
-		var res = await axios.delete(ROOT_URL + endpoint, {
-			params: data
-		});
-		if (res.data && res.data.error && res.data.code == 900) {
-			logout();
-		}
-		return res.data;
-	} catch (e) {
-		return {
-			error: true,
-			message: 'No hubo conexión con el servidor.'
-		}
-	}
+  var u = await getUser()
+  if (u) {
+    if (!data) data = { token: u.token }
+    else data.token = u.token
+  }
+  try {
+    console.log('DELETE /' + endpoint)
+    var res = await axios.delete(ROOT_URL + endpoint, {
+      params: data,
+    })
+    if (res.data && res.data.error && res.data.code == 900) {
+      logout()
+    }
+    return res.data
+  } catch (e) {
+    return {
+      error: true,
+      message: 'No hubo conexión con el servidor.',
+    }
+  }
 }
 
 /**
@@ -105,33 +105,33 @@ async function sendDelete(endpoint, data) {
  * the user is already logged in.
  */
 async function getUser() {
-	var user = await AsyncStorage.getItem('login');
-	if (!user) return false;
+  var user = await AsyncStorage.getItem('login')
+  if (!user) return false
 
-	user = JSON.parse(user);
-	if (!user) return false;
+  user = JSON.parse(user)
+  if (!user) return false
 
-	return user;
+  return user
 }
 
 /**
  * Returns the user object if the user
  * is logged in. If not returns false.
- * 
+ *
  * - Checks if login is stored in storage.
  * - Checks with API if login is valid.
  * - Returns user object if valid.
  */
 async function getLogin() {
-	var user = await AsyncStorage.getItem('login');
-	if (!user) return null;
+  var user = await AsyncStorage.getItem('login')
+  if (!user) return null
 
-	user = JSON.parse(user);
-	if (!user) return null;
+  user = JSON.parse(user)
+  if (!user) return null
 
-	//TODO: Check with API if the saved user is valid.
+  //TODO: Check with API if the saved user is valid.
 
-	return user;
+  return user
 }
 
 /**
@@ -142,17 +142,17 @@ async function getLogin() {
  * @param {String} password The user's password
  */
 async function login(email, password) {
-	try {
-		var u = await post('login', { email, password });
-		if (!u) return false;
-		if (u.error) return false;
+  try {
+    var u = await post('login', { email, password })
+    if (!u) return false
+    if (u.error) return false
 
-		var user = u.data;
-		await AsyncStorage.setItem('login', JSON.stringify(user));
-	} catch (err) {
-		throw err;
-	}
-	return user;
+    var user = u.data
+    await AsyncStorage.setItem('login', JSON.stringify(user))
+  } catch (err) {
+    throw err
+  }
+  return user
 }
 
 /**
@@ -161,10 +161,10 @@ async function login(email, password) {
  * @param {string} new_password The new password to change
  */
 async function changePassword(old_password, new_password) {
-	var u = await post('password/change', { old_password, new_password });
-	if (!u) return false;
-	if (!u.error) await AsyncStorage.removeItem('login')
-	return u;
+  var u = await post('password/change', { old_password, new_password })
+  if (!u) return false
+  if (!u.error) await AsyncStorage.removeItem('login')
+  return u
 }
 
 /**
@@ -174,35 +174,35 @@ async function changePassword(old_password, new_password) {
  * @returns {Boolean}
  */
 async function logout() {
-	var user = await getUser();
+  var user = await getUser()
 
-	// If user is not logged in, return true.
-	if (!user) return true;
+  // If user is not logged in, return true.
+  if (!user) return true
 
-	// Clear cache
-	Cache.clearCache();
-	if (onLogout) onLogout();
+  // Clear cache
+  Cache.clearCache()
+  if (onLogout) onLogout()
 
-	// Delete user info from storage.
-	await AsyncStorage.removeItem('login')
-	return true;
+  // Delete user info from storage.
+  await AsyncStorage.removeItem('login')
+  return true
 }
 
 /**
  * Get the list of zonas.
- *	@param {Boolean} force Should skip cached data. 
+ *	@param {Boolean} force Should skip cached data.
  */
 async function getZonas(force = false) {
-	if (!force && Cache.getZonas()) {
-		return Cache.getZonas()
-	}
+  if (!force && Cache.getZonas()) {
+    return Cache.getZonas()
+  }
 
-	var p = await get('zonas');
-	if (p.error) throw p;
-	else {
-		Cache.setZonas(p.data);
-		return p.data;
-	}
+  var p = await get('zonas')
+  if (p.error) throw p
+  else {
+    Cache.setZonas(p.data)
+    return p.data
+  }
 }
 
 /**
@@ -211,40 +211,40 @@ async function getZonas(force = false) {
  * @param {Boolean} force Should skip cached data
  */
 async function getZona(id, force = false) {
-	if (!force) {
-		var zonaCache = Cache.getZona(id);
-		if (zonaCache) {
-			return zonaCache;
-		}
-	}
+  if (!force) {
+    var zonaCache = Cache.getZona(id)
+    if (zonaCache) {
+      return zonaCache
+    }
+  }
 
-	var p = await get('zonas/' + id);
-	if (p.error) throw p;
-	else {
-		Cache.setZona(p.data);
-		return p.data;
-	}
+  var p = await get('zonas/' + id)
+  if (p.error) throw p
+  else {
+    Cache.setZona(p.data)
+    return p.data
+  }
 }
 
 /**
- * Get the decanato data. 
+ * Get the decanato data.
  * @param {Number} id The decanato ID
  * @param {Boolean} force Should skip cached data
  */
 async function getDecanato(id, force = false) {
-	if (!force) {
-		var decanatoCache = Cache.getDecanato(id);
-		if (decanatoCache) {
-			return decanatoCache;
-		}
-	}
+  if (!force) {
+    var decanatoCache = Cache.getDecanato(id)
+    if (decanatoCache) {
+      return decanatoCache
+    }
+  }
 
-	var p = await get('decanatos/' + id);
-	if (p.error) throw p;
-	else {
-		Cache.setDecanato(p.data);
-		return p.data;
-	}
+  var p = await get('decanatos/' + id)
+  if (p.error) throw p
+  else {
+    Cache.setDecanato(p.data)
+    return p.data
+  }
 }
 
 /**
@@ -252,16 +252,16 @@ async function getDecanato(id, force = false) {
  * @param {boolean} force Bypass the cache
  */
 async function getParroquias(force = false) {
-	if (!force && Cache.getParroquias()) {
-		return Cache.getParroquias();
-	}
+  if (!force && Cache.getParroquias()) {
+    return Cache.getParroquias()
+  }
 
-	var p = await get('parroquias');
-	if (p.error) throw p;
-	else {
-		Cache.setParroquias(p.data);
-		return p.data;
-	}
+  var p = await get('parroquias')
+  if (p.error) throw p
+  else {
+    Cache.setParroquias(p.data)
+    return p.data
+  }
 }
 
 /**
@@ -270,19 +270,19 @@ async function getParroquias(force = false) {
  * @param {boolean} force Bypass the cache
  */
 async function getParroquia(id, force = false) {
-	if (!force) {
-		var parroquiaCache = Cache.getParroquia(id);
-		if (parroquiaCache) {
-			return parroquiaCache;
-		}
-	}
+  if (!force) {
+    var parroquiaCache = Cache.getParroquia(id)
+    if (parroquiaCache) {
+      return parroquiaCache
+    }
+  }
 
-	var p = await get('parroquias/' + id);
-	if (p.error) throw p;
-	else {
-		Cache.setParroquia(p.data);
-		return p.data;
-	}
+  var p = await get('parroquias/' + id)
+  if (p.error) throw p
+  else {
+    Cache.setParroquia(p.data)
+    return p.data
+  }
 }
 
 /**
@@ -290,25 +290,24 @@ async function getParroquia(id, force = false) {
  * @param {object} data The parroquia data.
  */
 async function addParroquia(data) {
-	var payload = {
-		identificador: data.identificador,
-		nombre: data.nombre,
-		direccion: data.direccion,
-		colonia: data.colonia,
-		municipio: data.municipio,
-		telefono1: data.telefono1,
-		telefono2: data.telefono2,
-		decanato: data.decanato
-	}
+  var payload = {
+    identificador: data.identificador,
+    nombre: data.nombre,
+    direccion: data.direccion,
+    colonia: data.colonia,
+    municipio: data.municipio,
+    telefono1: data.telefono1,
+    telefono2: data.telefono2,
+    decanato: data.decanato,
+  }
 
-	const res = await post('parroquias', payload);
+  const res = await post('parroquias', payload)
 
-	if (res.error) {
-		throw res;
-	} else {
-
-		return res.data;
-	}
+  if (res.error) {
+    throw res
+  } else {
+    return res.data
+  }
 }
 
 /**
@@ -317,12 +316,12 @@ async function addParroquia(data) {
  * @param {object} data The new data of the parroquia.
  */
 async function editParroquia(id, data) {
-	var res = await post('parroquias/edit', {
-		parroquia: id,
-		...data
-	});
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('parroquias/edit', {
+    parroquia: id,
+    ...data,
+  })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -331,17 +330,17 @@ async function editParroquia(id, data) {
  * @param {object} data The new capilla data
  */
 async function addCapilla(parroquia_id, data) {
-	var payload = {
-		...data,
-		parroquia: parroquia_id
-	};
-	var res = await post('capillas', payload);
-	if (res.error) throw res;
-	else {
-		Cache.parroquiaAddCapilla(parroquia_id, res.data);
-		Cache.addCapilla(res.data);
-		return res.data;
-	}
+  var payload = {
+    ...data,
+    parroquia: parroquia_id,
+  }
+  var res = await post('capillas', payload)
+  if (res.error) throw res
+  else {
+    Cache.parroquiaAddCapilla(parroquia_id, res.data)
+    Cache.addCapilla(res.data)
+    return res.data
+  }
 }
 
 /**
@@ -349,15 +348,15 @@ async function addCapilla(parroquia_id, data) {
  * @param {boolean} force Bypass the cachce
  */
 async function getDecanatos(force = false) {
-	if (!force && Cache.getDecanatos()) {
-		return Cache.getDecanatos();
-	}
-	var p = await get('decanatos');
-	if (p.error) throw p;
-	else {
-		Cache.setDecanatos(p.data);
-		return p.data;
-	}
+  if (!force && Cache.getDecanatos()) {
+    return Cache.getDecanatos()
+  }
+  var p = await get('decanatos')
+  if (p.error) throw p
+  else {
+    Cache.setDecanatos(p.data)
+    return p.data
+  }
 }
 
 /**
@@ -365,15 +364,15 @@ async function getDecanatos(force = false) {
  * @param {boolean} force Bypass the cache
  */
 async function getCoordinadores(force = false) {
-	if (!force && Cache.getCoordinadores()) {
-		return Cache.getCoordinadores();
-	}
-	var p = await get('coordinadores');
-	if (p.error) throw p;
-	else {
-		Cache.setCoordinadores(p.data);
-		return p.data;
-	}
+  if (!force && Cache.getCoordinadores()) {
+    return Cache.getCoordinadores()
+  }
+  var p = await get('coordinadores')
+  if (p.error) throw p
+  else {
+    Cache.setCoordinadores(p.data)
+    return p.data
+  }
 }
 
 /**
@@ -382,32 +381,32 @@ async function getCoordinadores(force = false) {
  * @param {boolean} force Bypass the cache
  */
 async function getCoordinador(id, force = false) {
-	if (!force) {
-		var coordCache = Cache.getCoordinador(id);
-		if (coordCache) {
-			return coordCache;
-		}
-	}
+  if (!force) {
+    var coordCache = Cache.getCoordinador(id)
+    if (coordCache) {
+      return coordCache
+    }
+  }
 
-	var p = await get('coordinadores/' + id);
-	if (p.error) throw p;
-	else {
-		Cache.setCoordinador(p.data);
-		return p.data;
-	}
+  var p = await get('coordinadores/' + id)
+  if (p.error) throw p
+  else {
+    Cache.setCoordinador(p.data)
+    return p.data
+  }
 }
 
 /**
- * Get Coordinadores for groups in acompanante's zona or decanato 
+ * Get Coordinadores for groups in acompanante's zona or decanato
  * @param {string} acomId  The acompanante id
  */
 async function getCoordinadoresForAcompanante(acomId) {
-	var res = await get('coordinadores/acompanante/' + acomId);
-	if (res.error) {
-		throw res;
-	} else {
-		return res.data;
-	}
+  var res = await get('coordinadores/acompanante/' + acomId)
+  if (res.error) {
+    throw res
+  } else {
+    return res.data
+  }
 }
 
 /**
@@ -415,15 +414,15 @@ async function getCoordinadoresForAcompanante(acomId) {
  * @param {boolean} force Bypass the cache
  */
 async function getGrupos(force = false) {
-	if (!force && Cache.getGrupos()) {
-		return Cache.getGrupos();
-	}
-	var res = await get('grupos');
-	if (res.error) throw res;
-	else {
-		Cache.setGrupos(res.data);
-		return res.data;
-	}
+  if (!force && Cache.getGrupos()) {
+    return Cache.getGrupos()
+  }
+  var res = await get('grupos')
+  if (res.error) throw res
+  else {
+    Cache.setGrupos(res.data)
+    return res.data
+  }
 }
 
 /**
@@ -431,15 +430,15 @@ async function getGrupos(force = false) {
  * @param {string} acomId  The acompanante id
  */
 async function getGruposForAcompanante(acomId, force = false) {
-	if (!force && Cache.getGrupos()) {
-		return Cache.getGrupos();
-	}
-	var res = await get('grupos/acompanante/' + acomId);
-	if (res.error) throw res;
-	else {
-		Cache.setGrupos(res.data);
-		return res.data;
-	}
+  if (!force && Cache.getGrupos()) {
+    return Cache.getGrupos()
+  }
+  var res = await get('grupos/acompanante/' + acomId)
+  if (res.error) throw res
+  else {
+    Cache.setGrupos(res.data)
+    return res.data
+  }
 }
 
 /**
@@ -448,19 +447,19 @@ async function getGruposForAcompanante(acomId, force = false) {
  * @param {boolean} force Bypass the cache
  */
 async function getGrupo(id, force = false) {
-	if (!force) {
-		var cacheGrupo = Cache.getGrupo(id);
-		if (cacheGrupo) {
-			return cacheGrupo;
-		}
-	}
-	var res = await get('grupos/' + id);
-	if (res.error) throw res;
-	else {
-		res.data.id = id;
-		Cache.setGrupo(res.data);
-		return res.data;
-	}
+  if (!force) {
+    var cacheGrupo = Cache.getGrupo(id)
+    if (cacheGrupo) {
+      return cacheGrupo
+    }
+  }
+  var res = await get('grupos/' + id)
+  if (res.error) throw res
+  else {
+    res.data.id = id
+    Cache.setGrupo(res.data)
+    return res.data
+  }
 }
 
 /**
@@ -473,31 +472,30 @@ async function getGrupo(id, force = false) {
  * @param {string} capilla The ID of the grupo's capilla
  */
 async function addGrupo(name, coordinador, parroquia, capilla) {
-	var payload = {
-		name,
-		coordinador,
-		parroquia,
-		capilla
-	}
+  var payload = {
+    name,
+    coordinador,
+    parroquia,
+    capilla,
+  }
 
-	var res = await post('grupos', payload);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('grupos', payload)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
  * Get the list of events.
  */
 async function getEvents() {
-	const response = await get('eventos');
+  const response = await get('eventos')
 
-	if (response.error) {
-		throw response;
-	}
+  if (response.error) {
+    throw response
+  }
 
-	return response.data;
+  return response.data
 }
-
 
 /**
  * Create a calendar event and add it to the database.
@@ -508,21 +506,21 @@ async function getEvents() {
  * @param {string} eventDates The dates of the event
  */
 async function addEvent(name, eventResponsible, eventDates) {
-	console.log('addEvent start');
-	
-	const payload = {
-		name,
-		eventResponsible,
-		eventDates,
-	}
+  console.log('addEvent start')
 
-	const response = await post('eventos', payload);
+  const payload = {
+    name,
+    eventResponsible,
+    eventDates,
+  }
 
-	if (response.error) {
-		throw response;
-	}
-	
-	return response.data;
+  const response = await post('eventos', payload)
+
+  if (response.error) {
+    throw response
+  }
+
+  return response.data
 }
 
 /**
@@ -531,13 +529,13 @@ async function addEvent(name, eventResponsible, eventDates) {
  * @param {object} data The event's new data
  */
 async function editEvent(id, data) {
-	const response = await post('eventos/' + id + '/edit', data);
+  const response = await post('eventos/' + id + '/edit', data)
 
-	if (response.error) {
-		throw response;
-	}
-	
-	return response.data;
+  if (response.error) {
+    throw response
+  }
+
+  return response.data
 }
 
 /**
@@ -545,26 +543,26 @@ async function editEvent(id, data) {
  * @param {string} id The event's id
  */
 async function deleteEvent(id) {
-	const response = await sendDelete('eventos/' + id);
+  const response = await sendDelete('eventos/' + id)
 
-	if (response.error) {
-		throw response;
-	}
-	
-	return response.data;
+  if (response.error) {
+    throw response
+  }
+
+  return response.data
 }
 
 /**
  * Get the list of events.
  */
 async function getObjectivesByYear(year) {
-	const response = await get(`objetivos/${year}`);
+  const response = await get(`objetivos/${year}`)
 
-	if (response.error) {
-		throw response;
-	}
+  if (response.error) {
+    throw response
+  }
 
-	return response.data;
+  return response.data
 }
 
 /**
@@ -573,25 +571,25 @@ async function getObjectivesByYear(year) {
  * @param {object} data The objective's new data
  */
 async function editObjective(data) {
-	const response = await post('objetivos', data);
+  const response = await post('objetivos', data)
 
-	if (response.error) {
-		throw response;
-	}
-	
-	return response.data;
+  if (response.error) {
+    throw response
+  }
+
+  return response.data
 }
 /**
  * Create a coordinador and add it to the databse.
  * @param {object} data The data of the new coordinador
  */
 async function registerCoordinador(data) {
-	var res = await post('coordinadores', data);
-	if (res.error) throw res;
-	else {
-		Cache.setCoordinadores(res.data);
-		return res.data;
-	}
+  var res = await post('coordinadores', data)
+  if (res.error) throw res
+  else {
+    Cache.setCoordinadores(res.data)
+    return res.data
+  }
 }
 
 /**
@@ -600,14 +598,14 @@ async function registerCoordinador(data) {
  * @param {object} data The new member's data
  */
 async function registerMember(grupo, data) {
-	var payload = {
-		grupo,
-		...data,
-	}
+  var payload = {
+    grupo,
+    ...data,
+  }
 
-	var res = await post('grupos/register', payload);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('grupos/register', payload)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -617,10 +615,10 @@ async function registerMember(grupo, data) {
  * @param {string} fecha The asistencia's date in format 'YYYY-MM-DD'
  */
 async function getAsistencia(grupo_id, fecha) {
-	var res = await get('grupos/' + grupo_id + '/asistencia/' + fecha);
-  if (res.error) throw res;
-	else {
-    return res.data;
+  var res = await get('grupos/' + grupo_id + '/asistencia/' + fecha)
+  if (res.error) throw res
+  else {
+    return res.data
   }
 }
 
@@ -631,16 +629,27 @@ async function getAsistencia(grupo_id, fecha) {
  * @param {array} miembros Array of member ids
  * @param {boolean} force Overwrite the asistencia if there is already one on this date?
  */
-async function registerAsistencia(grupo_id, fecha, miembros, agenda, commentarios, force = false) {
-	var payload = {
-		fecha, miembros, force, agenda, commentarios
-	}
-	var res = await post('grupos/' + grupo_id + '/asistencia', payload);
-	if (res.error) throw res;
-	else {
-		Cache.registerAsistencia(grupo_id, res.data);
-		return res.data
-	}
+async function registerAsistencia(
+  grupo_id,
+  fecha,
+  miembros,
+  agenda,
+  commentarios,
+  force = false
+) {
+  var payload = {
+    fecha,
+    miembros,
+    force,
+    agenda,
+    commentarios,
+  }
+  var res = await post('grupos/' + grupo_id + '/asistencia', payload)
+  if (res.error) throw res
+  else {
+    Cache.registerAsistencia(grupo_id, res.data)
+    return res.data
+  }
 }
 
 /**
@@ -650,9 +659,13 @@ async function registerAsistencia(grupo_id, fecha, miembros, agenda, commentario
  * @param {array} miembros Array of member ids
  */
 async function saveAsistencia(grupo_id, fecha, miembros, agenda, commentarios) {
-	var res = await post('grupos/' + grupo_id + '/asistencia/' + fecha, { miembros, agenda, commentarios });
-	if (res.error) throw res;
-	else return res.data
+  var res = await post('grupos/' + grupo_id + '/asistencia/' + fecha, {
+    miembros,
+    agenda,
+    commentarios,
+  })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -660,9 +673,9 @@ async function saveAsistencia(grupo_id, fecha, miembros, agenda, commentarios) {
  * @param {string} capilla_id The capilla's id
  */
 async function getCapilla(capilla_id) {
-	var res = await get('capillas/' + capilla_id);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await get('capillas/' + capilla_id)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -672,20 +685,20 @@ async function getCapilla(capilla_id) {
  * @param {string} parroquia_id The capilla's parroquia, used for Cache saving.
  */
 async function editCapilla(capilla_id, data, parroquia_id) {
-	var payload = {
-		id: capilla_id,
-		...data
-	}
+  var payload = {
+    id: capilla_id,
+    ...data,
+  }
 
-	var res = await post('capillas/edit', payload);
-	if (res.error) throw res;
-	else {
-		Cache.parroquiaEditCapilla(parroquia_id, {
-			id: capilla_id,
-			...data
-		});
-		return res.data;
-	}
+  var res = await post('capillas/edit', payload)
+  if (res.error) throw res
+  else {
+    Cache.parroquiaEditCapilla(parroquia_id, {
+      id: capilla_id,
+      ...data,
+    })
+    return res.data
+  }
 }
 
 /**
@@ -694,12 +707,12 @@ async function editCapilla(capilla_id, data, parroquia_id) {
  * @param {string} capilla_id The capilla's id
  */
 async function deleteCapilla(parroquia_id, capilla_id) {
-	var res = await sendDelete('capillas/' + capilla_id);
-	if (res.error) throw res;
-	else {
-		Cache.deleteParroquiaCapilla(parroquia_id, capilla_id)
-		return res.data
-	}
+  var res = await sendDelete('capillas/' + capilla_id)
+  if (res.error) throw res
+  else {
+    Cache.deleteParroquiaCapilla(parroquia_id, capilla_id)
+    return res.data
+  }
 }
 
 /**
@@ -707,12 +720,12 @@ async function deleteCapilla(parroquia_id, capilla_id) {
  * @param {string} parroquia_id The parroquia's id
  */
 async function deleteParroquia(parroquia_id) {
-	var res = await sendDelete('parroquias/' + parroquia_id);
-	if (res.error) throw res;
-	else {
-		Cache.deleteParroquia(parroquia_id);
-		return res.data
-	}
+  var res = await sendDelete('parroquias/' + parroquia_id)
+  if (res.error) throw res
+  else {
+    Cache.deleteParroquia(parroquia_id)
+    return res.data
+  }
 }
 
 /**
@@ -721,31 +734,31 @@ async function deleteParroquia(parroquia_id) {
  * @param {boolean} force Bypass the cache
  */
 async function getMiembro(miembro_id, force = false) {
-	if (!force) {
-		var m = Cache.getMiembro(miembro_id);
-		if (m) {
-			return m;
-		}
-	}
+  if (!force) {
+    var m = Cache.getMiembro(miembro_id)
+    if (m) {
+      return m
+    }
+  }
 
-	var res = await get('grupos/miembro/' + miembro_id);
-	if (res.error) throw res;
-	else {
-		if (res.data) {
-			res.data.id = miembro_id;
-			Cache.addMiembro(res.data);
-		}
-		return res.data;
-	}
+  var res = await get('grupos/miembro/' + miembro_id)
+  if (res.error) throw res
+  else {
+    if (res.data) {
+      res.data.id = miembro_id
+      Cache.addMiembro(res.data)
+    }
+    return res.data
+  }
 }
 
 /**
  * Get the admin users from the database.
  */
 async function adminGetUsers() {
-	var res = await get('admin/users');
-	if (res.error) throw res;
-	else return res.data;
+  var res = await get('admin/users')
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -754,9 +767,9 @@ async function adminGetUsers() {
  * @param {string} type the user's type
  */
 async function getUserDetail(id, email, type) {
-	var res = await post('admin/users/get', { id: id, email: email, type: type });
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('admin/users/get', { id: id, email: email, type: type })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -764,9 +777,9 @@ async function getUserDetail(id, email, type) {
  * @param {object} data The new admin's data
  */
 async function registerAdmin(data) {
-	var res = await post('admin/users/add', data);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('admin/users/add', data)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -775,9 +788,9 @@ async function registerAdmin(data) {
  * @param {string} password The new password
  */
 async function changeAdminPassword(email, password) {
-	var res = await post('admin/users/password', { email, password });
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('admin/users/password', { email, password })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -785,9 +798,9 @@ async function changeAdminPassword(email, password) {
  * @param {string} email The admin's email
  */
 async function deleteAdmin(email) {
-	var res = await post('admin/users/delete', { email });
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('admin/users/delete', { email })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -797,13 +810,13 @@ async function deleteAdmin(email) {
  * @param {string} data The new user's data.
  */
 async function editUserDetail(old_email, id, data) {
-	var res = await post('admin/users/edit', {
-		id: id,
-		email: old_email,
-		...data
-	});
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('admin/users/edit', {
+    id: id,
+    email: old_email,
+    ...data,
+  })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -812,15 +825,15 @@ async function editUserDetail(old_email, id, data) {
  * @param {object} data The grupo's new data.
  */
 async function editGrupo(id, data) {
-	var res = await post('grupos/edit', {
-		id,
-		...data
-	});
-	if (res.error) throw res;
-	else {
-		Cache.setGrupoDirty(id);
-		return res.data;
-	};
+  var res = await post('grupos/edit', {
+    id,
+    ...data,
+  })
+  if (res.error) throw res
+  else {
+    Cache.setGrupoDirty(id)
+    return res.data
+  }
 }
 
 /**
@@ -829,13 +842,13 @@ async function editGrupo(id, data) {
  * @param {object} data The miembro's new data.
  */
 async function editMiembro(id, data) {
-	var res = await post('grupos/miembro/' + id + '/edit', data);
+  var res = await post('grupos/miembro/' + id + '/edit', data)
 
-	if (res.error) throw res;
-	else {
-		Cache.setMiembroDirty(id);
-		return res.data;
-	}
+  if (res.error) throw res
+  else {
+    Cache.setMiembroDirty(id)
+    return res.data
+  }
 }
 
 /**
@@ -843,9 +856,9 @@ async function editMiembro(id, data) {
  * @param {string} id The grupo's id
  */
 async function deleteGrupo(id) {
-	var res = await sendDelete('grupos/' + id);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await sendDelete('grupos/' + id)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -854,11 +867,11 @@ async function deleteGrupo(id) {
  * @param {string} coordinador_id The coordinador's id
  */
 async function changeCoordinador(grupo_id, coordinador_id) {
-	var res = await post('grupos/' + grupo_id + '/coordinador', {
-		coordinador: coordinador_id
-	});
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('grupos/' + grupo_id + '/coordinador', {
+    coordinador: coordinador_id,
+  })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -870,12 +883,12 @@ async function changeCoordinador(grupo_id, coordinador_id) {
  * @param {number} status The new miembro's status (0-2)
  */
 async function editMiembroStatus(id, status) {
-	var res = await post('grupos/miembro/' + id + '/edit/status', { status });
-	if (res.error) throw res;
-	else {
-		Cache.setMiembroStatus(id, status);
-		return res.data
-	}
+  var res = await post('grupos/miembro/' + id + '/edit/status', { status })
+  if (res.error) throw res
+  else {
+    Cache.setMiembroStatus(id, status)
+    return res.data
+  }
 }
 
 /**
@@ -883,9 +896,9 @@ async function editMiembroStatus(id, status) {
  * @param {string} id The grupo's id
  */
 async function getGrupoBajasTemporales(id) {
-	var res = await get('grupos/' + id + '/bajas');
-	if (res.error) throw res;
-	else return res.data;
+  var res = await get('grupos/' + id + '/bajas')
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -895,17 +908,17 @@ async function getGrupoBajasTemporales(id) {
  * @param {boolean} force Bypass the cache
  */
 async function getFichaMedica(id, force = false) {
-	if (!force) {
-		var f = Cache.getMiembroFicha(id);
-		if (f !== false) return f;
-	}
+  if (!force) {
+    var f = Cache.getMiembroFicha(id)
+    if (f !== false) return f
+  }
 
-	var res = await get('grupos/miembro/' + id + '/ficha');
-	if (res.error) throw res;
-	else {
-		Cache.setMiembroFicha(id, res.data);
-		return res.data;
-	}
+  var res = await get('grupos/miembro/' + id + '/ficha')
+  if (res.error) throw res
+  else {
+    Cache.setMiembroFicha(id, res.data)
+    return res.data
+  }
 }
 
 /**
@@ -914,15 +927,15 @@ async function getFichaMedica(id, force = false) {
  * @param {object} data The member's new ficha medica
  */
 async function setFichaMedica(id, data) {
-	var res = await post('grupos/miembro/' + id + '/edit/ficha', {
-		id,
-		...data
-	});
-	if (res.error) throw res;
-	else {
-		Cache.setMiembroFicha(id, data);
-		return res.data;
-	}
+  var res = await post('grupos/miembro/' + id + '/edit/ficha', {
+    id,
+    ...data,
+  })
+  if (res.error) throw res
+  else {
+    Cache.setMiembroFicha(id, data)
+    return res.data
+  }
 }
 
 /**
@@ -931,17 +944,17 @@ async function setFichaMedica(id, data) {
  * @param {object} data The new acompañante's data
  */
 async function registerAcompananteZona(zona, data) {
-	var res = await post('acompanante/zona', {
-		zona,
-		...data
-	});
-	if (res.error) throw res;
-	else {
-		if (res.data) {
-			Cache.setZonaAcompanante(zona, res.data);
-		}
-		return res.data;
-	}
+  var res = await post('acompanante/zona', {
+    zona,
+    ...data,
+  })
+  if (res.error) throw res
+  else {
+    if (res.data) {
+      Cache.setZonaAcompanante(zona, res.data)
+    }
+    return res.data
+  }
 }
 
 /**
@@ -950,45 +963,44 @@ async function registerAcompananteZona(zona, data) {
  * @param {object} data The new acompañante's data
  */
 async function registerAcompananteDecanato(decanato, data) {
-	var res = await post('acompanante/decanato', {
-		decanato,
-		...data
-	});
-	if (res.error) throw res;
-	else {
-		if (res.data) {
-			Cache.setDecanatoAcompanante(decanato, res.data);
-		}
-		return res.data;
-	}
+  var res = await post('acompanante/decanato', {
+    decanato,
+    ...data,
+  })
+  if (res.error) throw res
+  else {
+    if (res.data) {
+      Cache.setDecanatoAcompanante(decanato, res.data)
+    }
+    return res.data
+  }
 }
 
 /**
  * Get an acompañantes data.
  */
 async function getAcompanantes() {
-	const res = await get('acompanantes');
+  const res = await get('acompanantes')
 
-	if (res.error) {
-		throw res;
-	} else {
-		return res.data;
-	}
+  if (res.error) {
+    throw res
+  } else {
+    return res.data
+  }
 }
-
 
 /**
  * Get an acompañante's zona or decanato.
  * @param {string} id The acompañante's id
  */
 async function getAcompananteZonaOrDecanato(id) {
-	const res = await get('acompanantes/' + id + '/place');
+  const res = await get('acompanantes/' + id + '/place')
 
-	if (res.error) {
-		throw res;
-	} else {
-		return res.data;
-	}
+  if (res.error) {
+    throw res
+  } else {
+    return res.data
+  }
 }
 
 /**
@@ -996,9 +1008,9 @@ async function getAcompananteZonaOrDecanato(id) {
  * @param {string} id The acompañante's id
  */
 async function getAcompanante(id) {
-	var res = await get('acompanante/' + id);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await get('acompanante/' + id)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -1006,12 +1018,12 @@ async function getAcompanante(id) {
  * @param {string} zona The zona's id
  */
 async function deleteAcompananteZona(zona) {
-	var res = await sendDelete('zonas/' + zona + '/acompanante');
-	if (res.error) throw res;
-	else {
-		Cache.setZonaAcompanante(zona, null);
-		return res.data;
-	}
+  var res = await sendDelete('zonas/' + zona + '/acompanante')
+  if (res.error) throw res
+  else {
+    Cache.setZonaAcompanante(zona, null)
+    return res.data
+  }
 }
 
 /**
@@ -1019,12 +1031,12 @@ async function deleteAcompananteZona(zona) {
  * @param {string} decanato The decanato's id
  */
 async function deleteAcompananteDecanato(decanato) {
-	var res = await sendDelete('decanatos/' + decanato + '/acompanante');
-	if (res.error) throw res;
-	else {
-		Cache.setDecanatoAcompanante(decanato, null);
-		return res.data;
-	}
+  var res = await sendDelete('decanatos/' + decanato + '/acompanante')
+  if (res.error) throw res
+  else {
+    Cache.setDecanatoAcompanante(decanato, null)
+    return res.data
+  }
 }
 
 /**
@@ -1033,12 +1045,12 @@ async function deleteAcompananteDecanato(decanato) {
  * @param {object} data The acompañante's new data.
  */
 async function editAcompanante(id, data) {
-	var res = await post('acompanante/edit', {
-		id,
-		...data
-	});
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('acompanante/edit', {
+    id,
+    ...data,
+  })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -1047,9 +1059,9 @@ async function editAcompanante(id, data) {
  * @param {string} id The coordinador's id
  */
 async function deleteCoordinador(id) {
-	var res = await sendDelete('coordinadores/' + id);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await sendDelete('coordinadores/' + id)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -1058,9 +1070,9 @@ async function deleteCoordinador(id) {
  * @param {object} data The coordinador's new data
  */
 async function editCoordinador(id, data) {
-	var res = await post('coordinadores/' + id + '/edit', data);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('coordinadores/' + id + '/edit', data)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -1068,9 +1080,9 @@ async function editCoordinador(id, data) {
  * @param {object} data The new capactiacions data
  */
 async function addCapacitacion(data) {
-	var res = await post('capacitacion', data);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await post('capacitacion', data)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -1078,15 +1090,15 @@ async function addCapacitacion(data) {
  * @param {boolean} force Bypass the cache
  */
 async function getCapacitaciones(force = false) {
-	if (!force && Cache.getCapacitaciones()) {
-		return Cache.getCapacitaciones();
-	}
-	var res = await get('capacitacion');
-	if (res.error) throw res;
-	else {
-		Cache.setCapacitaciones(res.data);
-		return res.data;
-	}
+  if (!force && Cache.getCapacitaciones()) {
+    return Cache.getCapacitaciones()
+  }
+  var res = await get('capacitacion')
+  if (res.error) throw res
+  else {
+    Cache.setCapacitaciones(res.data)
+    return res.data
+  }
 }
 
 /**
@@ -1095,16 +1107,16 @@ async function getCapacitaciones(force = false) {
  * @param {boolean} force Bypass the cache
  */
 async function getCapacitacion(id, force = false) {
-	if (!force) {
-		var cacheCap = Cache.getCapacitacion(id);
-		if (cacheCap) return cacheCap;
-	}
-	var res = await get('capacitacion/' + id);
-	if (res.error) throw res;
-	else {
-		Cache.setCapacitacion(res.data);
-		return res.data;
-	}
+  if (!force) {
+    var cacheCap = Cache.getCapacitacion(id)
+    if (cacheCap) return cacheCap
+  }
+  var res = await get('capacitacion/' + id)
+  if (res.error) throw res
+  else {
+    Cache.setCapacitacion(res.data)
+    return res.data
+  }
 }
 
 /**
@@ -1113,21 +1125,21 @@ async function getCapacitacion(id, force = false) {
  * @param {object} data The capacitacións new data.
  */
 async function editCapacitacion(id, data) {
-	var res = await post('capacitacion/edit', {
-		id,
-		...data
-	});
-	if (res.error) throw res;
-	else {
-		data.inicio = {
-			_seconds: moment(data.inicio, 'YYYY-MM-DD').unix()
-		}
-		data.fin = {
-			_seconds: moment(data.fin, 'YYYY-MM-DD').unix()
-		}
-		Cache.editCapacitacion({ id, ...data });
-		return res.data;
-	}
+  var res = await post('capacitacion/edit', {
+    id,
+    ...data,
+  })
+  if (res.error) throw res
+  else {
+    data.inicio = {
+      _seconds: moment(data.inicio, 'YYYY-MM-DD').unix(),
+    }
+    data.fin = {
+      _seconds: moment(data.fin, 'YYYY-MM-DD').unix(),
+    }
+    Cache.editCapacitacion({ id, ...data })
+    return res.data
+  }
 }
 
 /**
@@ -1135,12 +1147,12 @@ async function editCapacitacion(id, data) {
  * @param {string} id The capacitación's data
  */
 async function removeCapacitacion(id) {
-	var res = await sendDelete('capacitacion/' + id);
-	if (res.error) throw res;
-	else {
-		Cache.removeCapacitacion(id);
-		return res.data;
-	}
+  var res = await sendDelete('capacitacion/' + id)
+  if (res.error) throw res
+  else {
+    Cache.removeCapacitacion(id)
+    return res.data
+  }
 }
 
 /**
@@ -1150,16 +1162,23 @@ async function removeCapacitacion(id) {
  * @param {array} miembros Array of member ids
  * @param {boolean} force Overwrite the asistencia if there is already one on this date?
  */
-async function registerCapacitacionAsistencia(id, fecha, miembros, force = false) {
-	var payload = {
-		fecha, miembros, force
-	}
-	var res = await post('capacitacion/' + id + '/asistencia', payload);
-	if (res.error) throw res;
-	else {
-		Cache.registerCapacitacionAsistencia(id, res.data);
-		return res.data
-	}
+async function registerCapacitacionAsistencia(
+  id,
+  fecha,
+  miembros,
+  force = false
+) {
+  var payload = {
+    fecha,
+    miembros,
+    force,
+  }
+  var res = await post('capacitacion/' + id + '/asistencia', payload)
+  if (res.error) throw res
+  else {
+    Cache.registerCapacitacionAsistencia(id, res.data)
+    return res.data
+  }
 }
 
 /**
@@ -1169,9 +1188,11 @@ async function registerCapacitacionAsistencia(id, fecha, miembros, force = false
  * @param {array} miembros Array of member ids
  */
 async function saveCapacitacionAsistencia(id, fecha, miembros) {
-	var res = await post('capacitacion/' + id + '/asistencia/' + fecha, { miembros });
-	if (res.error) throw res;
-	else return res.data
+  var res = await post('capacitacion/' + id + '/asistencia/' + fecha, {
+    miembros,
+  })
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -1181,9 +1202,9 @@ async function saveCapacitacionAsistencia(id, fecha, miembros) {
  * @param {string} fecha The asistencia's date in format 'YYYY-MM-DD'
  */
 async function getCapacitacionAsistencia(id, fecha) {
-	var res = await get('capacitacion/' + id + '/asistencia/' + fecha);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await get('capacitacion/' + id + '/asistencia/' + fecha)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -1193,21 +1214,21 @@ async function getCapacitacionAsistencia(id, fecha) {
  * @param {object} data The participantes new data
  */
 async function editParticipante(capacitacion, id, data) {
-	var res = await post('participante/edit', {
-		id,
-		...data
-	});
-	if (res.error) throw res;
-	else {
-		data.fecha_nacimiento = {
-			_seconds: moment(data.fecha_nacimiento, 'YYYY-MM-DD').unix()
-		}
-		Cache.editParticipante(capacitacion, {
-			id,
-			...data
-		});
-		return res.data;
-	}
+  var res = await post('participante/edit', {
+    id,
+    ...data,
+  })
+  if (res.error) throw res
+  else {
+    data.fecha_nacimiento = {
+      _seconds: moment(data.fecha_nacimiento, 'YYYY-MM-DD').unix(),
+    }
+    Cache.editParticipante(capacitacion, {
+      id,
+      ...data,
+    })
+    return res.data
+  }
 }
 
 /**
@@ -1215,9 +1236,9 @@ async function editParticipante(capacitacion, id, data) {
  * @param {string} id The participante's id
  */
 async function getParticipante(id) {
-	var res = await get('participante/' + id);
-	if (res.error) throw res;
-	else return res.data;
+  var res = await get('participante/' + id)
+  if (res.error) throw res
+  else return res.data
 }
 
 /**
@@ -1226,19 +1247,19 @@ async function getParticipante(id) {
  * @param {object} data The new participante's data
  */
 async function addCapacitacionParticipante(capacitacion, data) {
-	var res = await post('participante', {
-		capacitacion,
-		...data
-	});
+  var res = await post('participante', {
+    capacitacion,
+    ...data,
+  })
 
-	if (res.error) throw res;
-	else {
-		data.fecha_nacimiento = {
-			_seconds: moment(data.fecha_nacimiento, 'YYYY-MM-DD').unix()
-		}
-		Cache.addParticipante(capacitacion, data);
-		return res.data;
-	}
+  if (res.error) throw res
+  else {
+    data.fecha_nacimiento = {
+      _seconds: moment(data.fecha_nacimiento, 'YYYY-MM-DD').unix(),
+    }
+    Cache.addParticipante(capacitacion, data)
+    return res.data
+  }
 }
 
 /**
@@ -1247,12 +1268,12 @@ async function addCapacitacionParticipante(capacitacion, data) {
  * @param {string} id The participante's id to remove
  */
 async function removeCapacitacionParticipante(capacitacion, id) {
-	var res = await sendDelete('participante/' + id);
-	if (res.error) throw res;
-	else {
-		Cache.removeParticipante(capacitacion, id)
-		return res.data;
-	}
+  var res = await sendDelete('participante/' + id)
+  if (res.error) throw res
+  else {
+    Cache.removeParticipante(capacitacion, id)
+    return res.data
+  }
 }
 
 /**
@@ -1261,15 +1282,15 @@ async function removeCapacitacionParticipante(capacitacion, id) {
  * @param {string} encargado The coordinador's id
  */
 async function changeCapacitacionEncargado(capacitacion, encargado) {
-	var res = await post('capacitacion/edit/encargado', {
-		id: capacitacion,
-		capacitador: encargado
-	});
-	if (res.error) throw res;
-	else {
-		Cache.changeCapacitacionEncargado(capacitacion, encargado);
-		return res.data;
-	}
+  var res = await post('capacitacion/edit/encargado', {
+    id: capacitacion,
+    capacitador: encargado,
+  })
+  if (res.error) throw res
+  else {
+    Cache.changeCapacitacionEncargado(capacitacion, encargado)
+    return res.data
+  }
 }
 
 /**
@@ -1277,15 +1298,15 @@ async function changeCapacitacionEncargado(capacitacion, encargado) {
  * @param {boolean} force Bypass the cache
  */
 async function getCapacitadores(force = false) {
-	if (!force && Cache.getCapacitadores()) {
-		return Cache.getCapacitadores();
-	}
-	var p = await get('capacitadores');
-	if (p.error) throw p;
-	else {
-		Cache.setCapacitadores(p.data);
-		return p.data;
-	}
+  if (!force && Cache.getCapacitadores()) {
+    return Cache.getCapacitadores()
+  }
+  var p = await get('capacitadores')
+  if (p.error) throw p
+  else {
+    Cache.setCapacitadores(p.data)
+    return p.data
+  }
 }
 
 /**
@@ -1293,22 +1314,22 @@ async function getCapacitadores(force = false) {
  * @param {string} capacitacion The capacitación's id
  */
 async function getParticipantes(capacitacion) {
-	var res = await get('capacitacion/' + capacitacion + '/participantes');
-	if (res.error) throw err;
-	else return res.data;
+  var res = await get('capacitacion/' + capacitacion + '/participantes')
+  if (res.error) throw err
+  else return res.data
 }
 
 /**
  * Get group members' stats
  */
 async function getStats() {
-	const res = await get('estadisticas');
+  const res = await get('estadisticas')
 
-	if (res.error) {
-		throw res.error;
-	} else {
-		return res;
-	}
+  if (res.error) {
+    throw res.error
+  } else {
+    return res
+  }
 }
 
 /**
@@ -1317,89 +1338,89 @@ async function getStats() {
  * @param {string} url The endpoint of the url
  */
 async function formatURL(url) {
-	var u = await getUser();
-	return ROOT_URL + url + '?token=' + u.token;
+  var u = await getUser()
+  return ROOT_URL + url + '?token=' + u.token
 }
 
 export default {
-	setOnLogout,
-	getLogin,
-	getUser,
-	login,
-	logout,
-	addCapilla,
-	addGrupo,
-	getZona,
-	getZonas,
-	getDecanato,
-	getParroquias,
-	getParroquia,
-	addParroquia,
-	getDecanato,
-	getDecanatos,
-	getCoordinadores,
-	getCoordinadoresForAcompanante,
-	getGrupos,
-	getGruposForAcompanante,
-	getGrupo,
-	registerCoordinador,
-	registerMember,
-	registerAsistencia,
-	getAsistencia,
-	saveAsistencia,
-	getCapilla,
-	deleteCapilla,
-	deleteParroquia,
-	getMiembro,
-	changePassword,
-	adminGetUsers,
-	registerAdmin,
-	getUserDetail,
-	deleteAdmin,
-	changeAdminPassword,
-	editUserDetail,
-	editGrupo,
-	deleteGrupo,
-	editMiembro,
-	editMiembroStatus,
-	changeCoordinador,
-	getGrupoBajasTemporales,
-	getFichaMedica,
-	setFichaMedica,
-	editParroquia,
-	getAcompanantes,
-	getAcompananteZonaOrDecanato,
-	getAcompanante,
-	registerAcompananteZona,
-	registerAcompananteDecanato,
-	deleteAcompananteZona,
-	deleteAcompananteDecanato,
-	editAcompanante,
-	editCoordinador,
-	deleteCoordinador,
-	addCapacitacion,
-	getCapacitaciones,
-	getCapacitacion,
-	editCapacitacion,
-	removeCapacitacion,
-	registerCapacitacionAsistencia,
-	saveCapacitacionAsistencia,
-	getCapacitacionAsistencia,
-	addCapacitacionParticipante,
-	removeCapacitacionParticipante,
-	getParticipante,
-	editParticipante,
-	getParticipantes,
-	changeCapacitacionEncargado,
-	getCapacitadores,
-	editCapilla,
-	formatURL,
-	getCoordinador,
-	getStats,
-	getEvents,
-	addEvent,
-	deleteEvent,
-	editEvent,
-	getObjectivesByYear,
-	editObjective
+  setOnLogout,
+  getLogin,
+  getUser,
+  login,
+  logout,
+  addCapilla,
+  addGrupo,
+  getZona,
+  getZonas,
+  getDecanato,
+  getParroquias,
+  getParroquia,
+  addParroquia,
+  getDecanato,
+  getDecanatos,
+  getCoordinadores,
+  getCoordinadoresForAcompanante,
+  getGrupos,
+  getGruposForAcompanante,
+  getGrupo,
+  registerCoordinador,
+  registerMember,
+  registerAsistencia,
+  getAsistencia,
+  saveAsistencia,
+  getCapilla,
+  deleteCapilla,
+  deleteParroquia,
+  getMiembro,
+  changePassword,
+  adminGetUsers,
+  registerAdmin,
+  getUserDetail,
+  deleteAdmin,
+  changeAdminPassword,
+  editUserDetail,
+  editGrupo,
+  deleteGrupo,
+  editMiembro,
+  editMiembroStatus,
+  changeCoordinador,
+  getGrupoBajasTemporales,
+  getFichaMedica,
+  setFichaMedica,
+  editParroquia,
+  getAcompanantes,
+  getAcompananteZonaOrDecanato,
+  getAcompanante,
+  registerAcompananteZona,
+  registerAcompananteDecanato,
+  deleteAcompananteZona,
+  deleteAcompananteDecanato,
+  editAcompanante,
+  editCoordinador,
+  deleteCoordinador,
+  addCapacitacion,
+  getCapacitaciones,
+  getCapacitacion,
+  editCapacitacion,
+  removeCapacitacion,
+  registerCapacitacionAsistencia,
+  saveCapacitacionAsistencia,
+  getCapacitacionAsistencia,
+  addCapacitacionParticipante,
+  removeCapacitacionParticipante,
+  getParticipante,
+  editParticipante,
+  getParticipantes,
+  changeCapacitacionEncargado,
+  getCapacitadores,
+  editCapilla,
+  formatURL,
+  getCoordinador,
+  getStats,
+  getEvents,
+  addEvent,
+  deleteEvent,
+  editEvent,
+  getObjectivesByYear,
+  editObjective,
 }
