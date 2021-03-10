@@ -1,0 +1,11 @@
+# Ignore artifacts
+build
+
+# Ignore node_modules
+node_modules
+
+# Ignore deploy config
+.expo
+.expo-shared
+.github
+.netlify
