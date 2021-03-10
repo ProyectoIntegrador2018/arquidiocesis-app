@@ -3,52 +3,52 @@ Nombre: SelectCapacitación.js
 Usuario con acceso: Admin, Acompañante
 Descripción: Pantalla para seleccionar un grupo de capacitación para un asistente
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { List, ErrorView } from '../../components'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { API } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { List, ErrorView } from '../../components';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { API } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var [data, setData] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
-  var { onSelect } = props.route.params
+  var [data, setData] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
+  var { onSelect } = props.route.params;
 
   useEffect(() => {
     API.getCapacitaciones(false)
       .then((c) => {
-        setData(c)
-        setError(false)
+        setData(c);
+        setError(false);
       })
       .catch((err) => {
-        setError(true)
-        setRefreshing(false)
-      })
-  }, [])
+        setError(true);
+        setRefreshing(false);
+      });
+  }, []);
 
   var getCapacitacion = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     API.getCapacitaciones(true)
       .then((c) => {
-        setRefreshing(false)
-        setData(c)
-        setError(false)
+        setRefreshing(false);
+        setData(c);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   if (data === false) {
     return (
@@ -64,41 +64,41 @@ export default (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   props.navigation.setOptions({
     headerTitle: 'Seleccionar grupo',
-  })
+  });
 
   var selectCapacitacion = (item) => {
     if (onSelect) {
-      onSelect(item)
-      props.navigation.goBack()
+      onSelect(item);
+      props.navigation.goBack();
     }
-  }
+  };
 
   var formatUnix = (a) => {
     var f = !a
       ? moment().format('MMMM DD, YYYY')
-      : moment.unix(a).format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+      : moment.unix(a).format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var orderCapacitaciones = () => {
-    var today = moment().unix()
+    var today = moment().unix();
     var active = data.filter(
       (a) =>
         a.fin &&
         a.fin._seconds &&
         moment.unix(a.fin._seconds).endOf('day').unix() > today
-    )
-    var active_id = active.map((a) => a.id)
-    var old = data.filter((a) => active_id.indexOf(a.id) == -1)
-    return { active, old }
-  }
+    );
+    var active_id = active.map((a) => a.id);
+    var old = data.filter((a) => active_id.indexOf(a.id) == -1);
+    return { active, old };
+  };
 
-  var caps = orderCapacitaciones()
+  var caps = orderCapacitaciones();
 
   var renderCapacitacion = (a) => {
     return (
@@ -119,8 +119,8 @@ export default (props) => {
           </Text>
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <ScrollView
@@ -195,8 +195,8 @@ export default (props) => {
         </View>
       )}
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   date: {
@@ -212,4 +212,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontWeight: '600',
   },
-})
+});

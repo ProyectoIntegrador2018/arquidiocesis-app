@@ -3,24 +3,24 @@ Nombre: DetalleCoordinador.js
 Usuario con acceso: Admin, acompañante
 Descripción: Pantalla para ver la información personal de los coordinadores en el sistema
 */
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { API } from '../../lib'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { Input, Alert, Item, List, LoadingView } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { API } from '../../lib';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { Input, Alert, Item, List, LoadingView } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { onEdit, onDelete } = props.route.params
+  var { onEdit, onDelete } = props.route.params;
 
-  var [persona, setPersona] = useState(false)
-  var [deleting, setDeleting] = useState(false)
-  var [user, setUser] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
+  var [persona, setPersona] = useState(false);
+  var [deleting, setDeleting] = useState(false);
+  var [user, setUser] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
 
   props.navigation.setOptions({
     headerStyle: {
@@ -40,30 +40,30 @@ export default (props) => {
           />
         </TouchableOpacity>
       ),
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
-    getCoordinador()
-  }, [])
+    API.getUser().then(setUser);
+    getCoordinador();
+  }, []);
 
   var getCoordinador = (ref) => {
-    if (ref) setRefreshing(true)
-    setError(false)
+    if (ref) setRefreshing(true);
+    setError(false);
     API.getCoordinador(props.route.params.persona.id, ref)
       .then((data) => {
-        setPersona(data)
-        setError(false)
-        setRefreshing(false)
+        setPersona(data);
+        setError(false);
+        setRefreshing(false);
       })
       .catch((err) => {
-        setError(true)
-        setRefreshing(false)
-      })
-  }
+        setError(true);
+        setRefreshing(false);
+      });
+  };
 
   if (!persona) {
-    return <LoadingView />
+    return <LoadingView />;
   }
 
   var deleteCoordinador = () => {
@@ -76,72 +76,72 @@ export default (props) => {
           text: 'Eliminar',
           style: 'destructive',
           onPress: () => {
-            setDeleting(true)
+            setDeleting(true);
             API.deleteCoordinador(persona.id)
               .then((done) => {
-                setDeleting(false)
-                alert('Se ha eliminado el coordinador.')
-                props.navigation.goBack()
-                if (onDelete) onDelete(persona.id)
+                setDeleting(false);
+                alert('Se ha eliminado el coordinador.');
+                props.navigation.goBack();
+                if (onDelete) onDelete(persona.id);
               })
               .catch((err) => {
-                setDeleting(false)
-                alert('Hubo un error eliminando el coordinador.')
-              })
+                setDeleting(false);
+                alert('Hubo un error eliminando el coordinador.');
+              });
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var changePassword = () => {
     props.navigation.navigate('ChangePassword', {
       admin_email: persona.email,
-    })
-  }
+    });
+  };
 
   var editCoordinador = () => {
     props.navigation.navigate('EditCoordinador', {
       persona,
       onEdit: (data) => {
-        var p = { ...persona }
+        var p = { ...persona };
         for (var i in data) {
-          p[i] = data[i]
+          p[i] = data[i];
         }
-        setPersona(p)
-        if (onEdit) onEdit(p.id, p)
+        setPersona(p);
+        if (onEdit) onEdit(p.id, p);
       },
-    })
-  }
+    });
+  };
 
   var getFechaNacimiento = () => {
     if (!persona.fecha_nacimiento || !persona.fecha_nacimiento._seconds) {
-      return moment().format('MMMM DD, YYYY')
+      return moment().format('MMMM DD, YYYY');
     }
     var f = moment
       .unix(persona.fecha_nacimiento._seconds)
-      .format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+      .format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var gotoCapilla = (i) => {
-    i.showParroquia = true
-    props.navigation.navigate('DetalleCapilla', i)
-  }
+    i.showParroquia = true;
+    props.navigation.navigate('DetalleCapilla', i);
+  };
 
   var gotoParroquia = (i) => {
-    props.navigation.navigate('Parroquia', i)
-  }
+    props.navigation.navigate('Parroquia', i);
+  };
 
   var gotoGroup = (i) => {
     props.navigation.navigate('Grupo', {
       grupo: i,
-    })
-  }
+    });
+  };
 
   var gotoDecanato = (i) => {
-    props.navigation.navigate('Decanato', i)
-  }
+    props.navigation.navigate('Decanato', i);
+  };
 
   return (
     <KeyboardAwareScrollView
@@ -249,8 +249,8 @@ export default (props) => {
         />
       )}
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   section: {
@@ -267,4 +267,4 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingLeft: 15,
   },
-})
+});

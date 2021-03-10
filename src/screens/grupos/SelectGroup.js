@@ -3,66 +3,66 @@ Nombre: SelectGroup.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para seleccionar un grupo HEMA de una parroquia o capilla
 */
-import React, { useState, useEffect } from 'react'
-import { View, Text, ActivityIndicator, ScrollView } from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, ErrorView } from '../../components'
-import { API } from '../../lib'
+import React, { useState, useEffect } from 'react';
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { AlphabetList, ErrorView } from '../../components';
+import { API } from '../../lib';
 
 export default (props) => {
-  var [user, setUser] = useState(null)
-  var [data, setData] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
+  var [user, setUser] = useState(null);
+  var [data, setData] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
 
-  var { onSelect } = props.route.params
+  var { onSelect } = props.route.params;
 
   props.navigation.setOptions({
     headerTitle: 'Seleccionar grupo',
-  })
+  });
 
   useEffect(() => {
     API.getUser().then((u) => {
-      setUser(u)
+      setUser(u);
       if (u.type == 'acompañante_decanato' || u.type == 'acompañante_zona') {
         API.getGruposForAcompanante(u.id)
           .then((g) => {
-            setData(g)
-            setRefreshing(false)
-            setError(false)
+            setData(g);
+            setRefreshing(false);
+            setError(false);
           })
           .catch((err) => {
-            setRefreshing(false)
-            setError(true)
-          })
+            setRefreshing(false);
+            setError(true);
+          });
       } else {
         API.getGrupos()
           .then((grupos) => {
-            setData(grupos)
-            setRefreshing(false)
-            setError(false)
+            setData(grupos);
+            setRefreshing(false);
+            setError(false);
           })
           .catch((err) => {
-            setRefreshing(false)
-            setError(true)
-          })
+            setRefreshing(false);
+            setError(true);
+          });
       }
-    })
-  }, [])
+    });
+  }, []);
 
   var getGrupos = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     API.getGrupos(true)
       .then((d) => {
-        setData(d)
-        setError(false)
-        setRefreshing(false)
+        setData(d);
+        setError(false);
+        setRefreshing(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   if (data === false) {
     return (
@@ -78,13 +78,13 @@ export default (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   var onPress = (item) => {
-    if (onSelect) onSelect(item)
-    props.navigation.goBack()
-  }
+    if (onSelect) onSelect(item);
+    props.navigation.goBack();
+  };
 
   var renderItem = (data) => {
     return (
@@ -117,8 +117,8 @@ export default (props) => {
           </Text>
         )}
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <ScrollView
@@ -159,5 +159,5 @@ export default (props) => {
         </View>
       )}
     </ScrollView>
-  )
-}
+  );
+};

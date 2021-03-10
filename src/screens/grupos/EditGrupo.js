@@ -3,63 +3,63 @@ Nombre: EditGrupo.js
 Usuario con acceso: Admin
 Descripción: Pantalla para editar la información de los grupos HEMA
 */
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, Switch } from 'react-native'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, Switch } from 'react-native';
 import {
   AlphabetList,
   ErrorView,
   Input,
   Button,
   Picker,
-} from '../../components'
-import { API, Util } from '../../lib'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+} from '../../components';
+import { API, Util } from '../../lib';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props) => {
   var parroquia_id = props.route.params.grupo.capilla
     ? props.route.params.grupo.capilla.parroquia.id
-    : props.route.params.grupo.parroquia.id
+    : props.route.params.grupo.parroquia.id;
 
-  var [loading, setLoading] = useState(false)
-  var [nombre, setNombre] = useState(props.route.params.grupo.nombre)
+  var [loading, setLoading] = useState(false);
+  var [nombre, setNombre] = useState(props.route.params.grupo.nombre);
   // var [coordinador, setCoordinador]= useState(false);
-  var [parroquia, setParroquia] = useState(false)
-  var [capilla, setCapilla] = useState(false)
-  var [isEnabled, setIsEnabled] = useState(false)
+  var [parroquia, setParroquia] = useState(false);
+  var [capilla, setCapilla] = useState(false);
+  var [isEnabled, setIsEnabled] = useState(false);
 
   // var [coordinadorList, setCoordinadorList] = useState(false);
-  var [parroquiasList, setParroquiasList] = useState(false)
-  var [capillasList, setCapillasList] = useState(false)
+  var [parroquiasList, setParroquiasList] = useState(false);
+  var [capillasList, setCapillasList] = useState(false);
 
-  var onEdit = props.route.params.onEdit
+  var onEdit = props.route.params.onEdit;
 
   props.navigation.setOptions({
     headerTitle: 'Editar grupo',
-  })
+  });
 
   useEffect(() => {
     if (props.route.params.grupo.capilla) {
-      setIsEnabled(true)
-      var p = props.route.params.grupo.capilla.parroquia
+      setIsEnabled(true);
+      var p = props.route.params.grupo.capilla.parroquia;
       parroquiaSelected({
         value: p.id,
         label: p.nombre,
-      })
+      });
     }
 
     API.getParroquias().then((d) => {
-      setParroquiasList(d)
-    })
+      setParroquiasList(d);
+    });
 
     // API.getCoordinadores().then(c=>{
     // 	setCoordinadorList(c);
     // })
-  }, [])
+  }, []);
 
   var getParroquiaIndex = () => {
-    if (!parroquiasList) return
-    return parroquiasList.findIndex((a) => a.id == parroquia_id)
-  }
+    if (!parroquiasList) return;
+    return parroquiasList.findIndex((a) => a.id == parroquia_id);
+  };
 
   // var getCoordinadorIndex = ()=>{
   // 	if(!coordinadorList) return;
@@ -67,29 +67,29 @@ export default (props) => {
   // }
 
   var getCapillaIndex = () => {
-    if (!capillasList || !props.route.params.grupo.capilla) return
+    if (!capillasList || !props.route.params.grupo.capilla) return;
     return capillasList.findIndex(
       (a) => a.id == props.route.params.grupo.capilla.id
-    )
-  }
+    );
+  };
 
   var parroquiaSelected = (p, state = false) => {
-    setParroquia(p)
-    setCapilla(null)
-    setCapillasList(false)
-    if (!isEnabled && !state) return
+    setParroquia(p);
+    setCapilla(null);
+    setCapillasList(false);
+    if (!isEnabled && !state) return;
     API.getParroquia(p.value).then((c) => {
-      setCapillasList(c.capillas || [])
-    })
-  }
+      setCapillasList(c.capillas || []);
+    });
+  };
 
   var toggleSwitch = () => {
-    var ps = isEnabled
-    setIsEnabled(!ps)
+    var ps = isEnabled;
+    setIsEnabled(!ps);
     if (!ps && parroquia) {
-      parroquiaSelected(parroquia, !ps)
+      parroquiaSelected(parroquia, !ps);
     }
-  }
+  };
 
   var save = () => {
     var data = {
@@ -97,7 +97,7 @@ export default (props) => {
       // coordinador: coordinador ? coordinador.value : null,
       parroquia: parroquia ? parroquia.value : null,
       capilla: isEnabled ? capilla.value : null,
-    }
+    };
     var { valid, prompt } = Util.validateForm(data, {
       nombre: {
         type: 'minLength',
@@ -109,29 +109,29 @@ export default (props) => {
         type: 'empty',
         prompt: 'Favor de seleccionar la parroquia.',
       },
-    })
-    if (!valid) return alert(prompt)
+    });
+    if (!valid) return alert(prompt);
     if (isEnabled && !capilla) {
       return alert(
         'Favor de seleccionar una capilla, o quitar la opción de pertenece a capilla.'
-      )
+      );
     }
 
-    setLoading(true)
+    setLoading(true);
     API.editGrupo(props.route.params.grupo.id, data)
       .then((done) => {
-        setLoading(false)
-        if (!done) return alert('Hubo un error editando el grupo.')
+        setLoading(false);
+        if (!done) return alert('Hubo un error editando el grupo.');
 
-        var new_grupo = { ...props.route.params.grupo }
-        new_grupo.nombre = nombre
-        new_grupo.cached = false
+        var new_grupo = { ...props.route.params.grupo };
+        new_grupo.nombre = nombre;
+        new_grupo.cached = false;
         // new_grupo.coordinador = {
         // 	id: coordinador.value,
         // 	nombre: coordinador.label
         // };
         if (isEnabled) {
-          delete new_grupo.parroquia
+          delete new_grupo.parroquia;
           new_grupo.capilla = {
             id: capilla.value,
             nombre: capilla.label,
@@ -139,24 +139,24 @@ export default (props) => {
               id: parroquia.value,
               nombre: parroquia.label,
             },
-          }
+          };
         } else {
-          delete new_grupo.capilla
+          delete new_grupo.capilla;
           new_grupo.parroquia = {
             id: parroquia.value,
             nombre: parroquia.label,
-          }
+          };
         }
 
-        alert('Se ha editado el grupo.')
-        if (onEdit) onEdit(new_grupo)
+        alert('Se ha editado el grupo.');
+        if (onEdit) onEdit(new_grupo);
       })
       .catch((err) => {
-        setLoading(false)
-        console.log(err)
-        alert('Hubo un error editando el grupo.')
-      })
-  }
+        setLoading(false);
+        console.log(err);
+        alert('Hubo un error editando el grupo.');
+      });
+  };
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
@@ -215,8 +215,8 @@ export default (props) => {
       ) : null}
       <Button text="Guardar" loading={loading} onPress={save} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   label: {
@@ -225,4 +225,4 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontWeight: '500',
   },
-})
+});

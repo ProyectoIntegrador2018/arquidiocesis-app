@@ -4,23 +4,23 @@ Usuario con acceso: Admin, Acompañante, Coordinador
 Descripción: Pantalla para ver la información a detalle de un participante de una capacitación 
 			Tambien presenta opción para eliminar el participante
 */
-import React, { useState, useEffect, useRef } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { Input, Item, LoadingView, ErrorView, Alert } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API } from '../../lib'
-import { FontAwesome5 } from '@expo/vector-icons'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Input, Item, LoadingView, ErrorView, Alert } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API } from '../../lib';
+import { FontAwesome5 } from '@expo/vector-icons';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { onEdit, onDelete, id, capacitacion_id, canEdit } = props.route.params
+  var { onEdit, onDelete, id, capacitacion_id, canEdit } = props.route.params;
 
-  var [loading, setLoading] = useState(false)
-  var [error, setError] = useState(false)
-  var [deleting, setDeleting] = useState(false)
-  var [participante, setParticipante] = useState(false)
-  var pickerRef = useRef(null)
+  var [loading, setLoading] = useState(false);
+  var [error, setError] = useState(false);
+  var [deleting, setDeleting] = useState(false);
+  var [participante, setParticipante] = useState(false);
+  var pickerRef = useRef(null);
 
   props.navigation.setOptions({
     headerTitle: 'Participante',
@@ -35,22 +35,22 @@ export default (props) => {
           />
         </TouchableOpacity>
       ),
-  })
+  });
 
   useEffect(() => {
-    getParticipante()
-  }, [])
+    getParticipante();
+  }, []);
 
   var getParticipante = () => {
-    setError(false)
+    setError(false);
     API.getParticipante(id)
       .then((p) => {
-        setParticipante(p)
+        setParticipante(p);
       })
       .catch((err) => {
-        setError(true)
-      })
-  }
+        setError(true);
+      });
+  };
 
   if (error) {
     return (
@@ -58,19 +58,19 @@ export default (props) => {
         message="Hubo un error cargando el participante"
         retry={getParticipante}
       />
-    )
+    );
   }
 
   if (!participante) {
-    return <LoadingView />
+    return <LoadingView />;
   }
 
   var formatUnix = (a) => {
     var f = !a
       ? moment().format('MMMM DD, YYYY')
-      : moment.unix(a).format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+      : moment.unix(a).format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var deleteParticipante = () => {
     Alert.alert(
@@ -82,43 +82,43 @@ export default (props) => {
           text: 'Eliminar',
           style: 'destructive',
           onPress: () => {
-            setDeleting(true)
+            setDeleting(true);
             API.removeCapacitacionParticipante(capacitacion_id, id)
               .then((done) => {
-                setDeleting(false)
+                setDeleting(false);
                 if (!done)
                   return Alert.alert(
                     'Error',
                     'Hubo un error eliminando el participante.'
-                  )
-                Alert.alert('Exito', 'Se ha eliminado el participante.')
-                onDelete(id)
-                props.navigation.goBack()
+                  );
+                Alert.alert('Exito', 'Se ha eliminado el participante.');
+                onDelete(id);
+                props.navigation.goBack();
               })
               .catch((err) => {
-                setDeleting(false)
-                Alert.alert('Error', 'Hubo un error eliminado el participante.')
-              })
+                setDeleting(false);
+                Alert.alert('Error', 'Hubo un error eliminado el participante.');
+              });
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var editParticipante = () => {
     props.navigation.navigate('EditarParticipante', {
       persona: participante,
       capacitacion_id,
       onEdit: (data) => {
-        var p = { ...participante }
+        var p = { ...participante };
         for (var i in data) {
-          p[i] = data[i]
+          p[i] = data[i];
         }
-        setParticipante(p)
-        onEdit(p)
+        setParticipante(p);
+        onEdit(p);
       },
-    })
-  }
+    });
+  };
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ paddingBottom: 50 }}>
@@ -179,8 +179,8 @@ export default (props) => {
         loading={deleting}
       />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -194,4 +194,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 20,
   },
-})
+});

@@ -1,22 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-} from 'react-native'
-import { FontAwesome5 } from '@expo/vector-icons'
+} from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default (props) => {
-  var [loading, setLoading] = useState(false)
+  var [loading, setLoading] = useState(false);
 
   var press = () => {
-    if (!props.onPress) return
+    if (!props.onPress) return;
     props.onPress(function (d) {
-      setLoading(d)
-    })
-  }
+      setLoading(d);
+    });
+  };
 
   return (
     <TouchableOpacity onPress={press}>
@@ -32,8 +32,8 @@ export default (props) => {
         )}
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   itemText: {
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
   },
-})
+});

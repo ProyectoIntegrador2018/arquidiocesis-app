@@ -3,46 +3,46 @@ Nombre: ZonasList.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la lista de zonas en el sistema
 */
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import { AlphabetList, ErrorView } from '../components'
-import { API } from '../lib'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { AlphabetList, ErrorView } from '../components';
+import { API } from '../lib';
 
 export default (props) => {
-  var [data, setData] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
+  var [data, setData] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
 
   useEffect(() => {
     API.getZonas()
       .then((zonas) => {
-        setData(zonas)
-        setRefreshing(false)
-        setError(false)
+        setData(zonas);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getZonas = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     API.getZonas(true)
       .then((zonas) => {
-        setData(zonas)
-        setError(false)
-        setRefreshing(false)
+        setData(zonas);
+        setError(false);
+        setRefreshing(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   var onPress = (item) => {
-    props.navigation.navigate('Zona', item)
-  }
+    props.navigation.navigate('Zona', item);
+  };
 
   if (error) {
     return (
@@ -51,7 +51,7 @@ export default (props) => {
         retry={getZonas}
         message="Hubo un error cargando las zonas..."
       />
-    )
+    );
   }
 
   if (data === false) {
@@ -68,7 +68,7 @@ export default (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   return (
@@ -81,8 +81,8 @@ export default (props) => {
         sort={'nombre'}
       />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});

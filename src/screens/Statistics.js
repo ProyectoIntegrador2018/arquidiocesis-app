@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   FlatList,
@@ -7,62 +7,62 @@ import {
   StyleSheet,
   Switch,
   ActivityIndicator,
-} from 'react-native'
-import { API } from '../lib'
-import { ErrorView } from '../components'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import CanvasJSReact from '../lib/canvasjs.react'
+} from 'react-native';
+import { API } from '../lib';
+import { ErrorView } from '../components';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import CanvasJSReact from '../lib/canvasjs.react';
 
-var CanvasJS = CanvasJSReact.CanvasJS
-var CanvasJSChart = CanvasJSReact.CanvasJSChart
+var CanvasJS = CanvasJSReact.CanvasJS;
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default (props) => {
-  var [stats, setStats] = useState(false)
-  var [error, setError] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [verAlergias, setVerAlergias] = useState(false)
-  var [verDiscapacidad, setVerDiscapacidad] = useState(false)
-  var [servicioMedico, setServicioMedico] = useState({})
-  var [alergias, setAlergias] = useState({})
-  var [descAlergias, setDescAlergias] = useState([])
-  var [problemasSalud, setProblemasSalud] = useState({})
-  var [seguridadSocial, setSeguridadsocial] = useState({})
-  var [educacion, setEducacion] = useState({})
-  var [discapacidad, setDiscapacidad] = useState({})
-  var [descDiscapacidad, setDescDiscapacidad] = useState([])
+  var [stats, setStats] = useState(false);
+  var [error, setError] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [verAlergias, setVerAlergias] = useState(false);
+  var [verDiscapacidad, setVerDiscapacidad] = useState(false);
+  var [servicioMedico, setServicioMedico] = useState({});
+  var [alergias, setAlergias] = useState({});
+  var [descAlergias, setDescAlergias] = useState([]);
+  var [problemasSalud, setProblemasSalud] = useState({});
+  var [seguridadSocial, setSeguridadsocial] = useState({});
+  var [educacion, setEducacion] = useState({});
+  var [discapacidad, setDiscapacidad] = useState({});
+  var [descDiscapacidad, setDescDiscapacidad] = useState([]);
 
   props.navigation.setOptions({
     headerTitle: 'Estadísticas de miembros',
-  })
+  });
 
   useEffect(() => {
     API.getStats()
       .then((d) => {
-        setStats(d)
-        defineGraphData(d)
-        setRefreshing(false)
-        setError(false)
+        setStats(d);
+        defineGraphData(d);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getStats = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     API.getStats()
       .then((d) => {
-        setStats(d)
-        defineGraphData(d)
-        setRefreshing(false)
-        setError(false)
+        setStats(d);
+        defineGraphData(d);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   CanvasJS.addColorSet('customColorSet1', [
     '#4661EE',
@@ -75,14 +75,14 @@ export default (props) => {
     '#23BFAA',
     '#FAA586',
     '#EB8CC6',
-  ])
+  ]);
 
-  CanvasJS.addColorSet('customColorSet2', ['#EC5657', '#E6E6E6'])
+  CanvasJS.addColorSet('customColorSet2', ['#EC5657', '#E6E6E6']);
 
   function defineGraphData(stats) {
     const total_servicio_medico = Math.round(
       stats.servicio_medico.privado + stats.servicio_medico.publico
-    )
+    );
 
     setServicioMedico({
       interactivityEnabled: false,
@@ -112,7 +112,7 @@ export default (props) => {
           indexLabelFontSize: 12,
           indexLabelPlacement: 'outside',
           innerRadius: '70%',
-          yValueFormatString: "#0'%'",
+          yValueFormatString: '#0\'%\'',
           dataPoints: [
             { name: 'Privado', y: stats.servicio_medico.privado },
             { name: 'Público', y: stats.servicio_medico.publico },
@@ -120,9 +120,9 @@ export default (props) => {
           ],
         },
       ],
-    })
+    });
 
-    const alergico = Math.round(stats.alergico)
+    const alergico = Math.round(stats.alergico);
 
     setAlergias({
       interactivityEnabled: false,
@@ -148,7 +148,7 @@ export default (props) => {
         {
           type: 'doughnut',
           showInLegend: false,
-          yValueFormatString: "#0'%'",
+          yValueFormatString: '#0\'%\'',
           startAngle: 90,
           innerRadius: '85%',
           dataPoints: [
@@ -157,9 +157,9 @@ export default (props) => {
           ],
         },
       ],
-    })
+    });
 
-    setDescAlergias(stats.alergico_desc)
+    setDescAlergias(stats.alergico_desc);
 
     setProblemasSalud({
       interactivityEnabled: true,
@@ -187,9 +187,9 @@ export default (props) => {
         enabled: true,
         animationEnabled: true,
         content: function (e) {
-          const dp = e.entries[0].dataPoint
-          const pct = Math.round((dp.y / stats.total) * 100)
-          return pct + '%'
+          const dp = e.entries[0].dataPoint;
+          const pct = Math.round((dp.y / stats.total) * 100);
+          return pct + '%';
         },
       },
       data: [
@@ -206,13 +206,13 @@ export default (props) => {
           ],
         },
       ],
-    })
+    });
 
     const total_seguridad_social = Math.round(
       stats.seguridad_social.pensionado +
         stats.seguridad_social.jubilado +
         stats.seguridad_social.apoyo_federal
-    )
+    );
 
     setSeguridadsocial({
       interactivityEnabled: false,
@@ -242,7 +242,7 @@ export default (props) => {
           indexLabelFontSize: 12,
           indexLabelPlacement: 'outside',
           innerRadius: '70%',
-          yValueFormatString: "#0'%'",
+          yValueFormatString: '#0\'%\'',
           dataPoints: [
             { name: 'Pensionado', y: stats.seguridad_social.pensionado },
             { name: 'Jubilado', y: stats.seguridad_social.jubilado },
@@ -251,7 +251,7 @@ export default (props) => {
           ],
         },
       ],
-    })
+    });
 
     setEducacion({
       interactivityEnabled: true,
@@ -275,7 +275,7 @@ export default (props) => {
         {
           type: 'pie',
           showInLegend: true,
-          yValueFormatString: "#0'%'",
+          yValueFormatString: '#0\'%\'',
           startAngle: 90,
           legendText: '{name}: {y}',
           dataPoints: [
@@ -288,9 +288,9 @@ export default (props) => {
           ],
         },
       ],
-    })
+    });
 
-    const discapacidad = Math.round(stats.discapacidad)
+    const discapacidad = Math.round(stats.discapacidad);
 
     setDiscapacidad({
       interactivityEnabled: false,
@@ -316,7 +316,7 @@ export default (props) => {
         {
           type: 'doughnut',
           showInLegend: false,
-          yValueFormatString: "#0'%'",
+          yValueFormatString: '#0\'%\'',
           startAngle: 90,
           innerRadius: '85%',
           dataPoints: [
@@ -325,9 +325,9 @@ export default (props) => {
           ],
         },
       ],
-    })
+    });
 
-    setDescDiscapacidad(stats.discapacidad_desc)
+    setDescDiscapacidad(stats.discapacidad_desc);
   }
 
   return (
@@ -415,8 +415,8 @@ export default (props) => {
         </View>
       )}
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   sectionText: {
@@ -444,4 +444,4 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: 5,
   },
-})
+});

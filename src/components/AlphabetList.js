@@ -1,37 +1,37 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-} from 'react-native'
-import { Util } from '../lib'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { RefreshControl } from 'react-native-web-refresh-control'
+} from 'react-native';
+import { Util } from '../lib';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { RefreshControl } from 'react-native-web-refresh-control';
 
 export default (props) => {
-  var components = []
-  var headers = []
+  var components = [];
+  var headers = [];
   var organizedData =
     props.headers !== false
       ? props.organize !== false
         ? Util.organizeListData(props.data, props.sort || 'name')
         : props.data
-      : { A: props.data }
-  var clickable = true
+      : { A: props.data };
+  var clickable = true;
   if (props.clickable == false) {
-    clickable = props.clickable
+    clickable = props.clickable;
   }
 
   for (var i in organizedData) {
     if (props.headers !== false) {
-      headers.push(components.length)
+      headers.push(components.length);
       components.push(
         <View key={'header-' + i} style={styles.header}>
           <Text style={styles.headerText}>{i.toUpperCase()}</Text>
         </View>
-      )
+      );
     }
     components.push(
       ...organizedData[i].map((a, ix) =>
@@ -73,7 +73,7 @@ export default (props) => {
           />
         )
       )
-    )
+    );
   }
 
   if (props.scroll !== false) {
@@ -92,17 +92,17 @@ export default (props) => {
         }>
         {components}
       </ScrollView>
-    )
+    );
   } else {
-    return <View>{components}</View>
+    return <View>{components}</View>;
   }
-}
+};
 
 var ListItem = (props) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        if (props.onPress) props.onPress(props.data)
+        if (props.onPress) props.onPress(props.data);
       }}>
       <View style={{ backgroundColor: 'white' }}>
         <View style={styles.item}>
@@ -120,8 +120,8 @@ var ListItem = (props) => {
         </View>
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -147,4 +147,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-})
+});

@@ -1,41 +1,41 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import RNPickerSelect from 'react-native-picker-select'
-import { FontAwesome5 } from '@expo/vector-icons'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default (props) => {
-  var [select, setSelect] = useState(0)
-  var items = props.items || []
+  var [select, setSelect] = useState(0);
+  var items = props.items || [];
   var placeholder = props.placeholder || {
     label: 'Seleccionar valor...',
     value: null,
-  }
+  };
   if (typeof placeholder === 'string') {
-    placeholder = { label: placeholder, id: null }
+    placeholder = { label: placeholder, id: null };
   }
 
   useEffect(() => {
-    valueSelected(null, props.select + 1)
-  }, [props.select])
+    valueSelected(null, props.select + 1);
+  }, [props.select]);
 
   var orderItems = (items) => {
     return items.map((a) => {
       if (typeof a === 'string') {
-        return { label: a, value: a, color: 'black' }
-      } else return { ...a, color: 'black' }
-    })
-  }
+        return { label: a, value: a, color: 'black' };
+      } else return { ...a, color: 'black' };
+    });
+  };
 
   var valueSelected = (val, index) => {
-    setSelect(index)
+    setSelect(index);
     if (props.onValueChange) {
-      if (index == 0) props.onValueChange(null)
-      props.onValueChange(items[index - 1])
+      if (index == 0) props.onValueChange(null);
+      props.onValueChange(items[index - 1]);
     }
-  }
+  };
 
   var required =
-    typeof props.required !== 'undefined' && props.required !== false
+    typeof props.required !== 'undefined' && props.required !== false;
 
   return (
     <View style={[styles.container, props.style]}>
@@ -81,8 +81,8 @@ export default (props) => {
         </RNPickerSelect>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -114,4 +114,4 @@ const styles = StyleSheet.create({
     color: '#c42727',
     fontWeight: 'bold',
   },
-})
+});

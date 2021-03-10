@@ -3,42 +3,42 @@ Nombre: RegistroCoordinador.js
 Usuario con acceso: Admin
 Descripción: Pantalla para registrar un nuevo coordinador en el sistema
 */
-import React, { useState } from 'react'
-import { Text, StyleSheet } from 'react-native'
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  const [identificador, setIdentificador] = useState('')
-  var [loading, setLoading] = useState(false)
-  var [name, setName] = useState('')
-  var [apPaterno, setApPaterno] = useState('')
-  var [apMaterno, setApMaterno] = useState('')
-  var [email, setEmail] = useState('')
-  var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'))
-  var [gender, setGender] = useState(false)
-  var [estadoCivil, setEstadoCivil] = useState(false)
-  var [domicilio, setDomicilio] = useState('')
-  var [colonia, setColonia] = useState('')
-  var [municipio, setMunicipio] = useState('')
-  var [phoneHome, setPhoneHome] = useState('')
-  var [phoneMobile, setPhoneMobile] = useState('')
-  var [phoneMobile, setPhoneMobile] = useState('')
-  var [escolaridad, setEscolaridad] = useState(false)
-  var [oficio, setOficio] = useState(false)
-  var [password, setPassword] = useState('')
+  const [identificador, setIdentificador] = useState('');
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState('');
+  var [apPaterno, setApPaterno] = useState('');
+  var [apMaterno, setApMaterno] = useState('');
+  var [email, setEmail] = useState('');
+  var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'));
+  var [gender, setGender] = useState(false);
+  var [estadoCivil, setEstadoCivil] = useState(false);
+  var [domicilio, setDomicilio] = useState('');
+  var [colonia, setColonia] = useState('');
+  var [municipio, setMunicipio] = useState('');
+  var [phoneHome, setPhoneHome] = useState('');
+  var [phoneMobile, setPhoneMobile] = useState('');
+  var [phoneMobile, setPhoneMobile] = useState('');
+  var [escolaridad, setEscolaridad] = useState(false);
+  var [oficio, setOficio] = useState(false);
+  var [password, setPassword] = useState('');
 
-  var onAdd = props.route.params.onAdd
+  var onAdd = props.route.params.onAdd;
 
   props.navigation.setOptions({
     headerTitle: 'Registro Coordinador',
-  })
+  });
 
   var doRegister = () => {
-    if (loading) return
+    if (loading) return;
 
     var data = {
       identificador,
@@ -59,7 +59,7 @@ export default (props) => {
         telefono_casa: phoneHome,
         telefono_movil: phoneMobile,
       },
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       identificador: {
@@ -94,39 +94,39 @@ export default (props) => {
         value: 5,
         prompt: 'Favor de introducir la contraseña, minimo 5 caracteres',
       },
-    })
+    });
 
     if (!valid) {
-      return Alert.alert('Error', prompt)
+      return Alert.alert('Error', prompt);
     }
 
-    setLoading(true)
+    setLoading(true);
     API.registerCoordinador(data)
       .then((new_member) => {
-        setLoading(false)
+        setLoading(false);
         if (!new_member)
           return Alert.alert(
             'Error',
             'Hubo un error registrando el coordinador'
-          )
-        if (onAdd) onAdd(new_member)
-        Alert.alert('Exito', 'Se ha agregado el coordinador.')
-        props.navigation.goBack()
+          );
+        if (onAdd) onAdd(new_member);
+        Alert.alert('Exito', 'Se ha agregado el coordinador.');
+        props.navigation.goBack();
       })
       .catch((err) => {
-        console.log(err)
-        setLoading(false)
+        console.log(err);
+        setLoading(false);
 
         if (
           err.message ===
           'Ya existe un coordinador con el identificador proporcionado.'
         ) {
-          Alert.alert('Error', err.message)
+          Alert.alert('Error', err.message);
         } else {
-          Alert.alert('Error', 'Hubo un error agregando la parroquia.')
+          Alert.alert('Error', 'Hubo un error agregando la parroquia.');
         }
-      })
-  }
+      });
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
@@ -245,8 +245,8 @@ export default (props) => {
       />
       <Button text="Registrar" loading={loading} onPress={doRegister} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -283,4 +283,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 20,
   },
-})
+});

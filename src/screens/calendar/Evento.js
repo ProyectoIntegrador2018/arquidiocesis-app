@@ -4,24 +4,24 @@ Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la información de un evento
 */
 
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { API } from '../../lib'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { Input, Alert, Item, List, LoadingView } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { API } from '../../lib';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { Input, Alert, Item, List, LoadingView } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { evento, onEdit, onDelete } = props.route.params
+  var { evento, onEdit, onDelete } = props.route.params;
 
-  var [event, setEvent] = useState(evento)
-  var [deleting, setDeleting] = useState(false)
-  var [user, setUser] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
+  var [event, setEvent] = useState(evento);
+  var [deleting, setDeleting] = useState(false);
+  var [user, setUser] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
 
   props.navigation.setOptions({
     headerStyle: {
@@ -41,11 +41,11 @@ export default (props) => {
           />
         </TouchableOpacity>
       ),
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
-  }, [])
+    API.getUser().then(setUser);
+  }, []);
 
   var deleteEvent = () => {
     Alert.alert('¿Eliminar evento?', 'Esto eliminará los datos del evento.', [
@@ -54,39 +54,39 @@ export default (props) => {
         text: 'Eliminar',
         style: 'destructive',
         onPress: () => {
-          setDeleting(true)
+          setDeleting(true);
           API.deleteEvent(event.id)
             .then((done) => {
-              setDeleting(false)
-              alert('Se ha eliminado el evento.')
-              props.navigation.goBack()
-              if (onDelete) onDelete(event.id)
+              setDeleting(false);
+              alert('Se ha eliminado el evento.');
+              props.navigation.goBack();
+              if (onDelete) onDelete(event.id);
             })
             .catch((err) => {
-              setDeleting(false)
-              alert('Hubo un error eliminando el evento.')
-            })
+              setDeleting(false);
+              alert('Hubo un error eliminando el evento.');
+            });
         },
       },
-    ])
-  }
+    ]);
+  };
 
   const editEvent = () => {
     props.navigation.navigate('EditEvento', {
       event,
       onEdit: (data) => {
-        var event = { ...evento }
+        var event = { ...evento };
         for (var i in data) {
-          event[i] = data[i]
+          event[i] = data[i];
         }
-        setEvent(event)
+        setEvent(event);
 
         if (onEdit) {
-          onEdit(event.id, event)
+          onEdit(event.id, event);
         }
       },
-    })
-  }
+    });
+  };
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ paddingBottom: 50 }}>
@@ -104,8 +104,8 @@ export default (props) => {
         <Item text="Eliminar evento" onPress={deleteEvent} loading={deleting} />
       )}
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   section: {
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingLeft: 15,
   },
-})
+});

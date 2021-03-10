@@ -3,23 +3,23 @@ Nombre: RegistroGrupo.js
 Usuario con acceso: Admin
 Descripción: Pantalla para registrar un grupo HEMA
 */
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, Switch, ActivityIndicator } from 'react-native'
-import { Input, Button, Picker, PickerScreen } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API } from '../../lib'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, Switch, ActivityIndicator } from 'react-native';
+import { Input, Button, Picker, PickerScreen } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API } from '../../lib';
 
 export default (props) => {
-  var [loading, setLoading] = useState(false)
-  var [name, setName] = useState('')
-  var [coordinador, setCoordinador] = useState(false)
-  var [parroquia, setParroquia] = useState(false)
-  var [capilla, setCapilla] = useState(false)
-  var [isEnabled, setIsEnabled] = useState(false)
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState('');
+  var [coordinador, setCoordinador] = useState(false);
+  var [parroquia, setParroquia] = useState(false);
+  var [capilla, setCapilla] = useState(false);
+  var [isEnabled, setIsEnabled] = useState(false);
 
-  var [coordinadorList, setCoordinadorList] = useState(false)
-  var [parroquiasList, setParroquiasList] = useState(false)
-  var [capillasList, setCapillasList] = useState(false)
+  var [coordinadorList, setCoordinadorList] = useState(false);
+  var [parroquiasList, setParroquiasList] = useState(false);
+  var [capillasList, setCapillasList] = useState(false);
 
   props.navigation.setOptions({
     headerStyle: {
@@ -27,27 +27,27 @@ export default (props) => {
       shadowOpacity: 0,
     },
     headerTitle: 'Registro Grupo',
-  })
+  });
 
-  var onAdd = props.route.params.onAdd
+  var onAdd = props.route.params.onAdd;
 
   useEffect(() => {
     API.getParroquias().then((d) => {
-      setParroquiasList(d)
-    })
+      setParroquiasList(d);
+    });
 
     API.getCoordinadores().then((c) => {
-      setCoordinadorList(c)
-    })
-  }, [])
+      setCoordinadorList(c);
+    });
+  }, []);
 
   var doRegister = () => {
-    if (loading) return
-    if (name.length < 1) return alert('Por favor introduzca un nombre.')
-    if (!coordinador) return alert('Favor de seleccionar un coordinador.')
-    if (!parroquia) return alert('Favor de seleccionar una parroquia')
+    if (loading) return;
+    if (name.length < 1) return alert('Por favor introduzca un nombre.');
+    if (!coordinador) return alert('Favor de seleccionar un coordinador.');
+    if (!parroquia) return alert('Favor de seleccionar una parroquia');
 
-    setLoading(true)
+    setLoading(true);
     API.addGrupo(
       name,
       coordinador.id,
@@ -55,37 +55,37 @@ export default (props) => {
       capilla ? capilla.id : null
     )
       .then((new_grupo) => {
-        setLoading(false)
-        if (!new_grupo) return alert('Hubo un error registrando el coordinador')
-        new_grupo.new = true
-        if (onAdd) onAdd(new_grupo)
-        alert('Se ha agregado el grupo')
-        props.navigation.goBack()
+        setLoading(false);
+        if (!new_grupo) return alert('Hubo un error registrando el coordinador');
+        new_grupo.new = true;
+        if (onAdd) onAdd(new_grupo);
+        alert('Se ha agregado el grupo');
+        props.navigation.goBack();
       })
       .catch((err) => {
-        console.error(err)
-        alert('Hubo un error registrando el grupo')
-        setLoading(false)
-      })
-  }
+        console.error(err);
+        alert('Hubo un error registrando el grupo');
+        setLoading(false);
+      });
+  };
 
   var parroquiaSelected = (p, state = false) => {
-    setParroquia(p)
-    setCapilla(null)
-    setCapillasList(false)
-    if (!isEnabled && !state) return
+    setParroquia(p);
+    setCapilla(null);
+    setCapillasList(false);
+    if (!isEnabled && !state) return;
     API.getParroquia(p.id).then((c) => {
-      setCapillasList(c.capillas || [])
-    })
-  }
+      setCapillasList(c.capillas || []);
+    });
+  };
 
   var toggleSwitch = () => {
-    var ps = isEnabled
-    setIsEnabled(!ps)
+    var ps = isEnabled;
+    setIsEnabled(!ps);
     if (!ps && parroquia) {
-      parroquiaSelected(parroquia, !ps)
+      parroquiaSelected(parroquia, !ps);
     }
-  }
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.container} bounces={false}>
@@ -110,7 +110,7 @@ export default (props) => {
                 </Text>
                 <Text style={{ color: 'gray' }}>{i.email}</Text>
               </View>
-            )
+            );
           }}
         />
       ) : (
@@ -170,8 +170,8 @@ export default (props) => {
       ) : null}
       <Button text="Registrar" loading={loading} onPress={doRegister} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   label: {
@@ -196,4 +196,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 20,
   },
-})
+});

@@ -3,7 +3,7 @@ Nombre: Login.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para que un usuario registrado pueda iniciar sesión
 */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,20 +11,20 @@ import {
   SafeAreaView,
   ActivityIndicator,
   StatusBar,
-} from 'react-native'
-import { Input, Button } from '../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../lib'
-import { Image } from 'react-native'
+} from 'react-native';
+import { Input, Button } from '../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../lib';
+import { Image } from 'react-native';
 
 export default (props) => {
-  var [loading, setLoading] = useState(false)
-  var [email, setEmail] = useState('')
-  var [password, setPassword] = useState('')
+  var [loading, setLoading] = useState(false);
+  var [email, setEmail] = useState('');
+  var [password, setPassword] = useState('');
 
   useEffect(() => {
-    setLoading(false)
-  }, [])
+    setLoading(false);
+  }, []);
 
   var doLogin = () => {
     var { valid, prompt } = Util.validateForm(
@@ -39,21 +39,21 @@ export default (props) => {
           prompt: 'Favor de introducir la contraseña.',
         },
       }
-    )
-    if (!valid) return alert(prompt)
+    );
+    if (!valid) return alert(prompt);
 
-    setLoading(true)
+    setLoading(true);
     API.login(email, password)
       .then((user) => {
-        setLoading(false)
-        if (!user) return alert('Correo o contraseña invalida.')
-        if (props.onLogin) props.onLogin(user)
+        setLoading(false);
+        if (!user) return alert('Correo o contraseña invalida.');
+        if (props.onLogin) props.onLogin(user);
       })
       .catch((err) => {
-        setLoading(false)
-        alert('Hubo un error realizando el login.')
-      })
-  }
+        setLoading(false);
+        alert('Hubo un error realizando el login.');
+      });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,8 +102,8 @@ export default (props) => {
         )}
       </KeyboardAwareScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
   },
-})
+});

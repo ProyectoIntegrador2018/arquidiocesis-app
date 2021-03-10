@@ -3,52 +3,52 @@ Nombre: Grupos.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver los grupos HEMA
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, ErrorView, Button } from '../../components'
-import { API } from '../../lib'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { AlphabetList, ErrorView, Button } from '../../components';
+import { API } from '../../lib';
 
 export default (props) => {
-  var [user, setUser] = useState(null)
-  var [data, setData] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
+  var [user, setUser] = useState(null);
+  var [data, setData] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
 
   useEffect(() => {
-    API.getUser().then(setUser)
+    API.getUser().then(setUser);
     API.getGrupos()
       .then((grupos) => {
-        setData(grupos)
-        setRefreshing(false)
-        setError(false)
+        setData(grupos);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getGrupos = () => {
-    setRefreshing(true)
-    setError(false)
+    setRefreshing(true);
+    setError(false);
     API.getGrupos(true)
       .then((d) => {
-        setData(d)
-        setError(false)
-        setRefreshing(false)
+        setData(d);
+        setError(false);
+        setRefreshing(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   if (error) {
     return (
@@ -57,7 +57,7 @@ export default (props) => {
         refreshing={refreshing}
         retry={getGrupos}
       />
-    )
+    );
   }
 
   if (data === false) {
@@ -74,29 +74,29 @@ export default (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   var onPress = (item) => {
     props.navigation.navigate('Grupo', {
       grupo: item,
       onDelete: (id) => {
-        setData((d) => d.filter((a) => a.id != id))
+        setData((d) => d.filter((a) => a.id != id));
       },
       onEdit: (id, new_grupo) => {
-        setData([...data.filter((a) => a.id != id), new_grupo])
+        setData([...data.filter((a) => a.id != id), new_grupo]);
       },
-    })
-  }
+    });
+  };
 
   var addGrupo = () => {
     props.navigation.navigate('RegistroGrupo', {
       onAdd: (p) => {
-        if (!data) return
-        setData([...data, p])
+        if (!data) return;
+        setData([...data, p]);
       },
-    })
-  }
+    });
+  };
 
   var renderItem = (data) => {
     return (
@@ -129,8 +129,8 @@ export default (props) => {
           </Text>
         )}
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <ScrollView
@@ -170,8 +170,8 @@ export default (props) => {
         )}
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -182,4 +182,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});

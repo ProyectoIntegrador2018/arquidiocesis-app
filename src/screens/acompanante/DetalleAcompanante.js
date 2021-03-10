@@ -3,35 +3,35 @@ Nombre: DetalleAcompañante.js
 Usuario con acceso: Admin
 Descripción: Pantalla que muestra la información de los acompañantes de zona y decanato
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-} from 'react-native'
-import { API } from '../../lib'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { Input, Item, LoadingView, Alert } from '../../components'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+} from 'react-native';
+import { API } from '../../lib';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Input, Item, LoadingView, Alert } from '../../components';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { acompanante, zona, decanato, onDelete } = props.route.params
+  var { acompanante, zona, decanato, onDelete } = props.route.params;
 
-  var acompananteDatos
+  var acompananteDatos;
 
   if (acompanante) {
-    acompananteDatos = acompanante
+    acompananteDatos = acompanante;
   } else {
-    acompananteDatos = zona ? zona.acompanante : decanato.acompanante
+    acompananteDatos = zona ? zona.acompanante : decanato.acompanante;
   }
 
-  var [persona, setPersona] = useState(false)
-  var [user, setUser] = useState(false)
-  var [deleting, setDeleting] = useState(false)
-  var [place, setPlace] = useState(false)
+  var [persona, setPersona] = useState(false);
+  var [user, setUser] = useState(false);
+  var [deleting, setDeleting] = useState(false);
+  var [place, setPlace] = useState(false);
 
   props.navigation.setOptions({
     headerTitle: 'Detalle Acompañante',
@@ -47,94 +47,94 @@ export default (props) => {
           />
         </TouchableOpacity>
       ),
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
+    API.getUser().then(setUser);
 
     if (acompanante) {
-      setPersona(acompanante)
-      getZonaOrDecanatoForAcompanante()
-      return
+      setPersona(acompanante);
+      getZonaOrDecanatoForAcompanante();
+      return;
     }
 
     if (!acompananteDatos) {
-      onDelete()
-      props.navigation.goBack()
-      Alert.alert('Error', 'Esta zona no tiene acompañante.')
-      return
+      onDelete();
+      props.navigation.goBack();
+      Alert.alert('Error', 'Esta zona no tiene acompañante.');
+      return;
     }
     API.getAcompanante(acompananteDatos)
       .then((a) => {
-        setPersona(a)
-        getZonaOrDecanatoForAcompanante(acompananteDatos)
+        setPersona(a);
+        getZonaOrDecanatoForAcompanante(acompananteDatos);
       })
       .catch((err) => {
         if (err.code == 910) {
-          onDelete()
-          props.navigation.goBack()
+          onDelete();
+          props.navigation.goBack();
           Alert.alert(
             'Error',
             (zona ? 'Esta zona' : 'Este decanato') + ' no tiene acompañante.'
-          )
-          return
+          );
+          return;
         }
-        Alert.alert('Error', 'Hubo un error cargando el acompañante')
-        props.navigation.goBack()
-      })
-  }, [])
+        Alert.alert('Error', 'Hubo un error cargando el acompañante');
+        props.navigation.goBack();
+      });
+  }, []);
 
   var editPersona = () => {
     props.navigation.navigate('EditAcompanante', {
       persona,
       onEdit: (data) => {
-        var p = { ...persona }
+        var p = { ...persona };
         for (var i in data) {
-          p[i] = data[i]
+          p[i] = data[i];
         }
-        setPersona(p)
+        setPersona(p);
       },
-    })
-  }
+    });
+  };
 
   const getZonaOrDecanatoForAcompanante = async (id = acompananteDatos.id) => {
     try {
-      const data = await API.getAcompananteZonaOrDecanato(id)
+      const data = await API.getAcompananteZonaOrDecanato(id);
 
       if (data.zona) {
-        setPlace({ id: data.zona.id, kind: 'Zona', name: data.zona.nombre })
+        setPlace({ id: data.zona.id, kind: 'Zona', name: data.zona.nombre });
       } else if (data.decanato) {
         setPlace({
           id: data.decanato.id,
           kind: 'Decanato',
           name: data.decanato.nombre,
-        })
+        });
       }
     } catch (error) {
-      console.log('error :>> ', error)
+      console.log('error :>> ', error);
       Alert.alert(
         'Error',
         'Hubo un error al recuperar la zona o decanato del acompañante.'
-      )
+      );
     }
-  }
+  };
 
   const showPlace = () => {
     if (place.kind == 'Zona') {
-      props.navigation.navigate('Zona', { id: place.id, nombre: place.name })
+      props.navigation.navigate('Zona', { id: place.id, nombre: place.name });
     } else {
       props.navigation.navigate('Decanato', {
         id: place.id,
         nombre: place.name,
-      })
+      });
     }
-  }
+  };
 
   var changePassword = () => {
     props.navigation.navigate('ChangePassword', {
       admin_email: persona.email,
-    })
-  }
+    });
+  };
 
   var deleteAcompanante = () => {
     Alert.alert(
@@ -148,41 +148,41 @@ export default (props) => {
           text: 'Eliminar',
           style: 'destructive',
           onPress: () => {
-            setDeleting(true)
+            setDeleting(true);
 
             if (acompanante) {
               var prom =
                 place.kind === 'Zona'
                   ? API.deleteAcompananteZona(place.id)
-                  : API.deleteAcompananteDecanato(place.id)
+                  : API.deleteAcompananteDecanato(place.id);
             } else {
               var prom = zona
                 ? API.deleteAcompananteZona(zona.id)
-                : API.deleteAcompananteDecanato(decanato.id)
+                : API.deleteAcompananteDecanato(decanato.id);
             }
 
             prom
               .then((done) => {
-                setDeleting(false)
-                Alert.alert('Exito', 'Se ha eliminado el acompañante.')
-                props.navigation.goBack()
-                onDelete(persona.id)
+                setDeleting(false);
+                Alert.alert('Exito', 'Se ha eliminado el acompañante.');
+                props.navigation.goBack();
+                onDelete(persona.id);
               })
               .catch((err) => {
-                console.log(err)
-                setDeleting(false)
-                Alert.alert('Error', 'Hubo un error eliminando el acompañante.')
-              })
+                console.log(err);
+                setDeleting(false);
+                Alert.alert('Error', 'Hubo un error eliminando el acompañante.');
+              });
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var getFechaNacimiento = () => {
-    const f = moment(persona.fecha_nacimiento).format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    const f = moment(persona.fecha_nacimiento).format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -262,8 +262,8 @@ export default (props) => {
         </ScrollView>
       )}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -299,4 +299,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     paddingLeft: 15,
   },
-})
+});

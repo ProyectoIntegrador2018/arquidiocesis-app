@@ -3,7 +3,7 @@ Nombre: Capacitaciones.js
 Usuario con acceso: Admin, Acompañante, Coordinador
 Descripción: Pantalla que muestra los grupos de capacitaciones
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,48 +11,48 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { List, ErrorView, Button, Item } from '../../components'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { API } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { List, ErrorView, Button, Item } from '../../components';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { API } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var [data, setData] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
-  var [user, setUser] = useState(false)
+  var [data, setData] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
+  var [user, setUser] = useState(false);
 
   useEffect(() => {
-    setError(false)
-    API.getUser().then(setUser)
+    setError(false);
+    API.getUser().then(setUser);
     API.getCapacitaciones(false)
       .then((c) => {
-        setData(c)
-        setError(false)
+        setData(c);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getCapacitacion = () => {
-    setRefreshing(true)
-    setError(false)
+    setRefreshing(true);
+    setError(false);
     API.getCapacitaciones(true)
       .then((c) => {
-        setRefreshing(false)
-        setData(c)
-        setError(false)
+        setRefreshing(false);
+        setData(c);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   if (error) {
     return (
@@ -61,7 +61,7 @@ export default (props) => {
         refreshing={refreshing}
         retry={getCapacitacion}
       />
-    )
+    );
   }
 
   if (data === false) {
@@ -78,51 +78,51 @@ export default (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   var viewCapacitacion = (item) => {
     props.navigation.navigate('DetalleCapacitacion', {
       capacitacion: item,
       onEdit: (cap) => {
-        setData([...data.filter((a) => a.id != cap.id), cap])
+        setData([...data.filter((a) => a.id != cap.id), cap]);
       },
       onDelete: (id) => {
-        setData(data.filter((a) => a.id != id))
+        setData(data.filter((a) => a.id != id));
       },
-    })
-  }
+    });
+  };
 
   var addCapacitacion = () => {
     props.navigation.navigate('RegistroCapacitacion', {
       onAdd: (p) => {
-        if (!data) return
-        setData([...data, p])
+        if (!data) return;
+        setData([...data, p]);
       },
-    })
-  }
+    });
+  };
 
   var formatUnix = (a) => {
     var f = !a
       ? moment().format('MMMM DD, YYYY')
-      : moment.unix(a).format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+      : moment.unix(a).format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var orderCapacitaciones = () => {
-    var today = moment().unix()
+    var today = moment().unix();
     var active = data.filter(
       (a) =>
         a.fin &&
         a.fin._seconds &&
         moment.unix(a.fin._seconds).endOf('day').unix() > today
-    )
-    var active_id = active.map((a) => a.id)
-    var old = data.filter((a) => active_id.indexOf(a.id) == -1)
-    return { active, old }
-  }
+    );
+    var active_id = active.map((a) => a.id);
+    var old = data.filter((a) => active_id.indexOf(a.id) == -1);
+    return { active, old };
+  };
 
-  var caps = orderCapacitaciones()
+  var caps = orderCapacitaciones();
 
   var renderCapacitacion = (a) => {
     return (
@@ -143,8 +143,8 @@ export default (props) => {
           </Text>
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <ScrollView
@@ -205,8 +205,8 @@ export default (props) => {
         )}
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   date: {
@@ -222,4 +222,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontWeight: '600',
   },
-})
+});

@@ -3,35 +3,35 @@ Nombre: RegistroParticipante.js
 Usuario con acceso: Admin, Acompañante
 Descripción: Pantalla para registrar un participante de un grupo de Capacitación 
 */
-import React, { useState, useRef } from 'react'
-import { Text, StyleSheet } from 'react-native'
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState, useRef } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { capacitacion, onAdd } = props.route.params
+  var { capacitacion, onAdd } = props.route.params;
 
-  var [loading, setLoading] = useState(false)
-  var [name, setName] = useState('')
-  var [shortName, setShortName] = useState('')
-  var [apPaterno, setApPaterno] = useState('')
-  var [apMaterno, setApMaterno] = useState('')
-  var [email, setEmail] = useState('')
-  var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'))
-  var [gender, setGender] = useState(false)
-  var [estadoCivil, setEstadoCivil] = useState(false)
-  var [domicilio, setDomicilio] = useState('')
-  var [colonia, setColonia] = useState('')
-  var [municipio, setMunicipio] = useState('')
-  var [phoneHome, setPhoneHome] = useState('')
-  var [phoneMobile, setPhoneMobile] = useState('')
-  var [phoneMobile, setPhoneMobile] = useState('')
-  var [escolaridad, setEscolaridad] = useState(false)
-  var [oficio, setOficio] = useState(false)
-  var pickerRef = useRef(null)
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState('');
+  var [shortName, setShortName] = useState('');
+  var [apPaterno, setApPaterno] = useState('');
+  var [apMaterno, setApMaterno] = useState('');
+  var [email, setEmail] = useState('');
+  var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'));
+  var [gender, setGender] = useState(false);
+  var [estadoCivil, setEstadoCivil] = useState(false);
+  var [domicilio, setDomicilio] = useState('');
+  var [colonia, setColonia] = useState('');
+  var [municipio, setMunicipio] = useState('');
+  var [phoneHome, setPhoneHome] = useState('');
+  var [phoneMobile, setPhoneMobile] = useState('');
+  var [phoneMobile, setPhoneMobile] = useState('');
+  var [escolaridad, setEscolaridad] = useState(false);
+  var [oficio, setOficio] = useState(false);
+  var pickerRef = useRef(null);
 
   var doRegister = () => {
     var data = {
@@ -52,7 +52,7 @@ export default (props) => {
         telefono_casa: phoneHome,
         telefono_movil: phoneMobile,
       },
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       nombre: {
@@ -78,42 +78,42 @@ export default (props) => {
         prompt: 'Favor de introducir la escolaridad.',
       },
       oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
-    })
+    });
 
     if (!valid) {
-      return Alert.alert('Error', prompt)
+      return Alert.alert('Error', prompt);
     }
 
-    setLoading(true)
+    setLoading(true);
     API.addCapacitacionParticipante(capacitacion.id, data)
       .then((done) => {
-        setLoading(false)
+        setLoading(false);
         if (!done)
           return Alert.alert(
             'Error',
             'Hubo un error agregando el participante a la capacitación.'
-          )
+          );
         Alert.alert(
           'Exito',
           'Se ha agregando el participante a la capacitación.'
-        )
-        data.id = done
-        onAdd(data)
-        props.navigation.goBack()
+        );
+        data.id = done;
+        onAdd(data);
+        props.navigation.goBack();
       })
       .catch((err) => {
-        setLoading(false)
-        console.log(err)
+        setLoading(false);
+        console.log(err);
         Alert.alert(
           'Error',
           'Hubo un error agregando el participante a la capacitación.'
-        )
-      })
-  }
+        );
+      });
+  };
 
   props.navigation.setOptions({
     headerTitle: 'Agregar Participante',
-  })
+  });
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
@@ -208,8 +208,8 @@ export default (props) => {
 
       <Button text="Registrar" loading={loading} onPress={doRegister} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -223,4 +223,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 20,
   },
-})
+});

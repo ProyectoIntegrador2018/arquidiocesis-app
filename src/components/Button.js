@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,14 +6,14 @@ import {
   TextInput,
   ActivityIndicator,
   TouchableOpacity,
-} from 'react-native'
+} from 'react-native';
 
 export default (props) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        if (props.loading) return
-        if (props.onPress) props.onPress()
+        if (props.loading) return;
+        if (props.onPress) props.onPress();
       }}>
       <View
         style={[
@@ -28,8 +28,8 @@ export default (props) => {
         )}
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '500',
   },
-})
+});

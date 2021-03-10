@@ -3,23 +3,23 @@ Nombre: Decanato.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la lista de parroquias de un decanato y el acompañante del mismo
 */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, ErrorView, Item } from '../components'
-import { API } from '../lib'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { AlphabetList, ErrorView, Item } from '../components';
+import { API } from '../lib';
 
 export default (props) => {
-  var [decanato, setDecanato] = useState(props.route.params)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
-  var [user, setUser] = useState(false)
+  var [decanato, setDecanato] = useState(props.route.params);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
+  var [user, setUser] = useState(false);
 
   props.navigation.setOptions({
     headerStyle: {
@@ -27,67 +27,67 @@ export default (props) => {
       shadowOpacity: 0,
     },
     headerTitle: '',
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
-    setRefreshing(true)
-    setError(false)
+    API.getUser().then(setUser);
+    setRefreshing(true);
+    setError(false);
     API.getDecanato(decanato.id)
       .then((d) => {
-        d.id = decanato.id
-        setDecanato(d)
-        setRefreshing(false)
-        setError(false)
+        d.id = decanato.id;
+        setDecanato(d);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        console.log(err)
-        setError(true)
-        setRefreshing(false)
-      })
-  }, [])
+        console.log(err);
+        setError(true);
+        setRefreshing(false);
+      });
+  }, []);
 
   var getDecanato = () => {
-    setRefreshing(true)
-    setError(false)
+    setRefreshing(true);
+    setError(false);
     API.getDecanato(decanato.id, true)
       .then((d) => {
-        d.id = decanato.id
-        setDecanato(d)
-        setRefreshing(false)
-        setError(false)
+        d.id = decanato.id;
+        setDecanato(d);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setError(true)
-        setRefreshing(false)
-      })
-  }
+        setError(true);
+        setRefreshing(false);
+      });
+  };
 
   var addAcompanante = () => {
     props.navigation.navigate('RegistroAcompanante', {
       decanato,
       onAdd: (id) => {
-        var z = { ...decanato }
-        z.acompanante = id
-        setDecanato(z)
+        var z = { ...decanato };
+        z.acompanante = id;
+        setDecanato(z);
       },
-    })
-  }
+    });
+  };
 
   var viewAcompanante = () => {
     props.navigation.navigate('DetalleAcompanante', {
       decanato,
       onDelete: function () {
-        var z = { ...decanato }
-        z.acompanante = null
-        setDecanato(z)
+        var z = { ...decanato };
+        z.acompanante = null;
+        setDecanato(z);
       },
-    })
-  }
+    });
+  };
 
   var onPress = (item) => {
-    props.navigation.push('Parroquia', item)
-  }
+    props.navigation.push('Parroquia', item);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -150,8 +150,8 @@ export default (props) => {
         )}
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -175,4 +175,4 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingLeft: 15,
   },
-})
+});

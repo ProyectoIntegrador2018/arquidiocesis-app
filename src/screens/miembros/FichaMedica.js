@@ -3,14 +3,14 @@ Nombre: FichaMedica.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la ficha medica de un miembro de un grupo HEMA
 */
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, Switch, CheckBox } from 'react-native'
-import { API } from '../../lib'
-import { Input, Button, Picker, Alert } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Switch, CheckBox } from 'react-native';
+import { API } from '../../lib';
+import { Input, Button, Picker, Alert } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props) => {
-  var { persona, canEdit } = props.route.params
+  var { persona, canEdit } = props.route.params;
   if (!persona.ficha_medica) {
     persona.ficha_medica = {
       tipo_sangre: false,
@@ -25,38 +25,38 @@ export default (props) => {
       discapacidad: false,
       discapacidad_desc: '',
       ambulancia: false,
-    }
+    };
   }
 
-  var [bloodType, setBloodType] = useState(persona.ficha_medica.tipo_sangre)
+  var [bloodType, setBloodType] = useState(persona.ficha_medica.tipo_sangre);
   var [medicalService, setMedicalService] = useState(
     persona.ficha_medica.servicio_medico
-  )
-  var [alergic, setAlergic] = useState(persona.ficha_medica.alergico)
+  );
+  var [alergic, setAlergic] = useState(persona.ficha_medica.alergico);
   var [alergicDesc, setAlergicDesc] = useState(
     persona.ficha_medica.alergico_desc
-  )
+  );
   var [cardiovascular, setCardiovascular] = useState(
     persona.ficha_medica.p_cardiovascular
-  )
-  var [azucar, setAzucar] = useState(persona.ficha_medica.p_azucar)
+  );
+  var [azucar, setAzucar] = useState(persona.ficha_medica.p_azucar);
   var [hipertension, setHipertension] = useState(
     persona.ficha_medica.p_hipertension
-  )
-  var [sobrepeso, setSobrepeso] = useState(persona.ficha_medica.p_sobrepeso)
+  );
+  var [sobrepeso, setSobrepeso] = useState(persona.ficha_medica.p_sobrepeso);
   var [socialSecurity, setSocialSecurity] = useState(
     persona.ficha_medica.seguridad_social
-  )
-  var [disability, setDisability] = useState(persona.ficha_medica.discapacidad)
+  );
+  var [disability, setDisability] = useState(persona.ficha_medica.discapacidad);
   var [disabilityDesc, setDisabilityDesc] = useState(
     persona.ficha_medica.discapacidad_desc
-  )
-  var [ambulance, setAmbulance] = useState(persona.ficha_medica.ambulancia)
-  var [loading, setLoading] = useState(false)
+  );
+  var [ambulance, setAmbulance] = useState(persona.ficha_medica.ambulancia);
+  var [loading, setLoading] = useState(false);
 
   props.navigation.setOptions({
     headerTitle: 'Ficha Medica',
-  })
+  });
 
   var saveFicha = () => {
     var data = {
@@ -72,45 +72,45 @@ export default (props) => {
       discapacidad: disability,
       discapacidad_desc: disability ? disabilityDesc : '',
       ambulancia: ambulance,
-    }
+    };
     if (bloodType === undefined) {
-      Alert.alert('Error', 'Error: Tipo de sangre no escogido')
-      return
+      Alert.alert('Error', 'Error: Tipo de sangre no escogido');
+      return;
     }
-    setLoading(true)
+    setLoading(true);
     API.setFichaMedica(persona.id, data)
       .then((done) => {
-        setLoading(false)
-        Alert.alert('Exito', 'Se ha guardado la ficha medica.')
-        props.navigation.goBack()
+        setLoading(false);
+        Alert.alert('Exito', 'Se ha guardado la ficha medica.');
+        props.navigation.goBack();
       })
       .catch((err) => {
-        console.log(err)
-        setLoading(false)
-        Alert.alert('Error', 'Hubo un error guardando la ficha medica')
-      })
-  }
+        console.log(err);
+        setLoading(false);
+        Alert.alert('Error', 'Hubo un error guardando la ficha medica');
+      });
+  };
 
   var getServicioMedico = () => {
-    if (!persona.ficha_medica.servicio_medico) return ''
+    if (!persona.ficha_medica.servicio_medico) return '';
     return ['Ninguno', 'Público', 'Privado'].indexOf(
       persona.ficha_medica.servicio_medico
-    )
-  }
+    );
+  };
 
   var getSocialSecurity = () => {
-    if (!persona.ficha_medica.seguridad_social) return ''
+    if (!persona.ficha_medica.seguridad_social) return '';
     return ['Ninguno', 'Pensionado', 'Jubilado', 'Apoyo Federal'].indexOf(
       persona.ficha_medica.seguridad_social
-    )
-  }
+    );
+  };
 
   var getBloodType = () => {
-    if (!persona.ficha_medica.tipo_sangre) return -1
+    if (!persona.ficha_medica.tipo_sangre) return -1;
     return ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'].indexOf(
       persona.ficha_medica.tipo_sangre
-    )
-  }
+    );
+  };
 
   return (
     <KeyboardAwareScrollView
@@ -244,8 +244,8 @@ export default (props) => {
         <Button text={'Guardar'} onPress={saveFicha} loading={loading} />
       )}
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -292,4 +292,4 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     textAlignVertical: 'center',
   },
-})
+});

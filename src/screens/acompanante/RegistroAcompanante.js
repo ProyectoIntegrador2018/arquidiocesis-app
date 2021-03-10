@@ -3,73 +3,73 @@ Nombre: RegistroAcompañante.js
 Usuario con acceso: Admin
 Descripción: Pantalla que muestra los campos para el registro de los acompañantes de zona y decanato
 */
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, Switch } from 'react-native'
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, Switch } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var [loading, setLoading] = useState(false)
-  var [name, setName] = useState('')
-  var [apPaterno, setApPaterno] = useState('')
-  var [apMaterno, setApMaterno] = useState('')
-  var [email, setEmail] = useState('')
-  var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'))
-  var [gender, setGender] = useState(false)
-  var [estadoCivil, setEstadoCivil] = useState(false)
-  var [domicilio, setDomicilio] = useState('')
-  var [colonia, setColonia] = useState('')
-  var [municipio, setMunicipio] = useState('')
-  var [phoneHome, setPhoneHome] = useState('')
-  var [phoneMobile, setPhoneMobile] = useState('')
-  var [escolaridad, setEscolaridad] = useState(false)
-  var [oficio, setOficio] = useState(false)
-  var [password, setPassword] = useState('')
-  var [password2, setPassword2] = useState('')
-  const [assignedToZona, setAssignedToZona] = useState(true)
-  const [zonas, setZonas] = useState(undefined)
-  const [zonaSelected, setZonaSelected] = useState(undefined)
-  const [decanatos, setDecanatos] = useState(undefined)
-  const [decanatoSelected, setDecanatoSelected] = useState(undefined)
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState('');
+  var [apPaterno, setApPaterno] = useState('');
+  var [apMaterno, setApMaterno] = useState('');
+  var [email, setEmail] = useState('');
+  var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'));
+  var [gender, setGender] = useState(false);
+  var [estadoCivil, setEstadoCivil] = useState(false);
+  var [domicilio, setDomicilio] = useState('');
+  var [colonia, setColonia] = useState('');
+  var [municipio, setMunicipio] = useState('');
+  var [phoneHome, setPhoneHome] = useState('');
+  var [phoneMobile, setPhoneMobile] = useState('');
+  var [escolaridad, setEscolaridad] = useState(false);
+  var [oficio, setOficio] = useState(false);
+  var [password, setPassword] = useState('');
+  var [password2, setPassword2] = useState('');
+  const [assignedToZona, setAssignedToZona] = useState(true);
+  const [zonas, setZonas] = useState(undefined);
+  const [zonaSelected, setZonaSelected] = useState(undefined);
+  const [decanatos, setDecanatos] = useState(undefined);
+  const [decanatoSelected, setDecanatoSelected] = useState(undefined);
 
-  var { onAdd, zona, decanato } = props.route.params
+  var { onAdd, zona, decanato } = props.route.params;
 
   props.navigation.setOptions({
     headerTitle: 'Registro Acompañante',
-  })
+  });
 
   useEffect(() => {
     const populatePlaces = async () => {
       try {
-        const zonas = await API.getZonas(true)
+        const zonas = await API.getZonas(true);
         const parsedZonas = zonas.map((zona) => ({
           label: zona.nombre,
           value: zona.id,
-        }))
-        setZonas(parsedZonas)
+        }));
+        setZonas(parsedZonas);
 
-        const decanatos = await API.getDecanatos(true)
+        const decanatos = await API.getDecanatos(true);
         const parsedDecanatos = decanatos.map((decanato) => ({
           label: decanato.nombre,
           value: decanato.id,
-        }))
-        setDecanatos(parsedDecanatos)
+        }));
+        setDecanatos(parsedDecanatos);
       } catch (error) {
-        console.log('RegistroAcompanante', error.message)
+        console.log('RegistroAcompanante', error.message);
       }
-    }
+    };
 
     if (!zona && !decanato) {
-      populatePlaces()
+      populatePlaces();
     }
-  }, [])
+  }, []);
 
   var doRegister = () => {
     if (loading) {
-      return
+      return;
     }
 
     var data = {
@@ -90,7 +90,7 @@ export default (props) => {
         telefono_casa: phoneHome,
         telefono_movil: phoneMobile,
       },
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       nombre: {
@@ -132,84 +132,84 @@ export default (props) => {
           prompt: 'Las contraseña no concuerdan.',
         },
       ],
-    })
+    });
 
     if (!valid) {
-      return Alert.alert('Error', prompt)
+      return Alert.alert('Error', prompt);
     }
 
-    let prom
+    let prom;
 
     if (!zona && !decanato) {
       if (assignedToZona && zonaSelected === undefined) {
-        return Alert.alert('Error', 'Favor de escoger una zona')
+        return Alert.alert('Error', 'Favor de escoger una zona');
       } else if (!assignedToZona && decanatoSelected === undefined) {
-        return Alert.alert('Error', 'Favor de escoger un decanato')
+        return Alert.alert('Error', 'Favor de escoger un decanato');
       }
 
       prom = assignedToZona
         ? API.registerAcompananteZona(zonaSelected.value, data)
-        : API.registerAcompananteDecanato(decanatoSelected.value, data)
+        : API.registerAcompananteDecanato(decanatoSelected.value, data);
     } else {
       prom = zona
         ? API.registerAcompananteZona(zona.id, data)
-        : API.registerAcompananteDecanato(decanato.id, data)
+        : API.registerAcompananteDecanato(decanato.id, data);
     }
 
-    setLoading(true)
+    setLoading(true);
 
     prom
       .then((done) => {
-        setLoading(false)
+        setLoading(false);
 
         if (!done) {
-          return Alert.alert('Error', 'Hubo un error agregando el acompañante.')
+          return Alert.alert('Error', 'Hubo un error agregando el acompañante.');
         }
 
-        onAdd(done)
-        Alert.alert('Exito', 'Se ha agregado el acompañante.')
-        return props.navigation.goBack()
+        onAdd(done);
+        Alert.alert('Exito', 'Se ha agregado el acompañante.');
+        return props.navigation.goBack();
       })
       .catch((err) => {
-        setLoading(false)
+        setLoading(false);
 
         if (err.code == 999) {
-          Alert.alert('Error', 'No tienes acceso a esta acción.')
+          Alert.alert('Error', 'No tienes acceso a esta acción.');
         } else if (err.code == 1283) {
           if (zona || decanato) {
             Alert.alert(
               'Error',
               (zona ? 'La zona' : 'El decanato') + ' ya tiene un acompañante.'
-            )
+            );
           } else {
             Alert.alert(
               'Error',
               (assignedToZona ? 'La zona' : 'El decanato') +
                 ' ya tiene un acompañante.'
-            )
+            );
           }
         } else if (err.code == 623) {
           Alert.alert(
             'Error',
             'Ya existe un usuario con ese correo electrónico.'
-          )
+          );
         } else {
-          Alert.alert('Error', 'Hubo un error agregando el acompañante.')
+          Alert.alert('Error', 'Hubo un error agregando el acompañante.');
         }
-      })
-  }
+      });
+  };
 
   const renderSubheader = () => {
     if (!zona && !decanato) {
-      return null
+      return null;
     }
 
     return (
       <Text style={styles.subHeader}>
         {zona ? zona.nombre : decanato.nombre}
       </Text>
-    )
-  }
+    );
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
@@ -305,7 +305,7 @@ export default (props) => {
               thumbColor={assignedToZona ? '#f5dd4b' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={() => {
-                setAssignedToZona((previousState) => !previousState)
+                setAssignedToZona((previousState) => !previousState);
               }}
               value={assignedToZona}
             />
@@ -382,8 +382,8 @@ export default (props) => {
 
       <Button text="Registrar" loading={loading} onPress={doRegister} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -427,4 +427,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 20,
   },
-})
+});

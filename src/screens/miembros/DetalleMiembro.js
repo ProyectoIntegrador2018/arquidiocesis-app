@@ -3,7 +3,7 @@ Nombre: DetalleMiembro.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la información personal de un miembro de un grupo HEMA
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,25 +11,25 @@ import {
   TouchableOpacity,
   ScrollView,
   CheckBox,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { API } from '../../lib'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { Input, Item, LoadingView } from '../../components'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { API } from '../../lib';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Input, Item, LoadingView } from '../../components';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var [persona, setPersona] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [user, setUser] = useState(false)
+  var [persona, setPersona] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [user, setUser] = useState(false);
 
-  var { onEdit, onStatusChange, grupo } = props.route.params
+  var { onEdit, onStatusChange, grupo } = props.route.params;
   var canEdit =
     user &&
     (user.type == 'admin' ||
       user.type == 'superadmin' ||
-      user.type == 'coordinador')
+      user.type == 'coordinador');
 
   props.navigation.setOptions({
     headerTitle: 'Detalle Miembro',
@@ -44,94 +44,94 @@ export default (props) => {
           />
         </TouchableOpacity>
       ),
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
+    API.getUser().then(setUser);
     API.getMiembro(props.route.params.persona.id)
       .then((miembro) => {
-        setRefreshing(false)
+        setRefreshing(false);
         if (!miembro) {
-          alert('Hubo un error cargando al miembro...')
-          props.navigation.goBack()
+          alert('Hubo un error cargando al miembro...');
+          props.navigation.goBack();
         }
-        setPersona(miembro)
+        setPersona(miembro);
       })
       .catch((err) => {
-        setRefreshing(false)
-        alert('Hubo un error cargando al miembro...')
-        props.navigation.goBack()
-      })
-  }, [])
+        setRefreshing(false);
+        alert('Hubo un error cargando al miembro...');
+        props.navigation.goBack();
+      });
+  }, []);
 
   var getPersona = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     API.getMiembro(persona.id, true)
       .then((miembro) => {
-        setRefreshing(false)
+        setRefreshing(false);
         if (!miembro) {
-          alert('Hubo un error cargando al miembro...')
-          props.navigation.goBack()
+          alert('Hubo un error cargando al miembro...');
+          props.navigation.goBack();
         }
-        setPersona(miembro)
+        setPersona(miembro);
       })
       .catch((err) => {
-        setRefreshing(false)
-        alert('Hubo un error cargando al miembro...')
-        props.navigation.goBack()
-      })
-  }
+        setRefreshing(false);
+        alert('Hubo un error cargando al miembro...');
+        props.navigation.goBack();
+      });
+  };
 
   var editMedical = () => {
-    props.navigation.navigate('FichaMedica', { persona, canEdit })
-  }
+    props.navigation.navigate('FichaMedica', { persona, canEdit });
+  };
 
   var editStatus = () => {
     props.navigation.navigate('EstatusMiembro', {
       persona,
       onEdit: (status) => {
-        var p = { ...persona }
-        p.estatus = status
-        setPersona(p)
-        onStatusChange(persona.id, status, p)
+        var p = { ...persona };
+        p.estatus = status;
+        setPersona(p);
+        onStatusChange(persona.id, status, p);
       },
-    })
-  }
+    });
+  };
 
   var editPersona = () => {
     props.navigation.navigate('EditMiembro', {
       persona,
       onEdit: (data) => {
-        var p = { ...persona }
+        var p = { ...persona };
         for (var i in data) {
-          p[i] = data[i]
+          p[i] = data[i];
         }
-        setPersona(p)
-        onEdit(persona.id, p)
+        setPersona(p);
+        onEdit(persona.id, p);
       },
-    })
-  }
+    });
+  };
 
   var getStatus = () => {
-    if (!persona) return ''
+    if (!persona) return '';
     switch (persona.estatus) {
-      case 0:
-        return 'Activo'
-      case 1:
-        return 'Baja temporal'
-      case 2:
-        return 'Baja definitiva'
-      default:
-        return 'Activo'
+    case 0:
+      return 'Activo';
+    case 1:
+      return 'Baja temporal';
+    case 2:
+      return 'Baja definitiva';
+    default:
+      return 'Activo';
     }
-  }
+  };
 
   var getFechaNacimiento = () => {
     var f = moment
       .unix(persona.fecha_nacimiento._seconds)
-      .format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+      .format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -164,8 +164,8 @@ export default (props) => {
                   persona.estatus == 2
                     ? 'red'
                     : persona.estatus == 1
-                    ? 'orange'
-                    : 'black',
+                      ? 'orange'
+                      : 'black',
               }}
               value={getStatus()}
               readonly
@@ -278,8 +278,8 @@ export default (props) => {
         </ScrollView>
       )}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -336,4 +336,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
-})
+});

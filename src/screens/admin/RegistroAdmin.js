@@ -3,27 +3,27 @@ Nombre: RegistroAdmin.js
 Usuario con acceso: Admin
 Descripción: Pantalla para registrar la información de un usuario que tendrá acceso al sistema
 */
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { API, Util } from '../../lib'
-import { Input, Button, Picker } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { API, Util } from '../../lib';
+import { Input, Button, Picker } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props) => {
-  var [user, setUser] = useState({})
-  var [loading, setLoading] = useState(false)
+  var [user, setUser] = useState({});
+  var [loading, setLoading] = useState(false);
 
   props.navigation.setOptions({
     headerTitle: 'Registrar usuario',
-  })
+  });
 
   var setValue = (k) => {
     return (v) =>
       setUser((u) => {
-        u[k] = v
-        return u
-      })
-  }
+        u[k] = v;
+        return u;
+      });
+  };
 
   var register = () => {
     var { valid, prompt } = Util.validateForm(user, {
@@ -55,25 +55,25 @@ export default (props) => {
         prompt:
           'Favor de introducir la contraseña del usuario, mínimo 5 caracteres.',
       },
-    })
+    });
     if (!valid) {
-      return alert(prompt)
+      return alert(prompt);
     }
-    setLoading(true)
+    setLoading(true);
     API.registerAdmin(user)
       .then((done) => {
-        setLoading(false)
+        setLoading(false);
         if (!done) {
-          return alert('Hubo un error creando el usuario.')
+          return alert('Hubo un error creando el usuario.');
         }
-        props.navigation.goBack()
-        if (props.route.params.onAdd) props.route.params.onAdd(done)
+        props.navigation.goBack();
+        if (props.route.params.onAdd) props.route.params.onAdd(done);
       })
       .catch((err) => {
-        setLoading(false)
-        return alert('Hubo un error creando el usuario.')
-      })
-  }
+        setLoading(false);
+        return alert('Hubo un error creando el usuario.');
+      });
+  };
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
@@ -123,8 +123,8 @@ export default (props) => {
 
       <Button text="Registrar" onPress={register} loading={loading} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -144,4 +144,4 @@ const styles = StyleSheet.create({
     color: 'grey',
     marginVertical: 10,
   },
-})
+});

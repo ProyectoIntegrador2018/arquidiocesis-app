@@ -3,88 +3,88 @@ Nombre: Coordinadores.js
 Usuario con acceso: Admin
 Descripción: Pantalla para ver la información de todos los coordinadores en el sistema
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, Button, ErrorView, Alert } from '../../components'
-import { API } from '../../lib'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { AlphabetList, Button, ErrorView, Alert } from '../../components';
+import { API } from '../../lib';
 
 export default (props) => {
-  var [data, setData] = useState(false)
-  var [error, setError] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [user, setUser] = useState(false)
+  var [data, setData] = useState(false);
+  var [error, setError] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [user, setUser] = useState(false);
 
   useEffect(() => {
     API.getUser().then((u) => {
-      setUser(u)
+      setUser(u);
       if (u.type == 'acompañante_decanato' || u.type == 'acompañante_zona') {
-        setRefreshing(true)
+        setRefreshing(true);
         API.getCoordinadoresForAcompanante(u.id)
           .then((d) => {
-            setRefreshing(false)
-            setData(d)
-            setError(false)
+            setRefreshing(false);
+            setData(d);
+            setError(false);
           })
           .catch((err) => {
-            setRefreshing(false)
-            setError(true)
-            Alert.alert('Error', err.message)
-            console.log(err)
-          })
+            setRefreshing(false);
+            setError(true);
+            Alert.alert('Error', err.message);
+            console.log(err);
+          });
       } else {
-        setRefreshing(true)
+        setRefreshing(true);
         API.getCoordinadores(false)
           .then((d) => {
-            setRefreshing(false)
-            setData(d)
-            setError(false)
+            setRefreshing(false);
+            setData(d);
+            setError(false);
           })
           .catch((err) => {
-            setRefreshing(false)
-            setError(true)
-          })
+            setRefreshing(false);
+            setError(true);
+          });
       }
-    })
-  }, [])
+    });
+  }, []);
 
   var getCoordinadores = () => {
-    setRefreshing(true)
-    setError(false)
+    setRefreshing(true);
+    setError(false);
     if (
       user.type == 'acompañante_decanato' ||
       user.type == 'acompañante_zona'
     ) {
       API.getCoordinadoresForAcompanante(user.id)
         .then((d) => {
-          setRefreshing(false)
-          setData(d)
-          setError(false)
+          setRefreshing(false);
+          setData(d);
+          setError(false);
         })
         .catch((err) => {
-          setRefreshing(false)
-          setError(true)
-          console.log(err)
-        })
+          setRefreshing(false);
+          setError(true);
+          console.log(err);
+        });
     } else {
       API.getCoordinadores(true)
         .then((d) => {
-          setRefreshing(false)
-          setData(d)
-          setError(false)
+          setRefreshing(false);
+          setData(d);
+          setError(false);
         })
         .catch((err) => {
-          setRefreshing(false)
-          setError(true)
-        })
+          setRefreshing(false);
+          setError(true);
+        });
     }
-  }
+  };
 
   if (error) {
     return (
@@ -93,7 +93,7 @@ export default (props) => {
         refreshing={refreshing}
         retry={getCoordinadores}
       />
-    )
+    );
   }
 
   if (data === false) {
@@ -110,35 +110,35 @@ export default (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   var detalleCoord = (item) => {
     props.navigation.navigate('DetalleCoordinador', {
       persona: item,
       onEdit: (id, coord) => {
-        setData([...data.filter((a) => a.id != id), coord])
+        setData([...data.filter((a) => a.id != id), coord]);
       },
       onDelete: (id) => {
-        setData(data.filter((a) => a.id != id))
+        setData(data.filter((a) => a.id != id));
       },
-    })
-  }
+    });
+  };
 
   var addCoordinador = () => {
     props.navigation.navigate('RegistroCoordinador', {
       onAdd: (c) => {
-        setData([...data, c])
+        setData([...data, c]);
       },
-    })
-  }
+    });
+  };
 
   var formatData = () => {
     return data.map((a) => ({
       ...a,
       nombre_completo: `${a.nombre} ${a.apellido_paterno}`,
-    }))
-  }
+    }));
+  };
 
   return (
     <ScrollView
@@ -177,8 +177,8 @@ export default (props) => {
         )}
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -189,4 +189,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});

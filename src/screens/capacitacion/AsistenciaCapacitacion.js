@@ -3,7 +3,7 @@ Nombre: AsistenciaCapacitacion.js
 Usuario con acceso: Admin, Acompañante, Coordinador
 Descripción: Pantalla que permite tomar asistencia en los grupos de capacitación
 */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,57 +11,57 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-} from 'react-native'
-import { CheckBox } from 'react-native-elements'
-import { Alert, DatePicker } from '../../components'
-import { Util, API } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+} from 'react-native';
+import { CheckBox } from 'react-native-elements';
+import { Alert, DatePicker } from '../../components';
+import { Util, API } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 var Screen = (props) => {
-  var { isNew, capacitacion, onAssistance, date } = props.route.params
+  var { isNew, capacitacion, onAssistance, date } = props.route.params;
 
-  var [data, setData] = useState(false)
+  var [data, setData] = useState(false);
   var [date, setDate] = useState(
     isNew ? moment().format('YYYY-MM-DD') : props.route.params.date
-  )
-  var [sending, setSending] = useState(false)
-  var [assistance, setAssistance] = useState([])
+  );
+  var [sending, setSending] = useState(false);
+  var [assistance, setAssistance] = useState([]);
 
   props.navigation.setOptions({
     headerTitle: isNew ? 'Tomar asistencia' : 'Editar asistencia',
-  })
+  });
 
   // When the screen is shown get data for this group.
   useEffect(() => {
     if (isNew) {
       API.getParticipantes(capacitacion)
         .then((p) => {
-          setData(p)
+          setData(p);
         })
         .catch((err) => {
-          Alert.alert('Error', 'Error cargando los participantes.')
-          props.navigation.goBack()
-        })
+          Alert.alert('Error', 'Error cargando los participantes.');
+          props.navigation.goBack();
+        });
     } else {
       API.getCapacitacionAsistencia(capacitacion, date)
         .then((d) => {
-          setData(d.miembros)
-          setAssistance(d.miembros.filter((a) => a.assist).map((a) => a.id))
+          setData(d.miembros);
+          setAssistance(d.miembros.filter((a) => a.assist).map((a) => a.id));
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           if (err.code == 34) {
-            props.route.params.onDelete(date)
+            props.route.params.onDelete(date);
           }
           Alert.alert(
             'Error cargando asistencia',
             'La asistencia solicitada no existe.'
-          )
-          props.navigation.goBack()
-        })
+          );
+          props.navigation.goBack();
+        });
     }
-  }, [])
+  }, []);
 
   // Cargando datos
   if (data === false) {
@@ -78,26 +78,26 @@ var Screen = (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   var onCheck = (id, checked) => {
     setAssistance((p) =>
       checked ? Array.from(new Set([...p, id])) : p.filter((a) => a != id)
-    )
-  }
+    );
+  };
 
   // Ordenar datos
-  var orderedData = Util.organizeListData(data, 'nombre')
-  var components = []
-  var headers = []
+  var orderedData = Util.organizeListData(data, 'nombre');
+  var components = [];
+  var headers = [];
   for (var i in orderedData) {
-    headers.push(components.length)
+    headers.push(components.length);
     components.push(
       <View key={'header-' + i} style={styles.header}>
         <Text style={styles.headerText}>{i}</Text>
       </View>
-    )
+    );
     components.push(
       ...orderedData[i].map((a, ix) => (
         <CheckboxItem
@@ -107,13 +107,13 @@ var Screen = (props) => {
           checked={assistance.findIndex((b) => b == a.id) != -1}
         />
       ))
-    )
+    );
   }
 
   var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var showOverwrite = () => {
     Alert.alert(
@@ -124,47 +124,47 @@ var Screen = (props) => {
         {
           text: 'Reemplazar',
           onPress: () => {
-            saveAsistencia(true)
+            saveAsistencia(true);
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var saveAsistencia = (force = false) => {
-    setSending(true)
+    setSending(true);
     if (isNew) {
       API.registerCapacitacionAsistencia(capacitacion, date, assistance, force)
         .then((done) => {
-          setSending(false)
-          onAssistance(done)
-          Alert.alert('Exito', 'Se ha guardado la asistencia.')
-          props.navigation.goBack()
+          setSending(false);
+          onAssistance(done);
+          Alert.alert('Exito', 'Se ha guardado la asistencia.');
+          props.navigation.goBack();
         })
         .catch((err) => {
           if (err.code == 52 && !force) {
-            showOverwrite()
+            showOverwrite();
           } else {
-            setSending(false)
-            Alert.alert('Error', 'Hubo un error marcando la asistencia.')
+            setSending(false);
+            Alert.alert('Error', 'Hubo un error marcando la asistencia.');
           }
-        })
+        });
     } else {
       API.saveCapacitacionAsistencia(capacitacion, date, assistance)
         .then((done) => {
           if (done.deleted) {
-            props.route.params.onDelete(done.date)
+            props.route.params.onDelete(done.date);
           }
-          setSending(false)
-          Alert.alert('Exito', 'Se ha guardado la asistencia.')
-          props.navigation.goBack()
+          setSending(false);
+          Alert.alert('Exito', 'Se ha guardado la asistencia.');
+          props.navigation.goBack();
         })
         .catch((err) => {
-          setSending(false)
-          Alert.alert('Error', 'Hubo un error marcando la asistencia.')
-        })
+          setSending(false);
+          Alert.alert('Error', 'Hubo un error marcando la asistencia.');
+        });
     }
-  }
+  };
 
   return (
     <View style={StyleSheet.absoluteFillObject}>
@@ -203,21 +203,21 @@ var Screen = (props) => {
         </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default Screen
+export default Screen;
 
 var CheckboxItem = (props) => {
-  var [checked, setChecked] = useState(props.checked)
+  var [checked, setChecked] = useState(props.checked);
   var onPress = () => {
-    props.onCheck(props.id, !checked)
-    setChecked(!checked)
-  }
+    props.onCheck(props.id, !checked);
+    setChecked(!checked);
+  };
 
   useEffect(() => {
-    setChecked(props.checked)
-  }, [props.checked])
+    setChecked(props.checked);
+  }, [props.checked]);
 
   return (
     <TouchableOpacity onPress={onPress}>
@@ -237,8 +237,8 @@ var CheckboxItem = (props) => {
         </Text>
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -260,4 +260,4 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '600',
   },
-})
+});

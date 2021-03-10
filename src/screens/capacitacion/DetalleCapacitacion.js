@@ -4,17 +4,17 @@ Usuario con acceso: Admin, Acompañante, Coordinador
 Descripción: Pantalla para ver la información a detalle de un grupo de capacitación
 			Tambien presenta opción para eliminar
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { API } from '../../lib'
-import { FontAwesome5 } from '@expo/vector-icons'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { API } from '../../lib';
+import { FontAwesome5 } from '@expo/vector-icons';
 import {
   Item,
   AlphabetList,
@@ -24,29 +24,29 @@ import {
   LoadingView,
   ErrorView,
   Alert,
-} from '../../components'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+} from '../../components';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { onEdit, onDelete } = props.route.params
+  var { onEdit, onDelete } = props.route.params;
 
   var [capacitacion, setCapacitacion] = useState(
     props.route.params.capacitacion
-  )
-  var [participantes, setParticipantes] = useState(false)
-  var [asistencias, setAsistencias] = useState(false)
-  var [deleting, setDeleting] = useState(false)
-  var [user, setUser] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
+  );
+  var [participantes, setParticipantes] = useState(false);
+  var [asistencias, setAsistencias] = useState(false);
+  var [deleting, setDeleting] = useState(false);
+  var [user, setUser] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
 
   var canEdit =
     user &&
     capacitacion &&
     (user.type == 'admin' ||
       user.type == 'superadmin' ||
-      user.id == capacitacion.encargado)
+      user.id == capacitacion.encargado);
 
   props.navigation.setOptions({
     headerStyle: {
@@ -65,37 +65,37 @@ export default (props) => {
           />
         </TouchableOpacity>
       ),
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
+    API.getUser().then(setUser);
     API.getCapacitacion(props.route.params.capacitacion.id)
       .then((cap) => {
-        setCapacitacion(cap)
-        setParticipantes(cap.participantes)
-        setAsistencias(cap.asistencias)
-        setError(false)
+        setCapacitacion(cap);
+        setParticipantes(cap.participantes);
+        setAsistencias(cap.asistencias);
+        setError(false);
       })
       .catch((err) => {
-        setError(true)
-      })
-  }, [])
+        setError(true);
+      });
+  }, []);
 
   var getCapacitacion = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     API.getCapacitacion(capacitacion.id, true)
       .then((cap) => {
-        setCapacitacion(cap)
-        setParticipantes(cap.participantes)
-        setAsistencias(cap.asistencias)
-        setRefreshing(false)
-        setError(false)
+        setCapacitacion(cap);
+        setParticipantes(cap.participantes);
+        setAsistencias(cap.asistencias);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
   var deleteCapacitacion = () => {
     Alert.alert(
       '¿Eliminar capacitación?',
@@ -106,71 +106,71 @@ export default (props) => {
           text: 'Eliminar',
           style: 'destructive',
           onPress: () => {
-            setDeleting(true)
+            setDeleting(true);
             API.removeCapacitacion(capacitacion.id)
               .then((done) => {
-                setDeleting(false)
-                Alert.alert('Exito', 'Se ha eliminado la capacitación.')
-                props.navigation.goBack()
-                onDelete(capacitacion.id)
+                setDeleting(false);
+                Alert.alert('Exito', 'Se ha eliminado la capacitación.');
+                props.navigation.goBack();
+                onDelete(capacitacion.id);
               })
               .catch((err) => {
-                setDeleting(false)
+                setDeleting(false);
                 Alert.alert(
                   'Error',
                   'Hubo un error eliminando la capacitación.'
-                )
-              })
+                );
+              });
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var formatUnix = (a) => {
     var f = !a
       ? moment().format('MMMM DD, YYYY')
-      : moment.unix(a).format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+      : moment.unix(a).format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var editCapacitacion = () => {
     props.navigation.navigate('EditarCapacitacion', {
       capacitacion,
       onEdit: (data) => {
-        var p = { ...capacitacion }
+        var p = { ...capacitacion };
         for (var i in data) {
-          p[i] = data[i]
+          p[i] = data[i];
         }
-        setCapacitacion(p)
-        onEdit(p)
+        setCapacitacion(p);
+        onEdit(p);
       },
-    })
-  }
+    });
+  };
 
   var addParticipante = () => {
     props.navigation.navigate('RegistroParticipante', {
       capacitacion,
       onAdd: (part) => {
-        setParticipantes([...participantes, part])
+        setParticipantes([...participantes, part]);
       },
-    })
-  }
+    });
+  };
 
   var tomarAsistencia = () => {
     props.navigation.navigate('AsistenciaCapacitacion', {
       capacitacion: capacitacion.id,
       isNew: true,
       onAssistance: (date) => {
-        setAsistencias((a) => Array.from(new Set([...a, date])))
+        setAsistencias((a) => Array.from(new Set([...a, date])));
       },
-    })
-  }
+    });
+  };
 
   var showAsistencia = (a) => {
     if (
@@ -182,17 +182,17 @@ export default (props) => {
         date: a.id,
         new: false,
         onDelete: (d) => {
-          setAsistencias((a) => a.filter((a) => a != d))
+          setAsistencias((a) => a.filter((a) => a != d));
         },
-      })
+      });
     }
-  }
+  };
 
   var isAcompanante = () => {
     return (
       user.type == 'acompañante_decanato' || user.type == 'acompañante_zona'
-    )
-  }
+    );
+  };
 
   var viewParticipante = (p) => {
     if (!isAcompanante()) {
@@ -201,32 +201,32 @@ export default (props) => {
         capacitacion_id: capacitacion.id,
         canEdit,
         onDelete: (id) => {
-          setParticipantes(participantes.filter((a) => a.id != id))
+          setParticipantes(participantes.filter((a) => a.id != id));
         },
         onEdit: (data) => {
           setParticipantes([
             ...participantes.filter((a) => a.id != data.id),
             data,
-          ])
+          ]);
         },
-      })
+      });
     }
-  }
+  };
 
   var changeEncargado = () => {
     props.navigation.navigate('ChangeEncargado', {
       id: capacitacion.id,
       encargado: capacitacion.encargado,
       onEdit: (encargado) => {
-        var c = { ...capacitacion }
-        c.encargado = encargado
-        setCapacitacion(c)
+        var c = { ...capacitacion };
+        c.encargado = encargado;
+        setCapacitacion(c);
       },
-    })
-  }
+    });
+  };
 
   var formatAsistencias = () => {
-    if (!asistencias) return []
+    if (!asistencias) return [];
     return asistencias
       .sort(
         (a, b) =>
@@ -235,17 +235,17 @@ export default (props) => {
       .map((a) => ({
         name: formatDate(a),
         id: a,
-      }))
-  }
+      }));
+  };
 
   var gotoEncargado = () => {
     if (!capacitacion || !capacitacion.encargado) {
-      Alert.alert('Error', 'La capacitacion no tiene encargado.')
+      Alert.alert('Error', 'La capacitacion no tiene encargado.');
     }
     props.navigation.navigate('DetalleEncargado', {
       encargado: capacitacion.encargado,
-    })
-  }
+    });
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -349,16 +349,16 @@ export default (props) => {
             (user.type == 'admin' ||
               user.type == 'superadmin' ||
               user.type.startsWith('acompañante')) ? (
-              <View style={{ marginTop: 20 }}>
-                <Item text="Ver encargado" onPress={gotoEncargado} />
-                <Item text="Cambiar encargado" onPress={changeEncargado} />
-                <Item
-                  text="Eliminar capacitación"
-                  onPress={deleteCapacitacion}
-                  loading={deleting}
-                />
-              </View>
-            ) : null}
+                <View style={{ marginTop: 20 }}>
+                  <Item text="Ver encargado" onPress={gotoEncargado} />
+                  <Item text="Cambiar encargado" onPress={changeEncargado} />
+                  <Item
+                    text="Eliminar capacitación"
+                    onPress={deleteCapacitacion}
+                    loading={deleting}
+                  />
+                </View>
+              ) : null}
 
             {capacitacion.fecha_creada && capacitacion.fecha_creada._seconds && (
               <Text
@@ -382,8 +382,8 @@ export default (props) => {
         )}
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -415,4 +415,4 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 15,
   },
-})
+});

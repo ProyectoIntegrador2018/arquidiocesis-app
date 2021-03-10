@@ -3,21 +3,21 @@ Nombre: EditarCapilla.js
 Usuario con acceso: Admin, Acompañante
 Descripción: Pantalla para editar la información de las capillas
 */
-import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Input, Button, Alert } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Input, Button, Alert } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
 
 export default (props) => {
-  var { onEdit, capilla } = props.route.params
-  var [loading, setLoading] = useState(false)
-  var [nombre, setNombre] = useState(capilla.nombre || '')
-  var [direccion, setDireccion] = useState(capilla.direccion || '')
-  var [colonia, setColonia] = useState(capilla.colonia || '')
-  var [municipio, setMunicipio] = useState(capilla.municipio || '')
-  var [telefono1, setTelefono1] = useState(capilla.telefono1 || '')
-  var [telefono2, setTelefono2] = useState(capilla.telefono2 || '')
+  var { onEdit, capilla } = props.route.params;
+  var [loading, setLoading] = useState(false);
+  var [nombre, setNombre] = useState(capilla.nombre || '');
+  var [direccion, setDireccion] = useState(capilla.direccion || '');
+  var [colonia, setColonia] = useState(capilla.colonia || '');
+  var [municipio, setMunicipio] = useState(capilla.municipio || '');
+  var [telefono1, setTelefono1] = useState(capilla.telefono1 || '');
+  var [telefono2, setTelefono2] = useState(capilla.telefono2 || '');
 
   var save = () => {
     var data = {
@@ -27,7 +27,7 @@ export default (props) => {
       municipio,
       telefono1,
       telefono2,
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       nombre: {
@@ -46,24 +46,24 @@ export default (props) => {
         type: 'empty',
         prompt: 'Favor de introducir el municipio de la capilla.',
       },
-    })
+    });
     if (!valid) {
-      Alert.alert('Error', prompt)
-      return
+      Alert.alert('Error', prompt);
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
     API.editCapilla(capilla.id, data, capilla.parroquia)
       .then((done) => {
-        setLoading(false)
-        onEdit(data)
-        Alert.alert('Exito', 'Se ha editado la capilla.')
+        setLoading(false);
+        onEdit(data);
+        Alert.alert('Exito', 'Se ha editado la capilla.');
       })
       .catch((err) => {
-        console.log(err)
-        Alert.alert('Error', 'Hubo un error editado la capilla.')
-        setLoading(false)
-      })
+        console.log(err);
+        Alert.alert('Error', 'Hubo un error editado la capilla.');
+        setLoading(false);
+      });
 
     // API.addCapilla(name, address, parroquia.id).then(new_capilla=>{
     // 	if(!onAdded) return;
@@ -75,11 +75,11 @@ export default (props) => {
     // 	setLoading(false);
     // 	alert('Hubo un error agregando la capilla.')
     // })
-  }
+  };
 
   props.navigation.setOptions({
     headerTitle: 'Editar Capilla',
-  })
+  });
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ paddingBottom: 50 }}>
@@ -124,8 +124,8 @@ export default (props) => {
         <Button text="Guardar" onPress={save} loading={loading} />
       </View>
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -147,4 +147,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
   },
-})
+});

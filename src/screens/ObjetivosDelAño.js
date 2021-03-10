@@ -2,7 +2,7 @@
 Nombre: ObjetivosDelAño.js
 Descripción: Pantalla para ver la información de los objetivos de un año
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   Alert,
   View,
@@ -11,67 +11,67 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-} from 'react-native'
-import { Table, TableWrapper, Row, Cell } from 'react-native-table-component'
-import { FontAwesome5 } from '@expo/vector-icons'
+} from 'react-native';
+import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-import { API } from './../lib'
+import { API } from './../lib';
 
 export default (props) => {
-  const { year } = props.route.params
-  const [loadingData, setIsLoadingData] = useState(false)
-  const [info, setInfo] = useState(false)
-  const [error, setError] = useState('')
+  const { year } = props.route.params;
+  const [loadingData, setIsLoadingData] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [error, setError] = useState('');
 
   props.navigation.setOptions({
     headerTitle: `Objetivos del año ${year}`,
-  })
+  });
 
   const getObjectives = async () => {
     try {
-      setIsLoadingData(true)
-      const objectives = await API.getObjectivesByYear(year)
-      const tableData = []
+      setIsLoadingData(true);
+      const objectives = await API.getObjectivesByYear(year);
+      const tableData = [];
 
       Object.keys(objectives).map((zonaName) => {
-        tableData.push([zonaName])
+        tableData.push([zonaName]);
 
         objectives[zonaName].forEach((decanatoData) => {
-          const rowData = []
-          rowData.push(decanatoData.decanato)
-          rowData.push(decanatoData.objetivos.p)
-          rowData.push(decanatoData.objetivos.cg)
-          rowData.push(decanatoData.objetivos.oc1)
-          rowData.push(decanatoData.objetivos.oc2)
-          rowData.push(decanatoData.objetivos.oc3)
-          rowData.push(decanatoData.objetivos.id)
-          tableData.push(rowData)
-        })
-      })
+          const rowData = [];
+          rowData.push(decanatoData.decanato);
+          rowData.push(decanatoData.objetivos.p);
+          rowData.push(decanatoData.objetivos.cg);
+          rowData.push(decanatoData.objetivos.oc1);
+          rowData.push(decanatoData.objetivos.oc2);
+          rowData.push(decanatoData.objetivos.oc3);
+          rowData.push(decanatoData.objetivos.id);
+          tableData.push(rowData);
+        });
+      });
 
-      setError('')
+      setError('');
       setInfo({
         tableHead: ['', 'P', 'CG', 'OC1', 'OC2', 'OC3', ''],
         tableData,
-      })
-      setIsLoadingData(false)
+      });
+      setIsLoadingData(false);
     } catch (error) {
-      console.log('error :>> ', error)
-      setError(error.message)
+      console.log('error :>> ', error);
+      setError(error.message);
     }
-  }
+  };
 
   useEffect(() => {
-    getObjectives()
-  }, [])
+    getObjectives();
+  }, []);
 
   const onEdit = () => {
-    getObjectives()
-  }
+    getObjectives();
+  };
 
   const goToObjectives = async (objectiveData) => {
-    props.navigation.navigate('ObjetivosDecanato', { objectiveData, onEdit })
-  }
+    props.navigation.navigate('ObjetivosDecanato', { objectiveData, onEdit });
+  };
 
   if (loadingData || !info) {
     return (
@@ -79,7 +79,7 @@ export default (props) => {
         <Text style={styles.section}>Cargando datos...</Text>
         <ActivityIndicator size="large" />
       </View>
-    )
+    );
   }
 
   if (error !== '') {
@@ -90,7 +90,7 @@ export default (props) => {
         </Text>
         <Text style={styles.section}>{error}</Text>
       </View>
-    )
+    );
   }
 
   const element = (data) => (
@@ -101,7 +101,7 @@ export default (props) => {
         </Text>
       </View>
     </TouchableOpacity>
-  )
+  );
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -123,7 +123,7 @@ export default (props) => {
                       data={cellData}
                       textStyle={styles.rowText}
                     />
-                  )
+                  );
                 }
 
                 return (
@@ -136,15 +136,15 @@ export default (props) => {
                         : styles.rowText
                     }
                   />
-                )
+                );
               })}
             </TableWrapper>
           ))}
         </Table>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -194,4 +194,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
   },
-})
+});

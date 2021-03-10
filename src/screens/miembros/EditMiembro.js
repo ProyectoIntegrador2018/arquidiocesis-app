@@ -3,48 +3,48 @@ Nombre: EditMiembro.js
 Usuario con acceso: Admin
 Descripción: Pantalla para editar la información personal de un miembro de un grupo HEMA
 */
-import React, { useState, useRef } from 'react'
-import { Text, StyleSheet, CheckBox, View } from 'react-native'
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState, useRef } from 'react';
+import { Text, StyleSheet, CheckBox, View } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { persona } = props.route.params
+  var { persona } = props.route.params;
 
-  var bd = moment.unix(persona.fecha_nacimiento._seconds)
-  if (!bd.isValid()) bd = moment()
+  var bd = moment.unix(persona.fecha_nacimiento._seconds);
+  if (!bd.isValid()) bd = moment();
 
-  var [loading, setLoading] = useState(false)
-  var [name, setName] = useState(persona.nombre)
-  var [apPaterno, setApPaterno] = useState(persona.apellido_paterno)
-  var [apMaterno, setApMaterno] = useState(persona.apellido_materno)
-  var [email, setEmail] = useState(persona.email)
-  var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'))
-  var [gender, setGender] = useState(persona.sexo)
-  var [estadoCivil, setEstadoCivil] = useState(persona.estado_civil)
-  var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio)
-  var [colonia, setColonia] = useState(persona.domicilio.colonia)
-  var [municipio, setMunicipio] = useState(persona.domicilio.municipio)
-  var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa)
-  var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil)
-  var [escolaridad, setEscolaridad] = useState(persona.escolaridad)
-  var [oficio, setOficio] = useState(persona.oficio)
-  let [hasLaptop, setHasLaptop] = useState(persona.laptop)
-  let [hasTablet, setHasTablet] = useState(persona.tablet)
-  let [hasSmartphone, setHasSmartphone] = useState(persona.smartphone)
-  let [hasFacebook, setHasFacebook] = useState(persona.facebook)
-  let [hasTwitter, setHasTwitter] = useState(persona.twitter)
-  let [hasInstagram, setHasInstagram] = useState(persona.instagram)
-  var pickerRef = useRef(null)
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState(persona.nombre);
+  var [apPaterno, setApPaterno] = useState(persona.apellido_paterno);
+  var [apMaterno, setApMaterno] = useState(persona.apellido_materno);
+  var [email, setEmail] = useState(persona.email);
+  var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'));
+  var [gender, setGender] = useState(persona.sexo);
+  var [estadoCivil, setEstadoCivil] = useState(persona.estado_civil);
+  var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio);
+  var [colonia, setColonia] = useState(persona.domicilio.colonia);
+  var [municipio, setMunicipio] = useState(persona.domicilio.municipio);
+  var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa);
+  var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
+  var [escolaridad, setEscolaridad] = useState(persona.escolaridad);
+  var [oficio, setOficio] = useState(persona.oficio);
+  let [hasLaptop, setHasLaptop] = useState(persona.laptop);
+  let [hasTablet, setHasTablet] = useState(persona.tablet);
+  let [hasSmartphone, setHasSmartphone] = useState(persona.smartphone);
+  let [hasFacebook, setHasFacebook] = useState(persona.facebook);
+  let [hasTwitter, setHasTwitter] = useState(persona.twitter);
+  let [hasInstagram, setHasInstagram] = useState(persona.instagram);
+  var pickerRef = useRef(null);
 
-  var { onEdit } = props.route.params
+  var { onEdit } = props.route.params;
 
   props.navigation.setOptions({
     headerTitle: 'Editar Miembro',
-  })
+  });
 
   const lista_oficios = [
     'Ninguno',
@@ -74,10 +74,10 @@ export default (props) => {
     'Dentista',
     'Estilista',
     'Policia',
-  ]
+  ];
 
   var save = () => {
-    if (loading) return
+    if (loading) return;
     var data = {
       nombre: name,
       apellido_paterno: apPaterno,
@@ -101,7 +101,7 @@ export default (props) => {
       facebook: hasFacebook,
       twitter: hasTwitter,
       instagram: hasInstagram,
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       nombre: {
@@ -127,49 +127,49 @@ export default (props) => {
         prompt: 'Favor de introducir la escolaridad.',
       },
       oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
-    })
+    });
 
     if (!valid) {
-      return Alert.alert('Error', prompt)
+      return Alert.alert('Error', prompt);
     }
 
-    setLoading(true)
+    setLoading(true);
     API.editMiembro(persona.id, data)
       .then((done) => {
-        setLoading(false)
+        setLoading(false);
         if (!done)
-          return Alert.alert('Error', 'Hubo un error editando el miembro.')
+          return Alert.alert('Error', 'Hubo un error editando el miembro.');
         data.fecha_nacimiento = {
           _seconds: moment(birthday, 'YYYY-MM-DD').unix(),
-        }
-        onEdit(data)
-        Alert.alert('Exito', 'Se ha editado el miembro.')
-        props.navigation.goBack()
+        };
+        onEdit(data);
+        Alert.alert('Exito', 'Se ha editado el miembro.');
+        props.navigation.goBack();
       })
       .catch((err) => {
         if (err.code && err.code == 999) {
-          Alert.alert('Error', 'No tienes acceso a este grupo.')
+          Alert.alert('Error', 'No tienes acceso a este grupo.');
         } else {
-          Alert.alert('Error', 'Hubo un error editando el miembro.')
+          Alert.alert('Error', 'Hubo un error editando el miembro.');
         }
-        setLoading(false)
-      })
-  }
+        setLoading(false);
+      });
+  };
 
   var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var getEstadoCivil = () => {
     return ['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado'].indexOf(
       persona.estado_civil
-    )
-  }
+    );
+  };
 
   var getGenero = () => {
-    return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo)
-  }
+    return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo);
+  };
 
   var getEscolaridad = () => {
     return [
@@ -179,12 +179,12 @@ export default (props) => {
       'Preparatoria',
       'Carrera Técnica',
       'Profesional',
-    ].indexOf(persona.escolaridad)
-  }
+    ].indexOf(persona.escolaridad);
+  };
 
   var getOficio = () => {
-    return lista_oficios.indexOf(persona.oficio)
-  }
+    return lista_oficios.indexOf(persona.oficio);
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
@@ -317,8 +317,8 @@ export default (props) => {
 
       <Button text="Guardar" loading={loading} onPress={save} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -376,4 +376,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
-})
+});

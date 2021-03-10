@@ -3,19 +3,19 @@ Nombre: RegistroEvent.js
 Usuario con acceso: Admin
 Descripción: Pantalla para registrar un evento al calendario
 */
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, Switch, ActivityIndicator } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, Switch, ActivityIndicator } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { Input, Button, Picker, PickerScreen } from '../../components'
-import { API } from '../../lib'
+import { Input, Button, Picker, PickerScreen } from '../../components';
+import { API } from '../../lib';
 
 export default (props) => {
-  const [loading, setLoading] = useState(false)
-  const [name, setName] = useState('')
-  const [eventResponsible, setEventResponsible] = useState('')
-  const [eventDates, setEventDates] = useState('')
-  const onAdd = props.route.params.onAdd
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [eventResponsible, setEventResponsible] = useState('');
+  const [eventDates, setEventDates] = useState('');
+  const onAdd = props.route.params.onAdd;
 
   props.navigation.setOptions({
     headerStyle: {
@@ -23,39 +23,39 @@ export default (props) => {
       shadowOpacity: 0,
     },
     headerTitle: 'Registro de evento',
-  })
+  });
 
   const addEvent = async () => {
-    if (loading) return
-    if (name.trim().length < 1) return alert('Por favor introduzca un nombre.')
+    if (loading) return;
+    if (name.trim().length < 1) return alert('Por favor introduzca un nombre.');
     if (eventResponsible.trim().length < 1)
-      return alert('Por favor introduzca el responsable del evento.')
+      return alert('Por favor introduzca el responsable del evento.');
     if (eventDates.trim().length < 1)
-      return alert('Por favor introduzca las fechas.')
+      return alert('Por favor introduzca las fechas.');
 
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const newEvent = await API.addEvent(name, eventResponsible, eventDates)
+      const newEvent = await API.addEvent(name, eventResponsible, eventDates);
 
       if (onAdd) {
-        onAdd(newEvent)
+        onAdd(newEvent);
       }
 
-      alert('Se ha agregado el evento')
-      props.navigation.goBack()
+      alert('Se ha agregado el evento');
+      props.navigation.goBack();
     } catch (error) {
-      console.log('error :>> ', error)
+      console.log('error :>> ', error);
 
       if (error.message === 'Ya existe un evento con ese nombre.') {
-        alert(error.message)
+        alert(error.message);
       } else {
-        alert('Hubo un error registrando el evento')
+        alert('Hubo un error registrando el evento');
       }
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.container} bounces={false}>
@@ -73,8 +73,8 @@ export default (props) => {
       />
       <Button text="Añadir" loading={loading} onPress={addEvent} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   label: {
@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
   },
-})
+});

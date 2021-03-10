@@ -1,8 +1,8 @@
-import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
-import { FontAwesome5 } from '@expo/vector-icons'
-import Button from './Button'
-import { RefreshControl } from 'react-native-web-refresh-control'
+import React from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import Button from './Button';
+import { RefreshControl } from 'react-native-web-refresh-control';
 
 export default (props) => {
   if (props.scroll !== undefined) {
@@ -36,7 +36,7 @@ export default (props) => {
           loading={props.refreshing}
         />
       </ScrollView>
-    )
+    );
   }
 
   return (
@@ -62,5 +62,5 @@ export default (props) => {
         loading={props.refreshing}
       />
     </View>
-  )
-}
+  );
+};
