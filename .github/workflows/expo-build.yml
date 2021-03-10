@@ -1,5 +1,11 @@
 name: Expo Build
-on: [pull_request]
+
+on: 
+  pull_request:
+    branches:
+      - master
+      - dev
+
 jobs:
   build:
     name: Build
