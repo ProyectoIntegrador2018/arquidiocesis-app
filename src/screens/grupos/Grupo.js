@@ -3,7 +3,7 @@ Nombre: Grupo.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la información de un grupo HEMA
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
 import {
   AlphabetList,
   ErrorView,
@@ -20,23 +20,23 @@ import {
   List,
   Item,
   Alert,
-} from '../../components'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { API } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+} from '../../components';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { API } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var [grupo, setGrupo] = useState(props.route.params.grupo)
-  var [miembros, setMiembros] = useState(false)
-  var [asistencias, setAsistencias] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
-  var [sending, setSending] = useState(false)
-  var [user, setUser] = useState(false)
-  var [coordinador, setCoordinador] = useState(false)
+  var [grupo, setGrupo] = useState(props.route.params.grupo);
+  var [miembros, setMiembros] = useState(false);
+  var [asistencias, setAsistencias] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
+  var [sending, setSending] = useState(false);
+  var [user, setUser] = useState(false);
+  var [coordinador, setCoordinador] = useState(false);
 
-  var { showOwner, onDelete, onEdit } = props.route.params
+  var { showOwner, onDelete, onEdit } = props.route.params;
 
   props.navigation.setOptions({
     headerStyle: {
@@ -50,103 +50,103 @@ export default (props) => {
       (user.type == 'admin' ||
         user.type == 'superadmin' ||
         user.id == grupo.coordinador.id) ? (
-        <TouchableOpacity onPress={addMember}>
-          <FontAwesome5
-            name={'plus'}
-            size={24}
-            style={{ paddingRight: 15 }}
-            color={'white'}
-          />
-        </TouchableOpacity>
-      ) : null,
-  })
+          <TouchableOpacity onPress={addMember}>
+            <FontAwesome5
+              name={'plus'}
+              size={24}
+              style={{ paddingRight: 15 }}
+              color={'white'}
+            />
+          </TouchableOpacity>
+        ) : null,
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
+    API.getUser().then(setUser);
 
-    setError(false)
-    var id = grupo.id
+    setError(false);
+    var id = grupo.id;
     API.getGrupo(id)
       .then((d) => {
-        d.id = id
-        setGrupo(d)
-        setMiembros(d.miembros || [])
-        setAsistencias(d.asistencias || [])
-        setError(false)
-        getCoordinador()
+        d.id = id;
+        setGrupo(d);
+        setMiembros(d.miembros || []);
+        setAsistencias(d.asistencias || []);
+        setError(false);
+        getCoordinador();
       })
       .catch((err) => {
         if (err.code == 999) {
-          Alert.alert('Error', 'No tienes acceso a este grupo')
+          Alert.alert('Error', 'No tienes acceso a este grupo');
         }
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getCoordinador = () => {
     if (grupo && grupo.coordinador) {
       API.getCoordinadores(false)
         .then((c) => {
-          setCoordinador(c.find((a) => a.id == grupo.coordinador))
+          setCoordinador(c.find((a) => a.id == grupo.coordinador));
         })
-        .catch((err) => {})
+        .catch((err) => {});
     }
-  }
+  };
 
   var getGrupo = () => {
-    setRefreshing(true)
-    setError(false)
-    var id = grupo.id
+    setRefreshing(true);
+    setError(false);
+    var id = grupo.id;
     API.getGrupo(grupo.id, true)
       .then((d) => {
-        d.id = id
-        setGrupo(d)
-        setMiembros(d.miembros || [])
-        setAsistencias(d.asistencias || [])
-        setRefreshing(false)
-        setError(false)
-        getCoordinador()
+        d.id = id;
+        setGrupo(d);
+        setMiembros(d.miembros || []);
+        setAsistencias(d.asistencias || []);
+        setRefreshing(false);
+        setError(false);
+        getCoordinador();
       })
       .catch((err) => {
         if (err.code == 999) {
-          Alert.alert('Error', 'No tienes acceso a este grupo')
+          Alert.alert('Error', 'No tienes acceso a este grupo');
         }
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   var goParroquia = () => {
-    var p = grupo.parroquia
-    p.readonly = true
-    props.navigation.navigate('Parroquia', p)
-  }
+    var p = grupo.parroquia;
+    p.readonly = true;
+    props.navigation.navigate('Parroquia', p);
+  };
 
   var goCapilla = () => {
-    var p = grupo.capilla
-    p.readonly = true
-    p.showParroquia = true
-    props.navigation.navigate('DetalleCapilla', p)
-  }
+    var p = grupo.capilla;
+    p.readonly = true;
+    p.showParroquia = true;
+    props.navigation.navigate('DetalleCapilla', p);
+  };
 
   var assistance = () => {
     props.navigation.navigate('AsistenciaGrupo', {
       grupo,
       new: true,
       onAssistance: (date) => {
-        setAsistencias((a) => Array.from(new Set([...a, date])))
+        setAsistencias((a) => Array.from(new Set([...a, date])));
       },
-    })
-  }
+    });
+  };
 
   var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var formatAsistencias = () => {
-    if (!asistencias) return []
+    if (!asistencias) return [];
     return asistencias
       .sort(
         (a, b) =>
@@ -155,8 +155,8 @@ export default (props) => {
       .map((a) => ({
         name: formatDate(a),
         id: a,
-      }))
-  }
+      }));
+  };
 
   var showAsistencia = (a) => {
     if (
@@ -168,21 +168,21 @@ export default (props) => {
         date: a.id,
         new: false,
         onDelete: (d) => {
-          setAsistencias((a) => a.filter((a) => a != d))
+          setAsistencias((a) => a.filter((a) => a != d));
         },
-      })
+      });
     }
-  }
+  };
 
   var addMember = () => {
     props.navigation.navigate('RegistroMiembro', {
       grupo,
       onAdd: (m) => {
-        if (!m) return
-        setMiembros([...miembros, m])
+        if (!m) return;
+        setMiembros([...miembros, m]);
       },
-    })
-  }
+    });
+  };
 
   var viewMember = (item) => {
     if (
@@ -193,57 +193,57 @@ export default (props) => {
         grupo,
         persona: item,
         onEdit: (id, miembro) => {
-          setMiembros([...miembros.filter((a) => a.id != id), miembro])
+          setMiembros([...miembros.filter((a) => a.id != id), miembro]);
         },
         onStatusChange: (id, status, miembro) => {
-          if (status > 0) setMiembros(miembros.filter((a) => a.id != id))
+          if (status > 0) setMiembros(miembros.filter((a) => a.id != id));
           else {
-            setMiembros([...miembros.filter((a) => a.id != id), miembro])
+            setMiembros([...miembros.filter((a) => a.id != id), miembro]);
           }
         },
-      })
+      });
     }
-  }
+  };
 
   var editGroup = () => {
     props.navigation.navigate('EditGrupo', {
       grupo,
       onEdit: (new_grupo) => {
-        setGrupo(new_grupo)
-        if (onEdit) onEdit(new_grupo.id, new_grupo)
+        setGrupo(new_grupo);
+        if (onEdit) onEdit(new_grupo.id, new_grupo);
       },
-    })
-  }
+    });
+  };
 
   var changeCoordinador = () => {
     props.navigation.navigate('ChangeCoordinador', {
       grupo,
       onEdit: (new_coordinador) => {
         setGrupo((g) => {
-          g.coordinador = new_coordinador
-          return g
-        })
+          g.coordinador = new_coordinador;
+          return g;
+        });
       },
-    })
-  }
+    });
+  };
 
   var bajasTemporales = () => {
     props.navigation.navigate('GrupoBajasTemporales', {
       id: grupo.id,
       onEdit: (id, miembro) => {
-        setMiembros([...miembros.filter((a) => a.id != id), miembro])
+        setMiembros([...miembros.filter((a) => a.id != id), miembro]);
       },
       onStatusChange: (id, status, miembro) => {
-        if (status > 0) setMiembros(miembros.filter((a) => a.id != id))
+        if (status > 0) setMiembros(miembros.filter((a) => a.id != id));
         else {
-          setMiembros([...miembros.filter((a) => a.id != id), miembro])
+          setMiembros([...miembros.filter((a) => a.id != id), miembro]);
         }
       },
-    })
-  }
+    });
+  };
 
   var deleteGroup = () => {
-    if (sending) return false
+    if (sending) return false;
     Alert.alert(
       '¿Eliminar grupo?',
       'Esto eliminará todos las asistencias, miembros y datos del grupo.',
@@ -253,40 +253,40 @@ export default (props) => {
           text: 'Eliminar',
           style: 'destructive',
           onPress: () => {
-            setSending(true)
+            setSending(true);
             API.deleteGrupo(grupo.id)
               .then((done) => {
-                setSending(false)
-                if (!done) return alert('Hubo un error eliminando el grupo.')
-                alert('Se ha eliminado el grupo.')
-                if (onDelete) onDelete(grupo.id)
-                props.navigation.goBack()
+                setSending(false);
+                if (!done) return alert('Hubo un error eliminando el grupo.');
+                alert('Se ha eliminado el grupo.');
+                if (onDelete) onDelete(grupo.id);
+                props.navigation.goBack();
               })
               .catch((err) => {
-                setSending(false)
-                console.log(err)
-                alert('Hubo un error eliminando el grupo.')
-              })
+                setSending(false);
+                console.log(err);
+                alert('Hubo un error eliminando el grupo.');
+              });
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var gotoCoordinador = (i) => {
     if (!coordinador) {
-      Alert.alert('Error', 'El grupo no tiene coordinador.')
+      Alert.alert('Error', 'El grupo no tiene coordinador.');
     }
     props.navigation.navigate('DetalleCoordinador', {
       persona: coordinador,
-    })
-  }
+    });
+  };
 
   var isAcompanante = () => {
     return (
       user.type == 'acompañante_decanato' || user.type == 'acompañante_zona'
-    )
-  }
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -318,12 +318,12 @@ export default (props) => {
               (user.type == 'admin' ||
                 user.type == 'superadmin' ||
                 user.id == grupo.coordinador.id) && (
-                <Button
-                  text={'Tomar asistencia'}
-                  style={{ width: 200, alignSelf: 'center', marginBottom: 0 }}
-                  onPress={assistance}
-                />
-              )}
+              <Button
+                text={'Tomar asistencia'}
+                style={{ width: 200, alignSelf: 'center', marginBottom: 0 }}
+                onPress={assistance}
+              />
+            )}
             {grupo.parroquia && showOwner !== false ? (
               <View>
                 <Text style={styles.sectionText}>VER PARROQUIA</Text>
@@ -473,8 +473,8 @@ export default (props) => {
         )}
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -525,4 +525,4 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingLeft: 15,
   },
-})
+});

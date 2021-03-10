@@ -1,5 +1,5 @@
-import React from 'react'
-import Input from './Input'
+import React from 'react';
+import Input from './Input';
 
 export default (props) => {
   var selectValue = () => {
@@ -10,8 +10,8 @@ export default (props) => {
       renderItem: props.renderItem,
       onSelect: props.onSelect,
       sort: props.sort || 'nombre',
-    })
-  }
+    });
+  };
 
   return (
     <Input
@@ -22,5 +22,5 @@ export default (props) => {
       icon="chevron-right"
       required={props.required}
     />
-  )
-}
+  );
+};

@@ -1,21 +1,21 @@
-import React from 'react'
+import React from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
   TouchableWithoutFeedback,
-} from 'react-native'
-import { FontAwesome5 } from '@expo/vector-icons'
+} from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default (props) => {
   var multiline =
-    typeof props.multiline !== 'undefined' && props.multiline !== false
+    typeof props.multiline !== 'undefined' && props.multiline !== false;
   var readonly = !(
     typeof props.readonly === 'undefined' || props.readonly === false
-  )
+  );
   var required =
-    typeof props.required !== 'undefined' && props.required !== false
+    typeof props.required !== 'undefined' && props.required !== false;
 
   return (
     <View style={[styles.container, props.style]}>
@@ -69,8 +69,8 @@ export default (props) => {
         </TouchableWithoutFeedback>
       )}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
     color: '#c42727',
     fontWeight: 'bold',
   },
-})
+});

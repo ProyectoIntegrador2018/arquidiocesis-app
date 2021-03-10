@@ -3,65 +3,65 @@ Nombre: GrupoBajasTemporales.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la información de las bajas temporales registradas en un grupo HEMA
 */
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, ErrorView, LoadingView } from '../../components'
-import { API } from '../../lib'
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { AlphabetList, ErrorView, LoadingView } from '../../components';
+import { API } from '../../lib';
 
 export default (props) => {
-  var { onEdit, onStatusChange, id } = props.route.params
+  var { onEdit, onStatusChange, id } = props.route.params;
 
-  var [data, setData] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
+  var [data, setData] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
 
   props.navigation.setOptions({
     headerTitle: 'Bajas temporales',
-  })
+  });
 
   useEffect(() => {
     API.getGrupoBajasTemporales(id)
       .then((d) => {
-        setData(d)
-        setRefreshing(false)
-        setError(false)
+        setData(d);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getMiembros = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     API.getGrupoBajasTemporales(id, true)
       .then((d) => {
-        setData(d)
-        setError(false)
-        setRefreshing(false)
+        setData(d);
+        setError(false);
+        setRefreshing(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   var viewMiembro = (item) => {
     props.navigation.navigate('DetalleMiembro', {
       persona: item,
       onEdit: (id, miembro) => {
-        setData([...data.filter((a) => a.id != id), miembro])
+        setData([...data.filter((a) => a.id != id), miembro]);
       },
       onStatusChange: (id, status, miembro) => {
-        if (status != 1) setData(data.filter((a) => a.id != id))
+        if (status != 1) setData(data.filter((a) => a.id != id));
         else {
-          setData([...data.filter((a) => a.id != id), miembro])
+          setData([...data.filter((a) => a.id != id), miembro]);
         }
-        onStatusChange(id, status, miembro)
+        onStatusChange(id, status, miembro);
       },
-    })
-  }
+    });
+  };
 
   return (
     <ScrollView
@@ -92,8 +92,8 @@ export default (props) => {
         </View>
       )}
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 15,
   },
-})
+});

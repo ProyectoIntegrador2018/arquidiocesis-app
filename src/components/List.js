@@ -1,26 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { FontAwesome5 } from '@expo/vector-icons'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default (props) => {
   var renderChild = () => {
-    var clickable = true
+    var clickable = true;
     if (props.clickable == false) {
-      clickable = props.clickable
+      clickable = props.clickable;
     }
     return props.data.map((a, ix) => (
       <View key={'item-' + ix}>
         {props.renderItem ? (
           <TouchableOpacity
             onPress={() => {
-              if (props.onSelect) props.onSelect(a)
+              if (props.onSelect) props.onSelect(a);
             }}>
             <View style={[styles.item, { backgroundColor: 'white' }]}>
               {props.renderItem(a)}
@@ -30,8 +30,8 @@ export default (props) => {
           <ListItem data={a} onPress={props.onSelect} clickable={clickable} />
         )}
       </View>
-    ))
-  }
+    ));
+  };
 
   if (props.scroll !== false) {
     return (
@@ -48,17 +48,17 @@ export default (props) => {
         }>
         {renderChild()}
       </ScrollView>
-    )
+    );
   } else {
-    return <View>{renderChild()}</View>
+    return <View>{renderChild()}</View>;
   }
-}
+};
 
 var ListItem = (props) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        if (props.onPress) props.onPress(props.data)
+        if (props.onPress) props.onPress(props.data);
       }}>
       <View style={{ backgroundColor: 'white' }}>
         <View style={styles.item}>
@@ -72,8 +72,8 @@ var ListItem = (props) => {
         </View>
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   item: {
@@ -86,4 +86,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-})
+});

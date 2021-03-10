@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { List, AlphabetList } from '../components'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { List, AlphabetList } from '../components';
 
 export default (props) => {
   props.navigation.setOptions({
     headerTitle: props.route.params.name,
-  })
+  });
 
   var onSelect = (i) => {
-    if (props.route.params.onSelect) props.route.params.onSelect(i)
-    props.navigation.goBack()
-  }
+    if (props.route.params.onSelect) props.route.params.onSelect(i);
+    props.navigation.goBack();
+  };
 
   return (
     <ScrollView
@@ -39,8 +39,8 @@ export default (props) => {
         onSelect={onSelect}
       />
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   date: {
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontWeight: '600',
   },
-})
+});

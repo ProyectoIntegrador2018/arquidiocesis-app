@@ -3,54 +3,54 @@ Nombre: Acompañantes.js
 Usuario con acceso: Admin
 Descripción: Pantalla para ver la información de todos los acompañantes en el sistema
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, Button, ErrorView } from '../../components'
-import { API } from '../../lib'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { AlphabetList, Button, ErrorView } from '../../components';
+import { API } from '../../lib';
 
 export default (props) => {
-  var [data, setData] = useState(false)
-  var [error, setError] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [user, setUser] = useState(false)
+  var [data, setData] = useState(false);
+  var [error, setError] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [user, setUser] = useState(false);
 
   useEffect(() => {
-    API.getUser().then(setUser)
+    API.getUser().then(setUser);
 
-    setRefreshing(true)
+    setRefreshing(true);
     API.getAcompanantes(false)
       .then((d) => {
-        setRefreshing(false)
-        setData(d)
-        setError(false)
+        setRefreshing(false);
+        setData(d);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getAcompanantes = () => {
-    setRefreshing(true)
-    setError(false)
+    setRefreshing(true);
+    setError(false);
     API.getAcompanantes(true)
       .then((d) => {
-        setRefreshing(false)
-        setData(d)
-        setError(false)
+        setRefreshing(false);
+        setData(d);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   if (error) {
     return (
@@ -59,7 +59,7 @@ export default (props) => {
         refreshing={refreshing}
         retry={getAcompanantes}
       />
-    )
+    );
   }
 
   if (data === false) {
@@ -76,46 +76,46 @@ export default (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   var detalleAcompanante = (item) => {
-    console.log('item :>> ', item)
+    console.log('item :>> ', item);
     props.navigation.navigate('DetalleAcompanante', {
       acompanante: item,
       onEdit: (id, coord) => {
-        setData([...data.filter((a) => a.id != id), coord])
+        setData([...data.filter((a) => a.id != id), coord]);
       },
       onDelete: (id) => {
-        setData(data.filter((a) => a.id != id))
+        setData(data.filter((a) => a.id != id));
       },
-    })
-  }
+    });
+  };
 
   const addAcompanante = () => {
-    console.log('addAcompanante start')
+    console.log('addAcompanante start');
     props.navigation.navigate('RegistroAcompanante', {
       onAdd: (c) => {
         if (c.id === undefined) {
-          getAcompanantes()
-          return
+          getAcompanantes();
+          return;
         }
 
         if (!data) {
-          return
+          return;
         }
 
-        setData([...data, c])
+        setData([...data, c]);
       },
-    })
-  }
+    });
+  };
 
   var formatData = () => {
     return data.map((a) => ({
       ...a,
       nombre_completo: `${a.nombre} ${a.apellido_paterno}`,
-    }))
-  }
+    }));
+  };
 
   return (
     <ScrollView
@@ -154,8 +154,8 @@ export default (props) => {
         )}
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -166,4 +166,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});

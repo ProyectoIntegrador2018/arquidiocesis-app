@@ -3,43 +3,43 @@ Nombre: EditarParticipante.js
 Usuario con acceso: Admin, Acompañante
 Descripción: Pantalla para editar la información a detalle de un participante en un grupo de capacitación 
 */
-import React, { useState, useRef } from 'react'
-import { Text, StyleSheet } from 'react-native'
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState, useRef } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { persona, capacitacion_id, onEdit } = props.route.params
+  var { persona, capacitacion_id, onEdit } = props.route.params;
 
-  var bd = moment.unix(persona.fecha_nacimiento._seconds)
-  if (!bd.isValid()) bd = moment()
+  var bd = moment.unix(persona.fecha_nacimiento._seconds);
+  if (!bd.isValid()) bd = moment();
 
-  var [loading, setLoading] = useState(false)
-  var [name, setName] = useState(persona.nombre)
-  var [apPaterno, setApPaterno] = useState(persona.apellido_paterno)
-  var [apMaterno, setApMaterno] = useState(persona.apellido_materno)
-  var [nombreCorto, setNombreCorto] = useState(persona.nombre_corto)
-  var [email, setEmail] = useState(persona.email)
-  var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'))
-  var [gender, setGender] = useState(false)
-  var [estadoCivil, setEstadoCivil] = useState(false)
-  var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio)
-  var [colonia, setColonia] = useState(persona.domicilio.colonia)
-  var [municipio, setMunicipio] = useState(persona.domicilio.municipio)
-  var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa)
-  var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil)
-  var [escolaridad, setEscolaridad] = useState(false)
-  var [oficio, setOficio] = useState(false)
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState(persona.nombre);
+  var [apPaterno, setApPaterno] = useState(persona.apellido_paterno);
+  var [apMaterno, setApMaterno] = useState(persona.apellido_materno);
+  var [nombreCorto, setNombreCorto] = useState(persona.nombre_corto);
+  var [email, setEmail] = useState(persona.email);
+  var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'));
+  var [gender, setGender] = useState(false);
+  var [estadoCivil, setEstadoCivil] = useState(false);
+  var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio);
+  var [colonia, setColonia] = useState(persona.domicilio.colonia);
+  var [municipio, setMunicipio] = useState(persona.domicilio.municipio);
+  var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa);
+  var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
+  var [escolaridad, setEscolaridad] = useState(false);
+  var [oficio, setOficio] = useState(false);
 
   props.navigation.setOptions({
     headerTitle: 'Editar Participante',
-  })
+  });
 
   var save = () => {
-    if (loading) return
+    if (loading) return;
     var data = {
       nombre: name,
       apellido_paterno: apPaterno,
@@ -58,7 +58,7 @@ export default (props) => {
         telefono_casa: phoneHome,
         telefono_movil: phoneMobile,
       },
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       nombre: {
@@ -84,45 +84,45 @@ export default (props) => {
         prompt: 'Favor de introducir la escolaridad.',
       },
       oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
-    })
+    });
 
     if (!valid) {
-      return Alert.alert('Error', prompt)
+      return Alert.alert('Error', prompt);
     }
 
-    setLoading(true)
+    setLoading(true);
     API.editParticipante(capacitacion_id, persona.id, data)
       .then((done) => {
-        setLoading(false)
+        setLoading(false);
         if (!done)
-          return Alert.alert('Error', 'Hubo un error editando el participante.')
+          return Alert.alert('Error', 'Hubo un error editando el participante.');
         data.fecha_nacimiento = {
           _seconds: moment(birthday, 'YYYY-MM-DD').unix(),
-        }
-        onEdit(data)
-        Alert.alert('Exito', 'Se ha editado el participante.')
+        };
+        onEdit(data);
+        Alert.alert('Exito', 'Se ha editado el participante.');
       })
       .catch((err) => {
-        console.log(err)
-        Alert.alert('Error', 'Hubo un error editando el miembro.')
-        setLoading(false)
-      })
-  }
+        console.log(err);
+        Alert.alert('Error', 'Hubo un error editando el miembro.');
+        setLoading(false);
+      });
+  };
 
   var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var getEstadoCivil = () => {
     return ['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado'].indexOf(
       persona.estado_civil
-    )
-  }
+    );
+  };
 
   var getGenero = () => {
-    return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo)
-  }
+    return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo);
+  };
 
   var getEscolaridad = () => {
     return [
@@ -132,8 +132,8 @@ export default (props) => {
       'Técnica carrera',
       'Maestría',
       'Doctorado',
-    ].indexOf(persona.escolaridad)
-  }
+    ].indexOf(persona.escolaridad);
+  };
 
   var getOficio = () => {
     return [
@@ -146,8 +146,8 @@ export default (props) => {
       'Mecánico',
       'Músico',
       'Chofer',
-    ].indexOf(persona.oficio)
-  }
+    ].indexOf(persona.oficio);
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
@@ -247,8 +247,8 @@ export default (props) => {
 
       <Button text="Guardar" loading={loading} onPress={save} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -284,4 +284,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 20,
   },
-})
+});

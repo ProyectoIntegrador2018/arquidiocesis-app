@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, Platform } from 'react-native'
-import Input from './Input'
-import DatePicker from 'react-native-datepicker'
-import moment from 'moment/min/moment-with-locales'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import Input from './Input';
+import DatePicker from 'react-native-datepicker';
+import moment from 'moment/min/moment-with-locales';
 
 export default (props) => {
-  var pickerRef = useRef(null)
+  var pickerRef = useRef(null);
 
   var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var mobilePicker = () => {
     return (
@@ -36,8 +36,8 @@ export default (props) => {
           onDateChange={props.onDateChange}
         />
       </View>
-    )
-  }
+    );
+  };
 
   var webPicker = () => {
     return (
@@ -67,34 +67,34 @@ export default (props) => {
           }}
         />
       </View>
-    )
-  }
+    );
+  };
 
   var datePicker = () => {
     return Platform.select({
       ios: mobilePicker(),
       android: mobilePicker(),
       web: webPicker(),
-    })
-  }
+    });
+  };
 
   var pressInput = () => {
-    pickerRef.current.onPressDate()
-  }
+    pickerRef.current.onPressDate();
+  };
 
   var webChange = (v) => {
-    if (props.onDateChange) props.onDateChange(v.target.value)
-  }
+    if (props.onDateChange) props.onDateChange(v.target.value);
+  };
 
   var required =
-    typeof props.required !== 'undefined' && props.required !== false
+    typeof props.required !== 'undefined' && props.required !== false;
 
   return Platform.select({
     ios: mobilePicker(),
     android: mobilePicker(),
     web: datePicker(),
-  })
-}
+  });
+};
 
 const styles = StyleSheet.create({
   label: {
@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
     color: '#c42727',
     fontWeight: 'bold',
   },
-})
+});

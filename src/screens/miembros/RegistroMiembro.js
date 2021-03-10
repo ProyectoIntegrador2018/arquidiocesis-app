@@ -3,59 +3,59 @@ Nombre: RegistroMiembro.js
 Usuario con acceso: Admin
 Descripción: Pantalla para registrar un miembro de un grupo HEMA
 */
-import React, { useState, useRef } from 'react'
-import { Text, StyleSheet, CheckBox, View, Switch } from 'react-native'
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState, useRef } from 'react';
+import { Text, StyleSheet, CheckBox, View, Switch } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var [loading, setLoading] = useState(false)
-  var [name, setName] = useState('')
-  var [apPaterno, setApPaterno] = useState('')
-  var [apMaterno, setApMaterno] = useState('')
-  var [email, setEmail] = useState('')
-  var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'))
-  var [gender, setGender] = useState(false)
-  var [estadoCivil, setEstadoCivil] = useState(false)
-  var [domicilio, setDomicilio] = useState('')
-  var [colonia, setColonia] = useState('')
-  var [municipio, setMunicipio] = useState('')
-  var [phoneHome, setPhoneHome] = useState('')
-  var [phoneMobile, setPhoneMobile] = useState('')
-  var [phoneMobile, setPhoneMobile] = useState('')
-  var [escolaridad, setEscolaridad] = useState(false)
-  var [oficio, setOficio] = useState(false)
-  let [hasLaptop, setHasLaptop] = useState(false)
-  let [hasTablet, setHasTablet] = useState(false)
-  let [hasSmartphone, setHasSmartphone] = useState(false)
-  let [hasFacebook, setHasFacebook] = useState(false)
-  let [hasTwitter, setHasTwitter] = useState(false)
-  let [hasInstagram, setHasInstagram] = useState(false)
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState('');
+  var [apPaterno, setApPaterno] = useState('');
+  var [apMaterno, setApMaterno] = useState('');
+  var [email, setEmail] = useState('');
+  var [birthday, setBirthday] = useState(moment().format('YYYY-MM-DD'));
+  var [gender, setGender] = useState(false);
+  var [estadoCivil, setEstadoCivil] = useState(false);
+  var [domicilio, setDomicilio] = useState('');
+  var [colonia, setColonia] = useState('');
+  var [municipio, setMunicipio] = useState('');
+  var [phoneHome, setPhoneHome] = useState('');
+  var [phoneMobile, setPhoneMobile] = useState('');
+  var [phoneMobile, setPhoneMobile] = useState('');
+  var [escolaridad, setEscolaridad] = useState(false);
+  var [oficio, setOficio] = useState(false);
+  let [hasLaptop, setHasLaptop] = useState(false);
+  let [hasTablet, setHasTablet] = useState(false);
+  let [hasSmartphone, setHasSmartphone] = useState(false);
+  let [hasFacebook, setHasFacebook] = useState(false);
+  let [hasTwitter, setHasTwitter] = useState(false);
+  let [hasInstagram, setHasInstagram] = useState(false);
 
-  var [bloodType, setBloodType] = useState(false)
-  var [medicalService, setMedicalService] = useState(false)
-  var [alergic, setAlergic] = useState(false)
-  var [alergicDesc, setAlergicDesc] = useState('')
-  var [cardiovascular, setCardiovascular] = useState(false)
-  var [azucar, setAzucar] = useState(false)
-  var [hipertension, setHipertension] = useState(false)
-  var [sobrepeso, setSobrepeso] = useState(false)
-  var [socialSecurity, setSocialSecurity] = useState(false)
-  var [disability, setDisability] = useState(false)
-  var [disabilityDesc, setDisabilityDesc] = useState('')
-  var [ambulance, setAmbulance] = useState(false)
+  var [bloodType, setBloodType] = useState(false);
+  var [medicalService, setMedicalService] = useState(false);
+  var [alergic, setAlergic] = useState(false);
+  var [alergicDesc, setAlergicDesc] = useState('');
+  var [cardiovascular, setCardiovascular] = useState(false);
+  var [azucar, setAzucar] = useState(false);
+  var [hipertension, setHipertension] = useState(false);
+  var [sobrepeso, setSobrepeso] = useState(false);
+  var [socialSecurity, setSocialSecurity] = useState(false);
+  var [disability, setDisability] = useState(false);
+  var [disabilityDesc, setDisabilityDesc] = useState('');
+  var [ambulance, setAmbulance] = useState(false);
 
-  var pickerRef = useRef(null)
+  var pickerRef = useRef(null);
 
-  var onAdd = props.route.params.onAdd
-  var group = props.route.params.grupo
+  var onAdd = props.route.params.onAdd;
+  var group = props.route.params.grupo;
 
   props.navigation.setOptions({
     headerTitle: 'Registro Miembro',
-  })
+  });
 
   const lista_oficios = [
     { label: 'Ninguno', value: 'Ninguno' },
@@ -85,10 +85,10 @@ export default (props) => {
     { label: 'Dentista', value: 'Dentista' },
     { label: 'Estilista', value: 'Estilista' },
     { label: 'Policia', value: 'Policia' },
-  ]
+  ];
 
   var doRegister = () => {
-    if (loading) return
+    if (loading) return;
 
     var data = {
       nombre: name,
@@ -127,7 +127,7 @@ export default (props) => {
         discapacidad_desc: disability ? disabilityDesc : '',
         ambulancia: ambulance,
       },
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       nombre: {
@@ -153,43 +153,43 @@ export default (props) => {
         prompt: 'Favor de introducir la escolaridad.',
       },
       oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
-    })
+    });
 
     if (!valid) {
-      return Alert.alert('Error', prompt)
+      return Alert.alert('Error', prompt);
     }
 
     if (!bloodType || !medicalService || !socialSecurity) {
       return Alert.alert(
         'Error',
         'Favor de llenar información de ficha médica.'
-      )
+      );
     }
 
-    setLoading(true)
+    setLoading(true);
     API.registerMember(group.id, data)
       .then((new_member) => {
-        setLoading(false)
+        setLoading(false);
         if (!new_member)
-          return Alert.alert('Error', 'Hubo un error registrando el miembro')
-        if (onAdd) onAdd(new_member)
-        Alert.alert('Exito', 'Se ha agregado el miembro al grupo.')
-        props.navigation.goBack()
+          return Alert.alert('Error', 'Hubo un error registrando el miembro');
+        if (onAdd) onAdd(new_member);
+        Alert.alert('Exito', 'Se ha agregado el miembro al grupo.');
+        props.navigation.goBack();
       })
       .catch((err) => {
         if (err.code && err.code == 999) {
-          Alert.alert('Error', 'No tienes acceso a este grupo.')
+          Alert.alert('Error', 'No tienes acceso a este grupo.');
         } else {
-          Alert.alert('Error', 'Hubo un error registrando el miembro')
+          Alert.alert('Error', 'Hubo un error registrando el miembro');
         }
-        setLoading(false)
-      })
-  }
+        setLoading(false);
+      });
+  };
 
   var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
@@ -415,8 +415,8 @@ export default (props) => {
 
       <Button text="Registrar" loading={loading} onPress={doRegister} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -474,4 +474,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
-})
+});

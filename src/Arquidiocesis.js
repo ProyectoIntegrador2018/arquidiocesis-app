@@ -3,18 +3,18 @@ Nombre: Arquidiócesis.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Archivo que gestiona el tab navigation bar y el stack de pantallas de la aplicación
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
   StatusBar,
   TouchableOpacity,
   Platform,
-} from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { FontAwesome5 } from '@expo/vector-icons'
+} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import {
   Login,
@@ -76,19 +76,19 @@ import {
   Objetivos,
   ObjetivosDelAño,
   ObjetivosDecanato,
-} from './screens'
-import { API } from './lib'
+} from './screens';
+import { API } from './lib';
 
-var Tab = createBottomTabNavigator()
+var Tab = createBottomTabNavigator();
 var Home = (props) => {
-  var [user, setUser] = useState(false)
-  var { navigation } = props
+  var [user, setUser] = useState(false);
+  var { navigation } = props;
 
   var gotoUser = () => {
     props.navigation.navigate('User', {
       logout: props.route.params.logout,
-    })
-  }
+    });
+  };
 
   navigation.setOptions({
     headerLeft: () => (
@@ -105,97 +105,97 @@ var Home = (props) => {
       </TouchableOpacity>
     ),
     headerTitle: 'Arquidiocesis',
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
-  }, [])
+    API.getUser().then(setUser);
+  }, []);
 
   var showTabs = (user_type) => {
     switch (user_type) {
-      case 'admin':
-        return (
-          <>
-            <Tab.Screen name="Parroquias" component={Parroquias} />
-            <Tab.Screen name="Acompañantes" component={Acompanantes} />
-            <Tab.Screen name="Coordina" component={Coordinadores} />
-            <Tab.Screen name="HeMa" component={Grupos} />
-            <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Capacitación" component={Capacitaciones} />
-          </>
-        )
+    case 'admin':
+      return (
+        <>
+          <Tab.Screen name="Parroquias" component={Parroquias} />
+          <Tab.Screen name="Acompañantes" component={Acompanantes} />
+          <Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+          <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </>
+      );
 
-      case 'integrante_chm':
-        return (
-          <>
-            <Tab.Screen name="Parroquias" component={Parroquias} />
-            <Tab.Screen name="Acompañantes" component={Acompanantes} />
-            <Tab.Screen name="Coordina" component={Coordinadores} />
-            <Tab.Screen name="HeMa" component={Grupos} />
-            <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Capacitación" component={Capacitaciones} />
-          </>
-        )
+    case 'integrante_chm':
+      return (
+        <>
+          <Tab.Screen name="Parroquias" component={Parroquias} />
+          <Tab.Screen name="Acompañantes" component={Acompanantes} />
+          <Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+          <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </>
+      );
 
-      case 'coordinador':
-        return (
-          <>
-            <Tab.Screen name="HeMa" component={Grupos} />
-            <Tab.Screen name="Calendario" component={Calendar} />
-          </>
-        )
+    case 'coordinador':
+      return (
+        <>
+          <Tab.Screen name="HeMa" component={Grupos} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+        </>
+      );
 
-      case 'acompañante_zona':
-      case 'acompañante_decanato':
-        return (
-          <>
-            <Tab.Screen name="Coordina" component={Coordinadores} />
-            <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Capacitación" component={Capacitaciones} />
-          </>
-        )
+    case 'acompañante_zona':
+    case 'acompañante_decanato':
+      return (
+        <>
+          <Tab.Screen name="Coordina" component={Coordinadores} />
+          <Tab.Screen name="Calendario" component={Calendar} />
+          <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </>
+      );
 
-      case 'capacitacion':
-        return (
-          <>
-            <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Capacitación" component={Capacitaciones} />
-          </>
-        )
+    case 'capacitacion':
+      return (
+        <>
+          <Tab.Screen name="Calendario" component={Calendar} />
+          <Tab.Screen name="Capacitación" component={Capacitaciones} />
+        </>
+      );
 
-      default:
-        // Error
-        return <Tab.Screen name="Error" component={User} />
+    default:
+      // Error
+      return <Tab.Screen name="Error" component={User} />;
     }
-  }
+  };
 
   return (
     <Tab.Navigator
       initialRouteName="Parroquias"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName
+          let iconName;
           switch (route.name) {
-            case 'Parroquias':
-              iconName = 'church'
-              break
-            case 'Acompañantes':
-              iconName = 'globe-americas'
-              break
-            case 'Coordina':
-              iconName = 'user-circle'
-              break
-            case 'HeMa':
-              iconName = 'users'
-              break
-            case 'Calendario':
-              iconName = 'calendar'
-              break
-            case 'Capacitación':
-              iconName = 'chalkboard-teacher'
-              break
-            default:
-              iconName = 'exclamation-circle'
+          case 'Parroquias':
+            iconName = 'church';
+            break;
+          case 'Acompañantes':
+            iconName = 'globe-americas';
+            break;
+          case 'Coordina':
+            iconName = 'user-circle';
+            break;
+          case 'HeMa':
+            iconName = 'users';
+            break;
+          case 'Calendario':
+            iconName = 'calendar';
+            break;
+          case 'Capacitación':
+            iconName = 'chalkboard-teacher';
+            break;
+          default:
+            iconName = 'exclamation-circle';
           }
           return (
             <FontAwesome5
@@ -205,7 +205,7 @@ var Home = (props) => {
               style={{ paddingTop: 5 }}
               solid
             />
-          )
+          );
         },
       })}
       tabBarOptions={{
@@ -215,11 +215,11 @@ var Home = (props) => {
       }}>
       {showTabs(user.type)}
     </Tab.Navigator>
-  )
-}
+  );
+};
 
 // The app's main stack.
-var Stack = createStackNavigator()
+var Stack = createStackNavigator();
 var App = (props) => {
   return (
     <NavigationContainer>
@@ -332,39 +332,39 @@ var App = (props) => {
         <Stack.Screen name="ObjetivosDecanato" component={ObjetivosDecanato} />
       </Stack.Navigator>
     </NavigationContainer>
-  )
-}
+  );
+};
 
 export default (props) => {
-  var [login, setLogin] = useState(false)
+  var [login, setLogin] = useState(false);
 
   // This function runs when the screen is shown.
   useEffect(() => {
     // Set the logout function that will be run when
     // the user logs out.
     API.setOnLogout(() => {
-      setLogin(null)
-    })
-    checkLogin()
-  }, [])
+      setLogin(null);
+    });
+    checkLogin();
+  }, []);
 
   // Check to see if the user is logged in.
   var checkLogin = () => {
     API.getLogin().then((user) => {
-      if (!user) return setLogin(null)
-      setLogin(user)
-    })
-  }
+      if (!user) return setLogin(null);
+      setLogin(user);
+    });
+  };
 
   var onLogin = (user) => {
-    setLogin(user)
-  }
+    setLogin(user);
+  };
 
   var logout = () => {
     API.logout().then((done) => {
-      setLogin(null)
-    })
-  }
+      setLogin(null);
+    });
+  };
 
   return (
     <View style={StyleSheet.absoluteFillObject}>
@@ -376,5 +376,5 @@ export default (props) => {
         <App user={login} logout={logout} />
       )}
     </View>
-  )
-}
+  );
+};

@@ -3,7 +3,7 @@ Nombre: AsistenciaGrupo.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para tomar asistencia en los grupos HEMA
 */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,35 +11,35 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-} from 'react-native'
-import { CheckBox } from 'react-native-elements'
-import { Input, Alert, DatePicker } from '../../components'
-import { Util, API } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+} from 'react-native';
+import { CheckBox } from 'react-native-elements';
+import { Input, Alert, DatePicker } from '../../components';
+import { Util, API } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 var Screen = (props) => {
-  var isNew = props.route.params.new
-  var [data, setData] = useState(false)
+  var isNew = props.route.params.new;
+  var [data, setData] = useState(false);
   var [date, setDate] = useState(
     isNew ? moment().format('YYYY-MM-DD') : props.route.params.date
-  )
-  var [sending, setSending] = useState(false)
-  var [assistance, setAssistance] = useState([])
-  var [agenda, setAgenda] = useState('')
-  var [commentarios, setCommentarios] = useState('')
-  var pickerRef = useRef(null)
+  );
+  var [sending, setSending] = useState(false);
+  var [assistance, setAssistance] = useState([]);
+  var [agenda, setAgenda] = useState('');
+  var [commentarios, setCommentarios] = useState('');
+  var pickerRef = useRef(null);
 
   props.navigation.setOptions({
     headerTitle: isNew ? 'Tomar asistencia' : 'Editar asistencia',
-  })
+  });
 
   // When the screen is shown get data for this group.
   useEffect(() => {
     if (isNew) {
       API.getGrupo(props.route.params.grupo.id, true)
         .then((g) => {
-          setData(g.miembros)
+          setData(g.miembros);
         })
         .catch((err) => {
           Alert.alert(
@@ -49,23 +49,23 @@ var Screen = (props) => {
               {
                 style: 'cancel',
                 onPress: () => {
-                  props.navigation.goBack()
+                  props.navigation.goBack();
                 },
               },
             ]
-          )
-        })
+          );
+        });
     } else {
       API.getAsistencia(props.route.params.grupo.id, props.route.params.date)
         .then((d) => {
-          setData(d.miembros)
-          setAssistance(d.miembros.filter((a) => a.assist).map((a) => a.id))
-          setAgenda(d.agenda)
-          setCommentarios(d.commentarios)
+          setData(d.miembros);
+          setAssistance(d.miembros.filter((a) => a.assist).map((a) => a.id));
+          setAgenda(d.agenda);
+          setCommentarios(d.commentarios);
         })
         .catch((err) => {
           if (err.code == 34) {
-            props.route.params.onDelete(date)
+            props.route.params.onDelete(date);
           }
           Alert.alert(
             'Error cargando asistencia',
@@ -74,14 +74,14 @@ var Screen = (props) => {
               {
                 style: 'cancel',
                 onPress: () => {
-                  props.navigation.goBack()
+                  props.navigation.goBack();
                 },
               },
             ]
-          )
-        })
+          );
+        });
     }
-  }, [])
+  }, []);
 
   // Cargando datos
   if (data === false) {
@@ -98,32 +98,32 @@ var Screen = (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   var onCheck = (id, checked) => {
     setAssistance((p) =>
       checked ? Array.from(new Set([...p, id])) : p.filter((a) => a != id)
-    )
-  }
+    );
+  };
 
   // Ordenar datos
   var data_full_name = data.map((x) => {
     return {
       ...x,
       full_name: x.nombre + ' ' + x.apellido_paterno + ' ' + x.apellido_materno,
-    }
-  })
-  var orderedData = Util.organizeListData(data_full_name, 'full_name')
-  var components = []
-  var headers = []
+    };
+  });
+  var orderedData = Util.organizeListData(data_full_name, 'full_name');
+  var components = [];
+  var headers = [];
   for (var i in orderedData) {
-    headers.push(components.length)
+    headers.push(components.length);
     components.push(
       <View key={'header-' + i} style={styles.header}>
         <Text style={styles.headerText}>{i}</Text>
       </View>
-    )
+    );
     components.push(
       ...orderedData[i].map((a, ix) => (
         <CheckboxItem
@@ -133,13 +133,13 @@ var Screen = (props) => {
           checked={assistance.findIndex((b) => b == a.id) != -1}
         />
       ))
-    )
+    );
   }
 
   var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY')
-    return f.charAt(0).toUpperCase() + f.substr(1)
-  }
+    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+    return f.charAt(0).toUpperCase() + f.substr(1);
+  };
 
   var showOverwrite = () => {
     Alert.alert(
@@ -150,15 +150,15 @@ var Screen = (props) => {
         {
           text: 'Reemplazar',
           onPress: () => {
-            saveAsistencia(true)
+            saveAsistencia(true);
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var saveAsistencia = (force = false) => {
-    setSending(true)
+    setSending(true);
     if (isNew) {
       API.registerAsistencia(
         props.route.params.grupo.id,
@@ -169,19 +169,19 @@ var Screen = (props) => {
         force
       )
         .then((done) => {
-          setSending(false)
-          props.route.params.onAssistance(done)
-          alert('Se ha guardado la asistencia.')
-          props.navigation.goBack()
+          setSending(false);
+          props.route.params.onAssistance(done);
+          alert('Se ha guardado la asistencia.');
+          props.navigation.goBack();
         })
         .catch((err) => {
           if (err.code == 52 && !force) {
-            showOverwrite()
+            showOverwrite();
           } else {
-            setSending(false)
-            alert('Hubo un error marcando la asistencia.')
+            setSending(false);
+            alert('Hubo un error marcando la asistencia.');
           }
-        })
+        });
     } else {
       API.saveAsistencia(
         props.route.params.grupo.id,
@@ -192,18 +192,18 @@ var Screen = (props) => {
       )
         .then((done) => {
           if (done.deleted) {
-            props.route.params.onDelete(done.date)
+            props.route.params.onDelete(done.date);
           }
-          setSending(false)
-          alert('Se ha guardado la asistencia.')
-          props.navigation.goBack()
+          setSending(false);
+          alert('Se ha guardado la asistencia.');
+          props.navigation.goBack();
         })
         .catch((err) => {
-          setSending(false)
-          alert('Hubo un error marcando la asistencia.')
-        })
+          setSending(false);
+          alert('Hubo un error marcando la asistencia.');
+        });
     }
-  }
+  };
 
   return (
     <View style={StyleSheet.absoluteFillObject}>
@@ -280,21 +280,21 @@ var Screen = (props) => {
         </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default Screen
+export default Screen;
 
 var CheckboxItem = (props) => {
-  var [checked, setChecked] = useState(props.checked)
+  var [checked, setChecked] = useState(props.checked);
   var onPress = () => {
-    props.onCheck(props.id, !checked)
-    setChecked(!checked)
-  }
+    props.onCheck(props.id, !checked);
+    setChecked(!checked);
+  };
 
   useEffect(() => {
-    setChecked(props.checked)
-  }, [props.checked])
+    setChecked(props.checked);
+  }, [props.checked]);
 
   return (
     <TouchableOpacity onPress={onPress}>
@@ -314,8 +314,8 @@ var CheckboxItem = (props) => {
         </Text>
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -337,4 +337,4 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '600',
   },
-})
+});

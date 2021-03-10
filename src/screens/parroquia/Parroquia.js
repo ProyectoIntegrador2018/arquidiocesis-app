@@ -3,7 +3,7 @@ Nombre: Parroquia.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la información de un parroquia
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
 import {
   AlphabetList,
   ErrorView,
@@ -20,22 +20,22 @@ import {
   Item,
   Alert,
   List,
-} from '../../components'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { API } from '../../lib'
+} from '../../components';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { API } from '../../lib';
 
 export default (props) => {
-  var [parroquia, setParroquia] = useState(props.route.params)
-  var [capillas, setCapillas] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
-  var [deleting, setDeleting] = useState(false)
-  var [user, setUser] = useState(false)
-  var [grupos, setGrupos] = useState(false)
+  var [parroquia, setParroquia] = useState(props.route.params);
+  var [capillas, setCapillas] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
+  var [deleting, setDeleting] = useState(false);
+  var [user, setUser] = useState(false);
+  var [grupos, setGrupos] = useState(false);
 
-  var readonly = props.route.params.readonly
-  var onDelete = props.route.params.onDelete
-  var onEdit = props.route.params.onEdit
+  var readonly = props.route.params.readonly;
+  var onDelete = props.route.params.onDelete;
+  var onEdit = props.route.params.onEdit;
 
   props.navigation.setOptions({
     headerStyle: {
@@ -48,7 +48,7 @@ export default (props) => {
         readonly ||
         !(user && (user.type == 'admin' || user.type == 'superadmin'))
       )
-        return null
+        return null;
       else
         return (
           <TouchableOpacity onPress={addCapilla}>
@@ -59,70 +59,70 @@ export default (props) => {
               color={'white'}
             />
           </TouchableOpacity>
-        )
+        );
     },
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
-    setError(false)
-    var id = parroquia.id
+    API.getUser().then(setUser);
+    setError(false);
+    var id = parroquia.id;
 
     API.getGrupos(false).then((grupos) => {
-      setGrupos(grupos.filter((a) => a.parroquia && a.parroquia.id == id))
-    })
+      setGrupos(grupos.filter((a) => a.parroquia && a.parroquia.id == id));
+    });
     API.getParroquia(id, true)
       .then((d) => {
-        d.id = id
-        setParroquia(d)
-        setCapillas(d.capillas.filter((a) => a.nombre) || [])
-        setError(false)
+        d.id = id;
+        setParroquia(d);
+        setCapillas(d.capillas.filter((a) => a.nombre) || []);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getParroquia = () => {
-    setRefreshing(true)
-    setError(false)
-    var id = parroquia.id
+    setRefreshing(true);
+    setError(false);
+    var id = parroquia.id;
     API.getParroquia(parroquia.id, true)
       .then((d) => {
-        d.id = id
-        setParroquia(d)
-        setCapillas(d.capillas.filter((a) => a.nombre) || [])
-        setRefreshing(false)
-        setError(false)
+        d.id = id;
+        setParroquia(d);
+        setCapillas(d.capillas.filter((a) => a.nombre) || []);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   // esta funcion agrega capillas a la parroquia
   var addCapilla = () => {
     props.navigation.navigate('RegistroCapilla', {
       parroquia,
       onAdded: (capilla) => {
-        if (!capillas) return
-        setCapillas([...capillas, capilla])
+        if (!capillas) return;
+        setCapillas([...capillas, capilla]);
       },
-    })
-  }
+    });
+  };
 
   var onPress = (item) => {
-    item.parroquia = parroquia
+    item.parroquia = parroquia;
     item.onDelete = (id) => {
-      setCapillas((a) => a.filter((a) => a.id != id))
-    }
+      setCapillas((a) => a.filter((a) => a.id != id));
+    };
     item.onEdit = (data) => {
-      setCapillas([...capillas.filter((a) => a.id != data.id), data])
-    }
-    props.navigation.navigate('DetalleCapilla', item)
-  }
+      setCapillas([...capillas.filter((a) => a.id != data.id), data]);
+    };
+    props.navigation.navigate('DetalleCapilla', item);
+  };
 
   var deleteParroquia = () => {
     Alert.alert(
@@ -134,50 +134,50 @@ export default (props) => {
           text: 'Eliminar',
           style: 'destructive',
           onPress: () => {
-            setDeleting(true)
+            setDeleting(true);
             API.deleteParroquia(parroquia.id)
               .then((done) => {
-                setDeleting(false)
-                alert('Se ha eliminado la parroquia.')
-                props.navigation.goBack()
-                if (onDelete) onDelete(parroquia.id)
+                setDeleting(false);
+                alert('Se ha eliminado la parroquia.');
+                props.navigation.goBack();
+                if (onDelete) onDelete(parroquia.id);
               })
               .catch((err) => {
-                setDeleting(false)
-                console.error(err)
-                alert('Hubo un error eliminando la parroquia.')
-              })
+                setDeleting(false);
+                console.error(err);
+                alert('Hubo un error eliminando la parroquia.');
+              });
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var editParroquia = () => {
     props.navigation.navigate('EditParroquia', {
       parroquia,
       onEdit: (new_parroquia) => {
-        var p = { ...parroquia }
+        var p = { ...parroquia };
         for (var i in new_parroquia) {
-          p[i] = new_parroquia[i]
+          p[i] = new_parroquia[i];
         }
-        setParroquia(p)
-        if (onEdit) onEdit(p)
+        setParroquia(p);
+        if (onEdit) onEdit(p);
       },
-    })
-  }
+    });
+  };
 
   var gotoGroup = (i) => {
     props.navigation.navigate('Grupo', {
       grupo: i,
       showOwner: false,
-    })
-  }
+    });
+  };
 
   var gotoDecanato = () => {
-    if (!(parroquia && parroquia.decanato && parroquia.decanato.id)) return
-    props.navigation.navigate('Decanato', parroquia.decanato)
-  }
+    if (!(parroquia && parroquia.decanato && parroquia.decanato.id)) return;
+    props.navigation.navigate('Decanato', parroquia.decanato);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -188,10 +188,10 @@ export default (props) => {
           user &&
           (user.type == 'admin' || user.type == 'superadmin')
         ) ? null : (
-          <TouchableOpacity onPress={editParroquia}>
-            <FontAwesome5 name="edit" style={styles.editIcon} />
-          </TouchableOpacity>
-        )}
+            <TouchableOpacity onPress={editParroquia}>
+              <FontAwesome5 name="edit" style={styles.editIcon} />
+            </TouchableOpacity>
+          )}
       </View>
       <ScrollView
         refreshControl={
@@ -264,12 +264,12 @@ export default (props) => {
             {!readonly &&
               user &&
               (user.type == 'admin' || user.type == 'superadmin') && (
-                <Item
-                  text="Eliminar parroquia"
-                  onPress={deleteParroquia}
-                  loading={deleting}
-                />
-              )}
+              <Item
+                text="Eliminar parroquia"
+                onPress={deleteParroquia}
+                loading={deleting}
+              />
+            )}
           </View>
         ) : (
           <View style={{ marginTop: 50 }}>
@@ -287,8 +287,8 @@ export default (props) => {
         )}
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -320,4 +320,4 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingLeft: 15,
   },
-})
+});

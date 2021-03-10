@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, ActivityIndicator } from 'react-native'
+import React from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
 
 export default (props) => {
   return (
@@ -15,5 +15,5 @@ export default (props) => {
         {props.text || 'Cargando datos...'}
       </Text>
     </View>
-  )
-}
+  );
+};

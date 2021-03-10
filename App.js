@@ -1,8 +1,8 @@
-import React from 'react'
-import { StyleSheet, View, Platform } from 'react-native'
-import Arquidiocesis from './src/Arquidiocesis'
+import React from 'react';
+import { StyleSheet, View, Platform } from 'react-native';
+import Arquidiocesis from './src/Arquidiocesis';
 
-console.disableYellowBox = true
+console.disableYellowBox = true;
 
 var style = Platform.select({
   web: {
@@ -18,12 +18,12 @@ var style = Platform.select({
 
     elevation: 5,
   },
-})
+});
 
 export default function App() {
   return (
     <View style={[StyleSheet.absoluteFillObject, style]}>
       <Arquidiocesis />
     </View>
-  )
+  );
 }

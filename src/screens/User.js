@@ -3,51 +3,51 @@ Nombre: User.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para que un usuario registrado pueda gestionar su perfil
 */
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { Item, Alert } from '../components'
-import { API } from '../lib'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { Item, Alert } from '../components';
+import { API } from '../lib';
 
 export default (props) => {
-  var [user, setUser] = useState(false)
+  var [user, setUser] = useState(false);
 
   props.navigation.setOptions({
     headerTitle: 'Usuario',
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
-  }, [])
+    API.getUser().then(setUser);
+  }, []);
 
   const logout = () => {
     Alert.alert('Cerrar sesión', '¿Deseas cerrar sesión?', [
       { text: 'Cerrar sesión', onPress: props.route.params.logout },
       { text: 'Cancelar', style: 'cancel' },
-    ])
-  }
+    ]);
+  };
 
   const changePassword = () => {
     props.navigation.navigate('ChangePassword', {
       admin_email: false,
       logout: props.route.params.logout,
-    })
-  }
+    });
+  };
 
   const adminUsers = () => {
-    props.navigation.navigate('AdminUsers')
-  }
+    props.navigation.navigate('AdminUsers');
+  };
 
   const reports = async () => {
-    props.navigation.navigate('Reports')
-  }
+    props.navigation.navigate('Reports');
+  };
 
   const statistics = async () => {
-    props.navigation.navigate('Statistics')
-  }
+    props.navigation.navigate('Statistics');
+  };
 
   const goToObjetivos = async () => {
-    props.navigation.navigate('Objetivos')
-  }
+    props.navigation.navigate('Objetivos');
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -65,8 +65,8 @@ export default (props) => {
       <Item text="Cambiar contraseña" onPress={changePassword} />
       <Item text="Cerrar sesión" onPress={logout} />
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     paddingLeft: 15,
   },
-})
+});

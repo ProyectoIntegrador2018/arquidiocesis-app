@@ -4,23 +4,23 @@ Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la lista de parroquias de una zona,
 			 el acompañante de la zona y los decanatos de la zona
 */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { AlphabetList, ErrorView, Item } from '../components'
-import { API } from '../lib'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { AlphabetList, ErrorView, Item } from '../components';
+import { API } from '../lib';
 
 export default (props) => {
-  var [zona, setZona] = useState(props.route.params)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
-  var [user, setUser] = useState(false)
+  var [zona, setZona] = useState(props.route.params);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
+  var [user, setUser] = useState(false);
 
   props.navigation.setOptions({
     headerStyle: {
@@ -28,67 +28,67 @@ export default (props) => {
       shadowOpacity: 0,
     },
     headerTitle: '',
-  })
+  });
 
   useEffect(() => {
-    API.getUser().then(setUser)
-    setError(false)
+    API.getUser().then(setUser);
+    setError(false);
     API.getZona(zona.id)
       .then((d) => {
-        setZona(d)
-        setError(false)
+        setZona(d);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getZona = () => {
-    setRefreshing(true)
-    setError(false)
+    setRefreshing(true);
+    setError(false);
     API.getZona(zona.id, true)
       .then((d) => {
-        setZona(d)
-        setRefreshing(false)
-        setError(false)
+        setZona(d);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   var onPress = (item) => {
-    props.navigation.navigate('Decanato', item)
-  }
+    props.navigation.navigate('Decanato', item);
+  };
 
   var onPressParroquia = (item) => {
-    item.readonly = true
-    props.navigation.navigate('Parroquia', item)
-  }
+    item.readonly = true;
+    props.navigation.navigate('Parroquia', item);
+  };
 
   var addAcompanante = () => {
     props.navigation.navigate('RegistroAcompanante', {
       zona,
       onAdd: (id) => {
-        var z = { ...zona }
-        z.acompanante = id
-        setZona(z)
+        var z = { ...zona };
+        z.acompanante = id;
+        setZona(z);
       },
-    })
-  }
+    });
+  };
 
   var viewAcompanante = () => {
     props.navigation.navigate('DetalleAcompanante', {
       zona,
       onDelete: function () {
-        var z = { ...zona }
-        z.acompanante = null
-        setZona(z)
+        var z = { ...zona };
+        z.acompanante = null;
+        setZona(z);
       },
-    })
-  }
+    });
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -149,8 +149,8 @@ export default (props) => {
         )}
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -177,4 +177,4 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingLeft: 15,
   },
-})
+});

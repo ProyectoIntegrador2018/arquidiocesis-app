@@ -3,53 +3,53 @@ Nombre: ChangeCoordinador.js
 Usuario con acceso: Admin
 Descripción: Pantalla para cambiar coordinadores de los grupos HEMA
 */
-import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import { Button, PickerScreen } from '../../components'
-import { API, Util } from '../../lib'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Button, PickerScreen } from '../../components';
+import { API, Util } from '../../lib';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props) => {
-  var [loading, setLoading] = useState(false)
-  var [coordinador, setCoordinador] = useState(false)
-  var [coordinadorList, setCoordinadorList] = useState(false)
+  var [loading, setLoading] = useState(false);
+  var [coordinador, setCoordinador] = useState(false);
+  var [coordinadorList, setCoordinadorList] = useState(false);
 
-  var { grupo, onEdit } = props.route.params
-  var coordinador_id = grupo.coordinador ? grupo.coordinador.id : null
+  var { grupo, onEdit } = props.route.params;
+  var coordinador_id = grupo.coordinador ? grupo.coordinador.id : null;
 
   props.navigation.setOptions({
     headerTitle: 'Cambiar coordinador',
-  })
+  });
 
   useEffect(() => {
     API.getCoordinadores().then((c) => {
-      setCoordinadorList(c)
-      setCoordinador(c.find((a) => a.id == coordinador_id))
-    })
-  }, [])
+      setCoordinadorList(c);
+      setCoordinador(c.find((a) => a.id == coordinador_id));
+    });
+  }, []);
 
   var save = () => {
-    if (!coordinador) return alert('Favor de seleccionar un coordinador')
+    if (!coordinador) return alert('Favor de seleccionar un coordinador');
     if (coordinador.id == coordinador_id) {
       // Fake change.
-      alert('Se ha cambiado el coordinador.')
-      props.navigation.goBack()
-      return
+      alert('Se ha cambiado el coordinador.');
+      props.navigation.goBack();
+      return;
     }
-    setLoading(true)
+    setLoading(true);
     API.changeCoordinador(grupo.id, coordinador.id)
       .then((done) => {
-        setLoading(false)
-        if (!done) return alert('Hubo un error cambiando el coordinador')
-        alert('Se ha cambiado el coordinador.')
-        props.navigation.goBack()
-        onEdit(coordinador)
+        setLoading(false);
+        if (!done) return alert('Hubo un error cambiando el coordinador');
+        alert('Se ha cambiado el coordinador.');
+        props.navigation.goBack();
+        onEdit(coordinador);
       })
       .catch((err) => {
-        setLoading(false)
-        return alert('Hubo un error cambiando el coordinador')
-      })
-  }
+        setLoading(false);
+        return alert('Hubo un error cambiando el coordinador');
+      });
+  };
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
@@ -74,7 +74,7 @@ export default (props) => {
                 </Text>
                 <Text style={{ color: 'gray' }}>{i.email}</Text>
               </View>
-            )
+            );
           }}
         />
       ) : (
@@ -97,8 +97,8 @@ export default (props) => {
       ) : null}
       <Button text="Guardar" loading={loading} onPress={save} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   label: {
@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontWeight: '500',
   },
-})
+});

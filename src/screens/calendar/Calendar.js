@@ -3,45 +3,45 @@ Nombre: Calendar.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver los eventos del calendario
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { RefreshControl } from 'react-native-web-refresh-control'
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
 
-import { AlphabetList, ErrorView, Button } from '../../components'
-import { API } from '../../lib'
+import { AlphabetList, ErrorView, Button } from '../../components';
+import { API } from '../../lib';
 
 export default (props) => {
-  var [user, setUser] = useState(null)
-  var [data, setData] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
+  var [user, setUser] = useState(null);
+  var [data, setData] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
 
   useEffect(() => {
-    API.getUser().then(setUser)
-    getEvents()
-  }, [])
+    API.getUser().then(setUser);
+    getEvents();
+  }, []);
 
   const getEvents = async () => {
-    setRefreshing(true)
-    setError(false)
+    setRefreshing(true);
+    setError(false);
 
     try {
-      const data = await API.getEvents()
-      setData(data)
-      setError(false)
-      setRefreshing(false)
+      const data = await API.getEvents();
+      setData(data);
+      setError(false);
+      setRefreshing(false);
     } catch (error) {
-      console.log('error :>> ', error)
-      setRefreshing(false)
-      setError(true)
+      console.log('error :>> ', error);
+      setRefreshing(false);
+      setError(true);
     }
-  }
+  };
 
   if (error) {
     return (
@@ -50,7 +50,7 @@ export default (props) => {
         refreshing={refreshing}
         retry={getEvents}
       />
-    )
+    );
   }
 
   if (data === false) {
@@ -67,30 +67,30 @@ export default (props) => {
           Cargando datos...
         </Text>
       </View>
-    )
+    );
   }
 
   var onPress = (item) => {
     props.navigation.navigate('Evento', {
       evento: item,
       onDelete: (id) => {
-        setData((d) => d.filter((a) => a.id != id))
+        setData((d) => d.filter((a) => a.id != id));
       },
       onEdit: (id, new_event) => {
-        const filteredData = data.filter((a) => a.id != id)
-        setData([...filteredData, new_event])
+        const filteredData = data.filter((a) => a.id != id);
+        setData([...filteredData, new_event]);
       },
-    })
-  }
+    });
+  };
 
   var addEvent = () => {
     props.navigation.navigate('RegistroEvento', {
       onAdd: (p) => {
-        if (!data) return
-        setData([...data, p])
+        if (!data) return;
+        setData([...data, p]);
       },
-    })
-  }
+    });
+  };
 
   var renderItem = (data) => {
     return (
@@ -105,8 +105,8 @@ export default (props) => {
           {data.fechas}
         </Text>
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <ScrollView
@@ -146,8 +146,8 @@ export default (props) => {
         )}
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -158,4 +158,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});

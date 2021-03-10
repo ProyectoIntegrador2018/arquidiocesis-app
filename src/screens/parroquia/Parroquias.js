@@ -3,72 +3,72 @@ Nombre: Parroquias.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para ver la lista de parroquias en el sistema
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'
-import { AlphabetList, ErrorView, Button } from '../../components'
-import { RefreshControl } from 'react-native-web-refresh-control'
-import { API } from '../../lib'
+} from 'react-native';
+import { AlphabetList, ErrorView, Button } from '../../components';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { API } from '../../lib';
 
 export default (props) => {
-  var [data, setData] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
-  var [user, setUser] = useState(false)
+  var [data, setData] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
+  var [user, setUser] = useState(false);
 
   useEffect(() => {
-    API.getUser().then(setUser)
+    API.getUser().then(setUser);
     API.getParroquias()
       .then((d) => {
-        setData(d)
-        setRefreshing(false)
-        setError(false)
+        setData(d);
+        setRefreshing(false);
+        setError(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }, [])
+        setRefreshing(false);
+        setError(true);
+      });
+  }, []);
 
   var getParroquias = () => {
-    setRefreshing(true)
+    setRefreshing(true);
     API.getParroquias(true)
       .then((d) => {
-        setData(d)
-        setError(false)
-        setRefreshing(false)
+        setData(d);
+        setError(false);
+        setRefreshing(false);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   var onPress = (item) => {
     props.navigation.navigate('Parroquia', {
       ...item,
       onDelete: function (id) {
-        setData((d) => d.filter((a) => a.id != id))
+        setData((d) => d.filter((a) => a.id != id));
       },
       onEdit: function (p) {
-        setData([...data.filter((a) => a.id != p.id), p])
+        setData([...data.filter((a) => a.id != p.id), p]);
       },
-    })
-  }
+    });
+  };
 
   var addParroquia = () => {
     props.navigation.navigate('RegistroParroquia', {
       onAdd: (p) => {
-        if (!data) return
-        setData([...data, p])
+        if (!data) return;
+        setData([...data, p]);
       },
-    })
-  }
+    });
+  };
 
   return (
     <ScrollView
@@ -108,8 +108,8 @@ export default (props) => {
         </View>
       )}
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -120,4 +120,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});

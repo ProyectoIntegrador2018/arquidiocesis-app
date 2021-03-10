@@ -3,26 +3,26 @@ Nombre: RegistroParroquia.js
 Usuario con acceso: Admin
 Descripción: Pantalla para registrar parroquias en el sistema
 */
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import { Input, Button, Picker, Alert, PickerScreen } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Input, Button, Picker, Alert, PickerScreen } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
 
 export default (props) => {
-  var [loading, setLoading] = useState(false)
-  var [listDecanatos, setListDecanatos] = useState(false)
+  var [loading, setLoading] = useState(false);
+  var [listDecanatos, setListDecanatos] = useState(false);
 
-  var [identificador, setIdentificador] = useState('')
-  var [name, setName] = useState('')
-  var [address, setAddress] = useState('')
-  var [decanato, setDecanato] = useState(false)
-  var [colonia, setColonia] = useState('')
-  var [municipio, setMunicipio] = useState('')
-  var [telefono1, setTelefono1] = useState('')
-  var [telefono2, setTelefono2] = useState('')
+  var [identificador, setIdentificador] = useState('');
+  var [name, setName] = useState('');
+  var [address, setAddress] = useState('');
+  var [decanato, setDecanato] = useState(false);
+  var [colonia, setColonia] = useState('');
+  var [municipio, setMunicipio] = useState('');
+  var [telefono1, setTelefono1] = useState('');
+  var [telefono2, setTelefono2] = useState('');
 
-  var onAdd = props.route.params.onAdd
+  var onAdd = props.route.params.onAdd;
 
   var doRegister = () => {
     var data = {
@@ -34,7 +34,7 @@ export default (props) => {
       municipio,
       telefono1,
       telefono2,
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       identificador: {
@@ -49,52 +49,52 @@ export default (props) => {
       direccion: { type: 'empty', prompt: 'Favor de introducir la dirección.' },
       colonia: { type: 'empty', prompt: 'Favor de introducir la colonia.' },
       municipio: { type: 'empty', prompt: 'Favor de introducir el municipio.' },
-    })
+    });
 
     if (!valid) {
-      return Alert.alert('Error', prompt)
+      return Alert.alert('Error', prompt);
     }
 
-    setLoading(true)
+    setLoading(true);
     API.addParroquia(data)
       .then((new_parroquia) => {
-        setLoading(false)
+        setLoading(false);
         if (!new_parroquia)
-          return Alert.alert('Error', 'Hubo un error agregando la parroquia.')
-        if (onAdd) onAdd(new_parroquia)
-        props.navigation.goBack()
-        Alert.alert('Exito', 'Se ha agregado la parroquia.')
+          return Alert.alert('Error', 'Hubo un error agregando la parroquia.');
+        if (onAdd) onAdd(new_parroquia);
+        props.navigation.goBack();
+        Alert.alert('Exito', 'Se ha agregado la parroquia.');
       })
       .catch((err) => {
-        console.log(err)
-        setLoading(false)
+        console.log(err);
+        setLoading(false);
 
         if (
           err.message ===
           'Ya existe una parroquia con el identificador proporcionado.'
         ) {
-          Alert.alert('Error', err.message)
+          Alert.alert('Error', err.message);
         } else {
-          Alert.alert('Error', 'Hubo un error agregando la parroquia.')
+          Alert.alert('Error', 'Hubo un error agregando la parroquia.');
         }
-      })
-  }
+      });
+  };
 
   useEffect(() => {
     API.getZonas(true).then((zonas) => {
       API.getDecanatos(true).then((decanatos) => {
-        var dec = {}
+        var dec = {};
         for (var i of zonas) {
-          dec[i.nombre] = decanatos.filter((a) => a.zona == i.id)
+          dec[i.nombre] = decanatos.filter((a) => a.zona == i.id);
         }
-        setListDecanatos(dec)
-      })
-    })
-  }, [])
+        setListDecanatos(dec);
+      });
+    });
+  }, []);
 
   props.navigation.setOptions({
     headerTitle: 'Registrar Parroquia',
-  })
+  });
 
   return (
     <KeyboardAwareScrollView
@@ -155,8 +155,8 @@ export default (props) => {
       )}
       <Button text="Registrar" loading={loading} onPress={doRegister} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -178,4 +178,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-})
+});

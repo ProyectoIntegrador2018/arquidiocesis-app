@@ -3,29 +3,29 @@ Nombre: DetalleCapilla.js
 Usuario con acceso: Admin, Acompañante, Coordinador 
 Descripción: Pantalla para seleccionar un grupo de capacitación para un asistente
 */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
-} from 'react-native'
-import { API } from '../../lib'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { Input, ErrorView, Item, Alert, List } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+} from 'react-native';
+import { API } from '../../lib';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Input, ErrorView, Item, Alert, List } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props) => {
-  var [capilla, setCapilla] = useState(false)
-  var [refreshing, setRefreshing] = useState(false)
-  var [error, setError] = useState(false)
-  var [deleting, setDeleting] = useState(false)
-  var [user, setUser] = useState(false)
-  var [grupos, setGroups] = useState(false)
+  var [capilla, setCapilla] = useState(false);
+  var [refreshing, setRefreshing] = useState(false);
+  var [error, setError] = useState(false);
+  var [deleting, setDeleting] = useState(false);
+  var [user, setUser] = useState(false);
+  var [grupos, setGroups] = useState(false);
 
-  var onDelete = props.route.params.onDelete
-  var onEdit = props.route.params.onEdit
+  var onDelete = props.route.params.onDelete;
+  var onEdit = props.route.params.onEdit;
 
   props.navigation.setOptions({
     headerTitle: '',
@@ -33,34 +33,34 @@ export default (props) => {
       backgroundColor: '#002E60',
       shadowOpacity: 0,
     },
-  })
+  });
   useEffect(() => {
-    API.getUser().then(setUser)
-    getCapilla()
-  }, [])
+    API.getUser().then(setUser);
+    getCapilla();
+  }, []);
 
   var getCapilla = () => {
-    setRefreshing(true)
-    var id = capilla ? capilla.id : props.route.params.id
+    setRefreshing(true);
+    var id = capilla ? capilla.id : props.route.params.id;
     API.getCapilla(id)
       .then((d) => {
         // d.parroquia = (capilla.parroquia || props.route.params.parroquia);
-        d.id = id
-        setCapilla(d)
-        setError(false)
-        getGrupos(id)
+        d.id = id;
+        setCapilla(d);
+        setError(false);
+        getGrupos(id);
       })
       .catch((err) => {
-        setRefreshing(false)
-        setError(true)
-      })
-  }
+        setRefreshing(false);
+        setError(true);
+      });
+  };
 
   var getGrupos = (capilla_id) => {
     API.getGrupos(false).then((grupos) => {
-      setGroups(grupos.filter((a) => a.capilla.id == capilla_id))
-    })
-  }
+      setGroups(grupos.filter((a) => a.capilla.id == capilla_id));
+    });
+  };
 
   var deleteCapilla = () => {
     Alert.alert(
@@ -72,51 +72,51 @@ export default (props) => {
           text: 'Eliminar',
           style: 'destructive',
           onPress: () => {
-            setDeleting(true)
+            setDeleting(true);
             API.deleteCapilla(capilla.parroquia.id, capilla.id)
               .then((done) => {
-                setDeleting(false)
-                Alert.alert('Exito', 'Se ha eliminado la capilla.')
-                props.navigation.goBack()
-                if (onDelete) onDelete(capilla.id)
+                setDeleting(false);
+                Alert.alert('Exito', 'Se ha eliminado la capilla.');
+                props.navigation.goBack();
+                if (onDelete) onDelete(capilla.id);
               })
               .catch((err) => {
-                setDeleting(false)
-                Alert.alert('Exito', 'Hubo un error eliminando la capilla.')
-              })
+                setDeleting(false);
+                Alert.alert('Exito', 'Hubo un error eliminando la capilla.');
+              });
           },
         },
       ]
-    )
-  }
+    );
+  };
 
   var editCapilla = () => {
     props.navigation.navigate('EditarCapilla', {
       capilla,
       onEdit: (data) => {
-        var c = { ...capilla }
+        var c = { ...capilla };
         for (var i in data) {
-          c[i] = data[i]
+          c[i] = data[i];
         }
-        setCapilla(c)
-        onEdit(c)
+        setCapilla(c);
+        onEdit(c);
       },
-    })
-  }
+    });
+  };
 
   var gotoGroup = (i) => {
     props.navigation.navigate('Grupo', {
       grupo: i,
       showOwner: false,
-    })
-  }
+    });
+  };
 
   var gotoParroquia = () => {
     props.navigation.navigate('Parroquia', {
       showCapillas: false,
       id: capilla.parroquia,
-    })
-  }
+    });
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -127,10 +127,10 @@ export default (props) => {
         {user &&
         (user.type == 'admin' || user.type == 'superadmin') &&
         !props.route.params.readonly ? (
-          <TouchableOpacity onPress={editCapilla}>
-            <FontAwesome5 name="edit" style={styles.editIcon} />
-          </TouchableOpacity>
-        ) : null}
+            <TouchableOpacity onPress={editCapilla}>
+              <FontAwesome5 name="edit" style={styles.editIcon} />
+            </TouchableOpacity>
+          ) : null}
       </View>
       <KeyboardAwareScrollView>
         {error ? (
@@ -189,8 +189,8 @@ export default (props) => {
         )}
       </KeyboardAwareScrollView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -221,4 +221,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 15,
   },
-})
+});

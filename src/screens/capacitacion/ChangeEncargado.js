@@ -3,60 +3,60 @@ Nombre: ChangeEncargado.js
 Usuario con acceso: Admin, Acompañante
 Descripción: Pantalla para cambiar un encargado de capacitación
 */
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import { Button, PickerScreen, Alert } from '../../components'
-import { API } from '../../lib'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Button, PickerScreen, Alert } from '../../components';
+import { API } from '../../lib';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props) => {
-  var { id, encargado, onEdit } = props.route.params
+  var { id, encargado, onEdit } = props.route.params;
 
-  var [loading, setLoading] = useState(false)
-  var [capacitador, setCapacitador] = useState(null)
-  var [capacitadoresList, setCapacitadoresList] = useState(false)
+  var [loading, setLoading] = useState(false);
+  var [capacitador, setCapacitador] = useState(null);
+  var [capacitadoresList, setCapacitadoresList] = useState(false);
 
   props.navigation.setOptions({
     headerTitle: 'Cambiar encargado',
-  })
+  });
 
   useEffect(() => {
     API.getCapacitadores().then((c) => {
       if (c.length == 0) {
         API.getCapacitadores(true).then((cap) => {
-          setCapacitadoresList(cap)
-          setCapacitador(cap.find((a) => a.id == encargado))
-        })
+          setCapacitadoresList(cap);
+          setCapacitador(cap.find((a) => a.id == encargado));
+        });
       } else {
-        setCapacitadoresList(c)
-        setCapacitador(c.find((a) => a.id == encargado))
+        setCapacitadoresList(c);
+        setCapacitador(c.find((a) => a.id == encargado));
       }
-    })
-  }, [])
+    });
+  }, []);
 
   var save = () => {
-    if (!encargado) return alert('Favor de seleccionar un capacitador')
+    if (!encargado) return alert('Favor de seleccionar un capacitador');
     if (capacitador.id == encargado) {
       // Fake change.
-      Alert.alert('Exito', 'Se ha cambiado el capacitador.')
-      props.navigation.goBack()
-      return
+      Alert.alert('Exito', 'Se ha cambiado el capacitador.');
+      props.navigation.goBack();
+      return;
     }
-    setLoading(true)
+    setLoading(true);
     API.changeCapacitacionEncargado(id, capacitador.id)
       .then((done) => {
-        setLoading(false)
+        setLoading(false);
         if (!done)
-          return Alert.alert('Error', 'Hubo un error cambiando el capacitador')
-        Alert.alert('Exito', 'Se ha cambiado el capacitador.')
-        props.navigation.goBack()
-        onEdit(capacitador.id)
+          return Alert.alert('Error', 'Hubo un error cambiando el capacitador');
+        Alert.alert('Exito', 'Se ha cambiado el capacitador.');
+        props.navigation.goBack();
+        onEdit(capacitador.id);
       })
       .catch((err) => {
-        setLoading(false)
-        return Alert.alert('Error', err.message)
-      })
-  }
+        setLoading(false);
+        return Alert.alert('Error', err.message);
+      });
+  };
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
@@ -81,7 +81,7 @@ export default (props) => {
                 </Text>
                 <Text style={{ color: 'gray' }}>{i.email}</Text>
               </View>
-            )
+            );
           }}
         />
       ) : (
@@ -104,8 +104,8 @@ export default (props) => {
       ) : null}
       <Button text="Guardar" loading={loading} onPress={save} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   label: {
@@ -114,4 +114,4 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontWeight: '500',
   },
-})
+});

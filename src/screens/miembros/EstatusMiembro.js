@@ -4,56 +4,56 @@ Usuario con acceso: Admin
 Descripción: Pantalla para editar el estatus de un miembro de un grupo HEMA 
 			(baja definitiva, activo, baja temporal)
 */
-import React, { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { Button, Picker, Alert } from '../../components'
-import { API } from '../../lib'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button, Picker, Alert } from '../../components';
+import { API } from '../../lib';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props) => {
-  var { grupo, onEdit, persona } = props.route.params
+  var { grupo, onEdit, persona } = props.route.params;
 
-  var [loading, setLoading] = useState(false)
-  var [status, setStatus] = useState(false)
-  var [oldStatus, setOldStatus] = useState(persona.estatus)
+  var [loading, setLoading] = useState(false);
+  var [status, setStatus] = useState(false);
+  var [oldStatus, setOldStatus] = useState(persona.estatus);
 
   props.navigation.setOptions({
     headerTitle: 'Cambiar estatus',
-  })
+  });
 
   var actuallySave = () => {
     if (oldStatus == status.value) {
-      return Alert.alert('Exito', 'Se ha editado el estatus del miembro.')
+      return Alert.alert('Exito', 'Se ha editado el estatus del miembro.');
     }
-    setLoading(true)
+    setLoading(true);
     API.editMiembroStatus(persona.id, status.value)
       .then((done) => {
-        setLoading(false)
+        setLoading(false);
         if (!done)
           return Alert.alert(
             'Error',
             'Hubo un error editando el estatus del miembro.'
-          )
-        onEdit(status.value)
-        setOldStatus(status.value)
-        return Alert.alert('Exito', 'Se ha editado el estatus del miembro.')
+          );
+        onEdit(status.value);
+        setOldStatus(status.value);
+        return Alert.alert('Exito', 'Se ha editado el estatus del miembro.');
       })
       .catch((err) => {
-        setLoading(false)
+        setLoading(false);
         if (err.code && err.code == 999) {
-          Alert.alert('Error', 'No tienes acceso a este grupo.')
+          Alert.alert('Error', 'No tienes acceso a este grupo.');
         } else {
           return Alert.alert(
             'Error',
             'Hubo un error editando el estatus del miembro.'
-          )
+          );
         }
-      })
-  }
+      });
+  };
 
   var save = () => {
-    if (loading) return
-    if (!status || status.value < 0 || status.value > 2) return
+    if (loading) return;
+    if (!status || status.value < 0 || status.value > 2) return;
     if (status.value == 2) {
       Alert.alert(
         'Baja definitiva',
@@ -62,11 +62,11 @@ export default (props) => {
           { text: 'Cancelar', style: 'cancel' },
           { text: 'Aceptar', style: 'destructive', onPress: actuallySave },
         ]
-      )
+      );
     } else {
-      actuallySave()
+      actuallySave();
     }
-  }
+  };
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ padding: 15 }}>
@@ -92,8 +92,8 @@ export default (props) => {
       ) : null}
       <Button text="Guardar" onPress={save} loading={loading} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   label: {
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontWeight: '500',
   },
-})
+});

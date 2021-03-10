@@ -3,41 +3,41 @@ Nombre: EditAcompañante.js
 Usuario con acceso: Admin
 Descripción: Pantalla que edita la información de los acompañantes de zona y decanato
 */
-import React, { useState, useRef } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { API, Util } from '../../lib'
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Input, Button, Picker, Alert, DatePicker } from '../../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { API, Util } from '../../lib';
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
 export default (props) => {
-  var { onEdit, persona } = props.route.params
+  var { onEdit, persona } = props.route.params;
 
-  var bd = moment.unix(persona.fecha_nacimiento._seconds)
-  if (!bd.isValid()) bd = moment()
+  var bd = moment.unix(persona.fecha_nacimiento._seconds);
+  if (!bd.isValid()) bd = moment();
 
-  var [loading, setLoading] = useState(false)
-  var [name, setName] = useState(persona.nombre)
-  var [apPaterno, setApPaterno] = useState(persona.apellido_paterno)
-  var [apMaterno, setApMaterno] = useState(persona.apellido_materno)
-  var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'))
-  var [gender, setGender] = useState(false)
-  var [estadoCivil, setEstadoCivil] = useState(false)
-  var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio)
-  var [colonia, setColonia] = useState(persona.domicilio.colonia)
-  var [municipio, setMunicipio] = useState(persona.domicilio.municipio)
-  var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa)
-  var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil)
-  var [escolaridad, setEscolaridad] = useState(false)
-  var [oficio, setOficio] = useState(false)
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState(persona.nombre);
+  var [apPaterno, setApPaterno] = useState(persona.apellido_paterno);
+  var [apMaterno, setApMaterno] = useState(persona.apellido_materno);
+  var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'));
+  var [gender, setGender] = useState(false);
+  var [estadoCivil, setEstadoCivil] = useState(false);
+  var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio);
+  var [colonia, setColonia] = useState(persona.domicilio.colonia);
+  var [municipio, setMunicipio] = useState(persona.domicilio.municipio);
+  var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa);
+  var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
+  var [escolaridad, setEscolaridad] = useState(false);
+  var [oficio, setOficio] = useState(false);
 
   props.navigation.setOptions({
     headerTitle: 'Editar Acompañante',
-  })
+  });
 
   var doRegister = () => {
-    if (loading) return
+    if (loading) return;
 
     var data = {
       nombre: name,
@@ -55,7 +55,7 @@ export default (props) => {
         telefono_casa: phoneHome,
         telefono_movil: phoneMobile,
       },
-    }
+    };
 
     var { valid, prompt } = Util.validateForm(data, {
       nombre: {
@@ -81,48 +81,48 @@ export default (props) => {
         prompt: 'Favor de introducir la escolaridad.',
       },
       oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
-    })
+    });
 
     if (!valid) {
-      return Alert.alert('Error', prompt)
+      return Alert.alert('Error', prompt);
     }
 
-    setLoading(true)
+    setLoading(true);
 
     API.editAcompanante(persona.id, data)
       .then((done) => {
-        setLoading(false)
+        setLoading(false);
         if (!done) {
-          return Alert.alert('Error', 'Hubo un error editando el acompañante.')
+          return Alert.alert('Error', 'Hubo un error editando el acompañante.');
         }
 
         data.fecha_nacimiento = {
           _seconds: moment(birthday, 'YYYY-MM-DD').unix(),
-        }
-        onEdit(data)
-        Alert.alert('Exito', 'Se ha editando el acompañante.')
-        return
+        };
+        onEdit(data);
+        Alert.alert('Exito', 'Se ha editando el acompañante.');
+        return;
       })
       .catch((err) => {
-        console.log(err)
-        setLoading(false)
+        console.log(err);
+        setLoading(false);
         if (err.code == 999) {
-          props.navigation.goBack()
-          return Alert.alert('Error', 'No tienes acceso a esta acción.')
+          props.navigation.goBack();
+          return Alert.alert('Error', 'No tienes acceso a esta acción.');
         }
-        return Alert.alert('Error', 'Hubo un error editando el acompañanate.')
-      })
-  }
+        return Alert.alert('Error', 'Hubo un error editando el acompañanate.');
+      });
+  };
 
   var getEstadoCivil = () => {
     return ['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado'].indexOf(
       persona.estado_civil
-    )
-  }
+    );
+  };
 
   var getGenero = () => {
-    return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo)
-  }
+    return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo);
+  };
 
   var getEscolaridad = () => {
     return [
@@ -132,8 +132,8 @@ export default (props) => {
       'Técnica carrera',
       'Maestría',
       'Doctorado',
-    ].indexOf(persona.escolaridad)
-  }
+    ].indexOf(persona.escolaridad);
+  };
 
   var getOficio = () => {
     return [
@@ -146,8 +146,8 @@ export default (props) => {
       'Mecánico',
       'Músico',
       'Chofer',
-    ].indexOf(persona.oficio)
-  }
+    ].indexOf(persona.oficio);
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
@@ -230,8 +230,8 @@ export default (props) => {
 
       <Button text="Guardar" loading={loading} onPress={doRegister} />
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   testText: {
@@ -267,4 +267,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 20,
   },
-})
+});
