@@ -1,18 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import Input from './Input';
-import DatePicker from 'react-native-datepicker';
+import DatePicker from '@react-native-community/datetimepicker';
 import moment from 'moment/min/moment-with-locales';
 
 export default (props) => {
-  var pickerRef = useRef(null);
+  const pickerRef = useRef(null);
 
-  var formatDate = (a) => {
-    var f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
+  const formatDate = (a) => {
+    const f = moment(a, 'YYYY-MM-DD').format('MMMM DD, YYYY');
     return f.charAt(0).toUpperCase() + f.substr(1);
   };
 
-  var mobilePicker = () => {
+  const mobilePicker = () => {
     return (
       <View>
         <Input
@@ -39,7 +39,7 @@ export default (props) => {
     );
   };
 
-  var webPicker = () => {
+  const webPicker = () => {
     return (
       <View style={{ marginBottom: 10, width: '100%' }}>
         <Text style={styles.label}>
@@ -70,7 +70,7 @@ export default (props) => {
     );
   };
 
-  var datePicker = () => {
+  const datePicker = () => {
     return Platform.select({
       ios: mobilePicker(),
       android: mobilePicker(),
@@ -78,15 +78,15 @@ export default (props) => {
     });
   };
 
-  var pressInput = () => {
+  const pressInput = () => {
     pickerRef.current.onPressDate();
   };
 
-  var webChange = (v) => {
+  const webChange = (v) => {
     if (props.onDateChange) props.onDateChange(v.target.value);
   };
 
-  var required =
+  const required =
     typeof props.required !== 'undefined' && props.required !== false;
 
   return Platform.select({
