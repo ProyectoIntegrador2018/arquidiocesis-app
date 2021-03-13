@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { AsyncStorage, EventEmitter } from 'react-native';
 import Cache from './Cache';
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/';
 // const ROOT_URL = 'http://localhost:8000/api/'
-var onLogout = null;
+let onLogout = null;
 
 /**
  * Set the function to call on logout.
@@ -23,14 +23,14 @@ function setOnLogout(cb) {
  * @param {object} data The data to send to the endpoint
  */
 async function post(endpoint, data) {
-  var u = await getUser();
+  const u = await getUser();
   if (u) {
     if (!data) data = { token: u.token };
     else data.token = u.token;
   }
   try {
     console.log('POST /' + endpoint);
-    var res = await axios.post(ROOT_URL + endpoint, data);
+    const res = await axios.post(ROOT_URL + endpoint, data);
     if (res.data && res.data.error && res.data.code == 900) {
       logout();
     }
@@ -49,14 +49,14 @@ async function post(endpoint, data) {
  * @param {object} data The data to send to the endpoint
  */
 async function get(endpoint, data) {
-  var u = await getUser();
+  const u = await getUser();
   if (u) {
     if (!data) data = { token: u.token };
     else data.token = u.token;
   }
   try {
     console.log('GET /' + endpoint);
-    var res = await axios.get(ROOT_URL + endpoint, {
+    const res = await axios.get(ROOT_URL + endpoint, {
       params: data,
     });
     if (res.data && res.data.error && res.data.code == 900) {
@@ -77,14 +77,14 @@ async function get(endpoint, data) {
  * @param {object} data The data to send to the endpoint
  */
 async function sendDelete(endpoint, data) {
-  var u = await getUser();
+  const u = await getUser();
   if (u) {
     if (!data) data = { token: u.token };
     else data.token = u.token;
   }
   try {
     console.log('DELETE /' + endpoint);
-    var res = await axios.delete(ROOT_URL + endpoint, {
+    const res = await axios.delete(ROOT_URL + endpoint, {
       params: data,
     });
     if (res.data && res.data.error && res.data.code == 900) {
@@ -105,7 +105,7 @@ async function sendDelete(endpoint, data) {
  * the user is already logged in.
  */
 async function getUser() {
-  var user = await AsyncStorage.getItem('login');
+  let user = await AsyncStorage.getItem('login');
   if (!user) return false;
 
   user = JSON.parse(user);
@@ -123,7 +123,7 @@ async function getUser() {
  * - Returns user object if valid.
  */
 async function getLogin() {
-  var user = await AsyncStorage.getItem('login');
+  let user = await AsyncStorage.getItem('login');
   if (!user) return null;
 
   user = JSON.parse(user);
@@ -142,16 +142,13 @@ async function getLogin() {
  * @param {String} password The user's password
  */
 async function login(email, password) {
-  try {
-    var u = await post('login', { email, password });
-    if (!u) return false;
-    if (u.error) return false;
+  const u = await post('login', { email, password });
+  if (!u) return false;
+  if (u.error) return false;
 
-    var user = u.data;
-    await AsyncStorage.setItem('login', JSON.stringify(user));
-  } catch (err) {
-    throw err;
-  }
+  const user = u.data;
+  await AsyncStorage.setItem('login', JSON.stringify(user));
+
   return user;
 }
 
@@ -161,7 +158,7 @@ async function login(email, password) {
  * @param {string} new_password The new password to change
  */
 async function changePassword(old_password, new_password) {
-  var u = await post('password/change', { old_password, new_password });
+  const u = await post('password/change', { old_password, new_password });
   if (!u) return false;
   if (!u.error) await AsyncStorage.removeItem('login');
   return u;
@@ -174,7 +171,7 @@ async function changePassword(old_password, new_password) {
  * @returns {Boolean}
  */
 async function logout() {
-  var user = await getUser();
+  const user = await getUser();
 
   // If user is not logged in, return true.
   if (!user) return true;
@@ -197,7 +194,7 @@ async function getZonas(force = false) {
     return Cache.getZonas();
   }
 
-  var p = await get('zonas');
+  const p = await get('zonas');
   if (p.error) throw p;
   else {
     Cache.setZonas(p.data);
@@ -212,13 +209,13 @@ async function getZonas(force = false) {
  */
 async function getZona(id, force = false) {
   if (!force) {
-    var zonaCache = Cache.getZona(id);
+    const zonaCache = Cache.getZona(id);
     if (zonaCache) {
       return zonaCache;
     }
   }
 
-  var p = await get('zonas/' + id);
+  const p = await get('zonas/' + id);
   if (p.error) throw p;
   else {
     Cache.setZona(p.data);
@@ -233,13 +230,13 @@ async function getZona(id, force = false) {
  */
 async function getDecanato(id, force = false) {
   if (!force) {
-    var decanatoCache = Cache.getDecanato(id);
+    const decanatoCache = Cache.getDecanato(id);
     if (decanatoCache) {
       return decanatoCache;
     }
   }
 
-  var p = await get('decanatos/' + id);
+  const p = await get('decanatos/' + id);
   if (p.error) throw p;
   else {
     Cache.setDecanato(p.data);
@@ -256,7 +253,7 @@ async function getParroquias(force = false) {
     return Cache.getParroquias();
   }
 
-  var p = await get('parroquias');
+  const p = await get('parroquias');
   if (p.error) throw p;
   else {
     Cache.setParroquias(p.data);
@@ -271,13 +268,13 @@ async function getParroquias(force = false) {
  */
 async function getParroquia(id, force = false) {
   if (!force) {
-    var parroquiaCache = Cache.getParroquia(id);
+    const parroquiaCache = Cache.getParroquia(id);
     if (parroquiaCache) {
       return parroquiaCache;
     }
   }
 
-  var p = await get('parroquias/' + id);
+  const p = await get('parroquias/' + id);
   if (p.error) throw p;
   else {
     Cache.setParroquia(p.data);
@@ -290,7 +287,7 @@ async function getParroquia(id, force = false) {
  * @param {object} data The parroquia data.
  */
 async function addParroquia(data) {
-  var payload = {
+  const payload = {
     identificador: data.identificador,
     nombre: data.nombre,
     direccion: data.direccion,
@@ -316,7 +313,7 @@ async function addParroquia(data) {
  * @param {object} data The new data of the parroquia.
  */
 async function editParroquia(id, data) {
-  var res = await post('parroquias/edit', {
+  const res = await post('parroquias/edit', {
     parroquia: id,
     ...data,
   });
@@ -330,11 +327,11 @@ async function editParroquia(id, data) {
  * @param {object} data The new capilla data
  */
 async function addCapilla(parroquia_id, data) {
-  var payload = {
+  const payload = {
     ...data,
     parroquia: parroquia_id,
   };
-  var res = await post('capillas', payload);
+  const res = await post('capillas', payload);
   if (res.error) throw res;
   else {
     Cache.parroquiaAddCapilla(parroquia_id, res.data);
@@ -351,7 +348,7 @@ async function getDecanatos(force = false) {
   if (!force && Cache.getDecanatos()) {
     return Cache.getDecanatos();
   }
-  var p = await get('decanatos');
+  const p = await get('decanatos');
   if (p.error) throw p;
   else {
     Cache.setDecanatos(p.data);
@@ -367,7 +364,7 @@ async function getCoordinadores(force = false) {
   if (!force && Cache.getCoordinadores()) {
     return Cache.getCoordinadores();
   }
-  var p = await get('coordinadores');
+  const p = await get('coordinadores');
   if (p.error) throw p;
   else {
     Cache.setCoordinadores(p.data);
@@ -382,13 +379,13 @@ async function getCoordinadores(force = false) {
  */
 async function getCoordinador(id, force = false) {
   if (!force) {
-    var coordCache = Cache.getCoordinador(id);
+    const coordCache = Cache.getCoordinador(id);
     if (coordCache) {
       return coordCache;
     }
   }
 
-  var p = await get('coordinadores/' + id);
+  const p = await get('coordinadores/' + id);
   if (p.error) throw p;
   else {
     Cache.setCoordinador(p.data);
@@ -401,7 +398,7 @@ async function getCoordinador(id, force = false) {
  * @param {string} acomId  The acompanante id
  */
 async function getCoordinadoresForAcompanante(acomId) {
-  var res = await get('coordinadores/acompanante/' + acomId);
+  const res = await get('coordinadores/acompanante/' + acomId);
   if (res.error) {
     throw res;
   } else {
@@ -417,7 +414,7 @@ async function getGrupos(force = false) {
   if (!force && Cache.getGrupos()) {
     return Cache.getGrupos();
   }
-  var res = await get('grupos');
+  const res = await get('grupos');
   if (res.error) throw res;
   else {
     Cache.setGrupos(res.data);
@@ -433,7 +430,7 @@ async function getGruposForAcompanante(acomId, force = false) {
   if (!force && Cache.getGrupos()) {
     return Cache.getGrupos();
   }
-  var res = await get('grupos/acompanante/' + acomId);
+  const res = await get('grupos/acompanante/' + acomId);
   if (res.error) throw res;
   else {
     Cache.setGrupos(res.data);
@@ -448,12 +445,12 @@ async function getGruposForAcompanante(acomId, force = false) {
  */
 async function getGrupo(id, force = false) {
   if (!force) {
-    var cacheGrupo = Cache.getGrupo(id);
+    const cacheGrupo = Cache.getGrupo(id);
     if (cacheGrupo) {
       return cacheGrupo;
     }
   }
-  var res = await get('grupos/' + id);
+  const res = await get('grupos/' + id);
   if (res.error) throw res;
   else {
     res.data.id = id;
@@ -472,14 +469,14 @@ async function getGrupo(id, force = false) {
  * @param {string} capilla The ID of the grupo's capilla
  */
 async function addGrupo(name, coordinador, parroquia, capilla) {
-  var payload = {
+  const payload = {
     name,
     coordinador,
     parroquia,
     capilla,
   };
 
-  var res = await post('grupos', payload);
+  const res = await post('grupos', payload);
   if (res.error) throw res;
   else return res.data;
 }
@@ -584,7 +581,7 @@ async function editObjective(data) {
  * @param {object} data The data of the new coordinador
  */
 async function registerCoordinador(data) {
-  var res = await post('coordinadores', data);
+  const res = await post('coordinadores', data);
   if (res.error) throw res;
   else {
     Cache.setCoordinadores(res.data);
@@ -598,12 +595,12 @@ async function registerCoordinador(data) {
  * @param {object} data The new member's data
  */
 async function registerMember(grupo, data) {
-  var payload = {
+  const payload = {
     grupo,
     ...data,
   };
 
-  var res = await post('grupos/register', payload);
+  const res = await post('grupos/register', payload);
   if (res.error) throw res;
   else return res.data;
 }
@@ -615,7 +612,7 @@ async function registerMember(grupo, data) {
  * @param {string} fecha The asistencia's date in format 'YYYY-MM-DD'
  */
 async function getAsistencia(grupo_id, fecha) {
-  var res = await get('grupos/' + grupo_id + '/asistencia/' + fecha);
+  const res = await get('grupos/' + grupo_id + '/asistencia/' + fecha);
   if (res.error) throw res;
   else {
     return res.data;
@@ -637,14 +634,14 @@ async function registerAsistencia(
   commentarios,
   force = false
 ) {
-  var payload = {
+  const payload = {
     fecha,
     miembros,
     force,
     agenda,
     commentarios,
   };
-  var res = await post('grupos/' + grupo_id + '/asistencia', payload);
+  const res = await post('grupos/' + grupo_id + '/asistencia', payload);
   if (res.error) throw res;
   else {
     Cache.registerAsistencia(grupo_id, res.data);
@@ -659,7 +656,7 @@ async function registerAsistencia(
  * @param {array} miembros Array of member ids
  */
 async function saveAsistencia(grupo_id, fecha, miembros, agenda, commentarios) {
-  var res = await post('grupos/' + grupo_id + '/asistencia/' + fecha, {
+  const res = await post('grupos/' + grupo_id + '/asistencia/' + fecha, {
     miembros,
     agenda,
     commentarios,
@@ -673,7 +670,7 @@ async function saveAsistencia(grupo_id, fecha, miembros, agenda, commentarios) {
  * @param {string} capilla_id The capilla's id
  */
 async function getCapilla(capilla_id) {
-  var res = await get('capillas/' + capilla_id);
+  const res = await get('capillas/' + capilla_id);
   if (res.error) throw res;
   else return res.data;
 }
@@ -685,12 +682,12 @@ async function getCapilla(capilla_id) {
  * @param {string} parroquia_id The capilla's parroquia, used for Cache saving.
  */
 async function editCapilla(capilla_id, data, parroquia_id) {
-  var payload = {
+  const payload = {
     id: capilla_id,
     ...data,
   };
 
-  var res = await post('capillas/edit', payload);
+  const res = await post('capillas/edit', payload);
   if (res.error) throw res;
   else {
     Cache.parroquiaEditCapilla(parroquia_id, {
@@ -707,7 +704,7 @@ async function editCapilla(capilla_id, data, parroquia_id) {
  * @param {string} capilla_id The capilla's id
  */
 async function deleteCapilla(parroquia_id, capilla_id) {
-  var res = await sendDelete('capillas/' + capilla_id);
+  const res = await sendDelete('capillas/' + capilla_id);
   if (res.error) throw res;
   else {
     Cache.deleteParroquiaCapilla(parroquia_id, capilla_id);
@@ -720,7 +717,7 @@ async function deleteCapilla(parroquia_id, capilla_id) {
  * @param {string} parroquia_id The parroquia's id
  */
 async function deleteParroquia(parroquia_id) {
-  var res = await sendDelete('parroquias/' + parroquia_id);
+  const res = await sendDelete('parroquias/' + parroquia_id);
   if (res.error) throw res;
   else {
     Cache.deleteParroquia(parroquia_id);
@@ -735,13 +732,13 @@ async function deleteParroquia(parroquia_id) {
  */
 async function getMiembro(miembro_id, force = false) {
   if (!force) {
-    var m = Cache.getMiembro(miembro_id);
+    const m = Cache.getMiembro(miembro_id);
     if (m) {
       return m;
     }
   }
 
-  var res = await get('grupos/miembro/' + miembro_id);
+  const res = await get('grupos/miembro/' + miembro_id);
   if (res.error) throw res;
   else {
     if (res.data) {
@@ -756,7 +753,7 @@ async function getMiembro(miembro_id, force = false) {
  * Get the admin users from the database.
  */
 async function adminGetUsers() {
-  var res = await get('admin/users');
+  const res = await get('admin/users');
   if (res.error) throw res;
   else return res.data;
 }
@@ -767,7 +764,11 @@ async function adminGetUsers() {
  * @param {string} type the user's type
  */
 async function getUserDetail(id, email, type) {
-  var res = await post('admin/users/get', { id: id, email: email, type: type });
+  const res = await post('admin/users/get', {
+    id: id,
+    email: email,
+    type: type,
+  });
   if (res.error) throw res;
   else return res.data;
 }
@@ -777,7 +778,7 @@ async function getUserDetail(id, email, type) {
  * @param {object} data The new admin's data
  */
 async function registerAdmin(data) {
-  var res = await post('admin/users/add', data);
+  const res = await post('admin/users/add', data);
   if (res.error) throw res;
   else return res.data;
 }
@@ -788,7 +789,7 @@ async function registerAdmin(data) {
  * @param {string} password The new password
  */
 async function changeAdminPassword(email, password) {
-  var res = await post('admin/users/password', { email, password });
+  const res = await post('admin/users/password', { email, password });
   if (res.error) throw res;
   else return res.data;
 }
@@ -798,7 +799,7 @@ async function changeAdminPassword(email, password) {
  * @param {string} email The admin's email
  */
 async function deleteAdmin(email) {
-  var res = await post('admin/users/delete', { email });
+  const res = await post('admin/users/delete', { email });
   if (res.error) throw res;
   else return res.data;
 }
@@ -810,7 +811,7 @@ async function deleteAdmin(email) {
  * @param {string} data The new user's data.
  */
 async function editUserDetail(old_email, id, data) {
-  var res = await post('admin/users/edit', {
+  const res = await post('admin/users/edit', {
     id: id,
     email: old_email,
     ...data,
@@ -825,7 +826,7 @@ async function editUserDetail(old_email, id, data) {
  * @param {object} data The grupo's new data.
  */
 async function editGrupo(id, data) {
-  var res = await post('grupos/edit', {
+  const res = await post('grupos/edit', {
     id,
     ...data,
   });
@@ -842,7 +843,7 @@ async function editGrupo(id, data) {
  * @param {object} data The miembro's new data.
  */
 async function editMiembro(id, data) {
-  var res = await post('grupos/miembro/' + id + '/edit', data);
+  const res = await post('grupos/miembro/' + id + '/edit', data);
 
   if (res.error) throw res;
   else {
@@ -856,7 +857,7 @@ async function editMiembro(id, data) {
  * @param {string} id The grupo's id
  */
 async function deleteGrupo(id) {
-  var res = await sendDelete('grupos/' + id);
+  const res = await sendDelete('grupos/' + id);
   if (res.error) throw res;
   else return res.data;
 }
@@ -867,7 +868,7 @@ async function deleteGrupo(id) {
  * @param {string} coordinador_id The coordinador's id
  */
 async function changeCoordinador(grupo_id, coordinador_id) {
-  var res = await post('grupos/' + grupo_id + '/coordinador', {
+  const res = await post('grupos/' + grupo_id + '/coordinador', {
     coordinador: coordinador_id,
   });
   if (res.error) throw res;
@@ -883,7 +884,7 @@ async function changeCoordinador(grupo_id, coordinador_id) {
  * @param {number} status The new miembro's status (0-2)
  */
 async function editMiembroStatus(id, status) {
-  var res = await post('grupos/miembro/' + id + '/edit/status', { status });
+  const res = await post('grupos/miembro/' + id + '/edit/status', { status });
   if (res.error) throw res;
   else {
     Cache.setMiembroStatus(id, status);
@@ -896,7 +897,7 @@ async function editMiembroStatus(id, status) {
  * @param {string} id The grupo's id
  */
 async function getGrupoBajasTemporales(id) {
-  var res = await get('grupos/' + id + '/bajas');
+  const res = await get('grupos/' + id + '/bajas');
   if (res.error) throw res;
   else return res.data;
 }
@@ -909,11 +910,11 @@ async function getGrupoBajasTemporales(id) {
  */
 async function getFichaMedica(id, force = false) {
   if (!force) {
-    var f = Cache.getMiembroFicha(id);
+    const f = Cache.getMiembroFicha(id);
     if (f !== false) return f;
   }
 
-  var res = await get('grupos/miembro/' + id + '/ficha');
+  const res = await get('grupos/miembro/' + id + '/ficha');
   if (res.error) throw res;
   else {
     Cache.setMiembroFicha(id, res.data);
@@ -927,7 +928,7 @@ async function getFichaMedica(id, force = false) {
  * @param {object} data The member's new ficha medica
  */
 async function setFichaMedica(id, data) {
-  var res = await post('grupos/miembro/' + id + '/edit/ficha', {
+  const res = await post('grupos/miembro/' + id + '/edit/ficha', {
     id,
     ...data,
   });
@@ -944,7 +945,7 @@ async function setFichaMedica(id, data) {
  * @param {object} data The new acompañante's data
  */
 async function registerAcompananteZona(zona, data) {
-  var res = await post('acompanante/zona', {
+  const res = await post('acompanante/zona', {
     zona,
     ...data,
   });
@@ -963,7 +964,7 @@ async function registerAcompananteZona(zona, data) {
  * @param {object} data The new acompañante's data
  */
 async function registerAcompananteDecanato(decanato, data) {
-  var res = await post('acompanante/decanato', {
+  const res = await post('acompanante/decanato', {
     decanato,
     ...data,
   });
@@ -1008,7 +1009,7 @@ async function getAcompananteZonaOrDecanato(id) {
  * @param {string} id The acompañante's id
  */
 async function getAcompanante(id) {
-  var res = await get('acompanante/' + id);
+  const res = await get('acompanante/' + id);
   if (res.error) throw res;
   else return res.data;
 }
@@ -1018,7 +1019,7 @@ async function getAcompanante(id) {
  * @param {string} zona The zona's id
  */
 async function deleteAcompananteZona(zona) {
-  var res = await sendDelete('zonas/' + zona + '/acompanante');
+  const res = await sendDelete('zonas/' + zona + '/acompanante');
   if (res.error) throw res;
   else {
     Cache.setZonaAcompanante(zona, null);
@@ -1031,7 +1032,7 @@ async function deleteAcompananteZona(zona) {
  * @param {string} decanato The decanato's id
  */
 async function deleteAcompananteDecanato(decanato) {
-  var res = await sendDelete('decanatos/' + decanato + '/acompanante');
+  const res = await sendDelete('decanatos/' + decanato + '/acompanante');
   if (res.error) throw res;
   else {
     Cache.setDecanatoAcompanante(decanato, null);
@@ -1045,7 +1046,7 @@ async function deleteAcompananteDecanato(decanato) {
  * @param {object} data The acompañante's new data.
  */
 async function editAcompanante(id, data) {
-  var res = await post('acompanante/edit', {
+  const res = await post('acompanante/edit', {
     id,
     ...data,
   });
@@ -1059,7 +1060,7 @@ async function editAcompanante(id, data) {
  * @param {string} id The coordinador's id
  */
 async function deleteCoordinador(id) {
-  var res = await sendDelete('coordinadores/' + id);
+  const res = await sendDelete('coordinadores/' + id);
   if (res.error) throw res;
   else return res.data;
 }
@@ -1070,7 +1071,7 @@ async function deleteCoordinador(id) {
  * @param {object} data The coordinador's new data
  */
 async function editCoordinador(id, data) {
-  var res = await post('coordinadores/' + id + '/edit', data);
+  const res = await post('coordinadores/' + id + '/edit', data);
   if (res.error) throw res;
   else return res.data;
 }
@@ -1080,7 +1081,7 @@ async function editCoordinador(id, data) {
  * @param {object} data The new capactiacions data
  */
 async function addCapacitacion(data) {
-  var res = await post('capacitacion', data);
+  const res = await post('capacitacion', data);
   if (res.error) throw res;
   else return res.data;
 }
@@ -1093,7 +1094,7 @@ async function getCapacitaciones(force = false) {
   if (!force && Cache.getCapacitaciones()) {
     return Cache.getCapacitaciones();
   }
-  var res = await get('capacitacion');
+  const res = await get('capacitacion');
   if (res.error) throw res;
   else {
     Cache.setCapacitaciones(res.data);
@@ -1108,10 +1109,10 @@ async function getCapacitaciones(force = false) {
  */
 async function getCapacitacion(id, force = false) {
   if (!force) {
-    var cacheCap = Cache.getCapacitacion(id);
+    const cacheCap = Cache.getCapacitacion(id);
     if (cacheCap) return cacheCap;
   }
-  var res = await get('capacitacion/' + id);
+  const res = await get('capacitacion/' + id);
   if (res.error) throw res;
   else {
     Cache.setCapacitacion(res.data);
@@ -1125,7 +1126,7 @@ async function getCapacitacion(id, force = false) {
  * @param {object} data The capacitacións new data.
  */
 async function editCapacitacion(id, data) {
-  var res = await post('capacitacion/edit', {
+  const res = await post('capacitacion/edit', {
     id,
     ...data,
   });
@@ -1147,7 +1148,7 @@ async function editCapacitacion(id, data) {
  * @param {string} id The capacitación's data
  */
 async function removeCapacitacion(id) {
-  var res = await sendDelete('capacitacion/' + id);
+  const res = await sendDelete('capacitacion/' + id);
   if (res.error) throw res;
   else {
     Cache.removeCapacitacion(id);
@@ -1168,12 +1169,12 @@ async function registerCapacitacionAsistencia(
   miembros,
   force = false
 ) {
-  var payload = {
+  const payload = {
     fecha,
     miembros,
     force,
   };
-  var res = await post('capacitacion/' + id + '/asistencia', payload);
+  const res = await post('capacitacion/' + id + '/asistencia', payload);
   if (res.error) throw res;
   else {
     Cache.registerCapacitacionAsistencia(id, res.data);
@@ -1188,7 +1189,7 @@ async function registerCapacitacionAsistencia(
  * @param {array} miembros Array of member ids
  */
 async function saveCapacitacionAsistencia(id, fecha, miembros) {
-  var res = await post('capacitacion/' + id + '/asistencia/' + fecha, {
+  const res = await post('capacitacion/' + id + '/asistencia/' + fecha, {
     miembros,
   });
   if (res.error) throw res;
@@ -1202,7 +1203,7 @@ async function saveCapacitacionAsistencia(id, fecha, miembros) {
  * @param {string} fecha The asistencia's date in format 'YYYY-MM-DD'
  */
 async function getCapacitacionAsistencia(id, fecha) {
-  var res = await get('capacitacion/' + id + '/asistencia/' + fecha);
+  const res = await get('capacitacion/' + id + '/asistencia/' + fecha);
   if (res.error) throw res;
   else return res.data;
 }
@@ -1214,7 +1215,7 @@ async function getCapacitacionAsistencia(id, fecha) {
  * @param {object} data The participantes new data
  */
 async function editParticipante(capacitacion, id, data) {
-  var res = await post('participante/edit', {
+  const res = await post('participante/edit', {
     id,
     ...data,
   });
@@ -1236,7 +1237,7 @@ async function editParticipante(capacitacion, id, data) {
  * @param {string} id The participante's id
  */
 async function getParticipante(id) {
-  var res = await get('participante/' + id);
+  const res = await get('participante/' + id);
   if (res.error) throw res;
   else return res.data;
 }
@@ -1247,7 +1248,7 @@ async function getParticipante(id) {
  * @param {object} data The new participante's data
  */
 async function addCapacitacionParticipante(capacitacion, data) {
-  var res = await post('participante', {
+  const res = await post('participante', {
     capacitacion,
     ...data,
   });
@@ -1268,7 +1269,7 @@ async function addCapacitacionParticipante(capacitacion, data) {
  * @param {string} id The participante's id to remove
  */
 async function removeCapacitacionParticipante(capacitacion, id) {
-  var res = await sendDelete('participante/' + id);
+  const res = await sendDelete('participante/' + id);
   if (res.error) throw res;
   else {
     Cache.removeParticipante(capacitacion, id);
@@ -1282,7 +1283,7 @@ async function removeCapacitacionParticipante(capacitacion, id) {
  * @param {string} encargado The coordinador's id
  */
 async function changeCapacitacionEncargado(capacitacion, encargado) {
-  var res = await post('capacitacion/edit/encargado', {
+  const res = await post('capacitacion/edit/encargado', {
     id: capacitacion,
     capacitador: encargado,
   });
@@ -1301,7 +1302,7 @@ async function getCapacitadores(force = false) {
   if (!force && Cache.getCapacitadores()) {
     return Cache.getCapacitadores();
   }
-  var p = await get('capacitadores');
+  const p = await get('capacitadores');
   if (p.error) throw p;
   else {
     Cache.setCapacitadores(p.data);
@@ -1314,8 +1315,8 @@ async function getCapacitadores(force = false) {
  * @param {string} capacitacion The capacitación's id
  */
 async function getParticipantes(capacitacion) {
-  var res = await get('capacitacion/' + capacitacion + '/participantes');
-  if (res.error) throw err;
+  const res = await get('capacitacion/' + capacitacion + '/participantes');
+  if (res.error) throw res.error;
   else return res.data;
 }
 
@@ -1338,7 +1339,7 @@ async function getStats() {
  * @param {string} url The endpoint of the url
  */
 async function formatURL(url) {
-  var u = await getUser();
+  const u = await getUser();
   return ROOT_URL + url + '?token=' + u.token;
 }
 
@@ -1356,7 +1357,6 @@ export default {
   getParroquias,
   getParroquia,
   addParroquia,
-  getDecanato,
   getDecanatos,
   getCoordinadores,
   getCoordinadoresForAcompanante,
