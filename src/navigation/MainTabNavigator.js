@@ -55,3 +55,31 @@ export function getTabScreens(userType) {
 
   return {};
 }
+
+export function getTabBarIconName(routeName) {
+  let iconName;
+  switch (routeName) {
+    case PARROQUIAS_TAB_NAME:
+      iconName = 'church';
+      break;
+    case ACOMPANANTES_TAB_NAME:
+      iconName = 'globe-americas';
+      break;
+    case COORDINA_TAB_NAME:
+      iconName = 'user-circle';
+      break;
+    case HEMA_TAB_NAME:
+      iconName = 'users';
+      break;
+    case CALENDARIO_TAB_NAME:
+      iconName = 'calendar';
+      break;
+    case CAPACITACION_TAB_NAME:
+      iconName = 'chalkboard-teacher';
+      break;
+    default:
+      iconName = 'exclamation-circle';
+  }
+
+  return iconName;
+}
