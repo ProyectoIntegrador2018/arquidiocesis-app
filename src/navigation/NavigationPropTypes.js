@@ -17,6 +17,16 @@ export const NavigationRoutePropType = {
   params: PropTypes.object.isRequired,
 };
 
+/*
+  Use this object as A COPY, not as a reference.
+  For example:
+  MyScreen.propTypes = {
+    ...NavigationProps,
+  };
+
+  Instead of:
+  MyScreen.propTypes = NavigationProps;
+*/
 export const NavigationProps = {
   navigation: PropTypes.shape({ ...NavigationPropType }),
   route: PropTypes.shape({ ...NavigationRoutePropType }),
