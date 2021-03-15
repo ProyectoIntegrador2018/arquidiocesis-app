@@ -91,12 +91,19 @@ function Home({ navigation, route }) {
       <TouchableOpacity onPress={gotoUser}>
         <View
           style={{
-            width: 50,
-            height: 40,
-            alignItems: 'center',
-            justifyContent: 'center',
+            marginLeft: 16,
           }}>
           <FontAwesome5 name="user-circle" solid size={25} color={'white'} />
+        </View>
+      </TouchableOpacity>
+    ),
+    headerRight: () => (
+      <TouchableOpacity onPress={null}>
+        <View
+          style={{
+            marginRight: 16,
+          }}>
+          <FontAwesome5 name="comment-dots" solid size={26} color="white" />
         </View>
       </TouchableOpacity>
     ),
