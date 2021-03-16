@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 
@@ -53,18 +53,34 @@ const mockPosts = [
       },
     ],
   },
+  {
+    authorName: 'César Barraza',
+    date: new Date(),
+    textContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    comments: new Array(1),
+    attachments: [
+      {
+        type: 'document',
+        url: 'http://test.com/asdf/arch.pdf',
+      },
+      {
+        type: 'document',
+        url: 'http://test2.com/asdf/fdas/arch2.pptx',
+      },
+    ],
+  },
 ];
 
 function ChatChannelPosts() {
   return (
-    <View style={styles.root}>
+    <ScrollView style={styles.root}>
       {mockPosts.map((post) => (
         <>
           <View style={styles.postSeparator} />
           <ChatChannelPost post={post} />
         </>
       ))}
-    </View>
+    </ScrollView>
   );
 }
 

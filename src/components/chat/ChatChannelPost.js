@@ -70,7 +70,7 @@ ChatChannelPost.propTypes = {
     comments: PropTypes.array.isRequired,
     attachments: PropTypes.arrayOf(
       PropTypes.shape({
-        type: PropTypes.oneOf(['image', 'video']),
+        type: PropTypes.oneOf(['image', 'video', 'document']),
         url: PropTypes.string.isRequired,
       }).isRequired
     ).isRequired,
