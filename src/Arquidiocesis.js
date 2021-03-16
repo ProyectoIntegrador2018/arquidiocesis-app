@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
+import { MenuProvider as PopupMenuProvider } from 'react-native-popup-menu';
 import {
   Platform,
   StatusBar,
@@ -303,15 +304,17 @@ function Main() {
   };
 
   return (
-    <View style={StyleSheet.absoluteFillObject}>
-      <StatusBar barStyle={'light-content'} />
-      {!login ? (
-        <Login user={login} onLogin={onLogin} />
-      ) : (
-        // User is logged in
-        <App user={login} logout={logout} />
-      )}
-    </View>
+    <PopupMenuProvider>
+      <View style={StyleSheet.absoluteFillObject}>
+        <StatusBar barStyle={'light-content'} />
+        {!login ? (
+          <Login user={login} onLogin={onLogin} />
+        ) : (
+          // User is logged in
+          <App user={login} logout={logout} />
+        )}
+      </View>
+    </PopupMenuProvider>
   );
 }
 

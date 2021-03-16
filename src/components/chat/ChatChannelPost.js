@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import ChatChannelAttachment from './ChatChannelAttachment';
-
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 const ATTACHMENT_SIZE = 128;
 
 function ChatChannelPost({ post }) {
@@ -19,7 +24,17 @@ function ChatChannelPost({ post }) {
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.authorLabel}>{post.authorName}</Text>
-          <FontAwesome5 name="ellipsis-h" size={16} color="black" light />
+          <Menu style={{ maxWidth: 100 }}>
+            <MenuTrigger>
+              <FontAwesome5 name="ellipsis-h" size={16} color="black" light />
+            </MenuTrigger>
+            <MenuOptions>
+              <MenuOption text="Editar" />
+              <MenuOption>
+                <Text style={{ color: 'red' }}>Borrar</Text>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
         </View>
         <Text style={styles.dateLabel}>{post.date.toLocaleString()}</Text>
         <Text style={styles.textContentLabel}>{post.textContent}</Text>
@@ -146,6 +161,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#5F5F5F',
+  },
+  popupMenu: {
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
 });
 
