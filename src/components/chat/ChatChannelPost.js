@@ -2,8 +2,18 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import ChatChannelAttachment from './ChatChannelAttachment';
+
+const ATTACHMENT_SIZE = 128;
 
 function ChatChannelPost({ post }) {
+  let attachments = post.attachments;
+  let extraAttachments = 0;
+  if (post.attachments.length > 2) {
+    attachments = post.attachments.slice(0, 2);
+    extraAttachments = post.attachments.length - 2;
+  }
+
   return (
     <View style={styles.root}>
       <View style={styles.content}>
@@ -13,7 +23,27 @@ function ChatChannelPost({ post }) {
         </View>
         <Text style={styles.dateLabel}>{post.date.toLocaleString()}</Text>
         <Text style={styles.textContentLabel}>{post.textContent}</Text>
-        {}
+        {attachments.length > 0 && (
+          <View style={styles.attachmentsContainer}>
+            {attachments.map((attachment, idx) => (
+              <>
+                <View style={{ width: idx === 0 ? 0 : 8 }} />
+                <ChatChannelAttachment
+                  key={idx}
+                  attachment={attachment}
+                  size={ATTACHMENT_SIZE}
+                />
+              </>
+            ))}
+            {extraAttachments > 0 && (
+              <View style={styles.attachmentPlaceholder}>
+                <Text style={styles.attachmentPlaceholderLabel}>
+                  +{extraAttachments}
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
       </View>
 
       <View style={styles.footer}>
@@ -38,6 +68,12 @@ ChatChannelPost.propTypes = {
     date: PropTypes.instanceOf(Date).isRequired,
     textContent: PropTypes.string.isRequired,
     comments: PropTypes.array.isRequired,
+    attachments: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.oneOf(['image', 'video']),
+        url: PropTypes.string.isRequired,
+      }).isRequired
+    ).isRequired,
   }).isRequired,
 };
 
@@ -92,6 +128,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#003868',
     marginBottom: 3,
+  },
+  attachmentsContainer: {
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  attachmentPlaceholder: {
+    width: ATTACHMENT_SIZE,
+    height: ATTACHMENT_SIZE,
+    borderRadius: 8,
+    backgroundColor: '#C2C2C2',
+    marginLeft: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  attachmentPlaceholderLabel: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#5F5F5F',
   },
 });
 

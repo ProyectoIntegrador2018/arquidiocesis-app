@@ -3,18 +3,67 @@ import { StyleSheet, View } from 'react-native';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 
-const mockPost = {
-  authorName: 'Daniel Gaytan',
-  date: new Date(),
-  textContent:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida sit amet dolor eget commodo. Ut diam dui, auctor et tempus sed, egestas venenatis dui.',
-  comments: [],
-};
+const mockPosts = [
+  {
+    authorName: 'Daniel Gaytan',
+    date: new Date(),
+    textContent:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida sit amet dolor eget commodo. Ut diam dui, auctor et tempus sed, egestas venenatis dui.',
+    comments: [],
+    attachments: [],
+  },
+  {
+    authorName: 'Patricio Saldivar',
+    date: new Date(),
+    textContent:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida sit amet dolor eget commodo.',
+    comments: new Array(3),
+    attachments: [],
+  },
+  {
+    authorName: 'César Gaytan',
+    date: new Date(),
+    textContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    comments: new Array(1),
+    attachments: [
+      {
+        type: 'image',
+        url:
+          'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      },
+      {
+        type: 'video',
+        url:
+          'https://venngage-wordpress.s3.amazonaws.com/uploads/2018/09/Perfect-Sunset-Nature-Background-Image.jpeg',
+      },
+      {
+        type: 'image',
+        url:
+          'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      },
+      {
+        type: 'image',
+        url:
+          'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      },
+      {
+        type: 'image',
+        url:
+          'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      },
+    ],
+  },
+];
 
 function ChatChannelPosts() {
   return (
     <View style={styles.root}>
-      <ChatChannelPost post={mockPost} />
+      {mockPosts.map((post) => (
+        <>
+          <View style={styles.postSeparator} />
+          <ChatChannelPost post={post} />
+        </>
+      ))}
     </View>
   );
 }
@@ -26,6 +75,9 @@ ChatChannelPosts.propTypes = {
 const styles = StyleSheet.create({
   root: {
     backgroundColor: '#EDEDED',
+  },
+  postSeparator: {
+    height: 10,
   },
 });
 
