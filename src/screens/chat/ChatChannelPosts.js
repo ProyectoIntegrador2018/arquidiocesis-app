@@ -14,11 +14,7 @@ const mockPost = {
 function ChatChannelPosts() {
   return (
     <View style={styles.root}>
-      <ChatChannelPost
-        authorName={mockPost.authorName}
-        date={mockPost.date}
-        textContent={mockPost.textContent}
-      />
+      <ChatChannelPost post={mockPost} />
     </View>
   );
 }
