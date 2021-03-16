@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
+import { MenuProvider as PopupMenuProvider } from 'react-native-popup-menu';
 import {
   Platform,
   StatusBar,
@@ -74,6 +75,7 @@ import {
   Statistics,
   User,
   Zona,
+  ChatChannelPosts,
 } from './screens';
 
 const Tab = createBottomTabNavigator();
@@ -91,12 +93,19 @@ function Home({ navigation, route }) {
       <TouchableOpacity onPress={gotoUser}>
         <View
           style={{
-            width: 50,
-            height: 40,
-            alignItems: 'center',
-            justifyContent: 'center',
+            marginLeft: 16,
           }}>
           <FontAwesome5 name="user-circle" solid size={25} color={'white'} />
+        </View>
+      </TouchableOpacity>
+    ),
+    headerRight: () => (
+      <TouchableOpacity onPress={() => navigation.navigate('ChatChannelPosts')}>
+        <View
+          style={{
+            marginRight: 16,
+          }}>
+          <FontAwesome5 name="comment-dots" solid size={26} color="white" />
         </View>
       </TouchableOpacity>
     ),
@@ -256,6 +265,8 @@ function App({ user, logout }) {
         <Stack.Screen name="Objetivos" component={Objetivos} />
         <Stack.Screen name="ObjetivosDelAño" component={ObjetivosDelAño} />
         <Stack.Screen name="ObjetivosDecanato" component={ObjetivosDecanato} />
+
+        <Stack.Screen name="ChatChannelPosts" component={ChatChannelPosts} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -293,15 +304,17 @@ function Main() {
   };
 
   return (
-    <View style={StyleSheet.absoluteFillObject}>
-      <StatusBar barStyle={'light-content'} />
-      {!login ? (
-        <Login user={login} onLogin={onLogin} />
-      ) : (
-        // User is logged in
-        <App user={login} logout={logout} />
-      )}
-    </View>
+    <PopupMenuProvider>
+      <View style={StyleSheet.absoluteFillObject}>
+        <StatusBar barStyle={'light-content'} />
+        {!login ? (
+          <Login user={login} onLogin={onLogin} />
+        ) : (
+          // User is logged in
+          <App user={login} logout={logout} />
+        )}
+      </View>
+    </PopupMenuProvider>
   );
 }
 
