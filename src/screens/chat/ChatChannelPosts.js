@@ -1,15 +1,36 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 
+const mockPost = {
+  authorName: 'Daniel Gaytan',
+  date: new Date(),
+  textContent:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida sit amet dolor eget commodo. Ut diam dui, auctor et tempus sed, egestas venenatis dui.',
+  comments: [],
+};
+
 function ChatChannelPosts() {
-  return <View />;
+  return (
+    <View style={styles.root}>
+      <ChatChannelPost
+        authorName={mockPost.authorName}
+        date={mockPost.date}
+        textContent={mockPost.textContent}
+      />
+    </View>
+  );
 }
 
 ChatChannelPosts.propTypes = {
   ...NavigationProps,
 };
 
-// const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  root: {
+    backgroundColor: '#EDEDED',
+  },
+});
 
 export default React.memo(ChatChannelPosts);

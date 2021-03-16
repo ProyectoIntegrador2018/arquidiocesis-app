@@ -74,6 +74,7 @@ import {
   Statistics,
   User,
   Zona,
+  ChatChannelPosts,
 } from './screens';
 
 const Tab = createBottomTabNavigator();
@@ -98,7 +99,7 @@ function Home({ navigation, route }) {
       </TouchableOpacity>
     ),
     headerRight: () => (
-      <TouchableOpacity onPress={null}>
+      <TouchableOpacity onPress={() => navigation.navigate('ChatChannelPosts')}>
         <View
           style={{
             marginRight: 16,
@@ -263,6 +264,8 @@ function App({ user, logout }) {
         <Stack.Screen name="Objetivos" component={Objetivos} />
         <Stack.Screen name="ObjetivosDelAño" component={ObjetivosDelAño} />
         <Stack.Screen name="ObjetivosDecanato" component={ObjetivosDecanato} />
+
+        <Stack.Screen name="ChatChannelPosts" component={ChatChannelPosts} />
       </Stack.Navigator>
     </NavigationContainer>
   );
