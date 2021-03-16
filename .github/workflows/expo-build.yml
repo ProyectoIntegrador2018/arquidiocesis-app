@@ -29,3 +29,6 @@ jobs:
         
       - name: Build App
         run: expo build:web --no-pwa
+
+      - name: Run Tests
+        run: yarn test
