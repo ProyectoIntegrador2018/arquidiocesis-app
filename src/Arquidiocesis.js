@@ -78,6 +78,7 @@ import {
   ObjetivosDecanato,
 } from './screens';
 import { API } from './lib';
+import Discusiones from './screens/Discusion/Discusiones';
 
 var Tab = createBottomTabNavigator();
 var Home = (props) => {
@@ -113,59 +114,60 @@ var Home = (props) => {
 
   var showTabs = (user_type) => {
     switch (user_type) {
-    case 'admin':
-      return (
-        <>
-          <Tab.Screen name="Parroquias" component={Parroquias} />
-          <Tab.Screen name="Acompañantes" component={Acompanantes} />
-          <Tab.Screen name="Coordina" component={Coordinadores} />
-          <Tab.Screen name="HeMa" component={Grupos} />
-          <Tab.Screen name="Calendario" component={Calendar} />
-          <Tab.Screen name="Capacitación" component={Capacitaciones} />
-        </>
-      );
+      case 'admin':
+        return (
+          <>
+            <Tab.Screen name="Parroquias" component={Parroquias} />
+            <Tab.Screen name="Acompañantes" component={Acompanantes} />
+            <Tab.Screen name="Coordina" component={Coordinadores} />
+            <Tab.Screen name="HeMa" component={Grupos} />
+            <Tab.Screen name="Calendario" component={Calendar} />
+            <Tab.Screen name="Capacitación" component={Capacitaciones} />
+            <Tab.Screen name="Discusiones" component={Discusiones} />
+          </>
+        );
 
-    case 'integrante_chm':
-      return (
-        <>
-          <Tab.Screen name="Parroquias" component={Parroquias} />
-          <Tab.Screen name="Acompañantes" component={Acompanantes} />
-          <Tab.Screen name="Coordina" component={Coordinadores} />
-          <Tab.Screen name="HeMa" component={Grupos} />
-          <Tab.Screen name="Calendario" component={Calendar} />
-          <Tab.Screen name="Capacitación" component={Capacitaciones} />
-        </>
-      );
+      case 'integrante_chm':
+        return (
+          <>
+            <Tab.Screen name="Parroquias" component={Parroquias} />
+            <Tab.Screen name="Acompañantes" component={Acompanantes} />
+            <Tab.Screen name="Coordina" component={Coordinadores} />
+            <Tab.Screen name="HeMa" component={Grupos} />
+            <Tab.Screen name="Calendario" component={Calendar} />
+            <Tab.Screen name="Capacitación" component={Capacitaciones} />
+          </>
+        );
 
-    case 'coordinador':
-      return (
-        <>
-          <Tab.Screen name="HeMa" component={Grupos} />
-          <Tab.Screen name="Calendario" component={Calendar} />
-        </>
-      );
+      case 'coordinador':
+        return (
+          <>
+            <Tab.Screen name="HeMa" component={Grupos} />
+            <Tab.Screen name="Calendario" component={Calendar} />
+          </>
+        );
 
-    case 'acompañante_zona':
-    case 'acompañante_decanato':
-      return (
-        <>
-          <Tab.Screen name="Coordina" component={Coordinadores} />
-          <Tab.Screen name="Calendario" component={Calendar} />
-          <Tab.Screen name="Capacitación" component={Capacitaciones} />
-        </>
-      );
+      case 'acompañante_zona':
+      case 'acompañante_decanato':
+        return (
+          <>
+            <Tab.Screen name="Coordina" component={Coordinadores} />
+            <Tab.Screen name="Calendario" component={Calendar} />
+            <Tab.Screen name="Capacitación" component={Capacitaciones} />
+          </>
+        );
 
-    case 'capacitacion':
-      return (
-        <>
-          <Tab.Screen name="Calendario" component={Calendar} />
-          <Tab.Screen name="Capacitación" component={Capacitaciones} />
-        </>
-      );
+      case 'capacitacion':
+        return (
+          <>
+            <Tab.Screen name="Calendario" component={Calendar} />
+            <Tab.Screen name="Capacitación" component={Capacitaciones} />
+          </>
+        );
 
-    default:
-      // Error
-      return <Tab.Screen name="Error" component={User} />;
+      default:
+        // Error
+        return <Tab.Screen name="Error" component={User} />;
     }
   };
 
@@ -176,26 +178,29 @@ var Home = (props) => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           switch (route.name) {
-          case 'Parroquias':
-            iconName = 'church';
-            break;
-          case 'Acompañantes':
-            iconName = 'globe-americas';
-            break;
-          case 'Coordina':
-            iconName = 'user-circle';
-            break;
-          case 'HeMa':
-            iconName = 'users';
-            break;
-          case 'Calendario':
-            iconName = 'calendar';
-            break;
-          case 'Capacitación':
-            iconName = 'chalkboard-teacher';
-            break;
-          default:
-            iconName = 'exclamation-circle';
+            case 'Parroquias':
+              iconName = 'church';
+              break;
+            case 'Acompañantes':
+              iconName = 'globe-americas';
+              break;
+            case 'Coordina':
+              iconName = 'user-circle';
+              break;
+            case 'HeMa':
+              iconName = 'users';
+              break;
+            case 'Calendario':
+              iconName = 'calendar';
+              break;
+            case 'Capacitación':
+              iconName = 'chalkboard-teacher';
+              break;
+            case 'Discusiones':
+              iconName = 'comments';
+              break;
+            default:
+              iconName = 'exclamation-circle';
           }
           return (
             <FontAwesome5
