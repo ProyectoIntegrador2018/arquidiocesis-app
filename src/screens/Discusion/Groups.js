@@ -24,16 +24,6 @@ const AccordionItem = (props) => {
   );
 };
 
-/**
- * Props: {
- * title: string,
- * items: [{
- * title: string,
- * onClick: () => void
- * }]
- * }
- */
-
 // Channels
 const channelFac = factory((fake) => ({
   id: fake.random.uuid(),
@@ -108,7 +98,14 @@ export default (props) => {
         <Button
           style={{ width: 250, alignSelf: 'center' }}
           text="Nuevo grupo"
-          onPress={() => Alert.alert('XD')}
+          onPress={() =>
+            props.navigation.navigate('CrearGrupo', {
+              // newGroup : {title: string, channels: [{name: string}]}
+              onSubmit: (newGroup) => {
+                setGroups([newGroup, ...groups]);
+              },
+            })
+          }
         />
       </View>
 

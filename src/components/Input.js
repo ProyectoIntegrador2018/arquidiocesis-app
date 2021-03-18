@@ -19,10 +19,13 @@ export default (props) => {
 
   return (
     <View style={[styles.container, props.style]}>
-      <Text style={styles.label}>
-        {props.name || 'Input'}
-        {required && <Text style={styles.required}> *</Text>}
-      </Text>
+      {!props.noTextOver ? (
+        <Text style={styles.label}>
+          {props.name || 'Input'}
+          {required && <Text style={styles.required}> *</Text>}
+        </Text>
+      ) : null}
+
       {!readonly ? (
         <TextInput
           multiline={multiline}

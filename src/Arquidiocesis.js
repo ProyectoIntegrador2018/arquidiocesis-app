@@ -78,7 +78,10 @@ import {
   ObjetivosDecanato,
 } from './screens';
 import { API } from './lib';
-import Discusiones from './screens/Discusion/Discusiones';
+import Groups from './screens/Discusion/Groups';
+import CrearGrupo from './screens/Discusion/CrearGrupo';
+import CanalesGrupo from './screens/Discusion/CanalesGrupo';
+import CrearCanales from './screens/Discusion/CrearCanales';
 
 var Tab = createBottomTabNavigator();
 var Home = (props) => {
@@ -123,7 +126,7 @@ var Home = (props) => {
             <Tab.Screen name="HeMa" component={Grupos} />
             <Tab.Screen name="Calendario" component={Calendar} />
             <Tab.Screen name="Capacitación" component={Capacitaciones} />
-            <Tab.Screen name="Discusiones" component={Discusiones} />
+            <Tab.Screen name="Discusiones" component={Groups} />
           </>
         );
 
@@ -335,6 +338,10 @@ var App = (props) => {
         <Stack.Screen name="Objetivos" component={Objetivos} />
         <Stack.Screen name="ObjetivosDelAño" component={ObjetivosDelAño} />
         <Stack.Screen name="ObjetivosDecanato" component={ObjetivosDecanato} />
+
+        <Stack.Screen name="CrearGrupo" component={CrearGrupo} />
+        <Stack.Screen name="CanalesGrupo" component={CanalesGrupo} />
+        <Stack.Screen name="CrearCanales" component={CrearCanales} />
       </Stack.Navigator>
     </NavigationContainer>
   );
