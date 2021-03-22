@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { Button, Input, Item } from '../../components';
+import { Button } from '../../components';
 import { List } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default (props) => {
   const { channels, onSubmit } = props.route.params;

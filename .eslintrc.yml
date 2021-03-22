@@ -1,6 +1,8 @@
 env:
   browser: true
   es2021: true
+  jest: true
+  jest/globals: true
 parserOptions:
   ecmaFeatures:
     jsx: true
@@ -8,10 +10,8 @@ parserOptions:
   sourceType: module
 plugins:
   - react
+  - jest
 rules:
-  indent:
-    - warn
-    - 2
   linebreak-style:
     - off
     - unix
@@ -30,6 +30,7 @@ rules:
     - error
     - destructuring: all
   react/display-name: off
+  react/prop-types: off
 extends:
   - 'eslint:recommended'
   - 'plugin:react/recommended'

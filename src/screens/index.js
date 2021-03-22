@@ -68,6 +68,8 @@ import Objetivos from './Objetivos';
 import ObjetivosDelAño from './ObjetivosDelAño';
 import ObjetivosDecanato from './ObjetivosDecanato';
 
+import ChatChannelPosts from './chat/ChatChannelPosts';
+
 export {
   Login,
   Parroquias,
@@ -128,4 +130,5 @@ export {
   Objetivos,
   ObjetivosDelAño,
   ObjetivosDecanato,
+  ChatChannelPosts,
 };

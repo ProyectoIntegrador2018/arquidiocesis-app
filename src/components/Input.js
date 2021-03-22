@@ -9,12 +9,12 @@ import {
 import { FontAwesome5 } from '@expo/vector-icons';
 
 export default (props) => {
-  var multiline =
+  const multiline =
     typeof props.multiline !== 'undefined' && props.multiline !== false;
-  var readonly = !(
+  const readonly = !(
     typeof props.readonly === 'undefined' || props.readonly === false
   );
-  var required =
+  const required =
     typeof props.required !== 'undefined' && props.required !== false;
 
   return (
@@ -55,11 +55,11 @@ export default (props) => {
                   flexGrow: 1,
                   fontSize: 20,
                   color:
-                    !props.value || props.value.length == 0 ? 'gray' : 'black',
+                    !props.value || props.value.length === 0 ? 'gray' : 'black',
                 },
                 props.textStyle,
               ]}>
-              {!props.value || props.value.length == 0
+              {!props.value || props.value.length === 0
                 ? props.placeholder && props.placeholder.length > 0
                   ? props.placeholder
                   : props.name

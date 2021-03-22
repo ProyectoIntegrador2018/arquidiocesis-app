@@ -1,30 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { View, TextInput, Alert, StyleSheet } from 'react-native';
+import { View, TextInput } from 'react-native';
 import { Button } from '../../components';
 import { List } from 'react-native-paper';
 import { factory } from 'node-factory';
-import { Icon } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
-const AccordionItem = (props) => {
-  const [expanded, setExpanded] = React.useState(true);
-
-  const handlePress = () => setExpanded(!expanded);
-
-  return (
-    <List.Section title={props.title}>
-      <List.Accordion
-        title="Controlled Accordion"
-        left={(p) => <List.Icon {...p} icon="folder" />}
-        expanded={expanded}
-        onPress={handlePress}>
-        <List.Item title="First item" />
-        <List.Item title="Second item" />
-      </List.Accordion>
-    </List.Section>
-  );
-};
 
 // Channels
 const channelFac = factory((fake) => ({
@@ -129,21 +108,25 @@ export default (props) => {
                 borderBottomColor: '#ddd',
                 borderBottomWidth: '1px',
               }}
-              onLongPress={() => props.navigation.navigate("CrearGrupo", {
-                editGroup: v,
-                onSubmit: (renewed) => {
-                  const newGroups = [...groups]
-                  newGroups.splice(i, 1, renewed)
-                  setGroups(newGroups)
-                }
-              })}
-            >
+              onLongPress={() =>
+                props.navigation.navigate('CrearGrupo', {
+                  editGroup: v,
+                  onSubmit: (renewed) => {
+                    const newGroups = [...groups];
+                    newGroups.splice(i, 1, renewed);
+                    setGroups(newGroups);
+                  },
+                })
+              }>
               {v.channels.map((chV, chI) => (
                 <List.Item
                   title={`#${chV.name}`}
                   key={chI.toString()}
                   style={{
                     backgroundColor: chI % 2 ? 'white' : '#f8f8f8',
+                  }}
+                  onPress={() => {
+                    props.navigation.navigate('ChatChannelPosts');
                   }}
                   theme={{
                     colors: {

@@ -3,94 +3,93 @@ Nombre: Arquidiócesis.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Archivo que gestiona el tab navigation bar y el stack de pantallas de la aplicación
 */
-import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  View,
-  StatusBar,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome5 } from '@expo/vector-icons';
-
+import React, { useEffect, useState } from 'react';
+import { MenuProvider as PopupMenuProvider } from 'react-native-popup-menu';
 import {
-  Login,
-  Parroquias,
-  Parroquia,
-  Decanato,
-  Coordinadores,
-  Grupos,
-  Capacitaciones,
-  AsistenciaGrupo,
-  ZonasList,
-  Zona,
-  RegistroAdmin,
-  RegistroCoordinador,
-  RegistroParroquia,
-  RegistroMiembro,
-  RegistroGrupo,
-  Grupo,
-  RegistroCapilla,
-  EditMiembro,
-  FichaMedica,
-  DetalleCapilla,
-  DetalleMiembro,
-  User,
-  ChangePassword,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { API } from './lib';
+import {
+  getTabBarIconName,
+  getTabScreens,
+  PARROQUIAS_TAB_NAME,
+} from './navigation/MainTabNavigator';
+import {
   AdminUsers,
-  DetalleAdmin,
-  EditAdmin,
+  AsistenciaCapacitacion,
+  AsistenciaGrupo,
   ChangeCoordinador,
-  EditGrupo,
-  RegistroCapacitacion,
-  EstatusMiembro,
-  GrupoBajasTemporales,
-  RegistroParticipante,
-  DetalleCapacitacion,
-  EditParroquia,
-  RegistroAcompanante,
+  ChangeEncargado,
+  ChangePassword,
+  Decanato,
   DetalleAcompanante,
-  EditAcompanante,
+  DetalleAdmin,
+  DetalleCapacitacion,
+  DetalleCapilla,
   DetalleCoordinador,
   DetalleEncargado,
-  EditCoordinador,
-  EditarCapacitacion,
+  DetalleMiembro,
   DetalleParticipante,
-  EditarParticipante,
-  ChangeEncargado,
-  AsistenciaCapacitacion,
+  EditAcompanante,
+  EditAdmin,
+  EditarCapacitacion,
   EditarCapilla,
-  Reports,
-  SelectGroup,
-  SelectCapacitacion,
-  Select,
-  Acompanantes,
-  Statistics,
-  Calendar,
-  RegistroEvento,
-  Evento,
+  EditarParticipante,
+  EditCoordinador,
   EditEvento,
+  EditGrupo,
+  EditMiembro,
+  EditParroquia,
+  EstatusMiembro,
+  Evento,
+  FichaMedica,
+  Grupo,
+  GrupoBajasTemporales,
+  Login,
   Objetivos,
-  ObjetivosDelAño,
   ObjetivosDecanato,
+  ObjetivosDelAño,
+  Parroquia,
+  RegistroAcompanante,
+  RegistroAdmin,
+  RegistroCapacitacion,
+  RegistroCapilla,
+  RegistroCoordinador,
+  RegistroEvento,
+  RegistroGrupo,
+  RegistroMiembro,
+  RegistroParroquia,
+  RegistroParticipante,
+  Reports,
+  Select,
+  SelectCapacitacion,
+  SelectGroup,
+  Statistics,
+  User,
+  Zona,
+  ChatChannelPosts,
 } from './screens';
-import { API } from './lib';
+
 import Groups from './screens/Discusion/Groups';
 import CrearGrupo from './screens/Discusion/CrearGrupo';
 import CanalesGrupo from './screens/Discusion/CanalesGrupo';
 import CrearCanales from './screens/Discusion/CrearCanales';
 
-var Tab = createBottomTabNavigator();
-var Home = (props) => {
-  var [user, setUser] = useState(false);
-  var { navigation } = props;
+const Tab = createBottomTabNavigator();
+function Home({ navigation, route }) {
+  const [user, setUser] = useState(false);
 
-  var gotoUser = () => {
-    props.navigation.navigate('User', {
-      logout: props.route.params.logout,
+  const gotoUser = () => {
+    navigation.navigate('User', {
+      logout: route.params.logout,
     });
   };
 
@@ -99,12 +98,19 @@ var Home = (props) => {
       <TouchableOpacity onPress={gotoUser}>
         <View
           style={{
-            width: 50,
-            height: 40,
-            alignItems: 'center',
-            justifyContent: 'center',
+            marginLeft: 16,
           }}>
           <FontAwesome5 name="user-circle" solid size={25} color={'white'} />
+        </View>
+      </TouchableOpacity>
+    ),
+    headerRight: () => (
+      <TouchableOpacity onPress={() => navigation.navigate('Grupos')}>
+        <View
+          style={{
+            marginRight: 16,
+          }}>
+          <FontAwesome5 name="comment-dots" solid size={26} color="white" />
         </View>
       </TouchableOpacity>
     ),
@@ -115,99 +121,15 @@ var Home = (props) => {
     API.getUser().then(setUser);
   }, []);
 
-  var showTabs = (user_type) => {
-    switch (user_type) {
-      case 'admin':
-        return (
-          <>
-            <Tab.Screen name="Parroquias" component={Parroquias} />
-            <Tab.Screen name="Acompañantes" component={Acompanantes} />
-            <Tab.Screen name="Coordina" component={Coordinadores} />
-            <Tab.Screen name="HeMa" component={Grupos} />
-            <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Capacitación" component={Capacitaciones} />
-            <Tab.Screen name="Discusiones" component={Groups} />
-          </>
-        );
-
-      case 'integrante_chm':
-        return (
-          <>
-            <Tab.Screen name="Parroquias" component={Parroquias} />
-            <Tab.Screen name="Acompañantes" component={Acompanantes} />
-            <Tab.Screen name="Coordina" component={Coordinadores} />
-            <Tab.Screen name="HeMa" component={Grupos} />
-            <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Capacitación" component={Capacitaciones} />
-          </>
-        );
-
-      case 'coordinador':
-        return (
-          <>
-            <Tab.Screen name="HeMa" component={Grupos} />
-            <Tab.Screen name="Calendario" component={Calendar} />
-          </>
-        );
-
-      case 'acompañante_zona':
-      case 'acompañante_decanato':
-        return (
-          <>
-            <Tab.Screen name="Coordina" component={Coordinadores} />
-            <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Capacitación" component={Capacitaciones} />
-          </>
-        );
-
-      case 'capacitacion':
-        return (
-          <>
-            <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Capacitación" component={Capacitaciones} />
-          </>
-        );
-
-      default:
-        // Error
-        return <Tab.Screen name="Error" component={User} />;
-    }
-  };
-
+  const tabScreens = getTabScreens(user.type);
   return (
     <Tab.Navigator
-      initialRouteName="Parroquias"
+      initialRouteName={PARROQUIAS_TAB_NAME}
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          switch (route.name) {
-            case 'Parroquias':
-              iconName = 'church';
-              break;
-            case 'Acompañantes':
-              iconName = 'globe-americas';
-              break;
-            case 'Coordina':
-              iconName = 'user-circle';
-              break;
-            case 'HeMa':
-              iconName = 'users';
-              break;
-            case 'Calendario':
-              iconName = 'calendar';
-              break;
-            case 'Capacitación':
-              iconName = 'chalkboard-teacher';
-              break;
-            case 'Discusiones':
-              iconName = 'comments';
-              break;
-            default:
-              iconName = 'exclamation-circle';
-          }
+        tabBarIcon: ({ color, size }) => {
           return (
             <FontAwesome5
-              name={iconName}
+              name={getTabBarIconName(route.name)}
               size={size}
               color={color}
               style={{ paddingTop: 5 }}
@@ -221,18 +143,28 @@ var Home = (props) => {
         inactiveTintColor: 'gray',
         labelPosition: 'below-icon',
       }}>
-      {showTabs(user.type)}
+      {Object.keys(tabScreens).length > 0 ? (
+        Object.keys(tabScreens).map((screenName) => (
+          <Tab.Screen
+            key={screenName}
+            name={screenName}
+            component={tabScreens[screenName]}
+          />
+        ))
+      ) : (
+        <Tab.Screen name="Error" component={User} />
+      )}
     </Tab.Navigator>
   );
-};
+}
 
 // The app's main stack.
-var Stack = createStackNavigator();
-var App = (props) => {
+const Stack = createStackNavigator();
+function App({ user, logout }) {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        user={props.user}
+        user={user}
         initialRouteName="Home"
         screenOptions={{
           headerStyle: { backgroundColor: '#002E60' },
@@ -246,7 +178,7 @@ var App = (props) => {
         <Stack.Screen
           name="Home"
           component={Home}
-          initialParams={{ logout: props.logout }}
+          initialParams={{ logout: logout }}
         />
         <Stack.Screen name="RegistroAdmin" component={RegistroAdmin} />
         <Stack.Screen
@@ -338,17 +270,18 @@ var App = (props) => {
         <Stack.Screen name="Objetivos" component={Objetivos} />
         <Stack.Screen name="ObjetivosDelAño" component={ObjetivosDelAño} />
         <Stack.Screen name="ObjetivosDecanato" component={ObjetivosDecanato} />
-
         <Stack.Screen name="CrearGrupo" component={CrearGrupo} />
         <Stack.Screen name="CanalesGrupo" component={CanalesGrupo} />
         <Stack.Screen name="CrearCanales" component={CrearCanales} />
+        <Stack.Screen name="Grupos" component={Groups} />
+        <Stack.Screen name="ChatChannelPosts" component={ChatChannelPosts} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
+}
 
-export default (props) => {
-  var [login, setLogin] = useState(false);
+function Main() {
+  const [login, setLogin] = useState(false);
 
   // This function runs when the screen is shown.
   useEffect(() => {
@@ -361,32 +294,36 @@ export default (props) => {
   }, []);
 
   // Check to see if the user is logged in.
-  var checkLogin = () => {
+  const checkLogin = () => {
     API.getLogin().then((user) => {
       if (!user) return setLogin(null);
       setLogin(user);
     });
   };
 
-  var onLogin = (user) => {
+  const onLogin = (user) => {
     setLogin(user);
   };
 
-  var logout = () => {
-    API.logout().then((done) => {
+  const logout = () => {
+    API.logout().then(() => {
       setLogin(null);
     });
   };
 
   return (
-    <View style={StyleSheet.absoluteFillObject}>
-      <StatusBar barStyle={'light-content'} />
-      {!login ? (
-        <Login user={login} onLogin={onLogin} />
-      ) : (
-        // User is logged in
-        <App user={login} logout={logout} />
-      )}
-    </View>
+    <PopupMenuProvider>
+      <View style={StyleSheet.absoluteFillObject}>
+        <StatusBar barStyle={'light-content'} />
+        {!login ? (
+          <Login user={login} onLogin={onLogin} />
+        ) : (
+          // User is logged in
+          <App user={login} logout={logout} />
+        )}
+      </View>
+    </PopupMenuProvider>
   );
-};
+}
+
+export default React.memo(Main);
