@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Button, Input, Item } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+/**
+ * props: {editGroup: {title: string, channels: {name: string}}}
+ */
 export default (props) => {
-  const [name, setName] = useState('');
-  const [channels, setChannels] = useState([]);
+  console.log(props);
+  const { editGroup } = props.route.params;
+  const [name, setName] = useState(editGroup ? editGroup.title : '');
+  const [channels, setChannels] = useState(editGroup ? editGroup.channels : []);
+  const isEdit = editGroup !== undefined;
 
   return (
     <>
       <KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
-        <Text style={styles.header}>Crear grupo</Text>
+        <Text style={styles.header}>
+          {isEdit ? 'Editar grupo' : 'Crear grupo'}
+        </Text>
         <Input
           noTextOver
           placeholder="Nombre del grupo"
@@ -33,7 +41,7 @@ export default (props) => {
           }}
         />
         <Button
-          text="Registrar"
+          text={isEdit ? 'Aceptar' : 'Registrar'}
           onPress={() => {
             props.route.params.onSubmit({
               title: name,

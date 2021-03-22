@@ -4,6 +4,8 @@ import { View, TextInput, Alert, StyleSheet } from 'react-native';
 import { Button } from '../../components';
 import { List } from 'react-native-paper';
 import { factory } from 'node-factory';
+import { Icon } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const AccordionItem = (props) => {
   const [expanded, setExpanded] = React.useState(true);
@@ -126,7 +128,16 @@ export default (props) => {
               style={{
                 borderBottomColor: '#ddd',
                 borderBottomWidth: '1px',
-              }}>
+              }}
+              onLongPress={() => props.navigation.navigate("CrearGrupo", {
+                editGroup: v,
+                onSubmit: (renewed) => {
+                  const newGroups = [...groups]
+                  newGroups.splice(i, 1, renewed)
+                  setGroups(newGroups)
+                }
+              })}
+            >
               {v.channels.map((chV, chI) => (
                 <List.Item
                   title={`#${chV.name}`}
