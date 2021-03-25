@@ -9,9 +9,9 @@ import {
 import { FontAwesome5 } from '@expo/vector-icons';
 
 export default (props) => {
-  var [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  var press = () => {
+  const press = () => {
     if (!props.onPress) return;
     props.onPress(function (d) {
       setLoading(d);

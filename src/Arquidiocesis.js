@@ -78,6 +78,11 @@ import {
   ChatChannelPosts,
 } from './screens';
 
+import Groups from './screens/Discusion/Groups';
+import CrearGrupo from './screens/Discusion/CrearGrupo';
+import CanalesGrupo from './screens/Discusion/CanalesGrupo';
+import CrearCanales from './screens/Discusion/CrearCanales';
+
 const Tab = createBottomTabNavigator();
 function Home({ navigation, route }) {
   const [user, setUser] = useState(false);
@@ -100,7 +105,7 @@ function Home({ navigation, route }) {
       </TouchableOpacity>
     ),
     headerRight: () => (
-      <TouchableOpacity onPress={() => navigation.navigate('ChatChannelPosts')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Grupos')}>
         <View
           style={{
             marginRight: 16,
@@ -265,7 +270,10 @@ function App({ user, logout }) {
         <Stack.Screen name="Objetivos" component={Objetivos} />
         <Stack.Screen name="ObjetivosDelAño" component={ObjetivosDelAño} />
         <Stack.Screen name="ObjetivosDecanato" component={ObjetivosDecanato} />
-
+        <Stack.Screen name="CrearGrupo" component={CrearGrupo} />
+        <Stack.Screen name="CanalesGrupo" component={CanalesGrupo} />
+        <Stack.Screen name="CrearCanales" component={CrearCanales} />
+        <Stack.Screen name="Grupos" component={Groups} />
         <Stack.Screen name="ChatChannelPosts" component={ChatChannelPosts} />
       </Stack.Navigator>
     </NavigationContainer>

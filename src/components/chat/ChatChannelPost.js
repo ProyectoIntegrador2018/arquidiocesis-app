@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   dateLabel: {
-    fontSize: 'small',
+    fontSize: 12,
     color: 'gray',
     marginBottom: 4,
   },
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     color: '#8C8C8C',
     marginLeft: 5,
     marginBottom: 3,
-    fontSize: 'small',
+    fontSize: 12,
   },
   replyButton: {
     alignItems: 'center',

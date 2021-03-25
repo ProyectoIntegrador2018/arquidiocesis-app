@@ -33,6 +33,7 @@
     "expo-file-system": "~9.3.0",
     "expo-mail-composer": "~9.0.0",
     "express": "^4.17.1",
+    "faker": "^5.4.0",
     "moment": "^2.26.0",
     "react": "16.13.1",
     "react-checklist": "^1.0.9",
@@ -44,6 +45,7 @@
     "react-native-elements": "^3.3.1",
     "react-native-gesture-handler": "~1.8.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
+    "react-native-paper": "^4.7.2",
     "react-native-picker-select": "^7.0.0",
     "react-native-popup-menu": "^0.15.10",
     "react-native-reanimated": "~1.13.0",
@@ -69,6 +71,7 @@
     "husky": "4.2.5",
     "jest-expo": "^40.0.0",
     "lint-staged": "^10.5.4",
+    "node-factory": "^0.4.1",
     "prettier": "2.2.1",
     "pretty-quick": "^3.1.0",
     "react-test-renderer": "^17.0.1"

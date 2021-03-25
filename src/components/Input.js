@@ -9,20 +9,23 @@ import {
 import { FontAwesome5 } from '@expo/vector-icons';
 
 export default (props) => {
-  var multiline =
+  const multiline =
     typeof props.multiline !== 'undefined' && props.multiline !== false;
-  var readonly = !(
+  const readonly = !(
     typeof props.readonly === 'undefined' || props.readonly === false
   );
-  var required =
+  const required =
     typeof props.required !== 'undefined' && props.required !== false;
 
   return (
     <View style={[styles.container, props.style]}>
-      <Text style={styles.label}>
-        {props.name || 'Input'}
-        {required && <Text style={styles.required}> *</Text>}
-      </Text>
+      {!props.noTextOver ? (
+        <Text style={styles.label}>
+          {props.name || 'Input'}
+          {required && <Text style={styles.required}> *</Text>}
+        </Text>
+      ) : null}
+
       {!readonly ? (
         <TextInput
           multiline={multiline}
@@ -52,11 +55,11 @@ export default (props) => {
                   flexGrow: 1,
                   fontSize: 20,
                   color:
-                    !props.value || props.value.length == 0 ? 'gray' : 'black',
+                    !props.value || props.value.length === 0 ? 'gray' : 'black',
                 },
                 props.textStyle,
               ]}>
-              {!props.value || props.value.length == 0
+              {!props.value || props.value.length === 0
                 ? props.placeholder && props.placeholder.length > 0
                   ? props.placeholder
                   : props.name
