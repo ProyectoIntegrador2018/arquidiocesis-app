@@ -71,7 +71,11 @@ const mockPosts = [
   },
 ];
 
-function ChatChannelPosts() {
+function ChatChannelPosts({ navigation, route }) {
+  navigation.setOptions({
+    headerTitle: route.params.channelName,
+  });
+
   return (
     <ScrollView style={styles.root}>
       {mockPosts.map((post) => (

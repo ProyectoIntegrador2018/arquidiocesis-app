@@ -126,7 +126,9 @@ export default (props) => {
                     backgroundColor: chI % 2 ? 'white' : '#f8f8f8',
                   }}
                   onPress={() => {
-                    props.navigation.navigate('ChatChannelPosts');
+                    props.navigation.navigate('ChatChannelPosts', {
+                      channelName: `#${chV.name}`,
+                    });
                   }}
                   theme={{
                     colors: {
