@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const mockPosts = [
   {
@@ -74,6 +75,17 @@ const mockPosts = [
 function ChatChannelPosts({ navigation, route }) {
   navigation.setOptions({
     headerTitle: route.params.channelName,
+    headerRight: () => (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ChatChannelCreatePost')}>
+        <View
+          style={{
+            marginRight: 16,
+          }}>
+          <FontAwesome5 name="plus" solid size={18} color="white" />
+        </View>
+      </TouchableOpacity>
+    ),
   });
 
   return (
