@@ -1,13 +1,22 @@
-import { post, put } from './APIv2';
+import { get, post, put } from './APIv2';
 
 const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/groups';
 /**
+ * @typedef {{id: string, data: Object}[]} AllGroupsResponse
+ *
  * @typedef {{name: string, roles: {[key: string]: string}, channels: string[]}} AddGroupParams
  * @typedef {{error: boolean, data: string}} AddGroupResponse
  *
  * @typedef {{id: string, name: string, description: string}} EditGroupParams
  * @typedef {{error: boolean}} EditGroupResponse
  */
+
+/**
+ * @returns {Promise<AllGroupsResponse>}
+ */
+async function all() {
+  return await get(ROOT_URL);
+}
 
 /**
  * @param {AddGroupParams} params
@@ -46,6 +55,7 @@ async function edit(params) {
 }
 
 export default {
+  all,
   add,
   edit,
 };
