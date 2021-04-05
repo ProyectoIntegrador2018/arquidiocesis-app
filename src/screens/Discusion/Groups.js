@@ -3,10 +3,10 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { View, TextInput } from 'react-native';
 import { Button } from '../../components';
 import { List } from 'react-native-paper';
-import { factory } from 'node-factory';
+import GroupsConvAPI from '../../lib/apiV2/GroupsConvAPI';
 
 // Channels
-const channelFac = factory((fake) => ({
+/* const channelFac = factory((fake) => ({
   id: fake.random.uuid(),
   name: fake.random.word(),
 }));
@@ -15,14 +15,33 @@ const groupFac = factory((fake) => ({
   id: fake.random.uuid(),
   title: fake.random.word(),
   channels: channelFac.make(fake.random.number(10)),
-}));
+})); */
 
 export default (props) => {
   const [search, setSearch] = useState('');
   const [groups, setGroups] = useState([]);
+  console.log(groups);
 
   useEffect(() => {
-    setGroups(groupFac.make(15));
+    GroupsConvAPI.all()
+      .then((v) => {
+        if (v.error) throw v.message;
+        else return v.data;
+      })
+      .then((v) =>
+        v.map((v) => ({
+          id: v.id,
+          title: v.content.group_name,
+          channels: v.content.group_channels.map((ch, i) => ({
+            id: i,
+            name: ch,
+          })),
+        }))
+      )
+      .then(setGroups)
+      .catch((v) => {
+        console.error(v);
+      });
   }, []);
 
   return (
@@ -83,7 +102,19 @@ export default (props) => {
             props.navigation.navigate('CrearGrupo', {
               // newGroup : {title: string, channels: [{name: string}]}
               onSubmit: (newGroup) => {
-                setGroups([newGroup, ...groups]);
+                GroupsConvAPI.add({
+                  name: newGroup.title,
+                  channels: [],
+                  roles: [],
+                })
+                  .then((v) => {
+                    if (v.error) throw v.message;
+                    else return v.data;
+                  })
+                  .then((v) => {
+                    setGroups([...groups, { ...newGroup, id: v }]);
+                  })
+                  .catch((v) => console.error(v));
               },
             })
           }
@@ -95,50 +126,52 @@ export default (props) => {
           backgroundColor: 'white',
         }}>
         <List.Section title={props.title}>
-          {groups.map((v, i) => (
-            <List.Accordion
-              title={v.title}
-              key={i.toString()}
-              theme={{
-                colors: {
-                  primary: 'black',
-                },
-              }}
-              style={{
-                borderBottomColor: '#ddd',
-                borderBottomWidth: '1px',
-              }}
-              onLongPress={() =>
-                props.navigation.navigate('CrearGrupo', {
-                  editGroup: v,
-                  onSubmit: (renewed) => {
-                    const newGroups = [...groups];
-                    newGroups.splice(i, 1, renewed);
-                    setGroups(newGroups);
+          {groups
+            .filter((v) => v.title.includes(search))
+            .map((v, i) => (
+              <List.Accordion
+                title={v.title}
+                key={i.toString()}
+                theme={{
+                  colors: {
+                    primary: 'black',
                   },
-                })
-              }>
-              {v.channels.map((chV, chI) => (
-                <List.Item
-                  title={`#${chV.name}`}
-                  key={chI.toString()}
-                  style={{
-                    backgroundColor: chI % 2 ? 'white' : '#f8f8f8',
-                  }}
-                  onPress={() => {
-                    props.navigation.navigate('ChatChannelPosts', {
-                      channelName: `#${chV.name}`,
-                    });
-                  }}
-                  theme={{
-                    colors: {
-                      text: '#567998',
+                }}
+                style={{
+                  borderBottomColor: '#ddd',
+                  borderBottomWidth: '1px',
+                }}
+                onLongPress={() =>
+                  props.navigation.navigate('CrearGrupo', {
+                    editGroup: v,
+                    onSubmit: (renewed) => {
+                      const newGroups = [...groups];
+                      newGroups.splice(i, 1, renewed);
+                      setGroups(newGroups);
                     },
-                  }}
-                />
-              ))}
-            </List.Accordion>
-          ))}
+                  })
+                }>
+                {v.channels.map((chV, chI) => (
+                  <List.Item
+                    title={'#General'}
+                    key={chI.toString()}
+                    style={{
+                      backgroundColor: chI % 2 ? 'white' : '#f8f8f8',
+                    }}
+                    onPress={() => {
+                      props.navigation.navigate('ChatChannelPosts', {
+                        channelName: '#General',
+                      });
+                    }}
+                    theme={{
+                      colors: {
+                        text: '#567998',
+                      },
+                    }}
+                  />
+                ))}
+              </List.Accordion>
+            ))}
         </List.Section>
       </View>
     </View>

@@ -1,13 +1,13 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { Button, Input, Item } from '../../components';
+import { Button, Input } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 /**
  * props: {editGroup: {title: string, channels: {name: string}}}
  */
 export default (props) => {
-  console.log(props);
   const { editGroup } = props.route.params;
   const [name, setName] = useState(editGroup ? editGroup.title : '');
   const [channels, setChannels] = useState(editGroup ? editGroup.channels : []);
@@ -28,7 +28,7 @@ export default (props) => {
             setName(v);
           }}
         />
-        <Item
+        {/* <Item
           text="Ver canales"
           onPress={() => {
             props.navigation.navigate('CanalesGrupo', {
@@ -39,7 +39,7 @@ export default (props) => {
               },
             });
           }}
-        />
+        /> */}
         <Button
           text={isEdit ? 'Aceptar' : 'Registrar'}
           onPress={() => {
