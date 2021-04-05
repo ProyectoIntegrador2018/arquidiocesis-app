@@ -15,7 +15,7 @@ const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/groups';
  * @returns {Promise<AllGroupsResponse>}
  */
 async function all() {
-  return await get(ROOT_URL);
+  return await get(`${ROOT_URL}/get`);
 }
 
 /**
