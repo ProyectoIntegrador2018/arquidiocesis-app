@@ -24,7 +24,7 @@ async function all() {
  */
 async function add(params) {
   const { name, roles, channels } = params;
-  if (name == null || Object.keys(roles).length < 1 || channels.length < 1) {
+  if (name == null) {
     return null;
   }
 
