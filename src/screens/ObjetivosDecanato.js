@@ -2,7 +2,7 @@
 Nombre: ObjetivosDecanato.js
 Descripción: Pantalla para editar la información de los objetivos de un decanato
 */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Alert,
   View,
@@ -10,14 +10,14 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Input, Button } from "../components";
-import { API } from "./../lib";
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Input, Button } from '../components';
+import { API } from './../lib';
 
 export default (props) => {
   const { objectiveData, onEdit } = props.route.params;
-  console.log("objectiveData :>> ", objectiveData);
+  console.log('objectiveData :>> ', objectiveData);
 
   const [loading, setLoading] = useState(false);
   const [p, setP] = useState(String(objectiveData[1]));
@@ -28,29 +28,27 @@ export default (props) => {
 
   props.navigation.setOptions({
     headerStyle: {
-      backgroundColor: "#002E60",
+      backgroundColor: '#002E60',
       shadowOpacity: 0,
     },
-    headerTitle: "Editar un objetivo",
+    headerTitle: 'Editar un objetivo',
   });
 
   const editObjective = async () => {
     if (loading) return;
 
     if (Number.isNaN(parseInt(p)))
-      return alert("Por favor introduzca un número para P.");
+      return alert('Por favor introduzca un número para P.');
     if (Number.isNaN(parseInt(cg)))
-      return alert("Por favor introduzca un número para CG.");
+      return alert('Por favor introduzca un número para CG.');
     if (Number.isNaN(parseInt(oc1)))
-      return alert("Por favor introduzca un número para OC1.");
+      return alert('Por favor introduzca un número para OC1.');
     if (Number.isNaN(parseInt(oc2)))
-      return alert("Por favor introduzca un número para OC2.");
+      return alert('Por favor introduzca un número para OC2.');
     if (Number.isNaN(parseInt(oc3)))
-      return alert("Por favor introduzca un número para OC3.");
+      return alert('Por favor introduzca un número para OC3.');
     if (!objectiveData[6])
-      return alert(
-        "No se tiene el ID del objetivo actual, contacte a soporte."
-      );
+      return alert('No se tiene el ID del objetivo actual, contacte a soporte.');
 
     setLoading(true);
 
@@ -66,15 +64,15 @@ export default (props) => {
       const editedObjective = await API.editObjective(data);
 
       onEdit(data);
-      alert("Se ha editado el objetivo");
+      alert('Se ha editado el objetivo');
       props.navigation.goBack();
     } catch (error) {
-      console.log("error :>> ", error);
+      console.log('error :>> ', error);
 
-      if (error.message === "Ya existe un evento con ese nombre.") {
+      if (error.message === 'Ya existe un evento con ese nombre.') {
         alert(error.message);
       } else {
-        alert("Hubo un error editando el objetivo");
+        alert('Hubo un error editando el objetivo');
       }
     }
 
@@ -110,18 +108,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 5,
-    color: "grey",
-    fontWeight: "500",
+    color: 'grey',
+    fontWeight: '500',
   },
   container: {
-    height: "70%",
-    width: "100%",
+    height: '70%',
+    width: '100%',
     padding: 10,
   },
   header: {
     fontSize: 24,
-    fontWeight: "600",
-    textAlign: "center",
+    fontWeight: '600',
+    textAlign: 'center',
     marginBottom: 20,
     marginTop: 20,
   },

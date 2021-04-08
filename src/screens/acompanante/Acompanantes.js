@@ -3,17 +3,17 @@ Nombre: Acompañantes.js
 Usuario con acceso: Admin
 Descripción: Pantalla para ver la información de todos los acompañantes en el sistema
 */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from "react-native";
-import { RefreshControl } from "react-native-web-refresh-control";
-import { AlphabetList, Button, ErrorView } from "../../components";
-import { API } from "../../lib";
+} from 'react-native';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { AlphabetList, Button, ErrorView } from '../../components';
+import { API } from '../../lib';
 
 export default (props) => {
   var [data, setData] = useState(false);
@@ -55,7 +55,7 @@ export default (props) => {
   if (error) {
     return (
       <ErrorView
-        message={"Hubo un error cargando los acompañantes..."}
+        message={'Hubo un error cargando los acompañantes...'}
         refreshing={refreshing}
         retry={getAcompanantes}
       />
@@ -69,11 +69,10 @@ export default (props) => {
         <Text
           style={{
             marginTop: 10,
-            textAlign: "center",
-            fontWeight: "600",
+            textAlign: 'center',
+            fontWeight: '600',
             fontSize: 16,
-          }}
-        >
+          }}>
           Cargando datos...
         </Text>
       </View>
@@ -81,8 +80,8 @@ export default (props) => {
   }
 
   var detalleAcompanante = (item) => {
-    console.log("item :>> ", item);
-    props.navigation.navigate("DetalleAcompanante", {
+    console.log('item :>> ', item);
+    props.navigation.navigate('DetalleAcompanante', {
       acompanante: item,
       onEdit: (id, coord) => {
         setData([...data.filter((a) => a.id != id), coord]);
@@ -94,8 +93,8 @@ export default (props) => {
   };
 
   const addAcompanante = () => {
-    console.log("addAcompanante start");
-    props.navigation.navigate("RegistroAcompanante", {
+    console.log('addAcompanante start');
+    props.navigation.navigate('RegistroAcompanante', {
       onAdd: (c) => {
         if (c.id === undefined) {
           getAcompanantes();
@@ -123,13 +122,12 @@ export default (props) => {
       style={{ flex: 1 }}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={getAcompanantes} />
-      }
-    >
+      }>
       <View>
-        {user && (user.type == "admin" || user.type == "superadmin") && (
+        {user && (user.type == 'admin' || user.type == 'superadmin') && (
           <Button
             text="Agregar acompañante"
-            style={{ width: 250, alignSelf: "center" }}
+            style={{ width: 250, alignSelf: 'center' }}
             onPress={addAcompanante}
           />
         )}
@@ -137,13 +135,12 @@ export default (props) => {
           <View>
             <Text
               style={{
-                textAlign: "center",
+                textAlign: 'center',
                 fontSize: 16,
-                color: "gray",
-                backgroundColor: "white",
+                color: 'gray',
+                backgroundColor: 'white',
                 padding: 15,
-              }}
-            >
+              }}>
               No hay acompañantes en el sistema.
             </Text>
           </View>
@@ -152,7 +149,7 @@ export default (props) => {
             data={formatData()}
             onSelect={detalleAcompanante}
             scroll
-            sort={"nombre_completo"}
+            sort={'nombre_completo'}
           />
         )}
       </View>
@@ -166,7 +163,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

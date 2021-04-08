@@ -5,178 +5,266 @@ Descripción: Pantalla que edita la información de los acompañantes de zona y 
 */
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Input, Button, Picker, Alert, DatePicker } from '../../components'
+import { Input, Button, Picker, Alert, DatePicker } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../../lib';
-import moment from 'moment/min/moment-with-locales'
-moment.locale('es')
+import moment from 'moment/min/moment-with-locales';
+moment.locale('es');
 
-export default (props)=>{
-	var { onEdit, persona } = props.route.params;
+export default (props) => {
+  var { onEdit, persona } = props.route.params;
 
-	var bd = moment.unix(persona.fecha_nacimiento._seconds)
-	if(!bd.isValid()) bd = moment();
+  var bd = moment.unix(persona.fecha_nacimiento._seconds);
+  if (!bd.isValid()) bd = moment();
 
-	var [loading, setLoading] = useState(false);
-	var [name, setName] = useState(persona.nombre);
-	var [apPaterno, setApPaterno] = useState(persona.apellido_paterno);
-	var [apMaterno, setApMaterno] = useState(persona.apellido_materno);
-	var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'));
-	var [gender, setGender] = useState(false);
-	var [estadoCivil, setEstadoCivil] = useState(false);
-	var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio);
-	var [colonia, setColonia] = useState(persona.domicilio.colonia);
-	var [municipio, setMunicipio] = useState(persona.domicilio.municipio);
-	var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa);
-	var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
-	var [escolaridad, setEscolaridad] = useState(false);
-	var [oficio, setOficio] = useState(false);
+  var [loading, setLoading] = useState(false);
+  var [name, setName] = useState(persona.nombre);
+  var [apPaterno, setApPaterno] = useState(persona.apellido_paterno);
+  var [apMaterno, setApMaterno] = useState(persona.apellido_materno);
+  var [birthday, setBirthday] = useState(bd.format('YYYY-MM-DD'));
+  var [gender, setGender] = useState(false);
+  var [estadoCivil, setEstadoCivil] = useState(false);
+  var [domicilio, setDomicilio] = useState(persona.domicilio.domicilio);
+  var [colonia, setColonia] = useState(persona.domicilio.colonia);
+  var [municipio, setMunicipio] = useState(persona.domicilio.municipio);
+  var [phoneHome, setPhoneHome] = useState(persona.domicilio.telefono_casa);
+  var [phoneMobile, setPhoneMobile] = useState(persona.domicilio.telefono_movil);
+  var [escolaridad, setEscolaridad] = useState(false);
+  var [oficio, setOficio] = useState(false);
 
-	props.navigation.setOptions({
-		headerTitle: 'Editar Acompañante'
-	});
+  props.navigation.setOptions({
+    headerTitle: 'Editar Acompañante',
+  });
 
-	var doRegister = ()=>{
-		if(loading) return;
+  var doRegister = () => {
+    if (loading) return;
 
-		var data = {
-			nombre: name,
-			apellido_paterno: apPaterno,
-			apellido_materno: apMaterno,
-			fecha_nacimiento: birthday,
-			estado_civil: estadoCivil,
-			sexo: gender,
-			escolaridad: escolaridad,
-			oficio: oficio,
-			domicilio: {
-				domicilio: domicilio,
-				colonia: colonia,
-				municipio: municipio,
-				telefono_casa: phoneHome,
-				telefono_movil: phoneMobile,
-			}
-		}
+    var data = {
+      nombre: name,
+      apellido_paterno: apPaterno,
+      apellido_materno: apMaterno,
+      fecha_nacimiento: birthday,
+      estado_civil: estadoCivil,
+      sexo: gender,
+      escolaridad: escolaridad,
+      oficio: oficio,
+      domicilio: {
+        domicilio: domicilio,
+        colonia: colonia,
+        municipio: municipio,
+        telefono_casa: phoneHome,
+        telefono_movil: phoneMobile,
+      },
+    };
 
-		var { valid, prompt } = Util.validateForm(data, {
-			nombre: { type: 'minLength', value: 3, prompt: 'Favor de introducir el nombre.' },
-			apellido_paterno: { type: 'empty', prompt: 'Favor de introducir el apelldio paterno.' },
-			fecha_nacimiento: { type: 'empty', prompt: 'Favor de introducir la fecha de nacimiento.' },
-			sexo: { type: 'empty', prompt: 'Favor de introducir el sexo.' },
-			estado_civil: { type: 'empty', prompt: 'Favor de introducir el estado civil.' },
-			escolaridad: { type: 'empty', prompt: 'Favor de introducir la escolaridad.' },
-			oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' }
-		});
+    var { valid, prompt } = Util.validateForm(data, {
+      nombre: {
+        type: 'minLength',
+        value: 3,
+        prompt: 'Favor de introducir el nombre.',
+      },
+      apellido_paterno: {
+        type: 'empty',
+        prompt: 'Favor de introducir el apelldio paterno.',
+      },
+      fecha_nacimiento: {
+        type: 'empty',
+        prompt: 'Favor de introducir la fecha de nacimiento.',
+      },
+      sexo: { type: 'empty', prompt: 'Favor de introducir el sexo.' },
+      estado_civil: {
+        type: 'empty',
+        prompt: 'Favor de introducir el estado civil.',
+      },
+      escolaridad: {
+        type: 'empty',
+        prompt: 'Favor de introducir la escolaridad.',
+      },
+      oficio: { type: 'empty', prompt: 'Favor de introducir el oficio.' },
+    });
 
-		if(!valid){
-			return Alert.alert('Error', prompt);
-		}
+    if (!valid) {
+      return Alert.alert('Error', prompt);
+    }
 
-		setLoading(true);
+    setLoading(true);
 
-		API.editAcompanante(persona.id, data).then(done=>{
-			setLoading(false);
-			if(!done){
-				return Alert.alert('Error', 'Hubo un error editando el acompañante.');
-			}
-			
-			data.fecha_nacimiento = {
-				_seconds: moment(birthday, 'YYYY-MM-DD').unix()
-			}
-			onEdit(data);
-			Alert.alert('Exito', 'Se ha editando el acompañante.');
-			return;
-		}).catch(err=>{
-			console.log(err);
-			setLoading(false);
-			if(err.code==999){
-				props.navigation.goBack();
-				return Alert.alert('Error', 'No tienes acceso a esta acción.');
-			}
-			return Alert.alert('Error', 'Hubo un error editando el acompañanate.');
-		})	
-	}
+    API.editAcompanante(persona.id, data)
+      .then((done) => {
+        setLoading(false);
+        if (!done) {
+          return Alert.alert('Error', 'Hubo un error editando el acompañante.');
+        }
 
-	var getEstadoCivil = ()=>{
-		return ['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado'].indexOf(persona.estado_civil);
-	}
+        data.fecha_nacimiento = {
+          _seconds: moment(birthday, 'YYYY-MM-DD').unix(),
+        };
+        onEdit(data);
+        Alert.alert('Exito', 'Se ha editando el acompañante.');
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        if (err.code == 999) {
+          props.navigation.goBack();
+          return Alert.alert('Error', 'No tienes acceso a esta acción.');
+        }
+        return Alert.alert('Error', 'Hubo un error editando el acompañanate.');
+      });
+  };
 
-	var getGenero = ()=>{
-		return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo);
-	}
+  var getEstadoCivil = () => {
+    return ['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado'].indexOf(
+      persona.estado_civil
+    );
+  };
 
-	var getEscolaridad = ()=>{
-		return ['Ninguno', 'Primaria', 'Secundaria', 'Técnica carrera', 'Maestría', 'Doctorado'].indexOf(persona.escolaridad);
-	}
+  var getGenero = () => {
+    return ['Masculino', 'Femenino', 'Sin especificar'].indexOf(persona.sexo);
+  };
 
-	var getOficio = ()=>{
-		return ['Ninguno', 'Plomero', 'Electricista', 'Carpintero', 'Albañil', 'Pintor', 'Mecánico', 'Músico', 'Chofer'].indexOf(persona.oficio);
-	}
+  var getEscolaridad = () => {
+    return [
+      'Ninguno',
+      'Primaria',
+      'Secundaria',
+      'Técnica carrera',
+      'Maestría',
+      'Doctorado',
+    ].indexOf(persona.escolaridad);
+  };
 
-	return (
-		<KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
-			<Input name="Nombre" value={name} onChangeText={setName} required/>
-			<Input name="Apellido Paterno" value={apPaterno} onChangeText={setApPaterno} required/>
-			<Input name="Apellido Materno" value={apMaterno} onChangeText={setApMaterno} />
-			<DatePicker onDateChange={d=>setBirthday(d)} date={birthday} name="Fecha de nacimiento" />
+  var getOficio = () => {
+    return [
+      'Ninguno',
+      'Plomero',
+      'Electricista',
+      'Carpintero',
+      'Albañil',
+      'Pintor',
+      'Mecánico',
+      'Músico',
+      'Chofer',
+    ].indexOf(persona.oficio);
+  };
 
-			<Picker name="Estado Civil" items={['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado']} onValueChange={setEstadoCivil} select={getEstadoCivil()} />
-			<Picker name="Sexo" items={['Masculino', 'Femenino', 'Sin especificar']} onValueChange={setGender} select={getGenero()} />
-			<Picker name="Grado escolaridad" items={[
-				'Ninguno', 'Primaria',
-				'Secundaria', 'Técnica carrera', 
-				'Maestría', 'Doctorado'
-			]} onValueChange={setEscolaridad} select={getEscolaridad()} />
-			<Picker name="Oficio" items={[
-				'Ninguno', 'Plomero', 
-				'Electricista', 'Carpintero', 
-				'Albañil', 'Pintor', 'Mecánico', 
-				'Músico', 'Chofer'
-			]} onValueChange={setOficio} select={getOficio()} />
+  return (
+    <KeyboardAwareScrollView style={styles.loginContainer} bounces={true}>
+      <Input name="Nombre" value={name} onChangeText={setName} required />
+      <Input
+        name="Apellido Paterno"
+        value={apPaterno}
+        onChangeText={setApPaterno}
+        required
+      />
+      <Input
+        name="Apellido Materno"
+        value={apMaterno}
+        onChangeText={setApMaterno}
+      />
+      <DatePicker
+        onDateChange={(d) => setBirthday(d)}
+        date={birthday}
+        name="Fecha de nacimiento"
+      />
 
-			<Text style={styles.section}>Domicilio</Text> 
-			<Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
-			<Input name="Colonia" value={colonia} onChangeText={setColonia} />
-			<Input name="Municipio" value={municipio} onChangeText={setMunicipio} />
-			<Input name="Teléfono Casa" value={phoneHome} onChangeText={setPhoneHome} keyboard={'phone-pad'} />
-			<Input name="Teléfono Móvil" value={phoneMobile} onChangeText={setPhoneMobile} keyboard={'phone-pad'} />
+      <Picker
+        name="Estado Civil"
+        items={['Soltero', 'Casado', 'Viudo', 'Unión Libre', 'Divorciado']}
+        onValueChange={setEstadoCivil}
+        select={getEstadoCivil()}
+      />
+      <Picker
+        name="Sexo"
+        items={['Masculino', 'Femenino', 'Sin especificar']}
+        onValueChange={setGender}
+        select={getGenero()}
+      />
+      <Picker
+        name="Grado escolaridad"
+        items={[
+          'Ninguno',
+          'Primaria',
+          'Secundaria',
+          'Técnica carrera',
+          'Maestría',
+          'Doctorado',
+        ]}
+        onValueChange={setEscolaridad}
+        select={getEscolaridad()}
+      />
+      <Picker
+        name="Oficio"
+        items={[
+          'Ninguno',
+          'Plomero',
+          'Electricista',
+          'Carpintero',
+          'Albañil',
+          'Pintor',
+          'Mecánico',
+          'Músico',
+          'Chofer',
+        ]}
+        onValueChange={setOficio}
+        select={getOficio()}
+      />
 
-			<Button text="Guardar" loading={loading} onPress={doRegister} />
-		</KeyboardAwareScrollView>
-	)
-}
+      <Text style={styles.section}>Domicilio</Text>
+      <Input name="Domicilio" value={domicilio} onChangeText={setDomicilio} />
+      <Input name="Colonia" value={colonia} onChangeText={setColonia} />
+      <Input name="Municipio" value={municipio} onChangeText={setMunicipio} />
+      <Input
+        name="Teléfono Casa"
+        value={phoneHome}
+        onChangeText={setPhoneHome}
+        keyboard={'phone-pad'}
+      />
+      <Input
+        name="Teléfono Móvil"
+        value={phoneMobile}
+        onChangeText={setPhoneMobile}
+        keyboard={'phone-pad'}
+      />
+
+      <Button text="Guardar" loading={loading} onPress={doRegister} />
+    </KeyboardAwareScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
-	testText: {
-		fontSize: 20
-	},
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	loginContainer: {
-		width: '100%', 
-		padding: 10
-	},
-	header: {
-		fontSize: 24,
-		fontWeight: '600',
-		textAlign: 'center',
-		marginBottom: 5,
-		marginTop: 20,
-	},
-	subHeader: {
-		fontSize: 20,
-		textAlign: 'center',
-		color: 'grey',
-		marginBottom: 20,
-	},
-	section: {
-		fontSize: 20,
-		fontWeight: '600',
-		textAlign: 'center',
-		color: 'grey',
-		marginBottom: 10,
-		marginTop: 20,
-	}
-})
+  testText: {
+    fontSize: 20,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginContainer: {
+    width: '100%',
+    padding: 10,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 5,
+    marginTop: 20,
+  },
+  subHeader: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: 'grey',
+    marginBottom: 20,
+  },
+  section: {
+    fontSize: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: 'grey',
+    marginBottom: 10,
+    marginTop: 20,
+  },
+});

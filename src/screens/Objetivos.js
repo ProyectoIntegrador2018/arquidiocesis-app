@@ -2,20 +2,20 @@
 Nombre: Objetivos.js
 Descripción: Pantalla para ver la lista de años disponibles para ver objetivos
 */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-} from "react-native";
-import { API } from "./../lib";
-import { Item } from "./../components";
+} from 'react-native';
+import { API } from './../lib';
+import { Item } from './../components';
 
 export default (props) => {
   const goToYearObjectives = async (year) => {
-    props.navigation.navigate("ObjetivosDelAño", { year });
+    props.navigation.navigate('ObjetivosDelAño', { year });
   };
 
   const renderYears = () => {
@@ -51,15 +51,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   section: {
     fontSize: 16,
-    color: "gray",
+    color: 'gray',
     marginTop: 15,
     marginBottom: 15,
-    fontWeight: "500",
+    fontWeight: '500',
     paddingLeft: 15,
   },
 });
