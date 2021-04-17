@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { TextInput, StyleSheet, View } from 'react-native';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
+//import { FontAwesome5 } from '@expo/vector-icons';
 
 function ChatChannelPostDetails({ navigation, route }) {
   const { post, channelName } = route.params;
@@ -13,6 +14,11 @@ function ChatChannelPostDetails({ navigation, route }) {
   return (
     <View style={styles.root}>
       <ChatChannelPost post={post} showComments={true} />
+      <View style={styles.replyContainer}>
+        <View style={styles.inputContainer}>
+          <TextInput placeholder="Escribir mensaje..." />
+        </View>
+      </View>
     </View>
   );
 }
