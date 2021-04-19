@@ -83,6 +83,7 @@ import CrearGrupo from './screens/Discusion/CrearGrupo';
 import CanalesGrupo from './screens/Discusion/CanalesGrupo';
 import CrearCanales from './screens/Discusion/CrearCanales';
 import ChatChannelCreatePost from './screens/chat/ChatChannelCreatePost';
+import ChatChannelPostDetails from './screens/chat/ChatChannelPostDetails';
 
 const Tab = createBottomTabNavigator();
 function Home({ navigation, route }) {
@@ -280,6 +281,10 @@ function App({ user, logout }) {
         <Stack.Screen
           name="ChatChannelCreatePost"
           component={ChatChannelCreatePost}
+        />
+        <Stack.Screen
+          name="ChatChannelPostDetails"
+          component={ChatChannelPostDetails}
         />
       </Stack.Navigator>
     </NavigationContainer>
