@@ -1,18 +1,19 @@
 import { get, post, put, del } from './APIv2';
+import { ROOT_URL as BASE_URL } from './APIv2';
 
-const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/posts';
+const ROOT_URL = `${BASE_URL}posts`;
 /**
   @typedef {{text: string, authorID: string, fileIDs: string[], channelOwnerID: string}} AddPostParams
   @typedef {{error: boolean, data: string} | null} AddPostResponse
   
   @typedef {string} GetOnePostParams
-  @typedef {{id: string, post_author: string, post_text: string, post_files: string[], post_comments: string[]} | null} GetOnePostResponse
+  @typedef {{error: boolean, data: {post: {id: string, post_author: string, post_text: string, post_files: string[], post_comments: string[]}} | null} GetOnePostResponse
 
   @typedef {{id: string, text?: string, fileIDs?: string[]}} EditPostParams
   @typedef {{error: boolean} | null} EditPostResponse
 
   @typedef {string} DeletePostParams
-  @typedef {{error: boolean, message: string}} DeletePostResponse
+  @typedef {{error: boolean, message: string} | null} DeletePostResponse
 */
 
 /**

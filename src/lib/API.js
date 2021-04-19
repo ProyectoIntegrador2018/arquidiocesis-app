@@ -2,9 +2,7 @@ import axios from 'axios';
 import Cache from './Cache';
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/';
-// const ROOT_URL = 'http://localhost:8000/api/'
+import { ROOT_URL } from './apiV2/APIv2';
 let onLogout = null;
 
 /**

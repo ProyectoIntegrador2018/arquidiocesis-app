@@ -1,7 +1,7 @@
 import { post, put } from './APIv2';
+import { ROOT_URL as BASE_URL } from './APIv2';
 
-const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/channels';
-
+const ROOT_URL = `${BASE_URL}channels`;
 /**
  *
  * @typedef {{id: string, data: Object}[]} AllGroupsResponse
