@@ -146,6 +146,7 @@ async function login(email, password) {
 
   const user = u.data;
   await AsyncStorage.setItem('login', JSON.stringify(user));
+  await AsyncStorage.setItem('user_info', JSON.stringify(u.userInfo));
 
   return user;
 }

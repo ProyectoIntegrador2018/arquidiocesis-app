@@ -4,6 +4,8 @@ import { View, TextInput } from 'react-native';
 import { Button } from '../../components';
 import { List } from 'react-native-paper';
 import GroupsConvAPI from '../../lib/apiV2/GroupsConvAPI';
+import useCurrentUser from '../../lib/apiV2/useCurrentUser';
+import ChannelConvAPI from '../../lib/apiV2/ChannelConvAPI';
 
 // Channels
 /* const channelFac = factory((fake) => ({
@@ -20,29 +22,33 @@ const groupFac = factory((fake) => ({
 export default (props) => {
   const [search, setSearch] = useState('');
   const [groups, setGroups] = useState([]);
-  console.log(groups);
+  const user = useCurrentUser();
 
   useEffect(() => {
-    GroupsConvAPI.all()
-      .then((v) => {
-        if (v.error) throw v.message;
-        else return v.data;
-      })
-      .then((v) =>
-        v.map((v) => ({
-          id: v.id,
-          title: v.content.group_name,
-          channels: v.content.group_channels.map((ch, i) => ({
-            id: i,
-            name: ch,
-          })),
-        }))
-      )
-      .then(setGroups)
-      .catch((v) => {
-        console.error(v);
-      });
-  }, []);
+    if (user == null) {
+      return;
+    }
+
+    async function query() {
+      const res = await GroupsConvAPI.allByUser(user.id);
+      setGroups(
+        await Promise.all(
+          res.groups.map(async (group) => {
+            const res2 = await ChannelConvAPI.allByGroup(group.group_channels);
+            return {
+              id: group.id,
+              title: group.group_name,
+              channels: (res2?.channels ?? []).map((channel) => ({
+                id: channel.id,
+                name: channel.canal_name,
+              })),
+            };
+          })
+        )
+      );
+    }
+    query();
+  }, [user]);
 
   return (
     <View
@@ -153,14 +159,15 @@ export default (props) => {
                 }>
                 {v.channels.map((chV, chI) => (
                   <List.Item
-                    title={'#General'}
+                    title={`#${chV.name.toLowerCase()}`}
                     key={chI.toString()}
                     style={{
                       backgroundColor: chI % 2 ? 'white' : '#f8f8f8',
                     }}
                     onPress={() => {
                       props.navigation.navigate('ChatChannelPosts', {
-                        channelName: '#General',
+                        channelName: `#${chV.name.toLowerCase()}`,
+                        groupID: v.id,
                       });
                     }}
                     theme={{
