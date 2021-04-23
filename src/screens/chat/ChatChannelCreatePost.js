@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 import { Button } from '../../components';
 import ChatChannelCreatePostOptionRow from '../../components/chat/ChatChannelCreatePostOptionRow';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
+import useCurrentUser from '../../lib/apiV2/useCurrentUser';
+import PostsAPI from '../../lib/apiV2/PostsAPI';
 
-function ChatChannelCreatePost({ navigation }) {
+function ChatChannelCreatePost({ navigation, route }) {
   const [text, setText] = useState('');
+  const { channelID, onNewPost } = route.params;
+  const user = useCurrentUser();
 
   navigation.setOptions({
     headerTitle: 'Crear Publicación',
@@ -14,7 +18,28 @@ function ChatChannelCreatePost({ navigation }) {
 
   const onCameraPress = () => {};
   const onFilePress = () => {};
-  const onMessageCreatePress = () => {};
+  const onMessageCreatePress = useCallback(async () => {
+    const res = await PostsAPI.add({
+      text,
+      authorID: user.id,
+      channelOwnerID: channelID,
+      fileIDs: [],
+    });
+
+    if (res) {
+      const now = new Date();
+      onNewPost({
+        authorName:
+          `${user.nombre} ${user.apellido_paterno} ` +
+          (user.apellido_materno ?? ''),
+        date: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+        textContent: text,
+        comments: [],
+        attachments: [],
+      });
+      navigation.goBack();
+    }
+  }, [text, user]);
 
   return (
     <View style={styles.root}>

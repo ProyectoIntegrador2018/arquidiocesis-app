@@ -53,7 +53,7 @@ function ChatChannelPost({ post, onPress, showComments = false }) {
             </MenuOptions>
           </Menu>
         </View>
-        <Text style={styles.dateLabel}>{post.date.toLocaleString()}</Text>
+        <Text style={styles.dateLabel}>{post.date}</Text>
         <Text style={styles.textContentLabel}>{post.textContent}</Text>
         {attachments.length > 0 && (
           <View style={styles.attachmentsContainer}>

@@ -167,7 +167,7 @@ export default (props) => {
                     onPress={() => {
                       props.navigation.navigate('ChatChannelPosts', {
                         channelName: `#${chV.name.toLowerCase()}`,
-                        groupID: v.id,
+                        channelID: chV.id,
                       });
                     }}
                     theme={{

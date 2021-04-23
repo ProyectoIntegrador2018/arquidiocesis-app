@@ -14,6 +14,9 @@ const ROOT_URL = `${BASE_URL}posts`;
 
   @typedef {string} DeletePostParams
   @typedef {{error: boolean, message: string} | null} DeletePostResponse
+
+  @typedef {channelID: string} AllByChannelParams
+  @typedef {{error: boolean, data: {id: string, authorInfo: {nombre: string, apellido_paterno: string, apellido_materno: string}, post_author: string, post_text: string, post_files: string[], creation_timestamp: string, channel_owner_id: string}[]}} AllByChannelResponse
 */
 
 /**
@@ -85,9 +88,25 @@ async function remove(id) {
   return await del(`${ROOT_URL}/delete/${id}`);
 }
 
+/**
+ *
+ * @param {AllByChannelParams} channelID
+ * @returns {AllByChannelResponse}
+ */
+async function allByChannel(channelID) {
+  if (channelID == null) {
+    console.warn(
+      '[HTTP] Invalid POST request in PostsAPI.allByChannel: missing id'
+    );
+    return null;
+  }
+  return await get(`${ROOT_URL}/getChannelPosts/${channelID}`);
+}
+
 export default {
   add,
   getOne,
   edit,
   remove,
+  allByChannel,
 };
