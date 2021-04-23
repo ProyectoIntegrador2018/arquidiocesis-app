@@ -28,16 +28,17 @@ export default (props) => {
         if (v.error) throw v.message;
         else return v.data;
       })
-      .then((v) =>
-        v.map((v) => ({
+      .then((v) => {
+        return v.map((v) => ({
           id: v.id,
           title: v.content.group_name,
-          channels: v.content.group_channels.map((ch, i) => ({
-            id: i,
-            name: ch,
-          })),
-        }))
-      )
+          channels:
+            v.content.group_channels?.map((ch, i) => ({
+              id: i,
+              name: ch,
+            })) ?? [],
+        }));
+      })
       .then(setGroups)
       .catch((v) => {
         console.error(v);
