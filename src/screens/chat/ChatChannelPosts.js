@@ -79,7 +79,11 @@ function ChatChannelPosts({ navigation, route }) {
     headerTitle: channelName,
     headerRight: () => (
       <TouchableOpacity
-        onPress={() => navigation.navigate('ChatChannelCreatePost')}>
+        onPress={() =>
+          navigation.navigate('ChatChannelCreatePost', {
+            groupID: route.params.groupID,
+          })
+        }>
         <View
           style={{
             marginRight: 16,

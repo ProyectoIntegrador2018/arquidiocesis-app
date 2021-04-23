@@ -6,6 +6,8 @@ const ROOT_URL = `${BASE_URL}channels`;
  *
  * @typedef {{id: string, data: Object}[]} AllGroupsResponse
  *
+ * @typedef {ids: string[]} AllChannelsByGroupsParams
+ * @typedef {{error: boolean, channels: {id: string, canal_name: string, canal_description: string, canal_publications: string[]}[]}} AllChannelsByGroupsResponse
  */
 
 /**
@@ -44,7 +46,22 @@ async function edit(params) {
   return data;
 }
 
+/**
+ * @param {AllChannelsByGroupsParams} ids
+ * @returns {AllChannelsByGroupsResponse}
+ */
+async function allByGroup(ids) {
+  if (ids == null || ids.length < 1) {
+    return null;
+  }
+
+  return await post(`${ROOT_URL}/getAll`, {
+    channel_ids: ids,
+  });
+}
+
 export default {
   add,
   edit,
+  allByGroup,
 };
