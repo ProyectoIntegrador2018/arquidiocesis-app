@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { Button, Input } from '../../components';
+import { Button, Input, Item } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 /**
@@ -11,6 +11,7 @@ export default (props) => {
   const { editGroup } = props.route.params;
   const [name, setName] = useState(editGroup ? editGroup.title : '');
   const [channels, setChannels] = useState(editGroup ? editGroup.channels : []);
+  const [roles, setRoles] = useState(editGroup ? editGroup.roles : []);
   const isEdit = editGroup !== undefined;
 
   return (
@@ -28,6 +29,33 @@ export default (props) => {
             setName(v);
           }}
         />
+        {isEdit ? (
+          <>
+            <Item
+              text="Ver canales"
+              onPress={() => {
+                props.navigation.navigate('CanalesGrupo', {
+                  channels,
+                  // channel: {name: string}
+                  onSubmit: (channels) => {
+                    setChannels(channels);
+                  },
+                });
+              }}
+            />
+            <Item
+              text="Ver usuarios"
+              onPress={() => {
+                props.navigation.navigate('UserOnGroup', {
+                  roles,
+                  onSubmit: (newRoles) => {
+                    setRoles(newRoles);
+                  },
+                });
+              }}
+            />
+          </>
+        ) : null}
         {/* <Item
           text="Ver canales"
           onPress={() => {
