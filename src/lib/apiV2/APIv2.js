@@ -1,5 +1,10 @@
+/* global __DEV__ */
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const ROOT_URL = __DEV__
+  ? 'http://localhost:8000/api/'
+  : 'https://arquidiocesis-bda.herokuapp.com/api/';
 
 /**
  * @param {Object} data

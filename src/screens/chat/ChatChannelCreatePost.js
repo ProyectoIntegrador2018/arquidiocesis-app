@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 import { Button } from '../../components';
 import ChatChannelCreatePostOptionRow from '../../components/chat/ChatChannelCreatePostOptionRow';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 
 function ChatChannelCreatePost({ navigation }) {
+  const [text, setText] = useState('');
+
   navigation.setOptions({
     headerTitle: 'Crear Publicación',
   });
@@ -18,6 +21,8 @@ function ChatChannelCreatePost({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Escribir mensaje..."
+        value={text}
+        onChangeText={(text) => setText(text)}
         multiline={true}
       />
 

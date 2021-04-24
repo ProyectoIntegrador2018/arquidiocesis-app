@@ -73,11 +73,17 @@ const mockPosts = [
 ];
 
 function ChatChannelPosts({ navigation, route }) {
+  const { channelName } = route.params;
+
   navigation.setOptions({
-    headerTitle: route.params.channelName,
+    headerTitle: channelName,
     headerRight: () => (
       <TouchableOpacity
-        onPress={() => navigation.navigate('ChatChannelCreatePost')}>
+        onPress={() =>
+          navigation.navigate('ChatChannelCreatePost', {
+            groupID: route.params.groupID,
+          })
+        }>
         <View
           style={{
             marginRight: 16,
@@ -88,12 +94,19 @@ function ChatChannelPosts({ navigation, route }) {
     ),
   });
 
+  const onPostPress = (idx) => {
+    navigation.navigate('ChatChannelPostDetails', {
+      post: mockPosts[idx],
+      channelName,
+    });
+  };
+
   return (
     <ScrollView style={styles.root}>
-      {mockPosts.map((post) => (
+      {mockPosts.map((post, idx) => (
         <>
           <View style={styles.postSeparator} />
-          <ChatChannelPost post={post} />
+          <ChatChannelPost post={post} onPress={() => onPostPress(idx)} />
         </>
       ))}
     </ScrollView>
