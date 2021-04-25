@@ -1,79 +1,37 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 import { FontAwesome5 } from '@expo/vector-icons';
-
-const mockPosts = [
-  {
-    authorName: 'Daniel Gaytan',
-    date: new Date(),
-    textContent:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida sit amet dolor eget commodo. Ut diam dui, auctor et tempus sed, egestas venenatis dui.',
-    comments: [],
-    attachments: [],
-  },
-  {
-    authorName: 'Patricio Saldivar',
-    date: new Date(),
-    textContent:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida sit amet dolor eget commodo.',
-    comments: new Array(3),
-    attachments: [],
-  },
-  {
-    authorName: 'César Gaytan',
-    date: new Date(),
-    textContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    comments: new Array(1),
-    attachments: [
-      {
-        type: 'image',
-        url:
-          'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      },
-      {
-        type: 'video',
-        url:
-          'https://venngage-wordpress.s3.amazonaws.com/uploads/2018/09/Perfect-Sunset-Nature-Background-Image.jpeg',
-      },
-      {
-        type: 'image',
-        url:
-          'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      },
-      {
-        type: 'image',
-        url:
-          'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      },
-      {
-        type: 'image',
-        url:
-          'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      },
-    ],
-  },
-  {
-    authorName: 'César Barraza',
-    date: new Date(),
-    textContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    comments: new Array(1),
-    attachments: [
-      {
-        type: 'document',
-        url: 'http://test.com/asdf/arch.pdf',
-      },
-      {
-        type: 'document',
-        url: 'http://test2.com/asdf/fdas/arch2.pptx',
-      },
-    ],
-  },
-];
+import PostsAPI from '../../lib/apiV2/PostsAPI';
 
 function ChatChannelPosts({ navigation, route }) {
-  const { channelName } = route.params;
+  const [posts, setPosts] = useState([]);
+  const { channelName, channelID, groupID } = route.params;
+
+  useEffect(() => {
+    (async () => {
+      const res = await PostsAPI.allByChannel(channelID);
+      if (!res.error) {
+        setPosts(
+          res.data.map((post) => ({
+            authorName: `${post.authorInfo.nombre} ${
+              post.authorInfo.apellido_paterno ?? ''
+            } ${post.authorInfo.apellido_materno ?? ''}`,
+            date: post.creation_timestamp,
+            textContent: post.post_text,
+            comments: [],
+            attachments: post.post_files,
+          }))
+        );
+      }
+    })();
+  }, []);
+
+  const onNewPost = (post) => {
+    setPosts((prev) => [post, ...prev]);
+  };
 
   navigation.setOptions({
     headerTitle: channelName,
@@ -81,7 +39,9 @@ function ChatChannelPosts({ navigation, route }) {
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('ChatChannelCreatePost', {
-            groupID: route.params.groupID,
+            groupID,
+            channelID,
+            onNewPost,
           })
         }>
         <View
@@ -96,14 +56,14 @@ function ChatChannelPosts({ navigation, route }) {
 
   const onPostPress = (idx) => {
     navigation.navigate('ChatChannelPostDetails', {
-      post: mockPosts[idx],
+      post: posts[idx],
       channelName,
     });
   };
 
   return (
     <ScrollView style={styles.root}>
-      {mockPosts.map((post, idx) => (
+      {posts.map((post, idx) => (
         <>
           <View style={styles.postSeparator} />
           <ChatChannelPost post={post} onPress={() => onPostPress(idx)} />
