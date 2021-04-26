@@ -7,6 +7,7 @@ import { NavigationProps } from '../../navigation/NavigationPropTypes';
 import useCurrentUser from '../../lib/apiV2/useCurrentUser';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
 import { useChannelPostsStore } from '../../context/ChannelPostsStore';
+import Alert from '../../components/Alert';
 
 function ChatChannelCreatePost({ navigation, route }) {
   const [text, setText] = useState('');
@@ -28,6 +29,14 @@ function ChatChannelCreatePost({ navigation, route }) {
   const onCameraPress = () => {};
   const onFilePress = () => {};
   const onMessageCreatePress = useCallback(async () => {
+    if (text === '') {
+      Alert.alert(
+        'Llenar publicación',
+        'Una publicación no puede estar vacía.'
+      );
+      return;
+    }
+
     if (post == null) {
       // post is null, so we're creating a new one
       const res = await PostsAPI.add({
