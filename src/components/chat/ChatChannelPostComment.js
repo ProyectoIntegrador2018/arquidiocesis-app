@@ -9,7 +9,7 @@ function ChatChannelPostComment({ comment }) {
 
       <View style={styles.bubble}>
         <Text style={styles.content}>{comment.content}</Text>
-        <Text style={styles.dateLabel}>{comment.date.toLocaleString()}</Text>
+        <Text style={styles.dateLabel}>{comment.date}</Text>
       </View>
     </View>
   );

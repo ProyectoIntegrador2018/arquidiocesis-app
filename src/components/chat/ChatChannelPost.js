@@ -12,26 +12,12 @@ import {
 import ChatChannelPostComment from './ChatChannelPostComment';
 const ATTACHMENT_SIZE = 128;
 
-const mockComments = [
-  {
-    authorName: 'Patricio Saldivar',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida sit amet dolor eget commodo.',
-    date: new Date(),
-  },
-  {
-    authorName: 'Daniel Gaytan',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida sit amet dolor eget commodo. Ut diam dui, auctor et tempus sed, egestas venenatis dui.',
-    date: new Date(),
-  },
-];
-
 function ChatChannelPost({
   post,
   onPress,
   onEditPress,
   onDeletePress,
+  comments,
   showComments = false,
 }) {
   let attachments = post.attachments;
@@ -85,7 +71,7 @@ function ChatChannelPost({
       </View>
 
       {showComments ? (
-        mockComments.map((comment, idx) => (
+        comments.map((comment, idx) => (
           <ChatChannelPostComment key={idx} comment={comment} />
         ))
       ) : (

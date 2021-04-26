@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { TextInput, StyleSheet, View, TouchableOpacity } from 'react-native';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
@@ -7,12 +7,35 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useChannelPostsStore } from '../../context/ChannelPostsStore';
 import Alert from '../../components/Alert';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
+import PostCommentsAPI from '../../lib/apiV2/PostCommentsAPI';
+import useCurrentUser from '../../lib/apiV2/useCurrentUser';
 
 function ChatChannelPostDetails({ navigation, route }) {
   const { postIndex, channelName } = route.params;
   const [inputHeight, setInputHeight] = useState();
+  const [text, setText] = useState('');
+  const [comments, setComments] = useState([]);
   const [posts, setPosts, editingPostIndex] = useChannelPostsStore();
+  const user = useCurrentUser();
   const post = posts[postIndex];
+
+  useEffect(() => {
+    (async () => {
+      const res = await PostCommentsAPI.getForPost(post.id);
+      if (!res.error) {
+        setComments(
+          res.data.map((comment) => ({
+            id: comment.id,
+            authorName: `${comment.authorInfo.nombre} ${
+              comment.authorInfo.apellido_paterno ?? ''
+            } ${comment.authorInfo.apellido_materno ?? ''}`,
+            date: comment.creation_timestamp,
+            content: comment.comment_text,
+          }))
+        );
+      }
+    })();
+  }, []);
 
   navigation.setOptions({
     headerTitle: channelName,
@@ -46,11 +69,35 @@ function ChatChannelPostDetails({ navigation, route }) {
     ]);
   };
 
+  const onReplyPress = useCallback(async () => {
+    const res = await PostCommentsAPI.add({
+      authorID: user.id,
+      postID: post.id,
+      text,
+    });
+    if (!res.error) {
+      const now = new Date();
+      setComments((prev) => [
+        {
+          id: res.data,
+          authorName:
+            `${user.nombre} ${user.apellido_paterno} ` +
+            (user.apellido_materno ?? ''),
+          date: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+          content: text,
+        },
+        ...prev,
+      ]);
+    }
+    setText('');
+  }, [user, text]);
+
   return (
     <View style={styles.root}>
       <ChatChannelPost
         post={post}
         showComments={true}
+        comments={comments}
         onEditPress={onEditPress}
         onDeletePress={onDeletePress}
       />
@@ -63,9 +110,11 @@ function ChatChannelPostDetails({ navigation, route }) {
             onContentSizeChange={(event) =>
               setInputHeight(event.nativeEvent.contentSize.height)
             }
+            value={text}
+            onChangeText={setText}
           />
         </View>
-        <TouchableOpacity style={styles.iconContainer}>
+        <TouchableOpacity style={styles.iconContainer} onPress={onReplyPress}>
           <FontAwesome5 name="reply" size={14} color="white" />
         </TouchableOpacity>
       </View>
