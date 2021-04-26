@@ -3,13 +3,14 @@ import { StyleSheet, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
 function ChatChannelPostComment({ comment }) {
+  console.log(comment);
   return (
     <View style={styles.root}>
       <Text style={styles.authorLabel}>{comment.authorName}</Text>
 
       <View style={styles.bubble}>
         <Text style={styles.content}>{comment.content}</Text>
-        <Text style={styles.dateLabel}>{comment.date.toLocaleString()}</Text>
+        <Text style={styles.dateLabel}>{comment.date}</Text>
       </View>
     </View>
   );
