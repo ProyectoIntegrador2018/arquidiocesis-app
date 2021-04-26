@@ -1,16 +1,25 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 import { Button } from '../../components';
 import ChatChannelCreatePostOptionRow from '../../components/chat/ChatChannelCreatePostOptionRow';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 import useCurrentUser from '../../lib/apiV2/useCurrentUser';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
+import { useChannelPostsStore } from '../../context/ChannelPostsStore';
 
 function ChatChannelCreatePost({ navigation, route }) {
   const [text, setText] = useState('');
-  const { channelID, onNewPost } = route.params;
+  const { channelID, post } = route.params;
+  const [, setPosts, editingPostIndex] = useChannelPostsStore();
+
   const user = useCurrentUser();
+
+  useEffect(() => {
+    if (post != null) {
+      setText(post.textContent);
+    }
+  }, [post]);
 
   navigation.setOptions({
     headerTitle: 'Crear Publicación',
@@ -19,26 +28,55 @@ function ChatChannelCreatePost({ navigation, route }) {
   const onCameraPress = () => {};
   const onFilePress = () => {};
   const onMessageCreatePress = useCallback(async () => {
-    const res = await PostsAPI.add({
-      text,
-      authorID: user.id,
-      channelOwnerID: channelID,
-      fileIDs: [],
-    });
-
-    if (res) {
-      const now = new Date();
-      onNewPost({
-        authorName:
-          `${user.nombre} ${user.apellido_paterno} ` +
-          (user.apellido_materno ?? ''),
-        date: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
-        textContent: text,
-        comments: [],
-        attachments: [],
+    if (post == null) {
+      // post is null, so we're creating a new one
+      const res = await PostsAPI.add({
+        text,
+        authorID: user.id,
+        channelOwnerID: channelID,
+        fileIDs: [],
       });
-      navigation.goBack();
+
+      if (res) {
+        const now = new Date();
+        setPosts((prev) => [
+          {
+            id: res.data,
+            authorName:
+              `${user.nombre} ${user.apellido_paterno} ` +
+              (user.apellido_materno ?? ''),
+            date: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+            textContent: text,
+            comments: [],
+            attachments: [],
+          },
+          ...prev,
+        ]);
+      }
+    } else {
+      // post is not null so we're editing an existing one
+      const res = await PostsAPI.edit({ id: post.id, fileIDs: [], text });
+
+      if (res) {
+        const modifiedIndex = editingPostIndex.current;
+        editingPostIndex.current = -1;
+        setPosts((prev) =>
+          prev.map((curr, idx) =>
+            idx === modifiedIndex
+              ? {
+                  ...curr,
+                  ...{
+                    textContent: text,
+                    attachments: [],
+                  },
+                }
+              : curr
+          )
+        );
+      }
     }
+
+    navigation.goBack();
   }, [text, user]);
 
   return (
@@ -67,7 +105,7 @@ function ChatChannelCreatePost({ navigation, route }) {
 
       <Button
         style={styles.createButton}
-        text="Nuevo Mensaje"
+        text={post == null ? 'Nuevo Mensaje' : 'Editar Mensaje'}
         onPress={onMessageCreatePress}
       />
     </View>

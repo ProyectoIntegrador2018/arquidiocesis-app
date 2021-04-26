@@ -87,6 +87,7 @@ import AdduserFromRole from './screens/Discusion/AdduserFromRole';
 import AddUserIndividual from './screens/Discusion/AddUserIndividual';
 import ChatChannelCreatePost from './screens/chat/ChatChannelCreatePost';
 import ChatChannelPostDetails from './screens/chat/ChatChannelPostDetails';
+import { ChannelPostsStoreProvider } from './context/ChannelPostsStore';
 
 const Tab = createBottomTabNavigator();
 function Home({ navigation, route }) {
@@ -330,15 +331,17 @@ function Main() {
 
   return (
     <PopupMenuProvider>
-      <View style={StyleSheet.absoluteFillObject}>
-        <StatusBar barStyle={'light-content'} />
-        {!login ? (
-          <Login user={login} onLogin={onLogin} />
-        ) : (
-          // User is logged in
-          <App user={login} logout={logout} />
-        )}
-      </View>
+      <ChannelPostsStoreProvider>
+        <View style={StyleSheet.absoluteFillObject}>
+          <StatusBar barStyle={'light-content'} />
+          {!login ? (
+            <Login user={login} onLogin={onLogin} />
+          ) : (
+            // User is logged in
+            <App user={login} logout={logout} />
+          )}
+        </View>
+      </ChannelPostsStoreProvider>
     </PopupMenuProvider>
   );
 }
