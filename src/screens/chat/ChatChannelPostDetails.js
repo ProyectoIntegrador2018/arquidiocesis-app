@@ -4,18 +4,56 @@ import { TextInput, StyleSheet, View, TouchableOpacity } from 'react-native';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useChannelPostsStore } from '../../context/ChannelPostsStore';
+import Alert from '../../components/Alert';
+import PostsAPI from '../../lib/apiV2/PostsAPI';
 
 function ChatChannelPostDetails({ navigation, route }) {
-  const { post, channelName } = route.params;
+  const { postIndex, channelName } = route.params;
   const [inputHeight, setInputHeight] = useState();
+  const [posts, setPosts, editingPostIndex] = useChannelPostsStore();
+  const post = posts[postIndex];
 
   navigation.setOptions({
     headerTitle: channelName,
   });
 
+  const onEditPress = () => {
+    editingPostIndex.current = postIndex;
+    navigation.navigate('ChatChannelCreatePost', {
+      post,
+    });
+  };
+
+  const onDeletePress = () => {
+    Alert.alert('Confirmar', '¿Seguro que deseas borrar esta publicación?', [
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+        onPress: null,
+      },
+      {
+        text: 'Confirmar',
+        onPress: async () => {
+          const id = posts[postIndex].id;
+          const res = await PostsAPI.remove(id);
+          if (!res.error) {
+            setPosts((prev) => prev.filter((post) => post.id !== id));
+            navigation.goBack();
+          }
+        },
+      },
+    ]);
+  };
+
   return (
     <View style={styles.root}>
-      <ChatChannelPost post={post} showComments={true} />
+      <ChatChannelPost
+        post={post}
+        showComments={true}
+        onEditPress={onEditPress}
+        onDeletePress={onDeletePress}
+      />
       <View style={styles.replyContainer}>
         <View style={styles.inputContainer}>
           <TextInput

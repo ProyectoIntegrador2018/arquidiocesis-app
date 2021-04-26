@@ -99,10 +99,10 @@ export async function patch(url, body) {
  * @param {Object} body
  * @returns {Promise<Object>}
  */
-export async function del(url, body) {
-  body = await applyUserToken(body);
+export async function del(url, params) {
+  params = await applyUserToken(params);
   try {
-    const res = await axios.delete(url, body);
+    const res = await axios.delete(url, { params });
     return res.data;
   } catch (err) {
     return {

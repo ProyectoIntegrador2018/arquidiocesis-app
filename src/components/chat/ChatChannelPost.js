@@ -27,7 +27,13 @@ const mockComments = [
   },
 ];
 
-function ChatChannelPost({ post, onPress, showComments = false }) {
+function ChatChannelPost({
+  post,
+  onPress,
+  onEditPress,
+  onDeletePress,
+  showComments = false,
+}) {
   let attachments = post.attachments;
   let extraAttachments = 0;
   if (post.attachments.length > 2) {
@@ -46,8 +52,8 @@ function ChatChannelPost({ post, onPress, showComments = false }) {
               <FontAwesome5 name="ellipsis-h" size={16} color="black" light />
             </MenuTrigger>
             <MenuOptions>
-              <MenuOption text="Editar" />
-              <MenuOption>
+              <MenuOption text="Editar" onSelect={onEditPress} />
+              <MenuOption onSelect={onDeletePress}>
                 <Text style={{ color: 'red' }}>Borrar</Text>
               </MenuOption>
             </MenuOptions>
