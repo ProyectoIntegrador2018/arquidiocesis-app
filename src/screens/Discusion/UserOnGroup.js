@@ -3,24 +3,48 @@ import { AlphabetList, Button } from '../../components';
 import { Text, ActivityIndicator, ScrollView } from 'react-native';
 import { Modal } from 'react-native-paper';
 import { factory } from 'node-factory';
+import GroupsConvAPI from '../../lib/apiV2/GroupsConvAPI';
 
 /**
  * user = {id: string, name: string}
  */
 
 export default (props) => {
+  const { idGroup } = props.route.params;
+  console.log(idGroup);
   const [users, setUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState(false);
+  const [regather, setRegather] = useState(true);
+
+  props.navigation.setOptions({ title: 'Usuarios' });
 
   useEffect(() => {
+    if (!regather) return;
+    (async () => {
+      const data = await GroupsConvAPI.getAllUsers({ id: idGroup });
+      if (data.error) {
+        console.log(data.message);
+        return;
+      }
+
+      const newUsers = data.users
+        .filter((v) => v.nombre !== undefined)
+        .map((v) => ({
+          id: v.id,
+          name: v.nombre,
+        }));
+
+      setUsers(newUsers);
+      setRegather(false);
+    })();
     // Hacer llamada para obtener los usuarios de un grupo
-    const fak = factory((fake) => ({
+    /* const fak = factory((fake) => ({
       id: fake.random.uuid(),
       name: fake.name.findName(),
     }));
-    setUsers(fak.make(25));
-  }, []);
+    setUsers(fak.make(25)); */
+  }, [regather]);
 
   const onListPress = (item) => {
     setUser(item);
@@ -29,20 +53,28 @@ export default (props) => {
 
   const addFromRole = () => {
     props.navigation.navigate('AdduserFromRole', {
-      onAdd: (newUsers) => {
-        let arr = [...users];
+      onAdd: async (newUsers) => {
+        const result = await GroupsConvAPI.addUser(idGroup, newUsers);
+        if (!result.error) console.log(result.message);
+        setRegather(true);
+        return result.error !== true;
+        /* let arr = [...users];
         arr = arr.concat(newUsers);
-        setUsers(arr);
+        setUsers(arr); */
       },
     });
   };
 
   const addIndiv = () => {
     props.navigation.navigate('AddUserIndividual', {
-      onAdd: (newUsers) => {
-        let arr = [...users];
+      onAdd: async (newUsers) => {
+        const result = await GroupsConvAPI.addUser(idGroup, newUsers);
+        if (!result.error) console.log(result.message);
+        setRegather(true);
+        return result.error !== true;
+        /*         let arr = [...users];
         arr = arr.concat(newUsers);
-        setUsers(arr);
+        setUsers(arr); */
       },
     });
   };
@@ -103,7 +135,15 @@ export default (props) => {
           text={'Aceptar'}
           onPress={() => {
             // Hacer llamada de eliminar usuario en grupo
-            setModalVisible(false);
+            (async () => {
+              const data = await GroupsConvAPI.removeUsers(idGroup, [user.id]);
+              if (data.error) {
+                console.log(data.message);
+                return;
+              }
+              setRegather(true);
+              setModalVisible(false);
+            })();
           }}
         />
         <Button

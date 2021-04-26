@@ -3,6 +3,7 @@ import { AlphabetList, Button } from '../../components';
 import { Text, ActivityIndicator, ScrollView } from 'react-native';
 import { Modal, List } from 'react-native-paper';
 import { factory } from 'node-factory';
+import RolesConvAPI from './../../lib/apiV2/RolesConvAPI';
 
 /**
  * role = {id: string, name: string}
@@ -15,26 +16,47 @@ export default (props) => {
 
   const { onAdd } = props.route.params;
 
+  props.navigation.setOptions({ title: 'Agregar desde rol' });
+
   useEffect(() => {
-    const fak = factory((fake) => ({
+    (async () => {
+      const roles = await RolesConvAPI.allRoles();
+      setRoles(roles);
+    })();
+    /* const fak = factory((fake) => ({
       id: fake.random.uuid(),
       name: fake.name.jobType(),
     }));
-    setRoles(fak.make(15));
+    setRoles(fak.make(15)); */
   }, []);
 
-  const getPpl = async () => {
+  const getPpl = async (idRole) => {
     // Hacer llamada para obtener usuarios
-    const fak = factory((fake) => ({
+    (async () => {
+      const data = await RolesConvAPI.allUsersPerRole(idRole);
+      if (data.error) {
+        console.log(data.message);
+        return;
+      }
+      const ppl = data.users
+        .filter((v) => v.nombre !== undefined)
+        .map((v) => ({
+          id: v.id,
+          name: v.nombre ?? '',
+        }));
+      setUsers(ppl);
+    })();
+    /* const fak = factory((fake) => ({
       id: fake.random.uuid(),
       name: fake.name.firstName(),
     }));
-    setUsers(fak.make(15));
+    setUsers(fak.make(15)); */
     return;
   };
 
-  const onListPress = () => {
-    getPpl();
+  const onListPress = (v) => {
+    console.log(v.id);
+    getPpl(v.id);
     setVisible(true);
   };
 
@@ -54,10 +76,20 @@ export default (props) => {
               Cargando datos...
             </Text>
           </>
+        ) : roles.length === 0 ? (
+          <Text
+            style={{
+              marginTop: 10,
+              textAlign: 'center',
+              fontWeight: '600',
+              fontSize: 16,
+            }}>
+            No hay roles
+          </Text>
         ) : (
           <AlphabetList
             data={roles}
-            onSelect={onListPress}
+            onSelect={(v) => onListPress(v)}
             scroll
             sort={'name'}
           />
@@ -111,7 +143,7 @@ export default (props) => {
             if (users === false) return;
 
             props.navigation.goBack();
-            onAdd(users);
+            onAdd(users.map((v) => v.id));
           }}
         />
       </Modal>

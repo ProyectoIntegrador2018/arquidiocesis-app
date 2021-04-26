@@ -22,10 +22,13 @@ const groupFac = factory((fake) => ({
 export default (props) => {
   const [search, setSearch] = useState('');
   const [groups, setGroups] = useState([]);
+  const [regather, setRegather] = useState(true);
   const user = useCurrentUser();
 
+  props.navigation.setOptions({ title: 'Grupos' });
+
   useEffect(() => {
-    if (user == null) {
+    if (user == null || !regather) {
       return;
     }
 
@@ -46,9 +49,11 @@ export default (props) => {
           })
         )
       );
+
+      setRegather(false);
     }
     query();
-  }, [user]);
+  }, [user, regather]);
 
   return (
     <View
@@ -150,10 +155,16 @@ export default (props) => {
                 onLongPress={() =>
                   props.navigation.navigate('CrearGrupo', {
                     editGroup: v,
-                    onSubmit: (renewed) => {
-                      const newGroups = [...groups];
+                    onSubmit: async (renewed) => {
+                      const e = await GroupsConvAPI.edit({
+                        id: v.id,
+                        name: renewed.title,
+                        description: '',
+                      });
+                      setRegather(true);
+                      /* const newGroups = [...groups];
                       newGroups.splice(i, 1, renewed);
-                      setGroups(newGroups);
+                      setGroups(newGroups); */
                     },
                   })
                 }>

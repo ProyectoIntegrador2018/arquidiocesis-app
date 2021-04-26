@@ -3,6 +3,7 @@ import { AlphabetList, Button } from '../../components';
 import { Text, ActivityIndicator, ScrollView } from 'react-native';
 import { Modal } from 'react-native-paper';
 import { factory } from 'node-factory';
+import UsersConvAPI from '../../lib/apiV2/UsersConvAPI';
 
 /**
  * user = {id: string, name: string}
@@ -14,12 +15,27 @@ export default (props) => {
 
   const { onAdd } = props.route.params;
 
+  props.navigation.setOptions({ title: 'Agregar usuario' });
+
   useEffect(() => {
-    const fak = factory((fake) => ({
+    (async () => {
+      try {
+        const data = await UsersConvAPI.allUsers();
+        const newUsers = data.map((v) => ({
+          id: v.id,
+          name: v.nombre ?? '',
+        }));
+        console.log(data, newUsers);
+        setUsers(newUsers);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+    /* const fak = factory((fake) => ({
       id: fake.random.uuid(),
       name: fake.name.jobType(),
     }));
-    setUsers(fak.make(15));
+    setUsers(fak.make(15)); */
   }, []);
 
   const onListPress = (usr) => {
@@ -70,7 +86,7 @@ export default (props) => {
             if (users === false) return;
 
             props.navigation.goBack();
-            onAdd([user]);
+            onAdd([user.id]);
           }}
         />
       </Modal>
