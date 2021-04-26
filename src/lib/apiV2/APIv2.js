@@ -65,6 +65,7 @@ export async function post(url, body) {
  */
 export async function put(url, body) {
   body = await applyUserToken(body);
+  console.log(body);
   try {
     const res = await axios.put(url, body);
     return res.data;

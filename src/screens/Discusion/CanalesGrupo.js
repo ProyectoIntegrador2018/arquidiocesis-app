@@ -15,13 +15,10 @@ export default (props) => {
   return (
     <>
       <Text style={styles.header}>Canales</Text>
-      <Button
+      {/* <Button
         style={{ width: 250, alignSelf: 'center' }}
         text="Crear canal"
         onPress={() => {
-          /* const newChannels = [{name: "Canal ejemplo"}, ...actualChannels]
-                setActualChannels(newChannels)
-                onSubmit(newChannels) */
           props.navigation.navigate('CrearCanales', {
             onSubmit: (newChannel) => {
               const newChannels = [newChannel, ...actualChannels];
@@ -30,7 +27,7 @@ export default (props) => {
             },
           });
         }}
-      />
+      /> */}
       <List.Section>
         {actualChannels.map((v, i) => (
           <List.Item

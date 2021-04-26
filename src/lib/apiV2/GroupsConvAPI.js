@@ -57,8 +57,55 @@ async function edit(params) {
   return data;
 }
 
+async function getAllUsers(params) {
+  const { id } = params;
+  if (id == null) {
+    return { error: true, message: 'No id' };
+  }
+
+  const data = await put(`${ROOT_URL}/users`, {
+    id,
+  });
+  return data;
+}
+
+/**
+ *
+ * @param {string} idGroup
+ * @param {string[]} idsUsers
+ * @returns
+ */
+async function removeUsers(idGroup, idsUsers) {
+  if (idGroup == null) {
+    return { error: true, message: 'No id' };
+  }
+
+  const data = await put(`${ROOT_URL}/removeUser`, {
+    group_id: idGroup,
+    group_members: idsUsers,
+  });
+  return data;
+}
+
+/**
+ *
+ * @param {string} id
+ * @param {string[]} members
+ */
+async function addUser(id, members) {
+  const data = await put(`${ROOT_URL}/addMember`, {
+    group_id: id,
+    group_members: members,
+  });
+
+  return data;
+}
+
 export default {
   allByUser,
   add,
   edit,
+  getAllUsers,
+  addUser,
+  removeUsers,
 };

@@ -14,6 +14,10 @@ export default (props) => {
   const [roles, setRoles] = useState(editGroup ? editGroup.roles : []);
   const isEdit = editGroup !== undefined;
 
+  props.navigation.setOptions({
+    title: isEdit ? 'Editar grupo' : 'Crear grupo',
+  });
+
   return (
     <>
       <KeyboardAwareScrollView style={styles.loginContainer} bounces={false}>
@@ -48,6 +52,7 @@ export default (props) => {
               onPress={() => {
                 props.navigation.navigate('UserOnGroup', {
                   roles,
+                  idGroup: editGroup.id,
                   onSubmit: (newRoles) => {
                     setRoles(newRoles);
                   },
