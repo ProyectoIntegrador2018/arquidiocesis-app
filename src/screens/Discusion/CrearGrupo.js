@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Button, Input, Item } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import ChannelConvAPI from '../../lib/apiV2/ChannelConvAPI';
 
 /**
  * props: {editGroup: {title: string, channels: {name: string}}}
  */
 export default (props) => {
-  const { editGroup } = props.route.params;
+  const { editGroup, onSubmit } = props.route.params;
   const [name, setName] = useState(editGroup ? editGroup.title : '');
   const [channels, setChannels] = useState(editGroup ? editGroup.channels : []);
   const [roles, setRoles] = useState(editGroup ? editGroup.roles : []);
@@ -41,7 +42,22 @@ export default (props) => {
                 props.navigation.navigate('CanalesGrupo', {
                   channels,
                   // channel: {name: string}
-                  onSubmit: (channels) => {
+                  onAdd: async (channel) => {
+                    (async () => {
+                      const result = await ChannelConvAPI.add({
+                        idGroup: editGroup.id,
+                        description: '',
+                        name: channel.name
+                      });
+                      
+                      if(!result || result.error) return;
+
+                      props.route.params.onSubmit({
+                        title: name,
+                        channels,
+                      });
+                    })();
+                    
                     setChannels(channels);
                   },
                 });

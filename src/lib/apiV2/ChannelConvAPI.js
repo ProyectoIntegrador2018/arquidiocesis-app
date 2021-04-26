@@ -11,19 +11,22 @@ const ROOT_URL = `${BASE_URL}channels`;
  */
 
 /**
- * @param {AddGroupParams} params
+ * @param {{idGroup: string, name: string, description: string}} params
  * @returns {Promise<AddGroupResponse | null>}
  */
 async function add(params) {
-  const { name, description, publications } = params;
-  if (name == null) {
+  const { idGroup, name, description } = params;
+  if (idGroup == null ||
+    name == null ||
+    description == null) {
     return null;
   }
 
   const data = await post(`${ROOT_URL}/`, {
+    canal_group: idGroup,
     canal_name: name,
     canal_description: description,
-    canal_publications: publications,
+    canal_publications: [],
   });
   return data;
 }
