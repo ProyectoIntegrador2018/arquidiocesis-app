@@ -43,7 +43,7 @@ export default (props) => {
                   channels,
                   // channel: {name: string}
                   onAdd: async (channel) => {
-                    (async () => {
+                    await (async () => {
                       const result = await ChannelConvAPI.add({
                         idGroup: editGroup.id,
                         description: '',
@@ -51,8 +51,7 @@ export default (props) => {
                       });
                       
                       if(!result || result.error) return;
-
-                      props.route.params.onSubmit({
+                      onSubmit({
                         title: name,
                         channels,
                       });
@@ -92,7 +91,7 @@ export default (props) => {
         <Button
           text={isEdit ? 'Aceptar' : 'Registrar'}
           onPress={() => {
-            props.route.params.onSubmit({
+            onSubmit({
               title: name,
               channels,
             });

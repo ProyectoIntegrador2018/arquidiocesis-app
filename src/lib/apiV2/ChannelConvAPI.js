@@ -23,7 +23,7 @@ async function add(params) {
   }
 
   const data = await post(`${ROOT_URL}/`, {
-    canal_group: idGroup,
+    grupo_conv_owner_id: idGroup,
     canal_name: name,
     canal_description: description,
     canal_publications: [],

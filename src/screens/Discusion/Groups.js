@@ -122,8 +122,9 @@ export default (props) => {
                     if (v.error) throw v.message;
                     else return v.data;
                   })
-                  .then((v) => {
-                    setGroups([...groups, { ...newGroup, id: v }]);
+                  .then(() => {
+                    //setGroups([...groups, { ...newGroup, id: v }]);
+                    setRegather(true);
                   })
                   .catch((v) => console.error(v));
               },
@@ -156,7 +157,7 @@ export default (props) => {
                   props.navigation.navigate('CrearGrupo', {
                     editGroup: v,
                     onSubmit: async (renewed) => {
-                      const e = await GroupsConvAPI.edit({
+                      await GroupsConvAPI.edit({
                         id: v.id,
                         name: renewed.title,
                         description: '',

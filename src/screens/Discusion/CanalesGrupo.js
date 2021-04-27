@@ -21,7 +21,7 @@ export default (props) => {
         onPress={() => {
           props.navigation.navigate('CrearCanales', {
             onAdd: (newChannel) => {
-              const newChannels = [newChannel, ...actualChannels];
+              const newChannels = [...actualChannels, newChannel];
               setActualChannels(newChannels);
               onAdd(newChannel);
             },
