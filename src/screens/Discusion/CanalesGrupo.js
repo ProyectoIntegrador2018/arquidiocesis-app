@@ -4,7 +4,7 @@ import { Button } from '../../components';
 import { List } from 'react-native-paper';
 
 export default (props) => {
-  const { channels, onSubmit } = props.route.params;
+  const { channels, onAdd } = props.route.params;
 
   const [actualChannels, setActualChannels] = useState([]);
 
@@ -15,19 +15,19 @@ export default (props) => {
   return (
     <>
       <Text style={styles.header}>Canales</Text>
-      {/* <Button
+      <Button
         style={{ width: 250, alignSelf: 'center' }}
         text="Crear canal"
         onPress={() => {
           props.navigation.navigate('CrearCanales', {
-            onSubmit: (newChannel) => {
-              const newChannels = [newChannel, ...actualChannels];
+            onAdd: (newChannel) => {
+              const newChannels = [...actualChannels, newChannel];
               setActualChannels(newChannels);
-              onSubmit(newChannels);
+              onAdd(newChannel);
             },
           });
         }}
-      /> */}
+      />
       <List.Section>
         {actualChannels.map((v, i) => (
           <List.Item
