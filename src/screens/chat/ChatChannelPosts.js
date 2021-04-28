@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -13,8 +13,10 @@ import { NavigationProps } from '../../navigation/NavigationPropTypes';
 import { FontAwesome5 } from '@expo/vector-icons';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
 import { useChannelPostsStore } from '../../context/ChannelPostsStore';
+import { LoadingView } from '../../components';
 
 function ChatChannelPosts({ navigation, route }) {
+  const [loading, setLoading] = useState(true);
   const [posts, setPosts, editingPostIndex] = useChannelPostsStore();
   const { channelName, channelID, groupID } = route.params;
 
@@ -34,6 +36,7 @@ function ChatChannelPosts({ navigation, route }) {
             commentCount: (post.post_comments ?? []).length,
           }))
         );
+        setLoading(false);
       }
     })();
   }, []);
@@ -91,6 +94,10 @@ function ChatChannelPosts({ navigation, route }) {
       },
     ]);
   };
+
+  if (loading) {
+    return <LoadingView />;
+  }
 
   return (
     <ScrollView style={styles.root}>
