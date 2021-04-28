@@ -122,6 +122,9 @@ export default (props) => {
                     if (v.error) throw v.message;
                     else return v.data;
                   })
+                  .then((idGroup) => {
+                    return GroupsConvAPI.setAdmin(idGroup, [user.id]);
+                  })
                   .then(() => {
                     //setGroups([...groups, { ...newGroup, id: v }]);
                     setRegather(true);
