@@ -24,8 +24,8 @@ function ChatChannelPosts({ navigation, route }) {
             } ${post.authorInfo.apellido_materno ?? ''}`,
             date: post.creation_timestamp,
             textContent: post.post_text,
-            comments: [],
             attachments: post.post_files,
+            commentCount: (post.post_comments ?? []).length,
           }))
         );
       }

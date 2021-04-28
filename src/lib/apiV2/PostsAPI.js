@@ -16,7 +16,7 @@ const ROOT_URL = `${BASE_URL}posts`;
   @typedef {{error: boolean, message: string} | null} DeletePostResponse
 
   @typedef {channelID: string} AllByChannelParams
-  @typedef {{error: boolean, data: {id: string, authorInfo: {nombre: string, apellido_paterno: string, apellido_materno: string}, post_author: string, post_text: string, post_files: string[], creation_timestamp: string, channel_owner_id: string}[]}} AllByChannelResponse
+  @typedef {{error: boolean, data: {id: string, authorInfo: {nombre: string, apellido_paterno: string, apellido_materno: string}, post_author: string, post_text: string, post_files: string[], creation_timestamp: string, channel_owner_id: string, post_comments: string[]}[]}} AllByChannelResponse
 */
 
 /**

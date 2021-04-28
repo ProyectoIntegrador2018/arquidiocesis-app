@@ -56,8 +56,8 @@ function ChatChannelCreatePost({ navigation, route }) {
               (user.apellido_materno ?? ''),
             date: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
             textContent: text,
-            comments: [],
             attachments: [],
+            commentCount: 0,
           },
           ...prev,
         ]);
