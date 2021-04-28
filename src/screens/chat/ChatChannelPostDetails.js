@@ -31,14 +31,16 @@ function ChatChannelPostDetails({ navigation, route }) {
       const res = await PostCommentsAPI.getForPost(post.id);
       if (!res.error) {
         setComments(
-          res.data.map((comment) => ({
-            id: comment.id,
-            authorName: `${comment.authorInfo.nombre} ${
-              comment.authorInfo.apellido_paterno ?? ''
-            } ${comment.authorInfo.apellido_materno ?? ''}`,
-            date: new Date(comment.creation_timestamp._seconds * 1000),
-            content: comment.comment_text,
-          }))
+          res.data
+            .map((comment) => ({
+              id: comment.id,
+              authorName: `${comment.authorInfo.nombre} ${
+                comment.authorInfo.apellido_paterno ?? ''
+              } ${comment.authorInfo.apellido_materno ?? ''}`,
+              date: new Date(comment.creation_timestamp._seconds * 1000),
+              content: comment.comment_text,
+            }))
+            .sort((first, second) => second.date - first.date)
         );
       }
     })();

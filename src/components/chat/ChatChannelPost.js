@@ -71,11 +71,9 @@ function ChatChannelPost({
       </View>
 
       {showComments ? (
-        [...comments]
-          .sort((first, second) => second.date - first.date)
-          .map((comment, idx) => (
-            <ChatChannelPostComment key={idx} comment={comment} />
-          ))
+        comments.map((comment, idx) => (
+          <ChatChannelPostComment key={idx} comment={comment} />
+        ))
       ) : (
         <View style={styles.footer}>
           <View style={styles.footerSection}>
