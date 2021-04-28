@@ -88,7 +88,7 @@ function ChatChannelPosts({ navigation, route }) {
 
   return (
     <ScrollView style={styles.root}>
-      {posts
+      {[...posts]
         .sort((first, second) => second.date - first.date)
         .map((post, idx) => (
           <>

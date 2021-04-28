@@ -71,7 +71,7 @@ function ChatChannelPost({
       </View>
 
       {showComments ? (
-        comments
+        [...comments]
           .sort((first, second) => second.date - first.date)
           .map((comment, idx) => (
             <ChatChannelPostComment key={idx} comment={comment} />
