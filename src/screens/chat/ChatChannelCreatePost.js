@@ -11,6 +11,7 @@ import Alert from '../../components/Alert';
 
 function ChatChannelCreatePost({ navigation, route }) {
   const [text, setText] = useState('');
+  const [loading, setLoading] = useState(false);
   const { channelID, post } = route.params;
   const [, setPosts, editingPostIndex] = useChannelPostsStore();
 
@@ -37,6 +38,7 @@ function ChatChannelCreatePost({ navigation, route }) {
       return;
     }
 
+    setLoading(true);
     if (post == null) {
       // post is null, so we're creating a new one
       const res = await PostsAPI.add({
@@ -61,6 +63,7 @@ function ChatChannelCreatePost({ navigation, route }) {
           },
           ...prev,
         ]);
+        setLoading(false);
       }
     } else {
       // post is not null so we're editing an existing one
@@ -82,6 +85,7 @@ function ChatChannelCreatePost({ navigation, route }) {
               : curr
           )
         );
+        setLoading(false);
       }
     }
 
@@ -116,6 +120,7 @@ function ChatChannelCreatePost({ navigation, route }) {
         style={styles.createButton}
         text={post == null ? 'Nuevo Mensaje' : 'Editar Mensaje'}
         onPress={onMessageCreatePress}
+        loading={loading}
       />
     </View>
   );
