@@ -78,7 +78,7 @@ function ChatChannelPost({
         <View style={styles.footer}>
           <View style={styles.footerSection}>
             <FontAwesome5 name="comment-alt" size={16} color="#8C8C8C" solid />
-            <Text style={styles.commentsLabel}>{post.comments.length}</Text>
+            <Text style={styles.commentsLabel}>{post.commentCount}</Text>
           </View>
           <TouchableOpacity
             style={[styles.footerSection, styles.replyButton]}

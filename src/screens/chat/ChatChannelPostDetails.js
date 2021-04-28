@@ -88,6 +88,11 @@ function ChatChannelPostDetails({ navigation, route }) {
         },
         ...prev,
       ]);
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.id === post.id ? { ...p, commentCount: p.commentCount + 1 } : p
+        )
+      );
     }
     setText('');
   }, [user, text]);
