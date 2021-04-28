@@ -108,19 +108,17 @@ function ChatChannelPosts({ navigation, route }) {
           Aun no existen publicaciones en este canal.
         </Text>
       ) : (
-        [...posts]
-          .sort((first, second) => second.date - first.date)
-          .map((post, idx) => (
-            <>
-              <View style={styles.postSeparator} />
-              <ChatChannelPost
-                post={post}
-                onPress={() => onPostPress(idx)}
-                onEditPress={() => onEditPostPress(idx)}
-                onDeletePress={() => onDeletePostPress(idx)}
-              />
-            </>
-          ))
+        posts.map((post, idx) => (
+          <>
+            <View style={styles.postSeparator} />
+            <ChatChannelPost
+              post={post}
+              onPress={() => onPostPress(idx)}
+              onEditPress={() => onEditPostPress(idx)}
+              onDeletePress={() => onDeletePostPress(idx)}
+            />
+          </>
+        ))
       )}
     </ScrollView>
   );
