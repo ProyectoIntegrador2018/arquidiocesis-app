@@ -1,14 +1,22 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import Alert from '../../components/Alert';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 import { FontAwesome5 } from '@expo/vector-icons';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
 import { useChannelPostsStore } from '../../context/ChannelPostsStore';
+import { LoadingView } from '../../components';
 
 function ChatChannelPosts({ navigation, route }) {
+  const [loading, setLoading] = useState(true);
   const [posts, setPosts, editingPostIndex] = useChannelPostsStore();
   const { channelName, channelID, groupID } = route.params;
 
@@ -30,6 +38,7 @@ function ChatChannelPosts({ navigation, route }) {
             }))
             .sort((first, second) => second.date - first.date)
         );
+        setLoading(false);
       }
     })();
   }, []);
@@ -88,19 +97,31 @@ function ChatChannelPosts({ navigation, route }) {
     ]);
   };
 
+  if (loading) {
+    return <LoadingView />;
+  }
+
   return (
     <ScrollView style={styles.root}>
-      {posts.map((post, idx) => (
-        <>
-          <View style={styles.postSeparator} />
-          <ChatChannelPost
-            post={post}
-            onPress={() => onPostPress(idx)}
-            onEditPress={() => onEditPostPress(idx)}
-            onDeletePress={() => onDeletePostPress(idx)}
-          />
-        </>
-      ))}
+      {posts.length < 1 ? (
+        <Text style={styles.noPostsLabel}>
+          Aun no existen publicaciones en este canal.
+        </Text>
+      ) : (
+        [...posts]
+          .sort((first, second) => second.date - first.date)
+          .map((post, idx) => (
+            <>
+              <View style={styles.postSeparator} />
+              <ChatChannelPost
+                post={post}
+                onPress={() => onPostPress(idx)}
+                onEditPress={() => onEditPostPress(idx)}
+                onDeletePress={() => onDeletePostPress(idx)}
+              />
+            </>
+          ))
+      )}
     </ScrollView>
   );
 }
@@ -115,6 +136,13 @@ const styles = StyleSheet.create({
   },
   postSeparator: {
     height: 10,
+  },
+  noPostsLabel: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'gray',
+    marginTop: 24,
   },
 });
 
