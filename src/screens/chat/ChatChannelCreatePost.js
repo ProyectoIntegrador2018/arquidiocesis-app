@@ -49,14 +49,13 @@ function ChatChannelCreatePost({ navigation, route }) {
       });
 
       if (res) {
-        const now = new Date();
         setPosts((prev) => [
           {
             id: res.data,
             authorName:
               `${user.nombre} ${user.apellido_paterno} ` +
               (user.apellido_materno ?? ''),
-            date: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+            date: new Date(),
             textContent: text,
             attachments: [],
             commentCount: 0,

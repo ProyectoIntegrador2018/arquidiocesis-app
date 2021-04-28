@@ -36,7 +36,7 @@ function ChatChannelPostDetails({ navigation, route }) {
             authorName: `${comment.authorInfo.nombre} ${
               comment.authorInfo.apellido_paterno ?? ''
             } ${comment.authorInfo.apellido_materno ?? ''}`,
-            date: comment.creation_timestamp,
+            date: new Date(comment.creation_timestamp._seconds * 1000),
             content: comment.comment_text,
           }))
         );
@@ -93,14 +93,13 @@ function ChatChannelPostDetails({ navigation, route }) {
       text,
     });
     if (!res.error) {
-      const now = new Date();
       setComments((prev) => [
         {
           id: res.data,
           authorName:
             `${user.nombre} ${user.apellido_paterno} ` +
             (user.apellido_materno ?? ''),
-          date: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+          date: new Date(),
           content: text,
         },
         ...prev,

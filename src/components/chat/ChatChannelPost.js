@@ -45,7 +45,7 @@ function ChatChannelPost({
             </MenuOptions>
           </Menu>
         </View>
-        <Text style={styles.dateLabel}>{post.date}</Text>
+        <Text style={styles.dateLabel}>{post.date.toLocaleString()}</Text>
         <Text style={styles.textContentLabel}>{post.textContent}</Text>
         {attachments.length > 0 && (
           <View style={styles.attachmentsContainer}>
@@ -71,9 +71,11 @@ function ChatChannelPost({
       </View>
 
       {showComments ? (
-        comments.map((comment, idx) => (
-          <ChatChannelPostComment key={idx} comment={comment} />
-        ))
+        comments
+          .sort((first, second) => second.date - first.date)
+          .map((comment, idx) => (
+            <ChatChannelPostComment key={idx} comment={comment} />
+          ))
       ) : (
         <View style={styles.footer}>
           <View style={styles.footerSection}>

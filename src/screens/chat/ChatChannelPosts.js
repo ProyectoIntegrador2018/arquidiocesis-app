@@ -22,7 +22,7 @@ function ChatChannelPosts({ navigation, route }) {
             authorName: `${post.authorInfo.nombre} ${
               post.authorInfo.apellido_paterno ?? ''
             } ${post.authorInfo.apellido_materno ?? ''}`,
-            date: post.creation_timestamp,
+            date: new Date(post.creation_timestamp._seconds * 1000),
             textContent: post.post_text,
             attachments: post.post_files,
             commentCount: (post.post_comments ?? []).length,
@@ -88,17 +88,19 @@ function ChatChannelPosts({ navigation, route }) {
 
   return (
     <ScrollView style={styles.root}>
-      {posts.map((post, idx) => (
-        <>
-          <View style={styles.postSeparator} />
-          <ChatChannelPost
-            post={post}
-            onPress={() => onPostPress(idx)}
-            onEditPress={() => onEditPostPress(idx)}
-            onDeletePress={() => onDeletePostPress(idx)}
-          />
-        </>
-      ))}
+      {posts
+        .sort((first, second) => second.date - first.date)
+        .map((post, idx) => (
+          <>
+            <View style={styles.postSeparator} />
+            <ChatChannelPost
+              post={post}
+              onPress={() => onPostPress(idx)}
+              onEditPress={() => onEditPostPress(idx)}
+              onDeletePress={() => onDeletePostPress(idx)}
+            />
+          </>
+        ))}
     </ScrollView>
   );
 }
