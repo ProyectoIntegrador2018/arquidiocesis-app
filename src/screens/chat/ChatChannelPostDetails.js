@@ -21,6 +21,7 @@ function ChatChannelPostDetails({ navigation, route }) {
   const [inputHeight, setInputHeight] = useState();
   const [text, setText] = useState('');
   const [comments, setComments] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [posts, setPosts, editingPostIndex] = useChannelPostsStore();
   const user = useCurrentUser();
   const post = posts[postIndex];
@@ -76,6 +77,16 @@ function ChatChannelPostDetails({ navigation, route }) {
   };
 
   const onReplyPress = useCallback(async () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    if (text === '') {
+      Alert.alert('Llenar comentario', 'Un comentario no puede estar vacío.');
+      return;
+    }
+
+    setIsSubmitting(true);
     const res = await PostCommentsAPI.add({
       authorID: user.id,
       postID: post.id,
@@ -99,9 +110,10 @@ function ChatChannelPostDetails({ navigation, route }) {
           p.id === post.id ? { ...p, commentCount: p.commentCount + 1 } : p
         )
       );
+      setIsSubmitting(false);
     }
     setText('');
-  }, [user, text]);
+  }, [user, text, isSubmitting]);
 
   return (
     <>
