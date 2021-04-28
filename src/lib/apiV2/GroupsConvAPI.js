@@ -101,6 +101,20 @@ async function addUser(id, members) {
   return data;
 }
 
+/**
+ *
+ * @param {string} idGroup
+ * @param {string[]} idUsers
+ */
+async function setAdmin(idGroup, idUsers) {
+  const data = await put(`${ROOT_URL}/addAdmin`, {
+    group_id: idGroup,
+    administrators: idUsers
+  });
+
+  return data;
+}
+
 export default {
   allByUser,
   add,
@@ -108,4 +122,5 @@ export default {
   getAllUsers,
   addUser,
   removeUsers,
+  setAdmin
 };
