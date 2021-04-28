@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { TextInput, StyleSheet, View, TouchableOpacity } from 'react-native';
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import ChatChannelPost from '../../components/chat/ChatChannelPost';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -98,14 +104,18 @@ function ChatChannelPostDetails({ navigation, route }) {
   }, [user, text]);
 
   return (
-    <View style={styles.root}>
-      <ChatChannelPost
-        post={post}
-        showComments={true}
-        comments={comments}
-        onEditPress={onEditPress}
-        onDeletePress={onDeletePress}
-      />
+    <>
+      <ScrollView
+        style={styles.root}
+        contentContainerStyle={{ paddingBottom: 60 }}>
+        <ChatChannelPost
+          post={post}
+          showComments={true}
+          comments={comments}
+          onEditPress={onEditPress}
+          onDeletePress={onDeletePress}
+        />
+      </ScrollView>
       <View style={styles.replyContainer}>
         <View style={styles.inputContainer}>
           <TextInput
@@ -123,7 +133,7 @@ function ChatChannelPostDetails({ navigation, route }) {
           <FontAwesome5 name="reply" size={14} color="white" />
         </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 }
 
