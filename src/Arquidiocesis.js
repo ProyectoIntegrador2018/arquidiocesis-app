@@ -82,7 +82,12 @@ import Groups from './screens/Discusion/Groups';
 import CrearGrupo from './screens/Discusion/CrearGrupo';
 import CanalesGrupo from './screens/Discusion/CanalesGrupo';
 import CrearCanales from './screens/Discusion/CrearCanales';
+import UserOnGroup from './screens/Discusion/UserOnGroup';
+import AdduserFromRole from './screens/Discusion/AdduserFromRole';
+import AddUserIndividual from './screens/Discusion/AddUserIndividual';
 import ChatChannelCreatePost from './screens/chat/ChatChannelCreatePost';
+import ChatChannelPostDetails from './screens/chat/ChatChannelPostDetails';
+import { ChannelPostsStoreProvider } from './context/ChannelPostsStore';
 
 const Tab = createBottomTabNavigator();
 function Home({ navigation, route }) {
@@ -276,10 +281,17 @@ function App({ user, logout }) {
         <Stack.Screen name="CanalesGrupo" component={CanalesGrupo} />
         <Stack.Screen name="CrearCanales" component={CrearCanales} />
         <Stack.Screen name="Grupos" component={Groups} />
+        <Stack.Screen name="UserOnGroup" component={UserOnGroup} />
+        <Stack.Screen name="AdduserFromRole" component={AdduserFromRole} />
+        <Stack.Screen name="AddUserIndividual" component={AddUserIndividual} />
         <Stack.Screen name="ChatChannelPosts" component={ChatChannelPosts} />
         <Stack.Screen
           name="ChatChannelCreatePost"
           component={ChatChannelCreatePost}
+        />
+        <Stack.Screen
+          name="ChatChannelPostDetails"
+          component={ChatChannelPostDetails}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -319,15 +331,17 @@ function Main() {
 
   return (
     <PopupMenuProvider>
-      <View style={StyleSheet.absoluteFillObject}>
-        <StatusBar barStyle={'light-content'} />
-        {!login ? (
-          <Login user={login} onLogin={onLogin} />
-        ) : (
-          // User is logged in
-          <App user={login} logout={logout} />
-        )}
-      </View>
+      <ChannelPostsStoreProvider>
+        <View style={StyleSheet.absoluteFillObject}>
+          <StatusBar barStyle={'light-content'} />
+          {!login ? (
+            <Login user={login} onLogin={onLogin} />
+          ) : (
+            // User is logged in
+            <App user={login} logout={logout} />
+          )}
+        </View>
+      </ChannelPostsStoreProvider>
     </PopupMenuProvider>
   );
 }

@@ -1,5 +1,10 @@
+/* global __DEV__ */
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const ROOT_URL = __DEV__
+  ? 'http://localhost:8000/api/'
+  : 'https://arquidiocesis-bda.herokuapp.com/api/';
 
 /**
  * @param {Object} data
@@ -60,6 +65,7 @@ export async function post(url, body) {
  */
 export async function put(url, body) {
   body = await applyUserToken(body);
+  console.log(body);
   try {
     const res = await axios.put(url, body);
     return res.data;
@@ -94,10 +100,10 @@ export async function patch(url, body) {
  * @param {Object} body
  * @returns {Promise<Object>}
  */
-export async function del(url, body) {
-  body = await applyUserToken(body);
+export async function del(url, params) {
+  params = await applyUserToken(params);
   try {
-    const res = await axios.delete(url, body);
+    const res = await axios.delete(url, { params });
     return res.data;
   } catch (err) {
     return {

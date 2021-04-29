@@ -9,9 +9,17 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
+import ChatChannelPostComment from './ChatChannelPostComment';
 const ATTACHMENT_SIZE = 128;
 
-function ChatChannelPost({ post }) {
+function ChatChannelPost({
+  post,
+  onPress,
+  onEditPress,
+  onDeletePress,
+  comments,
+  showComments = false,
+}) {
   let attachments = post.attachments;
   let extraAttachments = 0;
   if (post.attachments.length > 2) {
@@ -21,7 +29,8 @@ function ChatChannelPost({ post }) {
 
   return (
     <View style={styles.root}>
-      <View style={styles.content}>
+      <View
+        style={[styles.content, { borderBottomWidth: showComments ? 1 : 0 }]}>
         <View style={styles.header}>
           <Text style={styles.authorLabel}>{post.authorName}</Text>
           <Menu style={{ maxWidth: 100 }}>
@@ -29,8 +38,8 @@ function ChatChannelPost({ post }) {
               <FontAwesome5 name="ellipsis-h" size={16} color="black" light />
             </MenuTrigger>
             <MenuOptions>
-              <MenuOption text="Editar" />
-              <MenuOption>
+              <MenuOption text="Editar" onSelect={onEditPress} />
+              <MenuOption onSelect={onDeletePress}>
                 <Text style={{ color: 'red' }}>Borrar</Text>
               </MenuOption>
             </MenuOptions>
@@ -61,18 +70,25 @@ function ChatChannelPost({ post }) {
         )}
       </View>
 
-      <View style={styles.footer}>
-        <View style={styles.footerSection}>
-          <FontAwesome5 name="comment-alt" size={16} color="#8C8C8C" solid />
-          <Text style={styles.commentsLabel}>{post.comments.length}</Text>
+      {showComments ? (
+        comments.map((comment, idx) => (
+          <ChatChannelPostComment key={idx} comment={comment} />
+        ))
+      ) : (
+        <View style={styles.footer}>
+          <View style={styles.footerSection}>
+            <FontAwesome5 name="comment-alt" size={16} color="#8C8C8C" solid />
+            <Text style={styles.commentsLabel}>{post.commentCount}</Text>
+          </View>
+          <TouchableOpacity
+            style={[styles.footerSection, styles.replyButton]}
+            hitSlop={12}
+            onPress={onPress}>
+            <Text style={styles.replyLabel}>Responder</Text>
+          </TouchableOpacity>
+          <View style={styles.footerSection} />
         </View>
-        <TouchableOpacity
-          style={[styles.footerSection, styles.replyButton]}
-          hitSlop={12}>
-          <Text style={styles.replyLabel}>Responder</Text>
-        </TouchableOpacity>
-        <View style={styles.footerSection} />
-      </View>
+      )}
     </View>
   );
 }
@@ -90,6 +106,8 @@ ChatChannelPost.propTypes = {
       }).isRequired
     ).isRequired,
   }).isRequired,
+  onPress: PropTypes.func.isRequired,
+  showComments: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
@@ -99,6 +117,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 10,
     paddingBottom: 16,
+    borderBottomColor: '#D6D6D6',
   },
   header: {
     flexDirection: 'row',

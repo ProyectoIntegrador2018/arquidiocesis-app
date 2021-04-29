@@ -1,23 +1,103 @@
 import * as React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 import { Button } from '../../components';
 import ChatChannelCreatePostOptionRow from '../../components/chat/ChatChannelCreatePostOptionRow';
 import { NavigationProps } from '../../navigation/NavigationPropTypes';
+import useCurrentUser from '../../lib/apiV2/useCurrentUser';
+import PostsAPI from '../../lib/apiV2/PostsAPI';
+import { useChannelPostsStore } from '../../context/ChannelPostsStore';
+import Alert from '../../components/Alert';
 
-function ChatChannelCreatePost({ navigation }) {
+function ChatChannelCreatePost({ navigation, route }) {
+  const [text, setText] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { channelID, post } = route.params;
+  const [, setPosts, editingPostIndex] = useChannelPostsStore();
+
+  const user = useCurrentUser();
+
+  useEffect(() => {
+    if (post != null) {
+      setText(post.textContent);
+    }
+  }, [post]);
+
   navigation.setOptions({
     headerTitle: 'Crear Publicación',
   });
 
   const onCameraPress = () => {};
   const onFilePress = () => {};
-  const onMessageCreatePress = () => {};
+  const onMessageCreatePress = useCallback(async () => {
+    if (text === '') {
+      Alert.alert(
+        'Llenar publicación',
+        'Una publicación no puede estar vacía.'
+      );
+      return;
+    }
+
+    setLoading(true);
+    if (post == null) {
+      // post is null, so we're creating a new one
+      const res = await PostsAPI.add({
+        text,
+        authorID: user.id,
+        channelOwnerID: channelID,
+        fileIDs: [],
+      });
+
+      if (res) {
+        setPosts((prev) => [
+          {
+            id: res.data,
+            authorName:
+              `${user.nombre} ${user.apellido_paterno} ` +
+              (user.apellido_materno ?? ''),
+            date: new Date(),
+            textContent: text,
+            attachments: [],
+            commentCount: 0,
+          },
+          ...prev,
+        ]);
+        setLoading(false);
+      }
+    } else {
+      // post is not null so we're editing an existing one
+      const res = await PostsAPI.edit({ id: post.id, fileIDs: [], text });
+
+      if (res) {
+        const modifiedIndex = editingPostIndex.current;
+        editingPostIndex.current = -1;
+        setPosts((prev) =>
+          prev.map((curr, idx) =>
+            idx === modifiedIndex
+              ? {
+                  ...curr,
+                  ...{
+                    textContent: text,
+                    attachments: [],
+                  },
+                }
+              : curr
+          )
+        );
+        setLoading(false);
+      }
+    }
+
+    navigation.goBack();
+  }, [text, user]);
 
   return (
     <View style={styles.root}>
       <TextInput
         style={styles.input}
         placeholder="Escribir mensaje..."
+        value={text}
+        onChangeText={(text) => setText(text)}
         multiline={true}
       />
 
@@ -37,8 +117,9 @@ function ChatChannelCreatePost({ navigation }) {
 
       <Button
         style={styles.createButton}
-        text="Nuevo Mensaje"
+        text={post == null ? 'Nuevo Mensaje' : 'Editar Mensaje'}
         onPress={onMessageCreatePress}
+        loading={loading}
       />
     </View>
   );

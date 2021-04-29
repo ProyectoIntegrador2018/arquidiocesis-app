@@ -1,27 +1,32 @@
 import { post, put } from './APIv2';
+import { ROOT_URL as BASE_URL } from './APIv2';
 
-const ROOT_URL = 'https://arquidiocesis-bda.herokuapp.com/api/channels';
-
+const ROOT_URL = `${BASE_URL}channels`;
 /**
  *
  * @typedef {{id: string, data: Object}[]} AllGroupsResponse
  *
+ * @typedef {ids: string[]} AllChannelsByGroupsParams
+ * @typedef {{error: boolean, channels: {id: string, canal_name: string, canal_description: string, canal_publications: string[]}[]}} AllChannelsByGroupsResponse
  */
 
 /**
- * @param {AddGroupParams} params
+ * @param {{idGroup: string, name: string, description: string}} params
  * @returns {Promise<AddGroupResponse | null>}
  */
 async function add(params) {
-  const { name, description, publications } = params;
-  if (name == null) {
+  const { idGroup, name, description } = params;
+  if (idGroup == null ||
+    name == null ||
+    description == null) {
     return null;
   }
 
   const data = await post(`${ROOT_URL}/`, {
+    grupo_conv_owner_id: idGroup,
     canal_name: name,
     canal_description: description,
-    canal_publications: publications,
+    canal_publications: [],
   });
   return data;
 }
@@ -44,7 +49,22 @@ async function edit(params) {
   return data;
 }
 
+/**
+ * @param {AllChannelsByGroupsParams} ids
+ * @returns {AllChannelsByGroupsResponse}
+ */
+async function allByGroup(ids) {
+  if (ids == null || ids.length < 1) {
+    return null;
+  }
+
+  return await post(`${ROOT_URL}/getAll`, {
+    channel_ids: ids,
+  });
+}
+
 export default {
   add,
   edit,
+  allByGroup,
 };

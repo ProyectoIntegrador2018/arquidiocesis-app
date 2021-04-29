@@ -17,7 +17,7 @@ export default (props) => {
       <Button
         text="Crear"
         onPress={() => {
-          props.route.params.onSubmit({ name });
+          props.route.params.onAdd({ name });
           props.navigation.goBack();
         }}
       />
