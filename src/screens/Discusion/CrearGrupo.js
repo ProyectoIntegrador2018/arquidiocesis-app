@@ -10,7 +10,9 @@ import ChannelConvAPI from '../../lib/apiV2/ChannelConvAPI';
  */
 export default (props) => {
   const { editGroup, onSubmit } = props.route.params;
+  console.log(editGroup);
   const [name, setName] = useState(editGroup ? editGroup.title : '');
+  const [desc, setDesc] = useState(editGroup ? editGroup.description : '');
   const [channels, setChannels] = useState(editGroup ? editGroup.channels : []);
   const [roles, setRoles] = useState(editGroup ? editGroup.roles : []);
   const isEdit = editGroup !== undefined;
@@ -35,6 +37,22 @@ export default (props) => {
           }}
         />
         {isEdit ? (
+          <Input
+            noTextOver
+            placeholder="Descripcion del grupo"
+            required
+            value={desc}
+            onChangeText={(v) => {
+              setDesc(v);
+            }}
+            extraProps={{
+              multiline: true,
+              numberOfLines: 3,
+            }}
+            height={90}
+          />
+        ) : null}
+        {isEdit ? (
           <>
             <Item
               text="Ver canales"
@@ -47,16 +65,17 @@ export default (props) => {
                       const result = await ChannelConvAPI.add({
                         idGroup: editGroup.id,
                         description: '',
-                        name: channel.name
+                        name: channel.name,
                       });
-                      
-                      if(!result || result.error) return;
+
+                      if (!result || result.error) return;
                       onSubmit({
                         title: name,
                         channels,
+                        description: desc,
                       });
                     })();
-                    
+
                     setChannels(channels);
                   },
                 });
@@ -94,6 +113,7 @@ export default (props) => {
             onSubmit({
               title: name,
               channels,
+              description: desc,
             });
 
             props.navigation.goBack();
@@ -114,5 +134,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  commentHeight: {
+    height: 80,
   },
 });
