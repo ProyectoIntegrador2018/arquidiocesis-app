@@ -59,7 +59,7 @@
     "@babel/core": "~7.9.0",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
-    "@expo/webpack-config": "~0.12.45",
+    "@expo/webpack-config": "^0.12.68",
     "babel-preset-expo": "8.3.0",
     "commitizen": "4.1.2",
     "cz-conventional-changelog": "3.2.0",

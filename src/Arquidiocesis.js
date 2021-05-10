@@ -88,6 +88,7 @@ import AddUserIndividual from './screens/Discusion/AddUserIndividual';
 import ChatChannelCreatePost from './screens/chat/ChatChannelCreatePost';
 import ChatChannelPostDetails from './screens/chat/ChatChannelPostDetails';
 import { ChannelPostsStoreProvider } from './context/ChannelPostsStore';
+import WebPushNotifications from './lib/WebPushNotifications';
 
 const Tab = createBottomTabNavigator();
 function Home({ navigation, route }) {
@@ -309,6 +310,14 @@ function Main() {
       setLogin(null);
     });
     checkLogin();
+
+    document.addEventListener('message', (e) => {
+      console.log(e);
+    });
+
+    window.addEventListener('message', (e) => {
+      console.log(e);
+    });
   }, []);
 
   // Check to see if the user is logged in.
@@ -319,8 +328,9 @@ function Main() {
     });
   };
 
-  const onLogin = (user) => {
+  const onLogin = async (user) => {
     setLogin(user);
+    await WebPushNotifications.subscribe();
   };
 
   const logout = () => {
