@@ -314,14 +314,6 @@ function Main() {
       setLogin(null);
     });
     checkLogin();
-
-    document.addEventListener('message', (e) => {
-      console.log(e);
-    });
-
-    window.addEventListener('message', (e) => {
-      console.log(e);
-    });
   }, []);
 
   // Check to see if the user is logged in.
