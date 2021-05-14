@@ -10,7 +10,10 @@ self.addEventListener('notificationclick', (event) => {
 
   event.waitUntil(
     (async () => {
-      if (event.notification.data?.url != null) {
+      if (
+        event.notification.data != null &&
+        event.notification.data.url != null
+      ) {
         await self.clients.openWindow(event.notification.data.url);
       }
     })()
