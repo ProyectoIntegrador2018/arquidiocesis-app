@@ -7,7 +7,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { MenuProvider as PopupMenuProvider } from 'react-native-popup-menu';
 import {
   Platform,
@@ -77,6 +77,7 @@ import {
   Zona,
   ChatChannelPosts,
 } from './screens';
+import { useDeepLinking } from './navigation/DeepLinking';
 
 import Groups from './screens/Discusion/Groups';
 import CrearGrupo from './screens/Discusion/CrearGrupo';
@@ -88,6 +89,7 @@ import AddUserIndividual from './screens/Discusion/AddUserIndividual';
 import ChatChannelCreatePost from './screens/chat/ChatChannelCreatePost';
 import ChatChannelPostDetails from './screens/chat/ChatChannelPostDetails';
 import { ChannelPostsStoreProvider } from './context/ChannelPostsStore';
+import WebPushNotifications from './lib/WebPushNotifications';
 
 const Tab = createBottomTabNavigator();
 function Home({ navigation, route }) {
@@ -167,8 +169,11 @@ function Home({ navigation, route }) {
 // The app's main stack.
 const Stack = createStackNavigator();
 function App({ user, logout }) {
+  const navigationRef = useRef(null);
+  useDeepLinking(navigationRef);
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         user={user}
         initialRouteName="Home"
@@ -319,8 +324,9 @@ function Main() {
     });
   };
 
-  const onLogin = (user) => {
+  const onLogin = async (user) => {
     setLogin(user);
+    await WebPushNotifications.subscribe();
   };
 
   const logout = () => {
