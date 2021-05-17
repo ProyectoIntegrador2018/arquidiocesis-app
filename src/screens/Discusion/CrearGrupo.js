@@ -4,6 +4,9 @@ import { Text, StyleSheet } from 'react-native';
 import { Button, Input, Item } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ChannelConvAPI from '../../lib/apiV2/ChannelConvAPI';
+import { List, Modal } from 'react-native-paper';
+import { View, TextInput, ActivityIndicator, ScrollView } from 'react-native';
+import Icons from '../../lib/Icons.json';
 
 /**
  * props: {editGroup: {title: string, channels: {name: string}}}
@@ -13,11 +16,20 @@ export default (props) => {
   const [name, setName] = useState(editGroup ? editGroup.title : '');
   const [channels, setChannels] = useState(editGroup ? editGroup.channels : []);
   const [roles, setRoles] = useState(editGroup ? editGroup.roles : []);
+  const [iconSelectVisible, setIconSelectVisible] = useState(false);
+  const [icon, setIcon] = useState(
+    editGroup ? editGroup.icon : '' ?? 'account-cancel'
+  );
   const isEdit = editGroup !== undefined;
 
   props.navigation.setOptions({
     title: isEdit ? 'Editar grupo' : 'Crear grupo',
   });
+
+  const onIconItemPress = (newIcon) => {
+    setIcon(newIcon);
+    setIconSelectVisible(false);
+  };
 
   return (
     <>
@@ -34,6 +46,13 @@ export default (props) => {
             setName(v);
           }}
         />
+        <Item
+          text="Cambiar icono"
+          leftIcon={icon}
+          onPress={() => {
+            setIconSelectVisible(true);
+          }}
+        />
         {isEdit ? (
           <>
             <Item
@@ -47,16 +66,16 @@ export default (props) => {
                       const result = await ChannelConvAPI.add({
                         idGroup: editGroup.id,
                         description: '',
-                        name: channel.name
+                        name: channel.name,
                       });
-                      
-                      if(!result || result.error) return;
+
+                      if (!result || result.error) return;
                       onSubmit({
                         title: name,
                         channels,
                       });
                     })();
-                    
+
                     setChannels(channels);
                   },
                 });
@@ -100,6 +119,35 @@ export default (props) => {
           }}
         />
       </KeyboardAwareScrollView>
+
+      <Modal
+        transparent={true}
+        visible={iconSelectVisible}
+        onDismiss={() => {
+          setIconSelectVisible(!iconSelectVisible);
+        }}
+        contentContainerStyle={{
+          backgroundColor: 'white',
+          padding: 20,
+          maxHeight: '80%',
+        }}>
+        <Text>{'Seleccione un icono'}</Text>
+        <ScrollView>
+          {Icons.map((v, i) => (
+            <Item
+              key={i.toString()}
+              leftIcon={v}
+              onPress={() => onIconItemPress(v)}
+            />
+          ))}
+        </ScrollView>
+        <Button
+          text={'Cancelar'}
+          onPress={() => {
+            setIconSelectVisible(false);
+          }}
+        />
+      </Modal>
     </>
   );
 };

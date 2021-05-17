@@ -156,6 +156,9 @@ export default (props) => {
                   borderBottomColor: '#ddd',
                   borderBottomWidth: '1px',
                 }}
+                left={(iP) => (
+                  <List.Icon {...iP} icon="account-supervisor-circle" />
+                )}
                 onLongPress={() =>
                   props.navigation.navigate('CrearGrupo', {
                     editGroup: v,
