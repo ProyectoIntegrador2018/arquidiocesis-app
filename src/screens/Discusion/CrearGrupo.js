@@ -44,7 +44,11 @@ export default (props) => {
                 props.navigation.navigate('CanalesGrupo', {
                   channels,
                   onDelete: async (id) => {
-                    console.log('delete channel', id);
+                    onSubmit({
+                      title: name,
+                      channels,
+                    });
+                    return await ChannelConvAPI.deleteChannels([id]);
                   },
                   // channel: {name: string}
                   onAdd: async (channel) => {

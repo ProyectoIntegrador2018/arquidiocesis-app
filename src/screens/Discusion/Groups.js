@@ -171,7 +171,7 @@ export default (props) => {
                       setGroups(newGroups); */
                     },
                     onDelete: async (id) => {
-                      console.log('delete', id);
+                      return await GroupsConvAPI.deleteGroup([id])
                     },
                   })
                 }>
