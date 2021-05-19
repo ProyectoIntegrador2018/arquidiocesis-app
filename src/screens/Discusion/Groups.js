@@ -170,6 +170,9 @@ export default (props) => {
                       newGroups.splice(i, 1, renewed);
                       setGroups(newGroups); */
                     },
+                    onDelete: async (id) => {
+                      console.log('delete', id);
+                    },
                   })
                 }>
                 {v.channels.map((chV, chI) => (

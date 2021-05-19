@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Button } from '../../components';
-import { List } from 'react-native-paper';
+import { List, Modal } from 'react-native-paper';
 
 export default (props) => {
-  const { channels, onAdd } = props.route.params;
+  const { channels, onAdd, onDelete } = props.route.params;
 
   const [actualChannels, setActualChannels] = useState([]);
+  const [channelToDelete, setChannelToDelete] = useState(null);
 
   useEffect(() => {
     setActualChannels(channels);
@@ -31,6 +32,9 @@ export default (props) => {
       <List.Section>
         {actualChannels.map((v, i) => (
           <List.Item
+            onPress={() => {
+              setChannelToDelete(v);
+            }}
             title={`${v.name}`}
             key={i.toString()}
             style={{
@@ -44,6 +48,30 @@ export default (props) => {
           />
         ))}
       </List.Section>
+
+      <Modal
+        transparent={true}
+        visible={channelToDelete !== null}
+        onDismiss={() => {
+          setChannelToDelete(null);
+        }}
+        contentContainerStyle={{
+          backgroundColor: 'white',
+          padding: 20,
+          maxHeight: '80%',
+        }}>
+        <Text>{`Desea eliminar el canal ${channelToDelete?.name ?? ''}?`}</Text>
+        <Button
+          text={'Eliminar canal'}
+          onPress={() => {
+            if (channelToDelete === null) return;
+            console.log(channelToDelete.id);
+
+            props.navigation.goBack();
+            onDelete(channelToDelete.id);
+          }}
+        />
+      </Modal>
     </>
   );
 };
