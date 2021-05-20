@@ -8,13 +8,16 @@ import useCurrentUser from '../../lib/apiV2/useCurrentUser';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
 import { useChannelPostsStore } from '../../context/ChannelPostsStore';
 import Alert from '../../components/Alert';
+import { requestMedia, requestDocument } from '../../lib/Files';
+import ChatChannelAttachment from '../../components/chat/ChatChannelAttachment';
 
 function ChatChannelCreatePost({ navigation, route }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [attachments, setAttachments] = useState([]);
+  const [screenWidth, setScreenWidth] = useState(500);
   const { channelID, post } = route.params;
   const [, setPosts, editingPostIndex] = useChannelPostsStore();
-
   const user = useCurrentUser();
 
   useEffect(() => {
@@ -27,8 +30,51 @@ function ChatChannelCreatePost({ navigation, route }) {
     headerTitle: 'Crear Publicación',
   });
 
-  const onCameraPress = () => {};
-  const onFilePress = () => {};
+  const measureView = (e) => {
+    setScreenWidth(e.nativeEvent.layout.width);
+  };
+
+  const onAttachmentDelete = (idx) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const onCameraPress = async () => {
+    const { file, base64, type, thumbnail } = await requestMedia();
+    if (attachments.find((attachment) => attachment.uri === base64)) {
+      return;
+    }
+
+    setAttachments((prev) =>
+      prev.concat({
+        uri: base64,
+        fileName: '',
+        type,
+        file,
+        thumbnail,
+      })
+    );
+  };
+
+  const onFilePress = async () => {
+    const doc = await requestDocument();
+    if (
+      doc == null ||
+      attachments.find((attachment) => attachment.uri === doc.uri)
+    ) {
+      return;
+    }
+
+    setAttachments((prev) =>
+      prev.concat({
+        uri: doc.uri,
+        fileName: doc.file.name,
+        type: 'document',
+        file: doc.file,
+        thumbnail: null,
+      })
+    );
+  };
+
   const onMessageCreatePress = useCallback(async () => {
     if (text === '') {
       Alert.alert(
@@ -103,6 +149,17 @@ function ChatChannelCreatePost({ navigation, route }) {
 
       <View style={styles.separator} />
 
+      <View style={styles.attachmentContainer} onLayout={measureView}>
+        {attachments.map((attachment, idx) => (
+          <ChatChannelAttachment
+            key={idx}
+            attachment={attachment}
+            size={screenWidth / 3 - 16}
+            onDelete={() => onAttachmentDelete(idx)}
+          />
+        ))}
+      </View>
+
       <ChatChannelCreatePostOptionRow
         iconName="camera"
         title="Agregar foto/video"
@@ -149,6 +206,11 @@ const styles = StyleSheet.create({
     width: 250,
     alignSelf: 'center',
     backgroundColor: '#EDEDED',
+  },
+  attachmentContainer: {
+    width: '100%',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
   },
 });
 
