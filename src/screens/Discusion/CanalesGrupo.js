@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Button } from '../../components';
 import { List, Modal } from 'react-native-paper';
+import ChannelConvAPI from '../../lib/apiV2/ChannelConvAPI';
 
 export default (props) => {
-  const { channels, onAdd, onDelete } = props.route.params;
 
-  const [actualChannels, setActualChannels] = useState([]);
+  const { idGroup, initialChannels, onChannelsChanged } = props.route.params
+
+  const [actualChannels, setActualChannels] = useState(initialChannels);
   const [channelToDelete, setChannelToDelete] = useState(null);
-
-  useEffect(() => {
-    setActualChannels(channels);
-  }, []);
 
   return (
     <>
@@ -21,10 +19,21 @@ export default (props) => {
         text="Crear canal"
         onPress={() => {
           props.navigation.navigate('CrearCanales', {
-            onAdd: (newChannel) => {
-              const newChannels = [...actualChannels, newChannel];
+            onAdd: async (newChannel) => {
+              const result = await ChannelConvAPI.add({
+                idGroup,
+                name: newChannel.name,
+                description: '',
+              });
+              if (!result || result.error) return;
+
+              const newChannels = [...actualChannels]
+              newChannels.push({
+                ...newChannel,
+                id: result.data
+              })
               setActualChannels(newChannels);
-              onAdd(newChannel);
+              onChannelsChanged(newChannels);
             },
           });
         }}
@@ -63,12 +72,17 @@ export default (props) => {
         <Text>{`Desea eliminar el canal ${channelToDelete?.name ?? ''}?`}</Text>
         <Button
           text={'Eliminar canal'}
-          onPress={() => {
+          onPress={async () => {
             if (channelToDelete === null) return;
-            console.log(channelToDelete.id);
 
-            props.navigation.goBack();
-            onDelete(channelToDelete.id);
+            if( await ChannelConvAPI.deleteChannels([channelToDelete.id]) ) {
+              const newChannels = [...actualChannels]
+              const idx = newChannels.findIndex(v => v.id === channelToDelete.id)
+              newChannels.splice(idx, 1);
+              setActualChannels(newChannels);
+              onChannelsChanged(newChannels);
+              setChannelToDelete(null);
+            }
           }}
         />
       </Modal>

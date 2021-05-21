@@ -171,8 +171,13 @@ export default (props) => {
                       setGroups(newGroups); */
                     },
                     onDelete: async (id) => {
-                      return await GroupsConvAPI.deleteGroup([id])
+                      const success = !(await GroupsConvAPI.deleteGroup([id])).error
+                      if(success) setRegather(true);
+                      return success
                     },
+                    onRefresh: () => {
+                      setRegather(true);
+                    }
                   })
                 }>
                 {v.channels.map((chV, chI) => (

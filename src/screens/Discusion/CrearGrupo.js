@@ -3,14 +3,13 @@ import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Button, Input, Item } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import ChannelConvAPI from '../../lib/apiV2/ChannelConvAPI';
 import { Modal } from 'react-native-paper';
 
 /**
  * props: {editGroup: {id: string, title: string, channels: {name: string}}}
  */
 export default (props) => {
-  const { editGroup, onSubmit, onDelete } = props.route.params;
+  const { editGroup, onSubmit, onDelete, onRefresh } = props.route.params;
   const [name, setName] = useState(editGroup ? editGroup.title : '');
   const [channels, setChannels] = useState(editGroup ? editGroup.channels : []);
   const [roles, setRoles] = useState(editGroup ? editGroup.roles : []);
@@ -42,32 +41,12 @@ export default (props) => {
               text="Ver canales"
               onPress={() => {
                 props.navigation.navigate('CanalesGrupo', {
-                  channels,
-                  onDelete: async (id) => {
-                    onSubmit({
-                      title: name,
-                      channels,
-                    });
-                    return await ChannelConvAPI.deleteChannels([id]);
-                  },
-                  // channel: {name: string}
-                  onAdd: async (channel) => {
-                    await (async () => {
-                      const result = await ChannelConvAPI.add({
-                        idGroup: editGroup.id,
-                        description: '',
-                        name: channel.name,
-                      });
-
-                      if (!result || result.error) return;
-                      onSubmit({
-                        title: name,
-                        channels,
-                      });
-                    })();
-
-                    setChannels(channels);
-                  },
+                  idGroup: editGroup.id,
+                  initialChannels: channels,
+                  onChannelsChanged: (newChannels) => {
+                    setChannels(newChannels);
+                    onRefresh();
+                  }
                 });
               }}
             />
@@ -109,8 +88,7 @@ export default (props) => {
           text={isEdit ? 'Aceptar' : 'Registrar'}
           onPress={() => {
             onSubmit({
-              title: name,
-              channels,
+              title: name
             });
 
             props.navigation.goBack();
@@ -132,11 +110,11 @@ export default (props) => {
         <Text>{`Desea eliminar el grupo ${editGroup?.title ?? ''}?`}</Text>
         <Button
           text={'Eliminar grupo'}
-          onPress={() => {
+          onPress={async () => {
             if (editGroup === false) return;
 
-            props.navigation.goBack();
-            onDelete(editGroup.id);
+            const success = await onDelete(editGroup.id);
+            if(success) props.navigation.goBack();
           }}
         />
       </Modal>
