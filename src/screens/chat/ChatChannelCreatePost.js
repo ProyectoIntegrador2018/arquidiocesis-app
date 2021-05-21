@@ -39,18 +39,21 @@ function ChatChannelCreatePost({ navigation, route }) {
   };
 
   const onCameraPress = async () => {
-    const { file, base64, type, thumbnail } = await requestMedia();
-    if (attachments.find((attachment) => attachment.uri === base64)) {
+    const file = await requestMedia();
+    if (
+      file == null ||
+      attachments.find((attachment) => attachment.uri === file.base64)
+    ) {
       return;
     }
 
     setAttachments((prev) =>
       prev.concat({
-        uri: base64,
+        uri: file.base64,
         fileName: '',
-        type,
-        file,
-        thumbnail,
+        type: file.type,
+        file: file.file,
+        thumbnail: file.thumbnail,
       })
     );
   };
@@ -159,6 +162,8 @@ function ChatChannelCreatePost({ navigation, route }) {
           />
         ))}
       </View>
+
+      {attachments.length > 0 && <View style={styles.separator} />}
 
       <ChatChannelCreatePostOptionRow
         iconName="camera"

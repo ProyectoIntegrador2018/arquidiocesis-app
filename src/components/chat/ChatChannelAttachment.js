@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 function ChatChannelAttachment({ size, attachment, onDelete }) {
   const sizeStyle = { width: size, height: size };
@@ -9,14 +10,26 @@ function ChatChannelAttachment({ size, attachment, onDelete }) {
   const isDocument = type === 'document';
   const splittedFilename = fileName.split('.');
   const docType = splittedFilename[splittedFilename.length - 1];
+  const { navigate } = useNavigation();
+
+  const onPress = () => {
+    if (type === 'document') {
+      // download
+    } else if (type === 'image') {
+      navigate('ImageViewer', { image: uri });
+    } else {
+      navigate('VideoViewer', { uri });
+    }
+  };
 
   return (
-    <View
+    <TouchableOpacity
       style={[
         styles.root,
         sizeStyle,
         { backgroundColor: isDocument ? '#C2C2C2' : 'transparent' },
-      ]}>
+      ]}
+      onPress={onPress}>
       {isDocument ? (
         <View style={styles.documentContainer}>
           <View style={styles.documentIcon}>
@@ -45,7 +58,7 @@ function ChatChannelAttachment({ size, attachment, onDelete }) {
           <FontAwesome5 name="times" size={12} color="red" solid />
         </TouchableOpacity>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -107,6 +120,7 @@ const styles = StyleSheet.create({
     color: '#5F5F5F',
     marginBottom: 6,
     width: '90%',
+    textAlign: 'center',
   },
   docTypeLabel: {
     fontSize: 10,

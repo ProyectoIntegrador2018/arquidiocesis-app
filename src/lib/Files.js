@@ -16,6 +16,10 @@ export async function requestDocument() {
     return null;
   }
 
+  if (doc.file.type.includes('image') || doc.file.type.includes('video')) {
+    return null;
+  }
+
   return {
     uri: doc.uri,
     file: doc.file,
@@ -84,4 +88,26 @@ export async function uploadFiles(files) {
     body: fd,
   });
   return res.ok;
+}
+
+export async function downloadFile(url) {
+  const res = await fetch(url);
+  if (Platform.OS === 'web') {
+    const objectURL = URL.createObjectURL(await res.blob());
+    const a = document.createElement('a');
+    const splittedURL = url.split('/');
+    a.href = objectURL;
+    a.download = splittedURL[splittedURL.length - 1].split('?')[0];
+
+    const handler = () =>
+      setTimeout(() => {
+        URL.revokeObjectURL(objectURL);
+        a.removeEventListener('click', handler);
+      });
+
+    a.addEventListener('click', handler);
+    a.click();
+  } else {
+    // missing implementation for iOS/Android
+  }
 }

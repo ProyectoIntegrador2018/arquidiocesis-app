@@ -28,6 +28,7 @@
     "@types/jest": "^26.0.20",
     "axios": "^0.19.2",
     "expo": "^40.0.0",
+    "expo-av": "~8.7.0",
     "expo-cli": "^3.27.4",
     "expo-document-picker": "~8.4.1",
     "expo-file-system": "~9.3.0",
