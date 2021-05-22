@@ -23,6 +23,7 @@ function ChatChannelCreatePost({ navigation, route }) {
   useEffect(() => {
     if (post != null) {
       setText(post.textContent);
+      setAttachments(post.attachments);
     }
   }, [post]);
 
@@ -144,8 +145,43 @@ function ChatChannelCreatePost({ navigation, route }) {
         setLoading(false);
       }
     } else {
+      // upload new files if they were added
+      const newFiles = attachments.filter((attachment) => attachment.file);
+      const filesRes = await uploadFiles(newFiles.map(({ file }) => file));
+
+      if (!filesRes) {
+        Alert.alert('Error', 'Hubo un error subiendo los archivos.');
+        setLoading(false);
+        return;
+      }
+
+      // upload thumbnails if present
+      const filesWithThumbnails = await Promise.all(
+        newFiles.map(async (attachment) => {
+          if (attachment.thumbnailBlob != null) {
+            const thumbnailRes = await uploadFiles([attachment.thumbnailBlob]);
+            attachment.thumbnail = thumbnailRes.files[0].url;
+          }
+
+          return attachment;
+        })
+      );
+
       // post is not null so we're editing an existing one
-      const res = await PostsAPI.edit({ id: post.id, fileIDs: [], text });
+      const files = [
+        ...attachments.filter((attachment) => !attachment.file),
+        ...filesWithThumbnails.map(({ type, fileName, thumbnail }) => ({
+          uri: `https://firebasestorage.googleapis.com/v0/b/arquidiocesis-38f49.appspot.com/o/${fileName}?alt=media`,
+          type,
+          fileName,
+          thumbnail,
+        })),
+      ];
+      const res = await PostsAPI.edit({
+        id: post.id,
+        files,
+        text,
+      });
 
       if (res) {
         const modifiedIndex = editingPostIndex.current;
@@ -157,7 +193,7 @@ function ChatChannelCreatePost({ navigation, route }) {
                   ...curr,
                   ...{
                     textContent: text,
-                    attachments: [],
+                    attachments: files,
                   },
                 }
               : curr
