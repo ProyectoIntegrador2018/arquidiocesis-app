@@ -27,7 +27,7 @@ export async function requestDocument() {
 }
 
 /**
- * @returns {Promise<{file: File, base64: string, type: string, thumbnail: string} | null>}
+ * @returns {Promise<{file: File, fileName: string, base64: string, type: string, thumbnail: string, thumbnailBlob: File} | null>}
  */
 export async function requestMedia() {
   if (Platform.OS !== 'web') {
@@ -56,6 +56,7 @@ export async function requestMedia() {
   const base64 = img.uri ?? img.base64;
   const blob = await (await fetch(base64)).blob();
   let thumbnail = null;
+  let thumbnailBlob = null;
 
   if (blob.type.includes('video')) {
     const thumbnails = await getThumbnails(blob);
@@ -64,32 +65,51 @@ export async function requestMedia() {
       reader.readAsDataURL(thumbnails[0].blob);
       reader.onloadend = () => resolve(reader.result);
     });
+    thumbnailBlob = new File([thumbnails[0].blob], `${uuid()}.jpg`);
   }
 
+  const fileName = `${uuid()}.${blob.type.split('/')[1]}`;
   return {
-    file: new File([blob], `${uuid()}.${blob.type.split('/')[1]}`),
+    file: new File([blob], fileName),
     base64,
+    fileName,
     type: blob.type.split('/')[0],
     thumbnail,
+    thumbnailBlob,
   };
 }
 
 /**
  * @param {File[]} files
- * @returns {Promise<boolean>}
+ * @returns {Promise<{error: boolean, files: {url: string, fileName: string}[]}>}
  */
 export async function uploadFiles(files) {
   const fd = new FormData();
   const { token } = JSON.parse(await AsyncStorage.getItem('login'));
-  fd.append('files', files);
+
+  for (const file of files) {
+    fd.append('files', file);
+  }
 
   const res = await fetch(`${ROOT_URL}upload?token=${token}`, {
     method: 'POST',
     body: fd,
   });
-  return res.ok;
+
+  if (!res.ok) {
+    return null;
+  }
+
+  return await res.json();
 }
 
+/**
+ * Downloads a file from an URL, assuming it has the following shape:
+ * https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${filename}?alt=media
+ *
+ * @param {string} url
+ * @returns {Promise<void>}
+ */
 export async function downloadFile(url) {
   const res = await fetch(url);
   if (Platform.OS === 'web') {

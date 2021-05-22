@@ -8,7 +8,7 @@ import useCurrentUser from '../../lib/apiV2/useCurrentUser';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
 import { useChannelPostsStore } from '../../context/ChannelPostsStore';
 import Alert from '../../components/Alert';
-import { requestMedia, requestDocument } from '../../lib/Files';
+import { requestMedia, requestDocument, uploadFiles } from '../../lib/Files';
 import ChatChannelAttachment from '../../components/chat/ChatChannelAttachment';
 
 function ChatChannelCreatePost({ navigation, route }) {
@@ -50,10 +50,11 @@ function ChatChannelCreatePost({ navigation, route }) {
     setAttachments((prev) =>
       prev.concat({
         uri: file.base64,
-        fileName: '',
+        fileName: file.fileName,
         type: file.type,
         file: file.file,
         thumbnail: file.thumbnail,
+        thumbnailBlob: file.thumbnailBlob,
       })
     );
   };
@@ -89,12 +90,41 @@ function ChatChannelCreatePost({ navigation, route }) {
 
     setLoading(true);
     if (post == null) {
+      // upload files
+      const filesRes = await uploadFiles(attachments.map(({ file }) => file));
+
+      if (!filesRes) {
+        Alert.alert('Error', 'Hubo un error subiendo los archivos.');
+        setLoading(false);
+        return;
+      }
+
+      // upload thumbnails if present
+      const filesWithThumbnails = await Promise.all(
+        attachments.map(async (attachment) => {
+          if (attachment.thumbnailBlob != null) {
+            const thumbnailRes = await uploadFiles([attachment.thumbnailBlob]);
+            attachment.thumbnail = thumbnailRes.files[0].url;
+          }
+
+          return attachment;
+        })
+      );
+
       // post is null, so we're creating a new one
+      const files = filesWithThumbnails.map(
+        ({ type, fileName, thumbnail }) => ({
+          uri: `https://firebasestorage.googleapis.com/v0/b/arquidiocesis-38f49.appspot.com/o/${fileName}?alt=media`,
+          type,
+          fileName,
+          thumbnail,
+        })
+      );
       const res = await PostsAPI.add({
         text,
         authorID: user.id,
         channelOwnerID: channelID,
-        fileIDs: [],
+        files,
       });
 
       if (res) {
@@ -106,7 +136,7 @@ function ChatChannelCreatePost({ navigation, route }) {
               (user.apellido_materno ?? ''),
             date: new Date(),
             textContent: text,
-            attachments: [],
+            attachments: files,
             commentCount: 0,
           },
           ...prev,
@@ -138,7 +168,7 @@ function ChatChannelCreatePost({ navigation, route }) {
     }
 
     navigation.goBack();
-  }, [text, user]);
+  }, [text, user, attachments]);
 
   return (
     <View style={styles.root}>
@@ -159,6 +189,7 @@ function ChatChannelCreatePost({ navigation, route }) {
             attachment={attachment}
             size={screenWidth / 3 - 16}
             onDelete={() => onAttachmentDelete(idx)}
+            isFileDownloadable={false}
           />
         ))}
       </View>

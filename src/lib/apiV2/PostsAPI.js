@@ -3,7 +3,7 @@ import { ROOT_URL as BASE_URL } from './APIv2';
 
 const ROOT_URL = `${BASE_URL}posts`;
 /**
-  @typedef {{text: string, authorID: string, fileIDs: string[], channelOwnerID: string}} AddPostParams
+  @typedef {{text: string, authorID: string, files: {uri: string, type: string, fileName: string, thumbnail: string}[], channelOwnerID: string}} AddPostParams
   @typedef {{error: boolean, data: string} | null} AddPostResponse
   
   @typedef {string} GetOnePostParams
@@ -24,11 +24,11 @@ const ROOT_URL = `${BASE_URL}posts`;
  * @returns {Promise<AddPostResponse>}
  */
 async function add(params) {
-  const { text, authorID, fileIDs, channelOwnerID } = params;
+  const { text, authorID, files, channelOwnerID } = params;
   if (
     text == null ||
     authorID == null ||
-    fileIDs == null ||
+    files == null ||
     channelOwnerID == null
   ) {
     console.warn('[HTTP] Invalid POST request in PostsAPI.add: missing params');
@@ -38,7 +38,7 @@ async function add(params) {
   return await post(`${ROOT_URL}/`, {
     post_text: text,
     post_author: authorID,
-    post_files: fileIDs,
+    post_files: files,
     channel_owner_id: channelOwnerID,
   });
 }

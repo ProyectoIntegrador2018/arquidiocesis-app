@@ -3,18 +3,25 @@ import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { downloadFile } from '../../lib/Files';
 
-function ChatChannelAttachment({ size, attachment, onDelete }) {
+function ChatChannelAttachment({
+  size,
+  attachment,
+  onDelete,
+  isFileDownloadable = true,
+}) {
   const sizeStyle = { width: size, height: size };
   const { type, uri, fileName, thumbnail } = attachment;
-  const isDocument = type === 'document';
-  const splittedFilename = fileName.split('.');
+  const splittedFilename = (fileName ?? '').split('.');
   const docType = splittedFilename[splittedFilename.length - 1];
   const { navigate } = useNavigation();
 
-  const onPress = () => {
+  const onPress = async () => {
     if (type === 'document') {
-      // download
+      if (isFileDownloadable) {
+        await downloadFile(uri);
+      }
     } else if (type === 'image') {
       navigate('ImageViewer', { image: uri });
     } else {
@@ -27,10 +34,11 @@ function ChatChannelAttachment({ size, attachment, onDelete }) {
       style={[
         styles.root,
         sizeStyle,
-        { backgroundColor: isDocument ? '#C2C2C2' : 'transparent' },
+        { backgroundColor: type === 'document' ? '#C2C2C2' : 'transparent' },
       ]}
+      activeOpacity={!isFileDownloadable && type === 'document' ? 1.0 : 0.2}
       onPress={onPress}>
-      {isDocument ? (
+      {type === 'document' ? (
         <View style={styles.documentContainer}>
           <View style={styles.documentIcon}>
             <FontAwesome5 name="file" size={48} color="#5F5F5F" solid />
@@ -69,6 +77,7 @@ ChatChannelAttachment.propTypes = {
     uri: PropTypes.string.isRequired,
     fileName: PropTypes.string,
     thumbnail: PropTypes.string,
+    isFileDownloadable: PropTypes.bool,
   }).isRequired,
   onDelete: PropTypes.func,
 };
