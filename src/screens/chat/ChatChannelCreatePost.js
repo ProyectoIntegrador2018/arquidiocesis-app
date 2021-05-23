@@ -8,18 +8,22 @@ import useCurrentUser from '../../lib/apiV2/useCurrentUser';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
 import { useChannelPostsStore } from '../../context/ChannelPostsStore';
 import Alert from '../../components/Alert';
+import { requestMedia, requestDocument, uploadFiles } from '../../lib/Files';
+import ChatChannelAttachment from '../../components/chat/ChatChannelAttachment';
 
 function ChatChannelCreatePost({ navigation, route }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [attachments, setAttachments] = useState([]);
+  const [screenWidth, setScreenWidth] = useState(500);
   const { channelID, post } = route.params;
   const [, setPosts, editingPostIndex] = useChannelPostsStore();
-
   const user = useCurrentUser();
 
   useEffect(() => {
     if (post != null) {
       setText(post.textContent);
+      setAttachments(post.attachments);
     }
   }, [post]);
 
@@ -27,8 +31,55 @@ function ChatChannelCreatePost({ navigation, route }) {
     headerTitle: 'Crear Publicación',
   });
 
-  const onCameraPress = () => {};
-  const onFilePress = () => {};
+  const measureView = (e) => {
+    setScreenWidth(e.nativeEvent.layout.width);
+  };
+
+  const onAttachmentDelete = (idx) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const onCameraPress = async () => {
+    const file = await requestMedia();
+    if (
+      file == null ||
+      attachments.find((attachment) => attachment.uri === file.base64)
+    ) {
+      return;
+    }
+
+    setAttachments((prev) =>
+      prev.concat({
+        uri: file.base64,
+        fileName: file.fileName,
+        type: file.type,
+        file: file.file,
+        thumbnail: file.thumbnail,
+        thumbnailBlob: file.thumbnailBlob,
+      })
+    );
+  };
+
+  const onFilePress = async () => {
+    const doc = await requestDocument();
+    if (
+      doc == null ||
+      attachments.find((attachment) => attachment.uri === doc.uri)
+    ) {
+      return;
+    }
+
+    setAttachments((prev) =>
+      prev.concat({
+        uri: doc.uri,
+        fileName: doc.file.name,
+        type: 'document',
+        file: doc.file,
+        thumbnail: null,
+      })
+    );
+  };
+
   const onMessageCreatePress = useCallback(async () => {
     if (text === '') {
       Alert.alert(
@@ -40,12 +91,41 @@ function ChatChannelCreatePost({ navigation, route }) {
 
     setLoading(true);
     if (post == null) {
+      // upload files
+      const filesRes = await uploadFiles(attachments.map(({ file }) => file));
+
+      if (!filesRes) {
+        Alert.alert('Error', 'Hubo un error subiendo los archivos.');
+        setLoading(false);
+        return;
+      }
+
+      // upload thumbnails if present
+      const filesWithThumbnails = await Promise.all(
+        attachments.map(async (attachment) => {
+          if (attachment.thumbnailBlob != null) {
+            const thumbnailRes = await uploadFiles([attachment.thumbnailBlob]);
+            attachment.thumbnail = thumbnailRes.files[0].url;
+          }
+
+          return attachment;
+        })
+      );
+
       // post is null, so we're creating a new one
+      const files = filesWithThumbnails.map(
+        ({ type, fileName, thumbnail }) => ({
+          uri: `https://firebasestorage.googleapis.com/v0/b/arquidiocesis-38f49.appspot.com/o/${fileName}?alt=media`,
+          type,
+          fileName,
+          thumbnail,
+        })
+      );
       const res = await PostsAPI.add({
         text,
         authorID: user.id,
         channelOwnerID: channelID,
-        fileIDs: [],
+        files,
       });
 
       if (res) {
@@ -57,7 +137,7 @@ function ChatChannelCreatePost({ navigation, route }) {
               (user.apellido_materno ?? ''),
             date: new Date(),
             textContent: text,
-            attachments: [],
+            attachments: files,
             commentCount: 0,
           },
           ...prev,
@@ -65,8 +145,43 @@ function ChatChannelCreatePost({ navigation, route }) {
         setLoading(false);
       }
     } else {
+      // upload new files if they were added
+      const newFiles = attachments.filter((attachment) => attachment.file);
+      const filesRes = await uploadFiles(newFiles.map(({ file }) => file));
+
+      if (!filesRes) {
+        Alert.alert('Error', 'Hubo un error subiendo los archivos.');
+        setLoading(false);
+        return;
+      }
+
+      // upload thumbnails if present
+      const filesWithThumbnails = await Promise.all(
+        newFiles.map(async (attachment) => {
+          if (attachment.thumbnailBlob != null) {
+            const thumbnailRes = await uploadFiles([attachment.thumbnailBlob]);
+            attachment.thumbnail = thumbnailRes.files[0].url;
+          }
+
+          return attachment;
+        })
+      );
+
       // post is not null so we're editing an existing one
-      const res = await PostsAPI.edit({ id: post.id, fileIDs: [], text });
+      const files = [
+        ...attachments.filter((attachment) => !attachment.file),
+        ...filesWithThumbnails.map(({ type, fileName, thumbnail }) => ({
+          uri: `https://firebasestorage.googleapis.com/v0/b/arquidiocesis-38f49.appspot.com/o/${fileName}?alt=media`,
+          type,
+          fileName,
+          thumbnail,
+        })),
+      ];
+      const res = await PostsAPI.edit({
+        id: post.id,
+        files,
+        text,
+      });
 
       if (res) {
         const modifiedIndex = editingPostIndex.current;
@@ -78,7 +193,7 @@ function ChatChannelCreatePost({ navigation, route }) {
                   ...curr,
                   ...{
                     textContent: text,
-                    attachments: [],
+                    attachments: files,
                   },
                 }
               : curr
@@ -89,7 +204,7 @@ function ChatChannelCreatePost({ navigation, route }) {
     }
 
     navigation.goBack();
-  }, [text, user]);
+  }, [text, user, attachments]);
 
   return (
     <View style={styles.root}>
@@ -102,6 +217,20 @@ function ChatChannelCreatePost({ navigation, route }) {
       />
 
       <View style={styles.separator} />
+
+      <View style={styles.attachmentContainer} onLayout={measureView}>
+        {attachments.map((attachment, idx) => (
+          <ChatChannelAttachment
+            key={idx}
+            attachment={attachment}
+            size={screenWidth / 3 - 16}
+            onDelete={() => onAttachmentDelete(idx)}
+            isFileDownloadable={false}
+          />
+        ))}
+      </View>
+
+      {attachments.length > 0 && <View style={styles.separator} />}
 
       <ChatChannelCreatePostOptionRow
         iconName="camera"
@@ -149,6 +278,11 @@ const styles = StyleSheet.create({
     width: 250,
     alignSelf: 'center',
     backgroundColor: '#EDEDED',
+  },
+  attachmentContainer: {
+    width: '100%',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
   },
 });
 

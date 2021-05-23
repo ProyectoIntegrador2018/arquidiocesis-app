@@ -10,6 +10,7 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import ChatChannelPostComment from './ChatChannelPostComment';
+import { useNavigation } from '@react-navigation/native';
 const ATTACHMENT_SIZE = 128;
 
 function ChatChannelPost({
@@ -20,12 +21,17 @@ function ChatChannelPost({
   comments,
   showComments = false,
 }) {
+  const { navigate } = useNavigation();
   let attachments = post.attachments;
   let extraAttachments = 0;
   if (post.attachments.length > 2) {
     attachments = post.attachments.slice(0, 2);
     extraAttachments = post.attachments.length - 2;
   }
+
+  const onMoreAttachmentsPress = () => {
+    navigate('ChatMoreAttachments', { attachments: post.attachments });
+  };
 
   return (
     <View style={styles.root}>
@@ -60,11 +66,13 @@ function ChatChannelPost({
               </>
             ))}
             {extraAttachments > 0 && (
-              <View style={styles.attachmentPlaceholder}>
+              <TouchableOpacity
+                style={styles.attachmentPlaceholder}
+                onPress={onMoreAttachmentsPress}>
                 <Text style={styles.attachmentPlaceholderLabel}>
                   +{extraAttachments}
                 </Text>
-              </View>
+              </TouchableOpacity>
             )}
           </View>
         )}
@@ -172,7 +180,8 @@ const styles = StyleSheet.create({
     height: ATTACHMENT_SIZE,
     borderRadius: 8,
     backgroundColor: '#C2C2C2',
-    marginLeft: 8,
+    margin: 8,
+    marginLeft: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },

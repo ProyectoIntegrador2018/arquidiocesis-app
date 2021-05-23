@@ -3,13 +3,13 @@ import { ROOT_URL as BASE_URL } from './APIv2';
 
 const ROOT_URL = `${BASE_URL}posts`;
 /**
-  @typedef {{text: string, authorID: string, fileIDs: string[], channelOwnerID: string}} AddPostParams
+  @typedef {{text: string, authorID: string, files: {uri: string, type: string, fileName: string, thumbnail: string}[], channelOwnerID: string}} AddPostParams
   @typedef {{error: boolean, data: string} | null} AddPostResponse
   
   @typedef {string} GetOnePostParams
   @typedef {{error: boolean, data: {post: {id: string, post_author: string, post_text: string, post_files: string[], post_comments: string[]}} | null} GetOnePostResponse
 
-  @typedef {{id: string, text?: string, fileIDs?: string[]}} EditPostParams
+  @typedef {{id: string, text?: string, files?: string[]}} EditPostParams
   @typedef {{error: boolean} | null} EditPostResponse
 
   @typedef {string} DeletePostParams
@@ -24,11 +24,11 @@ const ROOT_URL = `${BASE_URL}posts`;
  * @returns {Promise<AddPostResponse>}
  */
 async function add(params) {
-  const { text, authorID, fileIDs, channelOwnerID } = params;
+  const { text, authorID, files, channelOwnerID } = params;
   if (
     text == null ||
     authorID == null ||
-    fileIDs == null ||
+    files == null ||
     channelOwnerID == null
   ) {
     console.warn('[HTTP] Invalid POST request in PostsAPI.add: missing params');
@@ -38,7 +38,7 @@ async function add(params) {
   return await post(`${ROOT_URL}/`, {
     post_text: text,
     post_author: authorID,
-    post_files: fileIDs,
+    post_files: files,
     channel_owner_id: channelOwnerID,
   });
 }
@@ -61,7 +61,7 @@ async function getOne(id) {
  * @returns {EditPostResponse}
  */
 async function edit(params) {
-  const { id, text, fileIDs } = params;
+  const { id, text, files } = params;
   if (id == null) {
     console.warn('[HTTP] Invalid PUT request in PostsAPI.edit: missing params');
     return null;
@@ -70,7 +70,7 @@ async function edit(params) {
   return await put(`${ROOT_URL}/edit/${id}`, {
     post_id: id,
     post_text: text,
-    post_files: fileIDs,
+    post_files: files,
   });
 }
 
