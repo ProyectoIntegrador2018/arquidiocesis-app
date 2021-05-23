@@ -51,7 +51,7 @@ describe('PostsAPI http requests', () => {
       authorID: '123',
       text: 'test text for new post',
       channelOwnerID: 'channel-1',
-      fileIDs: [],
+      files: [],
     });
     expect(res.error).toBeFalsy();
     expect(res.data).toEqual('3');
@@ -89,7 +89,7 @@ describe('PostsAPI http requests', () => {
     const res = await PostsAPI.edit({
       id: '2',
       text: 'new text edited',
-      fileIDs: [],
+      files: [],
     });
     expect(res.error).toBeFalsy();
     expect(put).toHaveBeenCalledWith(`${ROOT_URL}/edit/2`, {
@@ -130,7 +130,7 @@ describe('PostsAPI http requests', () => {
   test('incorrect add post because of missing params', async () => {
     post.mockImplementationOnce(() => Promise.resolve(null));
 
-    const res = await PostsAPI.add({ text: 'test post', fileIDs: [] });
+    const res = await PostsAPI.add({ text: 'test post', files: [] });
     expect(res).toBeNull();
   });
 
