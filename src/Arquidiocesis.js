@@ -92,6 +92,7 @@ import { ChannelPostsStoreProvider } from './context/ChannelPostsStore';
 import WebPushNotifications from './lib/WebPushNotifications';
 import ImageViewer from './screens/ImageViewer';
 import VideoViewer from './screens/VideoViewer';
+import ChatMoreAttachments from './screens/chat/ChatMoreAttachments';
 
 const Tab = createBottomTabNavigator();
 function Home({ navigation, route }) {
@@ -302,6 +303,10 @@ function App({ user, logout }) {
         />
         <Stack.Screen name="ImageViewer" component={ImageViewer} />
         <Stack.Screen name="VideoViewer" component={VideoViewer} />
+        <Stack.Screen
+          name="ChatMoreAttachments"
+          component={ChatMoreAttachments}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
