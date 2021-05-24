@@ -4,7 +4,7 @@ import { ROOT_URL as BASE_URL } from './APIv2';
 const ROOT_URL = `${BASE_URL}groups`;
 /**
  * @typedef {id: string} AllGroupsByUserParams
- * @typedef {{error: boolean, groups: {id: string, group_channels: string[], group_name: string, group_roles: string[]}[]}} AllGroupsByUserResponse
+ * @typedef {{error: boolean, groups: {id: string, group_channels: string[], group_name: string, group_roles: string[], group_description: string}[]}} AllGroupsByUserResponse
  *
  * @typedef {{name: string, roles: {[key: string]: string}, channels: string[]}} AddGroupParams
  * @typedef {{error: boolean, data: string}} AddGroupResponse
@@ -109,7 +109,7 @@ async function addUser(id, members) {
 async function setAdmin(idGroup, idUsers) {
   const data = await put(`${ROOT_URL}/addAdmin`, {
     group_id: idGroup,
-    administrators: idUsers
+    administrators: idUsers,
   });
 
   return data;
@@ -122,5 +122,5 @@ export default {
   getAllUsers,
   addUser,
   removeUsers,
-  setAdmin
+  setAdmin,
 };

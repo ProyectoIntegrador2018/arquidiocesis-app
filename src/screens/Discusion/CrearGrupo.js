@@ -13,7 +13,9 @@ import Icons from '../../lib/Icons.json';
  */
 export default (props) => {
   const { editGroup, onSubmit } = props.route.params;
+  console.log(editGroup);
   const [name, setName] = useState(editGroup ? editGroup.title : '');
+  const [desc, setDesc] = useState(editGroup ? editGroup.description : '');
   const [channels, setChannels] = useState(editGroup ? editGroup.channels : []);
   const [roles, setRoles] = useState(editGroup ? editGroup.roles : []);
   const [iconSelectVisible, setIconSelectVisible] = useState(false);
@@ -54,6 +56,22 @@ export default (props) => {
           }}
         />
         {isEdit ? (
+          <Input
+            noTextOver
+            placeholder="Descripcion del grupo"
+            required
+            value={desc}
+            onChangeText={(v) => {
+              setDesc(v);
+            }}
+            extraProps={{
+              multiline: true,
+              numberOfLines: 3,
+            }}
+            height={90}
+          />
+        ) : null}
+        {isEdit ? (
           <>
             <Item
               text="Ver canales"
@@ -73,6 +91,7 @@ export default (props) => {
                       onSubmit({
                         title: name,
                         channels,
+                        description: desc,
                       });
                     })();
 
@@ -113,6 +132,7 @@ export default (props) => {
             onSubmit({
               title: name,
               channels,
+              description: desc,
             });
 
             props.navigation.goBack();
@@ -162,5 +182,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  commentHeight: {
+    height: 80,
   },
 });

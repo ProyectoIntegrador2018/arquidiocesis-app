@@ -9,6 +9,7 @@ import {
 import { FontAwesome5 } from '@expo/vector-icons';
 
 export default (props) => {
+  const { extraProps } = props;
   const multiline =
     typeof props.multiline !== 'undefined' && props.multiline !== false;
   const readonly = !(
@@ -36,6 +37,7 @@ export default (props) => {
           textContentType={props.textContentType}
           keyboardType={props.keyboard}
           secureTextEntry={typeof props.password !== 'undefined'}
+          {...extraProps}
         />
       ) : (
         <TouchableWithoutFeedback onPress={props.onPress}>
