@@ -170,6 +170,14 @@ export default (props) => {
                       newGroups.splice(i, 1, renewed);
                       setGroups(newGroups); */
                     },
+                    onDelete: async (id) => {
+                      const success = !(await GroupsConvAPI.deleteGroup([id])).error
+                      if(success) setRegather(true);
+                      return success
+                    },
+                    onRefresh: () => {
+                      setRegather(true);
+                    }
                   })
                 }>
                 {v.channels.map((chV, chI) => (
