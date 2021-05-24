@@ -48,13 +48,6 @@ export default (props) => {
             setName(v);
           }}
         />
-        <Item
-          text="Cambiar icono"
-          leftIcon={icon}
-          onPress={() => {
-            setIconSelectVisible(true);
-          }}
-        />
         {isEdit ? (
           <Input
             noTextOver
@@ -71,6 +64,13 @@ export default (props) => {
             height={90}
           />
         ) : null}
+        <Item
+          text="Cambiar icono"
+          leftIcon={icon}
+          onPress={() => {
+            setIconSelectVisible(true);
+          }}
+        />
         {isEdit ? (
           <>
             <Item
