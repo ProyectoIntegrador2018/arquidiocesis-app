@@ -115,18 +115,6 @@ async function setAdmin(idGroup, idUsers) {
   return data;
 }
 
-/**
- * 
- * @param {string[]} group_ids 
- */
-async function deleteGroup(group_ids) {
-  const data = await post(`${ROOT_URL}/delete`, {
-    group_ids
-  });
-
-  return !data.error
-}
-
 export default {
   allByUser,
   add,
@@ -134,6 +122,5 @@ export default {
   getAllUsers,
   addUser,
   removeUsers,
-  setAdmin,
-  deleteGroup
+  setAdmin
 };
