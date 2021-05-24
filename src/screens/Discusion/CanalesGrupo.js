@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { Button } from '../../components';
-import { List } from 'react-native-paper';
+import { List, Modal } from 'react-native-paper';
+import ChannelConvAPI from '../../lib/apiV2/ChannelConvAPI';
 
 export default (props) => {
-  const { channels, onAdd } = props.route.params;
+  const { idGroup, initialChannels, onChannelsChanged } = props.route.params;
 
-  const [actualChannels, setActualChannels] = useState([]);
-
-  useEffect(() => {
-    setActualChannels(channels);
-  }, []);
+  const [actualChannels, setActualChannels] = useState(initialChannels);
+  const [channelToDelete, setChannelToDelete] = useState(null);
 
   return (
     <>
@@ -20,10 +18,21 @@ export default (props) => {
         text="Crear canal"
         onPress={() => {
           props.navigation.navigate('CrearCanales', {
-            onAdd: (newChannel) => {
-              const newChannels = [...actualChannels, newChannel];
+            onAdd: async (newChannel) => {
+              const result = await ChannelConvAPI.add({
+                idGroup,
+                name: newChannel.name,
+                description: '',
+              });
+              if (!result || result.error) return;
+
+              const newChannels = [...actualChannels];
+              newChannels.push({
+                ...newChannel,
+                id: result.data,
+              });
               setActualChannels(newChannels);
-              onAdd(newChannel);
+              onChannelsChanged(newChannels);
             },
           });
         }}
@@ -31,6 +40,9 @@ export default (props) => {
       <List.Section>
         {actualChannels.map((v, i) => (
           <List.Item
+            onPress={() => {
+              setChannelToDelete(v);
+            }}
             title={`${v.name}`}
             key={i.toString()}
             style={{
@@ -44,6 +56,37 @@ export default (props) => {
           />
         ))}
       </List.Section>
+
+      <Modal
+        transparent={true}
+        visible={channelToDelete !== null}
+        onDismiss={() => {
+          setChannelToDelete(null);
+        }}
+        contentContainerStyle={{
+          backgroundColor: 'white',
+          padding: 20,
+          maxHeight: '80%',
+        }}>
+        <Text>{`Desea eliminar el canal ${channelToDelete?.name ?? ''}?`}</Text>
+        <Button
+          text={'Eliminar canal'}
+          onPress={async () => {
+            if (channelToDelete === null) return;
+
+            if (await ChannelConvAPI.deleteChannels([channelToDelete.id])) {
+              const newChannels = [...actualChannels];
+              const idx = newChannels.findIndex(
+                (v) => v.id === channelToDelete.id
+              );
+              newChannels.splice(idx, 1);
+              setActualChannels(newChannels);
+              onChannelsChanged(newChannels);
+              setChannelToDelete(null);
+            }
+          }}
+        />
+      </Modal>
     </>
   );
 };
