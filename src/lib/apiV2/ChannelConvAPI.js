@@ -63,21 +63,8 @@ async function allByGroup(ids) {
   });
 }
 
-/**
- * 
- * @param {string[]} channel_ids 
- */
-async function deleteChannels(channel_ids) {
-  const data = await post(`${ROOT_URL}/delete`, {
-    channel_ids
-  })
-
-  return !data.error
-}
-
 export default {
   add,
   edit,
   allByGroup,
-  deleteChannels
 };
