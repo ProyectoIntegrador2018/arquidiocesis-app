@@ -6,9 +6,17 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
+import { List } from 'react-native-paper';
 import { FontAwesome5 } from '@expo/vector-icons';
 
+/**
+ * @param {{
+ *  leftIcon: string | undefined,
+ *  onPress: (stillLoad: (doLoad: boolean) => void) => void
+ * }} props
+ */
 export default (props) => {
+  const { leftIcon } = props;
   const [loading, setLoading] = useState(false);
 
   const press = () => {
@@ -21,14 +29,14 @@ export default (props) => {
   return (
     <TouchableOpacity onPress={press}>
       <View style={[styles.item, props.style]}>
+        {leftIcon ? (
+          <List.Icon style={styles.leftIcon} icon={leftIcon} />
+        ) : null}
         <Text style={styles.itemText}>{props.text}</Text>
         {props.loading || loading ? (
           <ActivityIndicator size="small" style={{ marginRight: 30 }} />
         ) : (
-          <FontAwesome5
-            name="chevron-right"
-            style={{ marginRight: 30, color: 'gray', fontSize: 15 }}
-          />
+          <FontAwesome5 name="chevron-right" style={styles.chevron} />
         )}
       </View>
     </TouchableOpacity>
@@ -47,7 +55,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     backgroundColor: 'white',
+  },
+  chevron: {
+    marginLeft: 'auto',
+    marginRight: 30,
+    color: 'gray',
+    fontSize: 15,
+  },
+  leftIcon: {
+    height: '16px',
   },
 });

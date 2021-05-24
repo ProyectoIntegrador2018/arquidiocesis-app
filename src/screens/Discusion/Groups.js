@@ -34,21 +34,27 @@ export default (props) => {
 
     async function query() {
       const res = await GroupsConvAPI.allByUser(user.id);
-      setGroups(
-        await Promise.all(
-          res.groups.map(async (group) => {
-            const res2 = await ChannelConvAPI.allByGroup(group.group_channels);
-            return {
-              id: group.id,
-              title: group.group_name,
-              channels: (res2?.channels ?? []).map((channel) => ({
-                id: channel.id,
-                name: channel.canal_name,
-              })),
-            };
-          })
-        )
-      );
+      if (res.groups)
+        setGroups(
+          await Promise.all(
+            res.groups
+              .filter((group) => group.group_name !== undefined)
+              .map(async (group) => {
+                const res2 = await ChannelConvAPI.allByGroup(
+                  group.group_channels
+                );
+                return {
+                  id: group.id,
+                  title: group.group_name,
+                  channels: (res2?.channels ?? []).map((channel) => ({
+                    id: channel.id,
+                    name: channel.canal_name,
+                  })),
+                  description: group.group_description,
+                };
+              })
+          )
+        );
 
       setRegather(false);
     }
@@ -156,6 +162,9 @@ export default (props) => {
                   borderBottomColor: '#ddd',
                   borderBottomWidth: '1px',
                 }}
+                left={(iP) => (
+                  <List.Icon {...iP} icon="account-supervisor-circle" />
+                )}
                 onLongPress={() =>
                   props.navigation.navigate('CrearGrupo', {
                     editGroup: v,
@@ -163,12 +172,21 @@ export default (props) => {
                       await GroupsConvAPI.edit({
                         id: v.id,
                         name: renewed.title,
-                        description: '',
+                        description: renewed.description,
                       });
                       setRegather(true);
                       /* const newGroups = [...groups];
                       newGroups.splice(i, 1, renewed);
                       setGroups(newGroups); */
+                    },
+                    onDelete: async (id) => {
+                      const success = !(await GroupsConvAPI.deleteGroup([id]))
+                        .error;
+                      if (success) setRegather(true);
+                      return success;
+                    },
+                    onRefresh: () => {
+                      setRegather(true);
                     },
                   })
                 }>
