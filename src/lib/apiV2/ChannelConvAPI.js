@@ -16,9 +16,7 @@ const ROOT_URL = `${BASE_URL}channels`;
  */
 async function add(params) {
   const { idGroup, name, description } = params;
-  if (idGroup == null ||
-    name == null ||
-    description == null) {
+  if (idGroup == null || name == null || description == null) {
     return null;
   }
 
@@ -63,8 +61,21 @@ async function allByGroup(ids) {
   });
 }
 
+/**
+ *
+ * @param {string[]} channel_ids
+ */
+async function deleteChannels(channel_ids) {
+  const data = await post(`${ROOT_URL}/delete`, {
+    channel_ids,
+  });
+
+  return !data.error;
+}
+
 export default {
   add,
   edit,
   allByGroup,
+  deleteChannels,
 };

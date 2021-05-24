@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { AlphabetList, Button } from '../../components';
 import { Text, ActivityIndicator, ScrollView } from 'react-native';
 import { Modal } from 'react-native-paper';
-import { factory } from 'node-factory';
 import GroupsConvAPI from '../../lib/apiV2/GroupsConvAPI';
 
 /**
@@ -12,7 +11,7 @@ import GroupsConvAPI from '../../lib/apiV2/GroupsConvAPI';
 export default (props) => {
   const { idGroup } = props.route.params;
   console.log(idGroup);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState(false);
   const [regather, setRegather] = useState(true);
@@ -92,7 +91,7 @@ export default (props) => {
           style={{ width: 250, alignSelf: 'center' }}
           onPress={addFromRole}
         />
-        {users.length === 0 ? (
+        {!users ? (
           <>
             <ActivityIndicator size="large" />
             <Text
