@@ -64,13 +64,15 @@ export default (props) => {
             height={90}
           />
         ) : null}
-        <Item
-          text="Cambiar icono"
-          leftIcon={icon}
-          onPress={() => {
-            setIconSelectVisible(true);
-          }}
-        />
+        {!isEdit ? (
+          <Item
+            text="Cambiar icono"
+            leftIcon={icon}
+            onPress={() => {
+              setIconSelectVisible(true);
+            }}
+          />
+        ) : null}
         {isEdit ? (
           <>
             <Item
