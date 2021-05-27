@@ -114,6 +114,7 @@ export default (props) => {
             onSubmit({
               title: name,
               description: desc,
+              icon: icon,
             });
 
             props.navigation.goBack();
