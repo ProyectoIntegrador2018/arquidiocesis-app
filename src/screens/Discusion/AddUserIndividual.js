@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { AlphabetList, Button } from '../../components';
 import { Text, ActivityIndicator, ScrollView } from 'react-native';
 import { Modal } from 'react-native-paper';
-import { factory } from 'node-factory';
 import UsersConvAPI from '../../lib/apiV2/UsersConvAPI';
 
 /**
