@@ -51,6 +51,7 @@ export default (props) => {
                     name: channel.canal_name,
                   })),
                   description: group.group_description,
+                  icon: group.group_icon,
                 };
               })
           )
@@ -119,10 +120,12 @@ export default (props) => {
             props.navigation.navigate('CrearGrupo', {
               // newGroup : {title: string, channels: [{name: string}]}
               onSubmit: (newGroup) => {
+                console.log(newGroup);
                 GroupsConvAPI.add({
                   name: newGroup.title,
                   channels: [],
                   roles: [],
+                  icon: newGroup.icon,
                 })
                   .then((v) => {
                     if (v.error) throw v.message;
@@ -177,7 +180,14 @@ export default (props) => {
                     borderBottomWidth: '1px',
                   }}
                   left={(iP) => (
-                    <List.Icon {...iP} icon="account-supervisor-circle" />
+                    <List.Icon
+                      {...iP}
+                      icon={
+                        v.icon && v.icon !== ''
+                          ? v.icon
+                          : 'account-supervisor-circle'
+                      }
+                    />
                   )}
                   onLongPress={() =>
                     props.navigation.navigate('CrearGrupo', {

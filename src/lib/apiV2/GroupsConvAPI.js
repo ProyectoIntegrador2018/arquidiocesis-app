@@ -6,7 +6,7 @@ const ROOT_URL = `${BASE_URL}groups`;
  * @typedef {id: string} AllGroupsByUserParams
  * @typedef {{error: boolean, groups: {id: string, group_channels: string[], group_name: string, group_roles: string[], group_description: string}[]}} AllGroupsByUserResponse
  *
- * @typedef {{name: string, roles: {[key: string]: string}, channels: string[]}} AddGroupParams
+ * @typedef {{name: string, roles: {[key: string]: string}, channels: string[], icon: string}} AddGroupParams
  * @typedef {{error: boolean, data: string}} AddGroupResponse
  *
  * @typedef {{id: string, name: string, description: string}} EditGroupParams
@@ -26,7 +26,7 @@ async function allByUser(userID) {
  * @returns {Promise<AddGroupResponse | null>}
  */
 async function add(params) {
-  const { name, roles, channels } = params;
+  const { name, roles, channels, icon } = params;
   if (name == null) {
     return null;
   }
@@ -35,6 +35,7 @@ async function add(params) {
     group_name: name,
     group_roles: roles,
     group_channels: channels,
+    group_icon: icon,
   });
   return data;
 }
