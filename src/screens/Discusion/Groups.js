@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, Text, ActivityIndicator } from 'react-native';
 import { Button } from '../../components';
 import { List } from 'react-native-paper';
 import GroupsConvAPI from '../../lib/apiV2/GroupsConvAPI';
@@ -21,7 +21,7 @@ const groupFac = factory((fake) => ({
 
 export default (props) => {
   const [search, setSearch] = useState('');
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState(false);
   const [regather, setRegather] = useState(true);
   const user = useCurrentUser();
 
@@ -51,6 +51,7 @@ export default (props) => {
                     name: channel.canal_name,
                   })),
                   description: group.group_description,
+                  icon: group.group_icon,
                 };
               })
           )
@@ -119,10 +120,12 @@ export default (props) => {
             props.navigation.navigate('CrearGrupo', {
               // newGroup : {title: string, channels: [{name: string}]}
               onSubmit: (newGroup) => {
+                console.log(newGroup);
                 GroupsConvAPI.add({
                   name: newGroup.title,
                   channels: [],
                   roles: [],
+                  icon: newGroup.icon,
                 })
                   .then((v) => {
                     if (v.error) throw v.message;
@@ -147,71 +150,93 @@ export default (props) => {
           backgroundColor: 'white',
         }}>
         <List.Section title={props.title}>
-          {groups
-            .filter((v) => v.title.includes(search))
-            .map((v, i) => (
-              <List.Accordion
-                title={v.title}
-                key={i.toString()}
-                theme={{
-                  colors: {
-                    primary: 'black',
-                  },
-                }}
+          {groups === false ? (
+            <>
+              <ActivityIndicator size="large" />
+              <Text
                 style={{
-                  borderBottomColor: '#ddd',
-                  borderBottomWidth: '1px',
-                }}
-                left={(iP) => (
-                  <List.Icon {...iP} icon="account-supervisor-circle" />
-                )}
-                onLongPress={() =>
-                  props.navigation.navigate('CrearGrupo', {
-                    editGroup: v,
-                    onSubmit: async (renewed) => {
-                      await GroupsConvAPI.edit({
-                        id: v.id,
-                        name: renewed.title,
-                        description: renewed.description,
-                      });
-                      setRegather(true);
-                      /* const newGroups = [...groups];
+                  marginTop: 10,
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: 16,
+                }}>
+                Cargando datos...
+              </Text>
+            </>
+          ) : (
+            groups
+              .filter((v) => v.title.includes(search))
+              .map((v, i) => (
+                <List.Accordion
+                  title={v.title}
+                  key={i.toString()}
+                  theme={{
+                    colors: {
+                      primary: 'black',
+                    },
+                  }}
+                  style={{
+                    borderBottomColor: '#ddd',
+                    borderBottomWidth: '1px',
+                  }}
+                  left={(iP) => (
+                    <List.Icon
+                      {...iP}
+                      icon={
+                        v.icon && v.icon !== ''
+                          ? v.icon
+                          : 'account-supervisor-circle'
+                      }
+                    />
+                  )}
+                  onLongPress={() =>
+                    props.navigation.navigate('CrearGrupo', {
+                      editGroup: v,
+                      onSubmit: async (renewed) => {
+                        await GroupsConvAPI.edit({
+                          id: v.id,
+                          name: renewed.title,
+                          description: renewed.description,
+                        });
+                        setRegather(true);
+                        /* const newGroups = [...groups];
                       newGroups.splice(i, 1, renewed);
                       setGroups(newGroups); */
-                    },
-                    onDelete: async (id) => {
-                      const success = !(await GroupsConvAPI.deleteGroup([id]))
-                        .error;
-                      if (success) setRegather(true);
-                      return success;
-                    },
-                    onRefresh: () => {
-                      setRegather(true);
-                    },
-                  })
-                }>
-                {v.channels.map((chV, chI) => (
-                  <List.Item
-                    title={`#${chV.name.toLowerCase()}`}
-                    key={chI.toString()}
-                    style={{
-                      backgroundColor: chI % 2 ? 'white' : '#f8f8f8',
-                    }}
-                    onPress={() => {
-                      props.navigation.navigate('ChatChannelPosts', {
-                        channelName: `#${chV.name.toLowerCase()}`,
-                        channelID: chV.id,
-                      });
-                    }}
-                    theme={{
-                      colors: {
-                        text: '#567998',
                       },
-                    }}
-                  />
-                ))}
-              </List.Accordion>
-            ))}
+                      onDelete: async (id) => {
+                        const success = !(await GroupsConvAPI.deleteGroup([id]))
+                          .error;
+                        if (success) setRegather(true);
+                        return success;
+                      },
+                      onRefresh: () => {
+                        setRegather(true);
+                      },
+                    })
+                  }>
+                  {v.channels.map((chV, chI) => (
+                    <List.Item
+                      title={`#${chV.name.toLowerCase()}`}
+                      key={chI.toString()}
+                      style={{
+                        backgroundColor: chI % 2 ? 'white' : '#f8f8f8',
+                      }}
+                      onPress={() => {
+                        props.navigation.navigate('ChatChannelPosts', {
+                          channelName: `#${chV.name.toLowerCase()}`,
+                          channelID: chV.id,
+                        });
+                      }}
+                      theme={{
+                        colors: {
+                          text: '#567998',
+                        },
+                      }}
+                    />
+                  ))}
+                </List.Accordion>
+              ))
+          )}
         </List.Section>
       </View>
     </View>

@@ -15,20 +15,40 @@ import Alert from '../../components/Alert';
 import PostsAPI from '../../lib/apiV2/PostsAPI';
 import PostCommentsAPI from '../../lib/apiV2/PostCommentsAPI';
 import useCurrentUser from '../../lib/apiV2/useCurrentUser';
+import { LoadingView } from '../../components';
 
 function ChatChannelPostDetails({ navigation, route }) {
-  const { postIndex, channelName } = route.params;
+  const { channelName, id } = route.params;
+  const postIndex = route.params.postIndex ?? 0;
   const [inputHeight, setInputHeight] = useState();
   const [text, setText] = useState('');
   const [comments, setComments] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [posts, setPosts, editingPostIndex] = useChannelPostsStore();
-  const user = useCurrentUser();
   const post = posts[postIndex];
+  const user = useCurrentUser();
 
   useEffect(() => {
     (async () => {
-      const res = await PostCommentsAPI.getForPost(post.id);
+      if (id != null) {
+        const res = await PostsAPI.getOne(id);
+        if (!res.error) {
+          setPosts([
+            {
+              id: res.data.id,
+              authorName: `${res.data.authorInfo.nombre} ${
+                res.data.authorInfo.apellido_paterno ?? ''
+              } ${res.data.authorInfo.apellido_materno ?? ''}`,
+              date: new Date(res.data.creation_timestamp._seconds * 1000),
+              textContent: res.data.post_text,
+              attachments: res.data.post_files,
+              commentCount: (res.data.post_comments ?? []).length,
+            },
+          ]);
+        }
+      }
+
+      const res = await PostCommentsAPI.getForPost(id ?? post.id);
       if (!res.error) {
         setComments(
           res.data
@@ -47,7 +67,7 @@ function ChatChannelPostDetails({ navigation, route }) {
   }, []);
 
   navigation.setOptions({
-    headerTitle: channelName,
+    headerTitle: channelName ?? 'Publicación',
   });
 
   const onEditPress = () => {
@@ -67,7 +87,7 @@ function ChatChannelPostDetails({ navigation, route }) {
       {
         text: 'Confirmar',
         onPress: async () => {
-          const id = posts[postIndex].id;
+          const id = id ?? posts[postIndex].id;
           const res = await PostsAPI.remove(id);
           if (!res.error) {
             setPosts((prev) => prev.filter((post) => post.id !== id));
@@ -115,6 +135,10 @@ function ChatChannelPostDetails({ navigation, route }) {
     }
     setText('');
   }, [user, text, isSubmitting]);
+
+  if (post == null) {
+    return <LoadingView />;
+  }
 
   return (
     <>

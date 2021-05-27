@@ -85,7 +85,7 @@ export default (props) => {
             if (users === false) return;
 
             props.navigation.goBack();
-            onAdd(user.id);
+            onAdd([user.id]);
           }}
         />
       </Modal>
