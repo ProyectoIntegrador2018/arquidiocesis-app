@@ -1,8 +1,11 @@
 /* eslint-env serviceworker */
 
 self.addEventListener('push', (event) => {
-  const { title, body, icon } = event.data.json();
-  event.waitUntil(self.registration.showNotification(title, { body, icon }));
+  const { title, body, data } = event.data.json();
+  console.log(event.data.json());
+  event.waitUntil(
+    self.registration.showNotification(title, { body, icon: 'icon.png', data })
+  );
 });
 
 self.addEventListener('notificationclick', (event) => {
@@ -12,9 +15,9 @@ self.addEventListener('notificationclick', (event) => {
     (async () => {
       if (
         event.notification.data != null &&
-        event.notification.data.url != null
+        event.notification.data.path != null
       ) {
-        await self.clients.openWindow(event.notification.data.url);
+        await self.clients.openWindow(event.notification.data.path);
       }
     })()
   );
