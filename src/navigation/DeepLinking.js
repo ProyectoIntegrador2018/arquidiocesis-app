@@ -6,12 +6,21 @@ import * as Linking from 'expo-linking';
 
   Key of each link should be the base pathname.
   Query should be a set of the query parameters the link must have.
-  Screen is where the app should navigate once the deeplink is resolved.
+  Screen is where the app should navigate once the deeplink is resolved, passing query params
+  as screen parameters.
 */
 const links = {
   '/chat/post': {
     query: new Set(['id']),
     screen: 'ChatChannelPostDetails',
+  },
+  '/chat/channel': {
+    query: new Set(['channelID', 'groupID', 'channelName']),
+    screen: 'ChatChannelPosts',
+  },
+  '/chat/group': {
+    query: new Set(['id']),
+    screen: 'Grupos',
   },
 };
 
@@ -25,7 +34,7 @@ export function useDeepLinking(navigationRef) {
       const { pathname, searchParams } = new URL(await Linking.getInitialURL());
       const link = links[pathname];
       if (link == null) {
-        console.warn('[DEEPLINKS] Invalid pathname for deeplink.');
+        console.info('[DEEPLINKS] No pathname match for deeplink.');
         return;
       }
 
@@ -42,9 +51,10 @@ export function useDeepLinking(navigationRef) {
       // navigate to screen
       navigationRef.current.navigate(
         link.screen,
-        Array.from(link.query).map((param) => ({
-          [param]: searchParams.get(param),
-        }))
+        Array.from(link.query).reduce((obj, param) => {
+          obj[param] = searchParams.get(param);
+          return obj;
+        }, {})
       );
     })();
   }, [navigationRef]);

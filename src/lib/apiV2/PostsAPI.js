@@ -7,7 +7,7 @@ const ROOT_URL = `${BASE_URL}posts`;
   @typedef {{error: boolean, data: string} | null} AddPostResponse
   
   @typedef {string} GetOnePostParams
-  @typedef {{error: boolean, data: {post: {id: string, post_author: string, post_text: string, post_files: string[], post_comments: string[]}} | null} GetOnePostResponse
+  @typedef {{error: boolean, data: {id: string, creation_timestamp: string, authorInfo: {nombre: string, apellido_paterno: string, apellido_materno: string}, post_author: string, post_text: string, post_files: string[], post_comments: string[]} | null} GetOnePostResponse
 
   @typedef {{id: string, text?: string, files?: string[]}} EditPostParams
   @typedef {{error: boolean} | null} EditPostResponse
