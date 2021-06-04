@@ -29,7 +29,7 @@ async function post(endpoint, data) {
   try {
     console.log('POST /' + endpoint);
     const res = await axios.post(ROOT_URL + endpoint, data);
-    if (res.data && res.data.error && res.data.code == 900) {
+    if (res.data && res.data.error && res.data.code === 900) {
       logout();
     }
     return res.data;
@@ -57,7 +57,7 @@ async function get(endpoint, data) {
     const res = await axios.get(ROOT_URL + endpoint, {
       params: data,
     });
-    if (res.data && res.data.error && res.data.code == 900) {
+    if (res.data && res.data.error && res.data.code === 900) {
       logout();
     }
     return res.data;
@@ -85,7 +85,7 @@ async function sendDelete(endpoint, data) {
     const res = await axios.delete(ROOT_URL + endpoint, {
       params: data,
     });
-    if (res.data && res.data.error && res.data.code == 900) {
+    if (res.data && res.data.error && res.data.code === 900) {
       logout();
     }
     return res.data;
@@ -779,7 +779,7 @@ async function getUserDetail(id, email, type) {
 async function registerAdmin(data) {
   const res = await post('admin/users/add', data);
   if (res.error) throw res;
-  else return res.data;
+  else return res;
 }
 
 /**
