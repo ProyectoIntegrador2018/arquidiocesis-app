@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { API, Util } from '../../lib';
+import { Util } from '../../lib';
 import { Input, Button, Picker } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import UsersConvAPI from '../../lib/apiV2/UsersConvAPI';
 
 export default (props) => {
   const [user, setUser] = useState({ tipo: 'integrante_chm' });
@@ -48,7 +49,7 @@ export default (props) => {
       return alert(prompt);
     }
     setLoading(true);
-    API.registerAdmin(user)
+    UsersConvAPI.registerUser(user)
       .then((result) => {
         setLoading(false);
         if (result.error === true) {
