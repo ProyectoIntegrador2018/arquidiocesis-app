@@ -107,6 +107,20 @@ Once you are presented with a QR code, open up a mobile simulator either:
 
 To stop the application run control + C or command + C (mac) in the terminal.
 
+### Run unit and integration tests
+
+In terminal or CLI run the following command:
+
+```
+$ yarn test
+```
+
+The command will do the following:
+
+1. Present all unit and integration tests for components that are alive in the system.
+2. Each unit test will appear with debug information and a green checkmark if it passed
+3. Each component has a bunch of unit test and one integration test, the latest will be executed at the end.
+
 ## Version control
 
 ### Conventional commits
