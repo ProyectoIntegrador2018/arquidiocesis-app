@@ -1,4 +1,4 @@
-import { get, post, put } from './APIv2';
+import { get, post } from './APIv2';
 import { ROOT_URL as BASE_URL } from './APIv2';
 
 const ROOT_URL = `${BASE_URL}users`;
@@ -25,6 +25,13 @@ async function allUsers() {
   return users;
 }
 
+async function registerUser(data) {
+  const res = await post(`${ROOT_URL}/reg`, data);
+  if (res.error) throw res;
+  else return res;
+}
+
 export default {
   allUsers,
+  registerUser,
 };

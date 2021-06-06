@@ -3,7 +3,7 @@ Nombre: Login.js
 Usuario con acceso: Admin, acompañante, coordinador
 Descripción: Pantalla para que un usuario registrado pueda iniciar sesión
 */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,18 +16,21 @@ import { Input, Button } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { API, Util } from '../lib';
 import { Image } from 'react-native';
+import { Button as PaperButton } from 'react-native-paper';
 
 export default (props) => {
-  var [loading, setLoading] = useState(false);
-  var [email, setEmail] = useState('');
-  var [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { openReg } = props;
 
   useEffect(() => {
     setLoading(false);
   }, []);
+  console.log('asd');
 
-  var doLogin = () => {
-    var { valid, prompt } = Util.validateForm(
+  const doLogin = () => {
+    const { valid, prompt } = Util.validateForm(
       { email, password },
       {
         email: {
@@ -49,7 +52,7 @@ export default (props) => {
         if (!user) return alert('Correo o contraseña invalida.');
         if (props.onLogin) props.onLogin(user);
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false);
         alert('Hubo un error realizando el login.');
       });
@@ -96,6 +99,10 @@ export default (props) => {
               textContentType={'password'}
               password
             />
+
+            <PaperButton onPress={() => openReg()}>
+              {'¿No tienes cuenta? Registrate'}
+            </PaperButton>
 
             <Button text="Iniciar Sesión" loading={loading} onPress={doLogin} />
           </View>

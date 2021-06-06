@@ -93,6 +93,7 @@ import WebPushNotifications from './lib/WebPushNotifications';
 import ImageViewer from './screens/ImageViewer';
 import VideoViewer from './screens/VideoViewer';
 import ChatMoreAttachments from './screens/chat/ChatMoreAttachments';
+import UserRegister from './screens/UserReg/UserRegister';
 
 const Tab = createBottomTabNavigator();
 function Home({ navigation, route }) {
@@ -314,6 +315,7 @@ function App({ user, logout }) {
 
 function Main() {
   const [login, setLogin] = useState(false);
+  const [isRegOpened, setisRegOpened] = useState(false);
 
   // This function runs when the screen is shown.
   useEffect(() => {
@@ -349,8 +351,14 @@ function Main() {
       <ChannelPostsStoreProvider>
         <View style={StyleSheet.absoluteFillObject}>
           <StatusBar barStyle={'light-content'} />
-          {!login ? (
-            <Login user={login} onLogin={onLogin} />
+          {isRegOpened ? (
+            <UserRegister onClose={() => setisRegOpened(false)} />
+          ) : !login ? (
+            <Login
+              user={login}
+              onLogin={onLogin}
+              openReg={() => setisRegOpened(true)}
+            />
           ) : (
             // User is logged in
             <App user={login} logout={logout} />
