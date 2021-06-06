@@ -1,6 +1,7 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import { useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import ChatChannelAttachment from './ChatChannelAttachment';
 import {
@@ -11,7 +12,6 @@ import {
 } from 'react-native-popup-menu';
 import ChatChannelPostComment from './ChatChannelPostComment';
 import { useNavigation } from '@react-navigation/native';
-const ATTACHMENT_SIZE = 128;
 
 function ChatChannelPost({
   post,
@@ -22,6 +22,11 @@ function ChatChannelPost({
   showComments = false,
 }) {
   const { navigate } = useNavigation();
+  const [screenWidth, setScreenWidth] = useState(500);
+  const onMeasure = (e) => {
+    setScreenWidth(e.nativeEvent.layout.width);
+  };
+
   let attachments = post.attachments;
   let extraAttachments = 0;
   if (post.attachments.length > 2) {
@@ -34,7 +39,7 @@ function ChatChannelPost({
   };
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root} onLayout={onMeasure}>
       <View
         style={[styles.content, { borderBottomWidth: showComments ? 1 : 0 }]}>
         <View style={styles.header}>
@@ -57,17 +62,27 @@ function ChatChannelPost({
           <View style={styles.attachmentsContainer}>
             {attachments.map((attachment, idx) => (
               <>
-                <View style={{ width: idx === 0 ? 0 : 8 }} />
                 <ChatChannelAttachment
                   key={idx}
                   attachment={attachment}
-                  size={ATTACHMENT_SIZE}
+                  size={(screenWidth / 3) * 0.85}
+                  style={{
+                    margin: 4,
+                    marginRight: idx === 0 ? 8 : 0,
+                    marginLeft: 0,
+                  }}
                 />
               </>
             ))}
             {extraAttachments > 0 && (
               <TouchableOpacity
-                style={styles.attachmentPlaceholder}
+                style={[
+                  styles.attachmentPlaceholder,
+                  {
+                    width: (screenWidth / 3) * 0.85,
+                    height: (screenWidth / 3) * 0.85,
+                  },
+                ]}
                 onPress={onMoreAttachmentsPress}>
                 <Text style={styles.attachmentPlaceholderLabel}>
                   +{extraAttachments}
@@ -176,12 +191,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   attachmentPlaceholder: {
-    width: ATTACHMENT_SIZE,
-    height: ATTACHMENT_SIZE,
     borderRadius: 8,
     backgroundColor: '#C2C2C2',
-    margin: 8,
-    marginLeft: 16,
+    margin: 4,
+    marginLeft: 8,
+    marginRight: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -10,6 +10,7 @@ function ChatChannelAttachment({
   attachment,
   onDelete,
   isFileDownloadable = true,
+  style,
 }) {
   const sizeStyle = { width: size, height: size };
   const { type, uri, fileName, thumbnail } = attachment;
@@ -34,6 +35,7 @@ function ChatChannelAttachment({
       style={[
         styles.root,
         sizeStyle,
+        style,
         { backgroundColor: type === 'document' ? '#C2C2C2' : 'transparent' },
       ]}
       activeOpacity={!isFileDownloadable && type === 'document' ? 1.0 : 0.2}
@@ -80,6 +82,7 @@ ChatChannelAttachment.propTypes = {
     isFileDownloadable: PropTypes.bool,
   }).isRequired,
   onDelete: PropTypes.func,
+  style: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
