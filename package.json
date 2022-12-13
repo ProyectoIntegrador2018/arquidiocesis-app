@@ -36,7 +36,7 @@
     "expo-linking": "^2.2.3",
     "expo-mail-composer": "~9.0.0",
     "expo-video-thumbnails": "~4.4.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "faker": "^5.4.0",
     "moment": "^2.26.0",
     "react": "16.13.1",
